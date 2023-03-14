@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,20 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'vCharge',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(child: const Text('Hi')),
+      home: HomeScreen(),
     );
   }
 }
