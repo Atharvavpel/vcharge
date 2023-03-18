@@ -39,6 +39,7 @@ dependencies:
   latlng: ^0.2.0
   flutter_map: ^0.13.0
   location: ^4.3.0
+  font_awesome_flutter: ^10.4.0
 
 dev_dependencies:
   flutter_test:

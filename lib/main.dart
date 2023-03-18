@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'vCharge',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: HomeScreen(),
     );

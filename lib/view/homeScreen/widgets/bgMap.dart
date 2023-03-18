@@ -21,6 +21,19 @@ class BgMapState extends State<BgMap> {
     // getStationData();
   }
 
+//this function takes a parameter string as availiblityStatus, and returns a color based on availablity
+  MaterialColor getAvailablityColor(String availiblityStatus){
+      if(availiblityStatus == 'Available'){
+        return Colors.green;
+      }
+      else if(availiblityStatus == 'NotAvailable'){
+        return Colors.red;
+      }
+      else{
+        return Colors.orange;
+      }
+    }
+
   Future<void> getStationData() async {
     print('Getting Station data');
     var data =
@@ -58,31 +71,42 @@ class BgMapState extends State<BgMap> {
             Marker(
               // width: 20.0,
               // height: 20.0,
+              anchorPos: AnchorPos.align(AnchorAlign.center), //change center to bottom
               point: LatLng(18.5434725, 73.9336914),
               builder: (ctx) => Container(
-                child: IconButton(
-                  icon: Icon(Icons.location_on),
-                  color: Colors.red,
-                  iconSize: 40.0,
-                  onPressed: () {
+                child: GestureDetector(
+                  onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => StationsSpecificDetails(StationModel(
-                      stationName: "Charging Station",
-                      stationChargerList: [
-                        {
-                          'chargerName': 'ABC',
-                          'chargerType': 'Public',
-                          'chargerStatus': 'Available',
-                          'chargerConnectorType': 'Type 2'
-                        },
-                        {
-                          'chargerName': 'Xyzabc',
-                          'chargerType': 'Privte',
-                          'chargerStatus': 'Busy',
-                          'chargerConnectorType': 'CSS 2'
-                        },
-                      ]
-                      ))) );
+                        stationName: "Pride Icon Charging Station",
+                        stationChargerList: [
+                          {
+                            'chargerName': 'ABC',
+                            'chargerId': '000234567',
+                            'chargerType': 'Public',
+                            'chargerStatus': 'Available',
+                            'chargerConnectorType': 'Type 2',
+                            'chargerCostPerKWH':'30.00'
+                          },
+                          {
+                            'chargerName': 'Xyzabc',
+                            'chargerId': '000876543',
+                            'chargerType': 'Private',
+                            'chargerStatus': 'Busy',
+                            'chargerConnectorType': 'CSS 2',
+                            'chargerCostPerKWH':'25.00'
+                          },
+                          {
+                            'chargerName': 'Mnopqr',
+                            'chargerId': '000567488',
+                            'chargerType': 'Public',
+                            'chargerStatus': 'NotAvailable',
+                            'chargerConnectorType': 'CSS 2',
+                            'chargerCostPerKWH':'28.00'
+                          },
+                        ]
+                        ))) );
                   },
+                  child: Icon(Icons.location_on, color: getAvailablityColor("Available"),size: 30,)
                 ),
               ),
             ),

@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
+import 'package:vcharge/view/listOfStations/listOfStations.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
   final Function(int) onTabSelected;
@@ -24,8 +26,12 @@ class CustomBottomAppBar extends StatelessWidget {
                     icon: const Icon(Icons.filter_alt_sharp),
                     color: Colors.green,
                     onPressed: () {
-                      print("filter button pressed");
-                  
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context){
+                          return FilterPopUp();
+                        }
+                      );
                     },
                   ),
                   Container(
@@ -44,7 +50,7 @@ class CustomBottomAppBar extends StatelessWidget {
                     icon: const Icon(Icons.view_list_sharp),
                     color: Colors.green,
                     onPressed: () {
-                      print("list button pressed");
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ListOfStations()));
                   
                     },
                   ),
