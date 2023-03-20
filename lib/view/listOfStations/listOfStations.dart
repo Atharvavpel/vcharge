@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getMethod.dart';
-import 'package:vcharge/view/homeScreen/widgets/bottomBar.dart';
+
 
 class ListOfStations extends StatefulWidget {
   @override
