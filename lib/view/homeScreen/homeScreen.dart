@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 
-import 'package:vcharge/view/homeScreen/widgets/bottomBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/locationFinder.dart';
 import 'package:vcharge/view/homeScreen/widgets/logo.dart';
 import 'package:vcharge/view/homeScreen/widgets/markerHints.dart';
 import 'package:vcharge/view/homeScreen/widgets/searchBar.dart';
+import 'package:vcharge/view/homeScreen/widgets/menuBar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,22 +15,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
   @override
   void initState() {
     super.initState();
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-
+      drawer: const SideBarDrawer(),
+      
       body: Stack(children: [
         // background map
         BgMap(),
 
         // searchBar and navBar
-        SearchBarContainer(),
+        const SearchBarContainer(),
 
         // location finder
         const Positioned(
@@ -51,42 +55,48 @@ class _HomeScreenState extends State<HomeScreen> {
           bottom: 60,
           right: 0,
           child: MarkerHints(),
-        )
+        ),
+
+        BottomAppBar()
       ]),
 
-      // bottom navigation bar
-      bottomNavigationBar: Container(
-        height: 71,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 2,
-              offset: const Offset(2, 2),
-            ),
-          ],
-        ),
-        child: const CustomBottomAppBar(),
-      ),
-      floatingActionButton: SizedBox(
-        width: 70,
-        height: 70,
-        child: FloatingActionButton(
-          // shape: ,
-          splashColor: Colors.black,
-          backgroundColor: Colors.grey,
+      bottomNavigationBar: const BottomAppBar(),
 
-          onPressed: () {
-            print("Onpressed on scanner");
-          },
-          child: const Icon(
-            Icons.qr_code_scanner_sharp,
-            size: 50,
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // bottom navigation bar
+      // bottomNavigationBar: Container(
+      //   height: 71,
+      //   decoration: BoxDecoration(
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.white.withOpacity(0.5),
+      //         spreadRadius: 2,
+      //         blurRadius: 2,
+      //         offset: const Offset(2, 2),
+      //       ),
+      //     ],
+      //   ),
+      //   child: const CustomBottomAppBar(),
+      // ),
+      // floatingActionButton: SizedBox(
+      //   width: 70,
+      //   height: 70,
+      //   child: FloatingActionButton(
+      //     // shape: ,
+      //     splashColor: Colors.black,
+      //     backgroundColor: Colors.grey,
+
+      //     onPressed: () {
+      //       print("Onpressed on scanner");
+      //     },
+      //     child: const Icon(
+      //       Icons.qr_code_scanner_sharp,
+      //       size: 50,
+      //     ),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:vcharge/view/homeScreen/widgets/bottomBar.dart';
 class ListOfStations extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ListOfStationsState();
-}
+
 
 class ListOfStationsState extends State<ListOfStations> {
   @override
@@ -203,4 +203,5 @@ class ListOfStationsState extends State<ListOfStations> {
       ),
     );
   }
+}
 }
