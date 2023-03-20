@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:vcharge/models/stationModel.dart';
@@ -12,6 +13,7 @@ class BgMap extends StatefulWidget {
 }
 
 class BgMapState extends State<BgMap> {
+  MapController mapController = MapController();
   var stationsData;
   List<Marker> markers = [];
 
@@ -48,6 +50,7 @@ class BgMapState extends State<BgMap> {
   Widget build(BuildContext context) {
     return Container(
       child: FlutterMap(
+        mapController: mapController,
         options: MapOptions(
           minZoom: 3.8,
           maxZoom: 17.0,
@@ -64,7 +67,7 @@ class BgMapState extends State<BgMap> {
             additionalOptions: {
               'accessToken':
                   'pk.eyJ1IjoiYXRoYXJ2YTcwIiwiYSI6ImNsZjk3cTUxZDJjc2czems3N2F3d2Y2aWUifQ._j3hKxoBC_Gnh4-qddn8lg',
-              'id': 'mapbox.mapbox-streets-v8',
+              'id': 'mapbox.satellite',
             },
           ),
           MarkerLayerOptions(markers: [
@@ -106,7 +109,7 @@ class BgMapState extends State<BgMap> {
                         ]
                         ))) );
                   },
-                  child: Icon(Icons.location_on, color: getAvailablityColor("Available"),size: 30,)
+                  child: FaIcon(FontAwesomeIcons.locationDot,size: 30,color: getAvailablityColor('Available'),),
                 ),
               ),
             ),

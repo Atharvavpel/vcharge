@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LocationFinder extends StatefulWidget {
   const LocationFinder({super.key});
@@ -9,11 +9,41 @@ class LocationFinder extends StatefulWidget {
 }
 
 class LocationFinderState extends State<LocationFinder> {
-bool _locationFinder = false;
+  bool _locationFinder = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(boxShadow: const [
+        BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
+      ],
+      borderRadius: BorderRadius.circular(30)),
+      margin: const EdgeInsets.only(right: 13, bottom: 10),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _locationFinder = true;
+          });
+          Future.delayed(const Duration(seconds: 2)).then((_) {
+            setState(() {
+              _locationFinder = false;
+            });
+          });
+        },
+        child: CircleAvatar(
+          backgroundColor: _locationFinder ? Colors.blue : Colors.white,
+          child: const FaIcon(
+            FontAwesomeIcons.locationCrosshairs,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/*
+Container(
               margin: const EdgeInsets.only(right: 13, bottom: 10),
               decoration: BoxDecoration(
                   color: _locationFinder ? Colors.blue : Colors.white,
@@ -38,5 +68,4 @@ bool _locationFinder = false;
                     size: 20,
                   )),
             );
-  }
-}
+*/

@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 
 import 'package:vcharge/view/homeScreen/widgets/bottomBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/locationFinder.dart';
 import 'package:vcharge/view/homeScreen/widgets/logo.dart';
+import 'package:vcharge/view/homeScreen/widgets/markerHints.dart';
 import 'package:vcharge/view/homeScreen/widgets/searchBar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,14 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
-
   @override
   void initState() {
     super.initState();
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBodyBehindAppBar: true,
 
       body: Stack(children: [
-        
         // background map
         BgMap(),
 
@@ -39,18 +34,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // location finder
         const Positioned(
-            bottom: 0,
-            right: 0,
-            child: LocationFinder(),
-          ),
-          
+          bottom: 0,
+          right: 0,
+          child: LocationFinder(),
+        ),
+
         // Virtuoso logo
         const Positioned(
-            bottom: 0,
-            left: 0,
-            child: VirtuosoLogo(),
-          )
+          bottom: 0,
+          left: 0,
+          child: VirtuosoLogo(),
+        ),
 
+        //Hint question Mark
+        Positioned(
+          bottom: 60,
+          right: 0,
+          child: MarkerHints(),
+        )
       ]),
 
       // bottom navigation bar
