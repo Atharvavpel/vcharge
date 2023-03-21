@@ -117,6 +117,8 @@ class _MarkerHintsState extends State<MarkerHints> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     content: Wrap(children: [
+
+                      
                       //Row For Available
                       Row(
                         children: const [
@@ -142,6 +144,7 @@ class _MarkerHintsState extends State<MarkerHints> {
                         height: 5,
                       ),
 
+
                       //Row For Busy
                       Row(
                         children: const [
@@ -166,6 +169,7 @@ class _MarkerHintsState extends State<MarkerHints> {
                         width: 1,
                         height: 5,
                       ),
+
 
                       //Row For Not Available
                       Row(
@@ -215,73 +219,3 @@ class _MarkerHintsState extends State<MarkerHints> {
   }
 }
 
-
-/* 
-
-Wrap(children: [
-                      //Row For Available
-                      Row(
-                        children: const [
-                          Expanded(
-                            flex: 2,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.green,
-                              radius: 10,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                              child: Text(
-                            'Available',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )),
-                        ],
-                      ),
-                      
-                      const SizedBox(width:1, height: 5,),
-
-                      //Row For Busy
-                      Row(
-                        children: const [
-                          Expanded(
-                            flex: 2,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.orange,
-                              radius: 10,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                              child: Text(
-                            'Busy',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )),
-                        ],
-                      ),
-                      
-                      const SizedBox(width:1, height: 5,),
-                      
-                      //Row For Not Available
-                      Row(
-                        children: const [
-                          Expanded(
-                            flex: 2,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.red,
-                              radius: 10,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                              child: Text(
-                            'Not Available',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )),
-                        ],
-                      ),
-                    ]),
-
-*/

@@ -30,6 +30,8 @@ class ListOfStationsState extends State<ListOfStations> {
     print("Data fetched");
   }
 
+
+
   //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
   MaterialColor getAvailablityColor(String availiblityStatus) {
     if (availiblityStatus == 'Available') {
@@ -63,6 +65,8 @@ class ListOfStationsState extends State<ListOfStations> {
                 ),
                 subtitle: Text('${stationsList[index]['stationLocation']}'),
                 children: [
+
+
                   //container for contact number
                   Container(
                       decoration: BoxDecoration(
@@ -84,6 +88,8 @@ class ListOfStationsState extends State<ListOfStations> {
                         ]),
                       )),
 
+
+
                   //Container for active time and parking type
                   Container(
                     margin: const EdgeInsets.only(
@@ -95,6 +101,8 @@ class ListOfStationsState extends State<ListOfStations> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+
+
                         //Container for charger type
                         Container(
                           width: 110,
@@ -124,6 +132,8 @@ class ListOfStationsState extends State<ListOfStations> {
                             ),
                           ),
                         ),
+
+
 
                         //container for availiblity type
                         Container(
@@ -157,6 +167,8 @@ class ListOfStationsState extends State<ListOfStations> {
                       ],
                     ),
                   ),
+
+
 
                   //Container for amenities
                   Container(

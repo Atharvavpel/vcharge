@@ -9,6 +9,8 @@ class LocationFinder extends StatefulWidget {
 }
 
 class LocationFinderState extends State<LocationFinder> {
+
+  //variable for location finder
   bool _locationFinder = false;
 
   @override
