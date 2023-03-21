@@ -4,10 +4,10 @@ import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 
 import 'package:vcharge/view/homeScreen/widgets/locationFinder.dart';
-import 'package:vcharge/view/homeScreen/widgets/logo.dart';
+import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/homeScreen/widgets/markerHints.dart';
 import 'package:vcharge/view/homeScreen/widgets/searchBar.dart';
-import 'package:vcharge/view/homeScreen/widgets/menuBar.dart';
+import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/listOfStations/listOfStations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +18,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+// variable for filter button being pressed
+  bool _isFilterOpen = false;
+
   @override
   void initState() {
     super.initState();
@@ -26,9 +29,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+// this variable is used to extend the backgroun
       extendBodyBehindAppBar: true,
+
+// this is drawer function
       drawer: const SideBarDrawer(),
 
+// used stack to display the widgets one above the other
       body: Stack(children: [
         // background map
         BgMap(),
@@ -58,27 +65,37 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ]),
 
-
       // bottom app bar
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.grey,
         animationDuration: const Duration(milliseconds: 300),
         items: <Widget>[
+// button for home page
           const Icon(Icons.home, size: 30),
+
+// button for qr code scanner
           const Icon(Icons.qr_code_scanner, size: 30),
+
+// button for the list of stations
           GestureDetector(
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ListOfStations()));
               },
               child: const Icon(Icons.list, size: 30)),
+
+// button for filter
           GestureDetector(
               onTap: () {
-                showDialog(
+                setState(() {
+                  _isFilterOpen = true;
+                });
+                
+                _isFilterOpen == true ? showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return FilterPopUp();
-                    });
+                    }) : [];
               },
               child: const Icon(Icons.filter_alt_sharp, size: 30)),
         ],

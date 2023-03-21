@@ -13,14 +13,20 @@ class BgMap extends StatefulWidget {
 }
 
 class BgMapState extends State<BgMap> {
+
+  
+  // 
   MapController mapController = MapController();
+
+  // list which loads the station data
   var stationsData;
+
+  // this is the list which stores the markers related to the all stations on the map
   List<Marker> markers = [];
 
   @override
   void initState() {
     super.initState();
-    // getStationData();
   }
 
 //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
@@ -36,6 +42,8 @@ class BgMapState extends State<BgMap> {
       }
     }
 
+
+// this function is used to fetch the station data and embed it into the stationsData variable
   Future<void> getStationData() async {
     print('Getting Station data');
     var data =
@@ -45,6 +53,8 @@ class BgMapState extends State<BgMap> {
     }
     print('Station data fetched');
   }
+
+
 
   @override
   Widget build(BuildContext context) {

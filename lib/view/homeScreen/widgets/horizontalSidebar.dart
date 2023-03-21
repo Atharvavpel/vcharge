@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vcharge/view/moreOptionsScreen/moreMenu.dart';
 
 class HorizontalSideBar extends StatefulWidget {
   const HorizontalSideBar({super.key});
@@ -10,7 +11,7 @@ class HorizontalSideBar extends StatefulWidget {
 
 class _HorizontalSideBarState extends State<HorizontalSideBar> {
 
-
+// boolean variables used for adding the texture effect to the respective buttons
   bool isVehicle = false;
   bool isMapRoute = false;
   bool isWallet = false;
@@ -26,6 +27,9 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
+
+
+// container - vehicle addition
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -69,6 +73,9 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                 ),
               ),
             ),
+
+
+// container - Route
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -98,10 +105,10 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    children: [
-                      Icon(Icons.map, color: Colors.grey[700]),
-                      const SizedBox(width: 10),
-                      const Text(
+                    children: const [
+                      FaIcon(FontAwesomeIcons.route,size: 20,color: Color.fromARGB(255, 51, 50, 50),),
+                      SizedBox(width: 10),
+                      Text(
                         'Route',
                         style: TextStyle(fontSize: 14),
                         overflow: TextOverflow.ellipsis,
@@ -111,6 +118,9 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                 ),
               ),
             ),
+
+
+ // container - my wallet            
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -153,6 +163,9 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                 ),
               ),
             ),
+
+
+// container - favourites
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -195,6 +208,9 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                 ),
               ),
             ),
+
+
+// container - reservations
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -236,17 +252,26 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                 ),
               ),
             ),
+
+
+// container - more optionsPage
             GestureDetector(
               onTap: () {
                 setState(() {
                   isMore = true;
                 });
+  
                 Future.delayed(const Duration(seconds: 1)).then((_) {
                   setState(() {
                     isMore = false;
                   });
                 });
+
+
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const MoreMenu()));
               },
+
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(

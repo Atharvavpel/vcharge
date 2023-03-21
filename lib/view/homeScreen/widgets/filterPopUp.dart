@@ -7,6 +7,7 @@ class FilterPopUp extends StatefulWidget {
 }
 
 class FilterPopUpState extends State<FilterPopUp> {
+
   //variables for DropDown menu for vehicle selection
   var vehicleList = ['Tata Nexon', 'Tata Tiago', 'Mahindra XUV400'];
   var vehicleSelected;
@@ -36,6 +37,8 @@ class FilterPopUpState extends State<FilterPopUp> {
       ),
       child: Wrap(
         children: [
+
+
           //Following statck include cross button and title
           Container(
             decoration: const BoxDecoration(
@@ -58,6 +61,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
+
 
                   //Cross Button
                   Positioned(
@@ -90,11 +94,13 @@ class FilterPopUpState extends State<FilterPopUp> {
             ),
           ),
 
+
           //Folowing id the container for all the other assets
           Container(
             height: 500,
             child: Column(
               children: [
+
                 //DropDown menu for vehicle selection
                 Container(
                     width: double.maxFinite,
@@ -140,6 +146,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                   ),
                 ),
 
+
                 //Container for "show available chargers only" section
                 Container(
                   margin: const EdgeInsets.all(5),
@@ -165,6 +172,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                     ]),
                   ),
                 ),
+
 
                 //Container for "Access Type"
                 Container(
@@ -237,6 +245,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                   ),
                 ),
 
+
                 //Container for Connector Type
                 Container(
                     width: double.maxFinite,
@@ -292,6 +301,7 @@ class FilterPopUpState extends State<FilterPopUp> {
               ],
             ),
           ),
+
 
           //Container for the Apply button and reset button
           Container(

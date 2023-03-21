@@ -7,12 +7,15 @@ class SideBarDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.60,
-      // width: 30.w,
+
+      // this mediaQuery is used to make the drawer responsive
+      width: MediaQuery.of(context).size.width * 0.75,
       child: Drawer(
       child: ListView(
       padding: EdgeInsets.zero,
       children: [
+
+// this is the drawer header for the sidebar
         const DrawerHeader(
           decoration: BoxDecoration(
             color: Colors.grey,
@@ -22,6 +25,13 @@ class SideBarDrawer extends StatelessWidget {
             child: Icon(Icons.person, size: 70, color: Colors.black,),
           ),
         ),
+
+
+// this is the real widget for displaying the list of items
+
+
+
+// container - vehicle addition
 
         Row(
           children: [
@@ -49,6 +59,8 @@ class SideBarDrawer extends StatelessWidget {
           ],
         ),
         
+
+// container - wallet
         Row(
           children: [
             Padding(
@@ -75,6 +87,9 @@ class SideBarDrawer extends StatelessWidget {
           ],
         ),
 
+
+
+// container - reservation
         Row(
           children: [
             Padding(
@@ -101,6 +116,9 @@ class SideBarDrawer extends StatelessWidget {
           ],
         ),
 
+
+
+// container - FAQ
         Row(
           children: [
             Padding(
@@ -127,6 +145,8 @@ class SideBarDrawer extends StatelessWidget {
           ],
         ),
 
+
+// container - help and support      
         Row(
           children: [
             Padding(
@@ -153,6 +173,8 @@ class SideBarDrawer extends StatelessWidget {
           ],
         ),
 
+
+// container - logout
         Row(
           children: [
             Padding(

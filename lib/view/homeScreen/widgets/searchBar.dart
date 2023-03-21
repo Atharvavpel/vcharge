@@ -82,6 +82,7 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
               ),
             ),
 
+
             // alternate side bar
             const HorizontalSideBar(),
           ],
@@ -90,6 +91,8 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
     );
   }
   
+
+// this is used to invoke the searchBarContainer()  
   @override
   Widget build(BuildContext context) {
     return searchBarContainer();

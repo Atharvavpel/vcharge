@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class VirtuosoLogo extends StatelessWidget {
   const VirtuosoLogo({super.key});
 
+// this returns a widget which has logo
   @override
   Widget build(BuildContext context) {
     return Container(
