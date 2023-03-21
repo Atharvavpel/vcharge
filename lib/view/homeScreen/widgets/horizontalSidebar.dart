@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
 
 class HorizontalSideBar extends StatefulWidget {
   const HorizontalSideBar({super.key});
 
   @override
-  State<HorizontalSideBar> createState() => _HorizontalSideBarState();
+  State<HorizontalSideBar> createState() => HorizontalSideBarState();
 }
 
-class _HorizontalSideBarState extends State<HorizontalSideBar> {
+class HorizontalSideBarState extends State<HorizontalSideBar> {
 
 
   bool isVehicle = false;
@@ -36,6 +37,7 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                     isVehicle = false;
                   });
                 });
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> MyVehicleScreen()));
               },
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
@@ -50,7 +52,7 @@ class _HorizontalSideBarState extends State<HorizontalSideBar> {
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isVehicle
-                      ? const Color.fromARGB(255, 142, 181, 239)
+                      ? Color.fromARGB(255, 115, 204, 43)
                       : Colors.white,
                 ),
                 child: Padding(
