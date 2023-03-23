@@ -1,48 +1,75 @@
 class StationModel {
   String? stationName;
+  String? stationHostId;
+  String? stationVendorId;
   String? stationLocation;
+  String? stationLatitude;
+  String? stationLongitude;
   String? stationLocationURL;
   String? stationParkingArea;
   String? stationContactNumber;
   String? stationWorkingTime;
   String? stationParkingType;
-  List<String>? stationAmenity;
+  List<dynamic>? stationAmenity;
   List<dynamic>? stationChargerList;
+  String? stationStatus;
+  List<dynamic>? stationBooking;
+  String? stationPowerStandard;
 
   StationModel(
       {this.stationName,
+      this.stationHostId,
+      this.stationVendorId,
       this.stationLocation,
+      this.stationLatitude,
+      this.stationLongitude,
       this.stationLocationURL,
       this.stationParkingArea,
       this.stationContactNumber,
       this.stationWorkingTime,
       this.stationParkingType,
       this.stationAmenity,
-      this.stationChargerList});
+      this.stationChargerList,
+      this.stationStatus,
+      this.stationBooking,
+      this.stationPowerStandard});
 
-  StationModel.fromJson(Map<String, dynamic> json) {
-    stationName = json['stationName'];
-    stationLocation = json['stationLocation'];
-    stationLocationURL = json['stationLocationURL'];
-    stationParkingArea = json['stationParkingArea'];
-    stationContactNumber = json['stationContactNumber'];
-    stationWorkingTime = json['stationWorkingTime'];
-    stationParkingType = json['stationParkingType'];
-    stationAmenity = json['stationAmenity'].cast<String>();
-    stationChargerList = json['stationChargerList'].cast<String>();
-  }
+}
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['stationName'] = this.stationName;
-    data['stationLocation'] = this.stationLocation;
-    data['stationLocationURL'] = this.stationLocationURL;
-    data['stationParkingArea'] = this.stationParkingArea;
-    data['stationContactNumber'] = this.stationContactNumber;
-    data['stationWorkingTime'] = this.stationWorkingTime;
-    data['stationParkingType'] = this.stationParkingType;
-    data['stationAmenity'] = this.stationAmenity;
-    data['stationChargerList'] = this.stationChargerList;
-    return data;
-  }
+class StationChargerList {
+  String? chargerName;
+  String? chargerId;
+  String? chargerCostPerKWH;
+  String? chargerRFID;
+  String? chargerConnectorType;
+  String? chargerStatus;
+  String? chargerType;
+
+  StationChargerList(
+      {this.chargerName,
+      this.chargerId,
+      this.chargerCostPerKWH,
+      this.chargerRFID,
+      this.chargerConnectorType,
+      this.chargerStatus,
+      this.chargerType});
+
+}
+
+class StationBooking {
+  String? bookingType;
+  String? bookingCustomerId;
+  String? bookingStationId;
+  String? bookingDate;
+  String? bookingTime;
+  String? bookingStatus;
+
+  StationBooking(
+      {this.bookingType,
+      this.bookingCustomerId,
+      this.bookingStationId,
+      this.bookingDate,
+      this.bookingTime,
+      this.bookingStatus});
+
 }
