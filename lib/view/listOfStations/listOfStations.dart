@@ -45,11 +45,13 @@ class ListOfStationsState extends State<ListOfStations> {
 
   @override
   Widget build(BuildContext context) {
+    print("Inside the build method of listofobject");
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Stations'),
       ),
       body: Container(
+        color: Color.fromARGB(255, 215, 226, 215),
         child: ListView.builder(
             itemCount: stationsList.length,
             itemBuilder: (context, index) {
