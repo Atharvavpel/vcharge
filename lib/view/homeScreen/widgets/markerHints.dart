@@ -111,7 +111,7 @@ class _MarkerHintsState extends State<MarkerHints> {
           // onTapDown: (position) {
           //   getTapPosition(position);
           // },
-          onLongPressStart: (details) {
+          onTap: () {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -193,20 +193,6 @@ class _MarkerHintsState extends State<MarkerHints> {
                     ]),
                   );
                 });
-          },
-          onLongPressEnd: (details) {
-            Navigator.of(context).pop();
-          },
-
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  "Please Long Press For More Info",
-                ),
-                duration: Duration(seconds: 3), // Set the duration here
-              ),
-            );
           },
 
           child: const FaIcon(
