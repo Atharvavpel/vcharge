@@ -67,20 +67,20 @@ class FilterPopUpState extends State<FilterPopUp> {
                   Positioned(
                     top: 3,
                       right: 3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3),
-                          border: Border.all(
-                            width: 2,
-                            color: Colors.white,
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(
+                              width: 2,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(1.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
+                          child: const Padding(
+                            padding: EdgeInsets.all(1.0),
                             child: FaIcon(
                               FontAwesomeIcons.x,
                               size: 15,
