@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
 import 'package:vcharge/view/moreOptionsScreen/moreMenu.dart';
+import 'package:vcharge/view/walletScreen/walletScreen.dart';
 
 class HorizontalSideBar extends StatefulWidget {
   const HorizontalSideBar({super.key});
@@ -128,6 +129,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                 setState(() {
                   isWallet = true;
                 });
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletScreen()));
                 Future.delayed(const Duration(seconds: 1)).then((_) {
                   setState(() {
                     isWallet = false;

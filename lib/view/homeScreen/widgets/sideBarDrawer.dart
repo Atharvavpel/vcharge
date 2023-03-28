@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
 
 class SideBarDrawer extends StatelessWidget {
   const SideBarDrawer({super.key});
@@ -52,7 +53,7 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('Add Vehicle'),
                       onTap: () {
-              
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AddVehicleScreen()));
                       },
                     ),
             ),

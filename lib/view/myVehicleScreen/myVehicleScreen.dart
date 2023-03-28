@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vcharge/services/GetMethod.dart';
+import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
 import 'package:vcharge/view/myVehicleScreen/widgets/showVehilcleDetailsPopup.dart';
 
 import '../../models/vehicleModel.dart';
@@ -228,7 +229,9 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AddVehicleScreen()));
+                    },
                     child: const Text('Add Vehicle', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                   ),
                 ),
