@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/stationModel.dart';
 
 class StationsSpecificDetails extends StatefulWidget {
-  StationModel stationModel;
+  final StationModel stationModel;
   @override
   State<StatefulWidget> createState() => StationsSpecificDetailsState();
 
-  StationsSpecificDetails(this.stationModel);
+  const StationsSpecificDetails(this.stationModel, {super.key});
 }
 
 class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
@@ -322,7 +321,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                         const Text('Support'),
                                         IconButton(
                                           onPressed: (){}, 
-                                          icon: Icon(Icons.support_agent, size: 40,)
+                                          icon: const Icon(Icons.support_agent, size: 40,)
                                         )
                                       ],
                                     ),
@@ -332,7 +331,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             ),
                           ),
                         
-                          Container(
+                          SizedBox(
                             width: 220,
                             child: ElevatedButton(
                               onPressed: (){},

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/models/vehicleModel.dart';
 
 class ShowVehicleDetailsPopup extends StatelessWidget {
   //Initialize the VehicleModel object
-  VehicleModel vehicleDetails;
+  final VehicleModel vehicleDetails;
 
   //Take the VehicleModel object as a parameter in the constructor
-  ShowVehicleDetailsPopup({required this.vehicleDetails});
+  const ShowVehicleDetailsPopup({super.key, required this.vehicleDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class ShowVehicleDetailsPopup extends StatelessWidget {
       content: Wrap(
         children: [
           //Container for Image
-          Container(
+          SizedBox(
             // decoration: BoxDecoration(
             //   border: Border.all(
             //     width: 2,

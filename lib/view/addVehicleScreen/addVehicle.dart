@@ -156,10 +156,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                               value; // Update the currently selected value in the dropdown
                         });
                       },
-                      // style: const TextStyle(
-                      //     color: Colors.black,
-                      //     fontSize: 14,
-                      //     fontWeight: FontWeight.w400),
+                      
                       isExpanded:
                           true, // expand the dropdown button to full width
                       isDense: true, // reduces the height of the button
@@ -167,11 +164,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   ),
                 ),
 
-                // const SizedBox(
-                //   width: 1,
-                //   height: 10,
-                // ),
-
+                
                 //Drop down menu to select car model
                 Card(
                   elevation: 5,
@@ -193,10 +186,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                               value; // Update the currently selected value in the dropdown
                         });
                       },
-                      // style: const TextStyle(
-                      //     color: Colors.black,
-                      //     fontSize: 14,
-                      //     fontWeight: FontWeight.w400),
+                      
                       isExpanded:
                           true, // expand the dropdown button to full width
                       isDense: true, // reduces the height of the button

@@ -9,7 +9,7 @@ class SideBarDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
 
-      // this mediaQuery is used to make the drawer responsive
+// this mediaQuery is used to make the drawer responsive
       width: MediaQuery.of(context).size.width * 0.75,
       child: Drawer(
       child: ListView(
@@ -46,7 +46,7 @@ class SideBarDrawer extends StatelessWidget {
                           blurRadius: 10, color: Colors.grey, spreadRadius: 2)
                     ],
                     ),
-                child: FaIcon(FontAwesomeIcons.car,size: 20,color: Color.fromARGB(255, 51, 50, 50),),
+                child: const FaIcon(FontAwesomeIcons.car,size: 20,color: Color.fromARGB(255, 51, 50, 50),),
               ),
             ),
             Expanded(

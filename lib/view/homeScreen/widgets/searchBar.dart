@@ -5,7 +5,7 @@ import 'package:vcharge/view/profileScreen/myProfile.dart';
 class SearchBarContainer extends StatefulWidget {
 
 
-  SearchBarContainer({super.key});
+  const SearchBarContainer({super.key});
 
   @override
   State<SearchBarContainer> createState() => _SearchBarContainerState();
@@ -21,8 +21,7 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
   }
 
   Widget searchBarContainer() {
-    return Container(
-      child: SafeArea(
+    return SafeArea(
         child: Column(
           children: [
             Padding(
@@ -61,7 +60,6 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
                       flex: 1,
                       child: IconButton(
                         onPressed: () {
-                          print("the notifications is being clicked");
                         },
                         icon: const Icon(Icons.notifications),
                         iconSize: 30,
@@ -89,8 +87,8 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
             HorizontalSideBar(),
           ],
         ),
-      ),
-    );
+      );
+    
   }
 
 // this is used to invoke the searchBarContainer()

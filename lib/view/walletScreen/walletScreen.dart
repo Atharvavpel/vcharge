@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WalletScreen extends StatefulWidget {
+  const WalletScreen({super.key});
+
   @override
   State<StatefulWidget> createState() => WalletScreenState();
 }
@@ -15,8 +17,7 @@ class WalletScreenState extends State<WalletScreen> {
       ),
       body: Column(
         children: [
-          Container(
-            child: Column(
+          Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
@@ -30,7 +31,7 @@ class WalletScreenState extends State<WalletScreen> {
 
                 //Container for available balance and others options
                 Container(
-                  margin: EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(15),
                   child: Card(
                     elevation: 5,
                     child: Padding(
@@ -40,7 +41,7 @@ class WalletScreenState extends State<WalletScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           // Icon of wallet
-                          FaIcon(
+                          const FaIcon(
                             FontAwesomeIcons.wallet,
                             size: 45,
                             color: Color.fromARGB(255, 130, 199, 85),
@@ -64,15 +65,14 @@ class WalletScreenState extends State<WalletScreen> {
                           ),
 
                           //Container for credit button
-                          Container(
-                            child: ElevatedButton(
+                          ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 elevation: 5, // set the elevation value
                               ),
                               onPressed: () {},
                               child: const Text('Credit'),
                             ),
-                          )
+           
                         ],
                       ),
                     ),
@@ -80,7 +80,7 @@ class WalletScreenState extends State<WalletScreen> {
                 )
               ],
             ),
-          )
+
         ],
       ),
     );

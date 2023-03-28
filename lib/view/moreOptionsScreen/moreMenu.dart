@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:vcharge/view/homeScreen/existingHomeScreen.dart';
 
 class MoreMenu extends StatelessWidget {
   const MoreMenu({super.key});
@@ -60,7 +59,7 @@ class MoreMenu extends StatelessWidget {
         ),
       ),
     ),
-              Center(
+              const Center(
                 child: Text("This is the collapsed Widget",
                   style: TextStyle(color: Colors.white),
                 ),

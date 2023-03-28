@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getMethod.dart';
 
 
 class ListOfStations extends StatefulWidget {
+  const ListOfStations({super.key});
+
   @override
   State<StatefulWidget> createState() => ListOfStationsState();
 }
@@ -11,7 +12,6 @@ class ListOfStations extends StatefulWidget {
 class ListOfStationsState extends State<ListOfStations> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getStationList();
   }
@@ -19,15 +19,11 @@ class ListOfStationsState extends State<ListOfStations> {
   List<dynamic> stationsList = [];
 
   Future<void> getStationList() async {
-    print("Fetching Data");
     var data =
         await GetMethod.getRequest('http://192.168.0.113:8081/vst1/stations');
-    if (data != null) {
-      setState(() {
-        stationsList = data;
-      });
-    }
-    print("Data fetched");
+    setState(() {
+      stationsList = data;
+    });
   }
 
 

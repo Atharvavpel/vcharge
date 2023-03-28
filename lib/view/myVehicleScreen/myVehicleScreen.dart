@@ -6,6 +6,8 @@ import 'package:vcharge/view/myVehicleScreen/widgets/showVehilcleDetailsPopup.da
 import '../../models/vehicleModel.dart';
 
 class MyVehicleScreen extends StatefulWidget {
+  const MyVehicleScreen({super.key});
+
   @override
   State<StatefulWidget> createState() => MyVehicleScreenState();
 }
@@ -70,24 +72,22 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
 
   Future<void> getVehicleData(String url) async {
     var data = await GetMethod.getRequest(url);
-    if (data != null) {
-      vehicleList = data.map((e) {
-        return VehicleModel(
-            vehicleBrandName: data[e]['vehicleBrandName'],
-            vehicleModelName: data[e]['vehicleModelName'],
-            vehicleClass: data[e]['vehicleClass'],
-            vehicleColour: data[e]['vehicleColour'],
-            vehicleType: data[e]['vehicleType'],
-            vehicleBatteryType: data[e]['vehicleBatteryType'],
-            vehicleBatteryCapacity: data[e]['vehicleBatteryCapacity'],
-            vehicleAdaptorType: data[e]['vehicleAdaptorType'],
-            vehicleTimeToChargeRegular: data[e]['vehicleTimeToChargeRegular'],
-            vehicleTimeToChargeFast: data[e]['vehicleTimeToChargeFast'],
-            vehicleChargingStandard: data[e]['vehicleChargingStandard'],
-            vehicleRange: data[e]['vehicleRange'],
-            vehicleDriveModes: data[e]['vehicleDriveModes']);
-      }).toList();
-    }
+    vehicleList = data.map((e) {
+      return VehicleModel(
+          vehicleBrandName: data[e]['vehicleBrandName'],
+          vehicleModelName: data[e]['vehicleModelName'],
+          vehicleClass: data[e]['vehicleClass'],
+          vehicleColour: data[e]['vehicleColour'],
+          vehicleType: data[e]['vehicleType'],
+          vehicleBatteryType: data[e]['vehicleBatteryType'],
+          vehicleBatteryCapacity: data[e]['vehicleBatteryCapacity'],
+          vehicleAdaptorType: data[e]['vehicleAdaptorType'],
+          vehicleTimeToChargeRegular: data[e]['vehicleTimeToChargeRegular'],
+          vehicleTimeToChargeFast: data[e]['vehicleTimeToChargeFast'],
+          vehicleChargingStandard: data[e]['vehicleChargingStandard'],
+          vehicleRange: data[e]['vehicleRange'],
+          vehicleDriveModes: data[e]['vehicleDriveModes']);
+    }).toList();
   }
 
   @override
