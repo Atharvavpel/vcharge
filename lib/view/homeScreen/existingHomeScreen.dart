@@ -5,8 +5,9 @@ import 'package:vcharge/view/homeScreen/widgets/markerHints.dart';
 import 'package:vcharge/view/homeScreen/widgets/searchBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 
-class ExistingStack extends StatelessWidget {
-  const ExistingStack({super.key});
+class ExistingHomeScreen extends StatelessWidget {
+
+  ExistingHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class ExistingStack extends StatelessWidget {
         BgMap(),
 
         // searchBar and navBar
-        const SearchBarContainer(),
+        SearchBarContainer(),
 
         // location finder
         const Positioned(

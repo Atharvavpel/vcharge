@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vcharge/view/homeScreen/existingStack.dart';
+import 'package:vcharge/view/homeScreen/existingHomeScreen.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 class FilterPopUp extends StatefulWidget {
@@ -40,7 +40,7 @@ class FilterPopUpState extends State<FilterPopUp> {
   Widget build(BuildContext context) {
     print("Inside the filter method");
     return Stack(children: [
-      ExistingStack(),
+      ExistingHomeScreen(),
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Dialog(

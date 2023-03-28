@@ -1,11 +1,12 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:vcharge/view/homeScreen/existingStack.dart';
+import 'package:vcharge/view/homeScreen/existingHomeScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/listOfStations/listOfStations.dart';
 import 'package:vcharge/view/qrScanner.dart/scanner.dart';
+import 'package:vcharge/view/qrScanner.dart/scannerScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+  
 
 /*
 
@@ -54,15 +58,31 @@ this is screen with onclose function
 // variables for index in bottom bar
   int selectedIndex = 0;
 
+  
+
   @override
   Widget build(BuildContext context) {
     
 
 // screens
-    var screens = [
-      ExistingStack(),
+    List<dynamic> screens = [
+      ExistingHomeScreen(),
       ListOfStations(),
-      ScannerQr(),
+      QRScannerWidget(),
+      // ScannerQr.qrScanner(),
+  //     FutureBuilder<dynamic>(
+  //   future: ScannerQr.qrScanner(),
+  //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+  //     if (snapshot.connectionState == ConnectionState.waiting) {
+  //       return CircularProgressIndicator();
+  //     } else if (snapshot.hasError) {
+  //       return Text('Error: ${snapshot.error}');
+  //     } else {
+  //       // Use the result of the Future to build the widget
+  //       return Text('QR code scanned: ${snapshot.data}');
+  //     }
+  //   },
+  // ),
       FilterPopUp(),
           
     ];
@@ -71,7 +91,14 @@ this is screen with onclose function
     final items = <Widget>[
       const Icon(Icons.home, size: 30),
       const Icon(Icons.list, size: 30),
-      const Icon(Icons.qr_code_scanner, size: 30),
+  //     IconButton(
+  //       onPressed: () async {
+  //   String barcodeResult = await ScannerQr().scanBarcode(); 
+  //   print(barcodeResult);
+  //    // Do something with the barcode result, such as navigate to a new screen
+  // },
+  //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
+        const Icon(Icons.qr_code_scanner, size: 30),
       const Icon(Icons.filter_alt_sharp, size: 30)
     ];
     
@@ -95,7 +122,7 @@ this is screen with onclose function
           height: MediaQuery.of(context).size.height * 0.07,
           animationCurve: Curves.easeInOut,
           backgroundColor: Colors.transparent,
-          buttonBackgroundColor: const Color.fromARGB(255, 165, 220, 167),
+          buttonBackgroundColor: Colors.white,
           animationDuration: const Duration(milliseconds: 300),
           items: items,
           index: selectedIndex,
