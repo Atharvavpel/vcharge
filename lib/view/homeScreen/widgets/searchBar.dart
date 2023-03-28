@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vcharge/view/homeScreen/widgets/horizontalSidebar.dart';
+import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class SearchBarContainer extends StatefulWidget {
 
-  const SearchBarContainer({super.key});
+
+  SearchBarContainer({super.key});
 
   @override
   State<SearchBarContainer> createState() => _SearchBarContainerState();
@@ -43,8 +45,6 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
                         onPressed: () => Scaffold.of(context).openDrawer(),
                       ),
                     ),
-
-
                     const Expanded(
                       flex: 7,
                       child: Padding(
@@ -71,7 +71,10 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
                       flex: 2,
                       child: IconButton(
                         onPressed: () {
-                          print("the profile is being clicked");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyProfilePage()));
                         },
                         icon: const Icon(Icons.person),
                         iconSize: 30,
@@ -82,20 +85,17 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
               ),
             ),
 
-
             // alternate side bar
-            const HorizontalSideBar(),
+            HorizontalSideBar(),
           ],
         ),
       ),
     );
   }
-  
 
-// this is used to invoke the searchBarContainer()  
+// this is used to invoke the searchBarContainer()
   @override
   Widget build(BuildContext context) {
     return searchBarContainer();
   }
-
 }
