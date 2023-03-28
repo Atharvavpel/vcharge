@@ -16,6 +16,7 @@ class FilterPopUp extends StatefulWidget {
 class FilterPopUpState extends State<FilterPopUp> {
   //variables for DropDown menu for vehicle selection
   var vehicleList = ['Tata Nexon', 'Tata Tiago', 'Mahindra XUV400'];
+  // ignore: prefer_typing_uninitialized_variables
   var vehicleSelected;
 
   //variable for "show available toggle button"
@@ -37,9 +38,9 @@ class FilterPopUpState extends State<FilterPopUp> {
 
   @override
   Widget build(BuildContext context) {
-    print("Inside the filter method");
+    // print("Inside the filter method");
     return Stack(children: [
-      ExistingHomeScreen(),
+      const ExistingHomeScreen(),
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Center(
@@ -48,7 +49,7 @@ class FilterPopUpState extends State<FilterPopUp> {
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                side: BorderSide(color: Colors.green)
+                side: const BorderSide(color: Colors.green)
               ),
               child: Wrap(
                 children: [
@@ -94,7 +95,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  HomeScreen()));
+                                                  const HomeScreen()));
                                     },
                                     child: const FaIcon(
                                       FontAwesomeIcons.x,
@@ -117,7 +118,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                         //DropDown menu for vehicle selection
                         Container(
                             width: double.maxFinite,
-                            color: Color.fromARGB(40, 131, 199, 85),
+                            color: const Color.fromARGB(40, 131, 199, 85),
                             child: const Padding(
                               padding: EdgeInsets.all(6),
                               child: Text(
@@ -131,7 +132,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                           margin: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color.fromARGB(255, 255, 255, 255)),
+                              color: const Color.fromARGB(255, 255, 255, 255)),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DropdownButton(
@@ -180,8 +181,8 @@ class FilterPopUpState extends State<FilterPopUp> {
                                   });
                                 },
                                 activeTrackColor:
-                                    Color.fromARGB(255, 144, 228, 66),
-                                activeColor: Color.fromARGB(255, 244, 244, 244),
+                                    const Color.fromARGB(255, 144, 228, 66),
+                                activeColor: const Color.fromARGB(255, 244, 244, 244),
                               )
                             ]),
                           ),
@@ -196,7 +197,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                               //heding text
                               Container(
                                   width: double.maxFinite,
-                                  color: Color.fromARGB(40, 131, 199, 85),
+                                  color: const Color.fromARGB(40, 131, 199, 85),
                                   child: const Padding(
                                     padding: EdgeInsets.all(6),
                                     child: Text(
@@ -209,51 +210,49 @@ class FilterPopUpState extends State<FilterPopUp> {
                                   )),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: Wrap(spacing: 10, children: [
-                                    GestureDetector(
-                                      child: Chip(
-                                        label: Text(
-                                          'Public',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: isPublicSelected
-                                                  ? Colors.white
-                                                  : Colors.black),
-                                        ),
-                                        backgroundColor: isPublicSelected
-                                            ? Colors.green
-                                            : Color.fromARGB(40, 131, 199, 85),
+                                child: Wrap(spacing: 10, children: [
+                                  GestureDetector(
+                                    child: Chip(
+                                      label: Text(
+                                        'Public',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: isPublicSelected
+                                                ? Colors.white
+                                                : Colors.black),
                                       ),
-                                      onTap: () {
-                                        isPublicSelected = !isPublicSelected;
-                                        setState(() {});
-                                      },
+                                      backgroundColor: isPublicSelected
+                                          ? Colors.green
+                                          : const Color.fromARGB(40, 131, 199, 85),
                                     ),
-                                    const SizedBox(
-                                      width: 2,
-                                    ),
-                                    GestureDetector(
-                                      child: Chip(
-                                        label: Text(
-                                          'Private',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: isPrivateSelected
-                                                  ? Colors.white
-                                                  : Colors.black),
-                                        ),
-                                        backgroundColor: isPrivateSelected
-                                            ? Colors.green
-                                            : Color.fromARGB(40, 131, 199, 85),
+                                    onTap: () {
+                                      isPublicSelected = !isPublicSelected;
+                                      setState(() {});
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    width: 2,
+                                  ),
+                                  GestureDetector(
+                                    child: Chip(
+                                      label: Text(
+                                        'Private',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: isPrivateSelected
+                                                ? Colors.white
+                                                : Colors.black),
                                       ),
-                                      onTap: () {
-                                        isPrivateSelected = !isPrivateSelected;
-                                        setState(() {});
-                                      },
-                                    )
-                                  ]),
-                                ),
+                                      backgroundColor: isPrivateSelected
+                                          ? Colors.green
+                                          : const Color.fromARGB(40, 131, 199, 85),
+                                    ),
+                                    onTap: () {
+                                      isPrivateSelected = !isPrivateSelected;
+                                      setState(() {});
+                                    },
+                                  )
+                                ]),
                               )
                             ],
                           ),
@@ -262,7 +261,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                         //Container for Connector Type
                         Container(
                             width: double.maxFinite,
-                            color: Color.fromARGB(40, 131, 199, 85),
+                            color: const Color.fromARGB(40, 131, 199, 85),
                             child: const Padding(
                               padding: EdgeInsets.all(6),
                               child: Text(
@@ -287,7 +286,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                                   borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
                                     width: 1,
-                                    color: Color.fromARGB(255, 130, 199, 85),
+                                    color: const Color.fromARGB(255, 130, 199, 85),
                                   ),
                                 ),
                                 child: Padding(
@@ -329,7 +328,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
+                                      builder: (context) => const HomeScreen()));
                               Fluttertoast.showToast(
                                 msg: "Filters Applied Successfully",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -339,8 +338,8 @@ class FilterPopUpState extends State<FilterPopUp> {
                                 fontSize: 16.0,
                               );
                             },
-                            child: Text('Apply')),
-                        ElevatedButton(onPressed: () {}, child: Text('Reset')),
+                            child: const Text('Apply')),
+                        ElevatedButton(onPressed: () {}, child: const Text('Reset')),
                       ],
                     ),
                   ),

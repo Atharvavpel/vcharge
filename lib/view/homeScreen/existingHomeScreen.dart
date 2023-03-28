@@ -7,16 +7,16 @@ import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 
 class ExistingHomeScreen extends StatelessWidget {
 
-  ExistingHomeScreen({super.key});
+  const ExistingHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print("Inside the build method of homescreen");
+    // print("Inside the build method of homescreen");
     return Stack(
       children: [
 
         // background map
-        BgMap(),
+        const BgMap(),
 
         // searchBar and navBar
         SearchBarContainer(),

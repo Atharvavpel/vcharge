@@ -8,7 +8,7 @@ class HorizontalSideBar extends StatefulWidget {
 
 
  
-  HorizontalSideBar({super.key});
+  const HorizontalSideBar({super.key});
 
   @override
   State<HorizontalSideBar> createState() => HorizontalSideBarState();
@@ -68,7 +68,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isVehicle
-                      ? Color.fromARGB(255, 115, 204, 43)
+                      ? const Color.fromARGB(255, 115, 204, 43)
                       : Colors.white,
                 ),
                 child: Padding(
@@ -204,7 +204,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                       offset: const Offset(2, 2),
                     ),
                   ],
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isFavourite ? const Color.fromARGB(255, 142, 181, 239) : Colors.white,
                 ),
                 child: Padding(
@@ -249,7 +249,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                         offset: const Offset(2, 2),
                       ),
                     ],
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                     color: isReservation ? const Color.fromARGB(255, 142, 181, 239) : Colors.white),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -311,7 +311,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                       offset: const Offset(2, 2),
                     ),
                   ],
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isMore ? const Color.fromARGB(255, 142, 181, 239) : Colors.white,
                 ),
                 child: Padding(
@@ -343,7 +343,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 }
 
 SlidingUpPanel? slidingPanel(){
-  print("In sliding up function");
+  // print("In sliding up function");
   return SlidingUpPanel(
         backdropEnabled: true, //darken background if panel is open
         backdropOpacity: 0.2,
@@ -395,7 +395,7 @@ SlidingUpPanel? slidingPanel(){
         ),
       ),
     ),
-              Center(
+              const Center(
                 child: Text("This is the collapsed Widget",
                   style: TextStyle(color: Colors.white),
                 ),

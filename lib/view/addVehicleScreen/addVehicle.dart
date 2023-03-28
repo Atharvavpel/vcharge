@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddVehicleScreen extends StatefulWidget {
+  const AddVehicleScreen({super.key});
+
   @override
   State<StatefulWidget> createState() => AddVehicleScreenState();
 }
@@ -10,7 +11,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
   var vehicleType = ['two', 'three', 'four'];
   var vehicleTypeSelectBool = [false, false, false];
 
+  // ignore: prefer_typing_uninitialized_variables
   var selectedManufacturer;
+  // ignore: prefer_typing_uninitialized_variables
   var selectedCarModel;
 
   var manufacturarList = ['Tata', 'Tesla', 'Hundai', 'Kia', "BMW"];
@@ -35,86 +38,84 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
           title: const Text('Add Vehicle'),
         ),
         body: Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //Heading Text
-                Container(
-                    child: const Center(
+                const Center(
                   child: Text(
-                    'Vehicle Details',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                'Vehicle Details',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                )),
+                ),
 
                 //select list for vehicle type
-                Container(
-                    child: Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8, right: 8),
-                      child: Text(
-                        'Vehicle Type',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  child: Text(
+                    'Vehicle Type',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    //check box for two wheeler
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        //check box for two wheeler
-                        Row(
-                          children: [
-                            Checkbox(
-                                value: vehicleTypeSelectBool[0],
-                                onChanged: (value) {
-                                  setState(() {
-                                    vehicleTypeSelectBool[0] = value!;
-                                    vehicleTypeSelectBool[1] = false;
-                                    vehicleTypeSelectBool[2] = false;
-                                  });
-                                }),
-                            const Icon(Icons.electric_moped_rounded, color: Colors.green,)
-                          ],
-                        ),
-                        //check box for four wheeler
-                        Row(
-                          children: [
-                            Checkbox(
-                                value: vehicleTypeSelectBool[2],
-                                onChanged: (value) {
-                                  setState(() {
-                                    vehicleTypeSelectBool[2] = value!;
-                                    vehicleTypeSelectBool[1] = false;
-                                    vehicleTypeSelectBool[0] = false;
-                                  });
-                                }),
-                            const Icon(Icons.electric_car,color: Colors.green,)
-                          ],
-                        ),
-                        //check box for three wheeler
-                        Row(
-                          children: [
-                            Checkbox(
-                                value: vehicleTypeSelectBool[1],
-                                onChanged: (value) {
-                                  setState(() {
-                                    vehicleTypeSelectBool[1] = value!;
-                                    vehicleTypeSelectBool[0] = false;
-                                    vehicleTypeSelectBool[2] = false;
-                                  });
-                                }),
-                            const Icon(Icons.electric_rickshaw,color: Colors.green,)
-                          ],
-                        ),
+                        Checkbox(
+                            value: vehicleTypeSelectBool[0],
+                            onChanged: (value) {
+                              setState(() {
+                                vehicleTypeSelectBool[0] = value!;
+                                vehicleTypeSelectBool[1] = false;
+                                vehicleTypeSelectBool[2] = false;
+                              });
+                            }),
+                        const Icon(Icons.electric_moped_rounded, color: Colors.green,)
+                      ],
+                    ),
+                    //check box for four wheeler
+                    Row(
+                      children: [
+                        Checkbox(
+                            value: vehicleTypeSelectBool[2],
+                            onChanged: (value) {
+                              setState(() {
+                                vehicleTypeSelectBool[2] = value!;
+                                vehicleTypeSelectBool[1] = false;
+                                vehicleTypeSelectBool[0] = false;
+                              });
+                            }),
+                        const Icon(Icons.electric_car,color: Colors.green,)
+                      ],
+                    ),
+                    //check box for three wheeler
+                    Row(
+                      children: [
+                        Checkbox(
+                            value: vehicleTypeSelectBool[1],
+                            onChanged: (value) {
+                              setState(() {
+                                vehicleTypeSelectBool[1] = value!;
+                                vehicleTypeSelectBool[0] = false;
+                                vehicleTypeSelectBool[2] = false;
+                              });
+                            }),
+                        const Icon(Icons.electric_rickshaw,color: Colors.green,)
                       ],
                     ),
                   ],
-                )),
+                ),
+                  ],
+                ),
 
                 const SizedBox(
                   width: 1,
@@ -138,11 +139,11 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                 //Drop down menu to select manufacturer
                 Card(
                   elevation: 5.0,
-                  color: Color.fromARGB(255, 243, 255, 255),
+                  color: const Color.fromARGB(255, 243, 255, 255),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DropdownButton(
-                      underline: SizedBox(),
+                      underline: const SizedBox(),
                       value:
                           selectedManufacturer, // Set the currently selected value in the dropdown
                       items: manufacturarList.map((e) {
@@ -175,11 +176,11 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                 //Drop down menu to select car model
                 Card(
                   elevation: 5,
-                  color: Color.fromARGB(255, 243, 254, 255),
+                  color: const Color.fromARGB(255, 243, 254, 255),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DropdownButton(
-                      underline: SizedBox(),
+                      underline: const SizedBox(),
                       value:
                           selectedCarModel, // Set the currently selected value in the dropdown
                       items: carModelList.map((e) {
@@ -224,10 +225,10 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                 //Text Field for enter registration number
                 Card(
                   elevation: 5,
-                  color: Color.fromARGB(255, 243, 254, 255),
+                  color: const Color.fromARGB(255, 243, 254, 255),
                   child: TextField(
                     controller: regNoController,
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                     decoration: const InputDecoration(
                         hintText: 'Enter Registration Number',
                         hintStyle: TextStyle(color: Colors.grey),
@@ -285,7 +286,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  color: Color.fromARGB(255, 243, 254, 255),
+                  color: const Color.fromARGB(255, 243, 254, 255),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(

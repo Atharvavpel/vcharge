@@ -6,16 +6,15 @@ import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/listOfStations/listOfStations.dart';
 import 'package:vcharge/view/qrScanner.dart/scanner.dart';
-import 'package:vcharge/view/qrScanner.dart/scannerScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
 
 
   
@@ -66,7 +65,7 @@ this is screen with onclose function
 
 // screens
     List<dynamic> screens = [
-      ExistingHomeScreen(),
+      const ExistingHomeScreen(),
       ListOfStations(),
       QRScannerWidget(),
       // ScannerQr.qrScanner(),
@@ -83,7 +82,7 @@ this is screen with onclose function
   //     }
   //   },
   // ),
-      FilterPopUp(),
+      const FilterPopUp(),
           
     ];
 
