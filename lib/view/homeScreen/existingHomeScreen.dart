@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 import 'package:vcharge/view/homeScreen/widgets/locationFinder.dart';
@@ -8,7 +9,12 @@ import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 
 class ExistingHomeScreen extends StatelessWidget {
 
-  const ExistingHomeScreen({super.key});
+  String userId;
+
+  ExistingHomeScreen({required this.userId ,super.key});
+
+  //map controller is initialized here because we can pass it to another screens later
+  MapController mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +23,16 @@ class ExistingHomeScreen extends StatelessWidget {
       children: [
 
         // background map
-        BgMap(),
+        BgMap(mapController: mapController,),
 
         // searchBar and navBar
-        SearchBarContainer(),
+        SearchBarContainer(userId: userId,),
 
         // location finder
-        const Positioned(
+        Positioned(
           bottom: 70,
           right: 0,
-          child: LocationFinder(),
+          child: LocationFinder(mapController: mapController,),
         ),
 
         // Virtuoso logo
@@ -37,7 +43,7 @@ class ExistingHomeScreen extends StatelessWidget {
         ),
 
         //Hint question Mark
-        Positioned(
+        const Positioned(
           bottom: 130,
           right: 0,
           child: MarkerHints(),
@@ -59,7 +65,7 @@ class ExistingHomeScreen extends StatelessWidget {
                   showDialog(
                     context: context, 
                     builder: (BuildContext context){
-                      return FilterPopUp();
+                      return FilterPopUp(userId: userId);
                     }
                   );
                 },
@@ -76,5 +82,3 @@ class ExistingHomeScreen extends StatelessWidget {
     
   }
 }
-
-

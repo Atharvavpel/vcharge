@@ -4,7 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 class FilterPopUp extends StatefulWidget {
-  const FilterPopUp({super.key});
+  String userId;
+
+  FilterPopUp({required this.userId,super.key});
 
   @override
   State<StatefulWidget> createState() => FilterPopUpState();

@@ -16,7 +16,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   @override
   void initState() {
     super.initState();
-    chargerList = widget.stationModel.stationChargerList ?? [];
+    chargerList = widget.stationModel.chargers ?? [];
+    print(chargerList);
   }
 
   @override
@@ -47,7 +48,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
               child: Card(
                 elevation: 4.0,
                 child: ExpansionTile(
-                  leading: CircleAvatar(backgroundColor: getAvailablityColor(chargerList[index]['chargerStatus']), radius: 7,),
+                  leading: CircleAvatar(backgroundColor: Colors.green, radius: 7,),
                   title: Text(chargerList[index]['chargerName'], style: const TextStyle(fontWeight: FontWeight.bold),),
                   children: [
                     Container(
@@ -98,36 +99,36 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 //Container for charger type
-                                Container(
-                                  width: 110,
-                                  height: 80,
-                                  margin: const EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 4, right: 4),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text('Charger Type'),
-                                        const Divider(
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                          thickness: 2,
-                                          indent: 20,
-                                          endIndent: 20,
-                                        ),
-                                        Text(chargerList[index]
-                                            ['chargerType'])
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                // Container(
+                                //   width: 110,
+                                //   height: 80,
+                                //   margin: const EdgeInsets.only(
+                                //     top: 10,
+                                //     bottom: 10,
+                                //   ),
+                                //   decoration: BoxDecoration(
+                                //       color: Colors.grey.shade300,
+                                //       borderRadius: BorderRadius.circular(5)),
+                                //   child: Padding(
+                                //     padding: const EdgeInsets.only(
+                                //         top: 10, bottom: 10, left: 4, right: 4),
+                                //     child: Column(
+                                //       mainAxisAlignment:
+                                //           MainAxisAlignment.center,
+                                //       children: [
+                                //         const Text('Charger Type'),
+                                //         const Divider(
+                                //           color: Color.fromARGB(255, 0, 0, 0),
+                                //           thickness: 2,
+                                //           indent: 20,
+                                //           endIndent: 20,
+                                //         ),
+                                //         Text(chargerList[index]
+                                //             ['chargerType'])
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
 
                                 //container for availiblity type
                                 Container(
@@ -146,16 +147,15 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: [
-                                        const Text('Availability'),
-                                        const Divider(
+                                      children: const [
+                                        Text('Availability'),
+                                        Divider(
                                           color: Color.fromARGB(255, 0, 0, 0),
                                           thickness: 2,
                                           indent: 20,
                                           endIndent: 20,
                                         ),
-                                        Text(
-                                            chargerList[index]['chargerStatus'])
+                                        Text('Available')
                                       ],
                                     ),
                                   ),
@@ -192,16 +192,16 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: [
-                                        const Text('Cost'),
-                                        const Divider(
+                                      children: const [
+                                        Text('Cost'),
+                                        Divider(
                                           color: Color.fromARGB(255, 0, 0, 0),
                                           thickness: 2,
                                           indent: 20,
                                           endIndent: 20,
                                         ),
                                         Text(
-                                            '${chargerList[index]['chargerCostPerKWH']}/kWh')
+                                            '30/kWh')
                                       ],
                                     ),
                                   ),
@@ -215,37 +215,37 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 // ),
 
                                 //Container for charger Id
-                                Container(
-                                  width: 110,
-                                  height: 80,
-                                  margin: const EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 4, right: 4),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text('ChargerID'),
-                                        const Divider(
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                          thickness: 2,
-                                          indent: 20,
-                                          endIndent: 20,
-                                        ),
-                                        Text(
-                                            '${chargerList[index]['chargerId']}')
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                // Container(
+                                //   width: 110,
+                                //   height: 80,
+                                //   margin: const EdgeInsets.only(
+                                //     top: 10,
+                                //     bottom: 10,
+                                //   ),
+                                //   decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(5),
+                                //       color: Colors.grey.shade300,
+                                //     ),
+                                //   child: Padding(
+                                //     padding: const EdgeInsets.only(
+                                //         top: 10, bottom: 10, left: 4, right: 4),
+                                //     child: Column(
+                                //       mainAxisAlignment:
+                                //           MainAxisAlignment.center,
+                                //       children: [
+                                //         const Text('ChargerID'),
+                                //         const Divider(
+                                //           color: Color.fromARGB(255, 0, 0, 0),
+                                //           thickness: 2,
+                                //           indent: 20,
+                                //           endIndent: 20,
+                                //         ),
+                                //         Text(
+                                //             '${chargerList[index]['chargerId']}')
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

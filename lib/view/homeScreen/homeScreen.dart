@@ -49,23 +49,35 @@ this is screen with onclose function
           }
 
 
-    */      
+    */
 
-    
+  //this the user ID of the current user who is logged in
+  String userId = "USR010420231242560021";
+
 // variables for index in bottom bar
   int selectedIndex = 1;
 
-  
-
   @override
   Widget build(BuildContext context) {
-    
-
 // screens
     List<dynamic> screens = [
       ListOfStations(),
-      ExistingHomeScreen(),
+      ExistingHomeScreen(userId: userId,),
       QRScannerWidget(),
+      // ScannerQr.qrScanner(),
+      //     FutureBuilder<dynamic>(
+      //   future: ScannerQr.qrScanner(),
+      //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return CircularProgressIndicator();
+      //     } else if (snapshot.hasError) {
+      //       return Text('Error: ${snapshot.error}');
+      //     } else {
+      //       // Use the result of the Future to build the widget
+      //       return Text('QR code scanned: ${snapshot.data}');
+      //     }
+      //   },
+      // ),
     ];
 
 // bottom bar icons
@@ -80,11 +92,16 @@ this is screen with onclose function
   // },
   //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
         const Icon(Icons.qr_code_scanner, size: 30),
+      //     IconButton(
+      //       onPressed: () async {
+      //   String barcodeResult = await ScannerQr().scanBarcode();
+      //   print(barcodeResult);
+      //    // Do something with the barcode result, such as navigate to a new screen
+      // },
+      //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
     ];
-    
 
     return Scaffold(
-
 // this variable is used to extend the background to the appbar
       extendBodyBehindAppBar: true,
 
@@ -94,10 +111,10 @@ this is screen with onclose function
 // this is drawer function
       drawer: const SideBarDrawer(),
 
-// this is body 
+// this is body
       body: screens[selectedIndex],
-        
-// this is bottom bar        
+
+// this is bottom bar
       bottomNavigationBar: CurvedNavigationBar(
           height: MediaQuery.of(context).size.height * 0.07,
           animationCurve: Curves.easeInOut,
@@ -108,11 +125,9 @@ this is screen with onclose function
           index: selectedIndex,
           onTap: (index) {
             setState(() {
-            selectedIndex = index;
+              selectedIndex = index;
             });
-          }
-        
-        ),
+          }),
     );
   }
 }

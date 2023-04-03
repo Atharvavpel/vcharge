@@ -154,8 +154,15 @@ class QrScannerOutput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Text("Output is: $output"),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("QR Scanner output"),
+      ),
+      body: Center(
+        child: Container(
+          
+          child: Text("Output is: $output"),
+        ),
       ),
     );
   }

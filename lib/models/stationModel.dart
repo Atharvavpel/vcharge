@@ -11,15 +11,13 @@ class StationModel {
   String? stationWorkingTime;
   String? stationParkingType;
   List<dynamic>? stationAmenity;
-  List<dynamic>? stationChargerList;
+  List<dynamic>? chargers;
   String? stationStatus;
   List<dynamic>? stationBooking;
   String? stationPowerStandard;
 
   StationModel(
       {this.stationName,
-      this.stationHostId,
-      this.stationVendorId,
       this.stationLocation,
       this.stationLatitude,
       this.stationLongitude,
@@ -29,9 +27,8 @@ class StationModel {
       this.stationWorkingTime,
       this.stationParkingType,
       this.stationAmenity,
-      this.stationChargerList,
+      this.chargers,
       this.stationStatus,
-      this.stationBooking,
       this.stationPowerStandard});
 
 }
