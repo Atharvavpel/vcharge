@@ -40,7 +40,7 @@ class FilterPopUpState extends State<FilterPopUp> {
   Widget build(BuildContext context) {
     // print("Inside the filter method");
     return Stack(children: [
-      const ExistingHomeScreen(),
+      ExistingHomeScreen(),
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Center(

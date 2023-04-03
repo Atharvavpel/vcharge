@@ -18,8 +18,6 @@ class StationModel {
 
   StationModel(
       {this.stationName,
-      this.stationHostId,
-      this.stationVendorId,
       this.stationLocation,
       this.stationLatitude,
       this.stationLongitude,
@@ -31,7 +29,6 @@ class StationModel {
       this.stationAmenity,
       this.stationChargerList,
       this.stationStatus,
-      this.stationBooking,
       this.stationPowerStandard});
 
 }

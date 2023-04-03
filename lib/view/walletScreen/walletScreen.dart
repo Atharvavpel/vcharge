@@ -78,6 +78,8 @@ class WalletScreenState extends State<WalletScreen> {
                     ),
                   ),
                 )
+              
+                
               ],
             ),
 
