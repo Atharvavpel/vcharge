@@ -4,14 +4,16 @@ import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class SearchBarContainer extends StatefulWidget {
 
+  String userId;
 
-  const SearchBarContainer({super.key});
+
+  SearchBarContainer({required this.userId ,super.key});
 
   @override
-  State<SearchBarContainer> createState() => _SearchBarContainerState();
+  State<SearchBarContainer> createState() => SearchBarContainerState();
 }
 
-class _SearchBarContainerState extends State<SearchBarContainer> {
+class SearchBarContainerState extends State<SearchBarContainer> {
   String? searchQuery;
 
   void onSearchSubmitted(String query) {
@@ -84,7 +86,7 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
             ),
 
             // alternate side bar
-            HorizontalSideBar(),
+            HorizontalSideBar(userId: widget.userId,),
           ],
         ),
       );

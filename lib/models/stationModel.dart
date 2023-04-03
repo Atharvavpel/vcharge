@@ -11,7 +11,7 @@ class StationModel {
   String? stationWorkingTime;
   String? stationParkingType;
   List<dynamic>? stationAmenity;
-  List<dynamic>? stationChargerList;
+  List<dynamic>? chargers;
   String? stationStatus;
   List<dynamic>? stationBooking;
   String? stationPowerStandard;
@@ -27,7 +27,7 @@ class StationModel {
       this.stationWorkingTime,
       this.stationParkingType,
       this.stationAmenity,
-      this.stationChargerList,
+      this.chargers,
       this.stationStatus,
       this.stationPowerStandard});
 

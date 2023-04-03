@@ -49,6 +49,9 @@ this is screen with onclose function
 
     */
 
+  //this the user ID of the current user who is logged in
+  String userId = "USR010420231242560021";
+
 // variables for index in bottom bar
   int selectedIndex = 0;
 
@@ -56,7 +59,7 @@ this is screen with onclose function
   Widget build(BuildContext context) {
 // screens
     List<dynamic> screens = [
-      ExistingHomeScreen(),
+      ExistingHomeScreen(userId: userId,),
       ListOfStations(),
       QRScannerWidget(),
       // ScannerQr.qrScanner(),
@@ -73,7 +76,7 @@ this is screen with onclose function
       //     }
       //   },
       // ),
-      const FilterPopUp(),
+      FilterPopUp(userId: userId,),
     ];
 
 // bottom bar icons

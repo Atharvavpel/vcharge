@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
@@ -73,23 +72,23 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     var data = await GetMethod.getRequest(
         'http://192.168.0.43:8081/vst1/manageStation/stations');
     if (data.isNotEmpty) {
-      stationsData = data.map((e) {
-        return StationModel(
-          stationName: e['stationName'],
-          stationLocation: e['stationLocation'],
-          stationLatitude: e['stationLatitude'],
-          stationLongitude: e['stationLongitude'],
-          stationLocationURL: e['stationLocationURL'],
-          stationParkingArea: e['stationParkingArea'],
-          stationContactNumber: e['stationContactNumber'],
-          stationWorkingTime: e['stationWorkingTime'],
-          stationParkingType: e['stationParkingType'],
-          stationAmenity: e['stationAmenity'],
-          stationChargerList: e['stationChargerList'],
-          stationStatus: e['stationStatus'],
-          stationPowerStandard: e['stationPowerStandard'],
-        );
-      }).toList();
+      for (int i = 0; i < data.length; i++) {
+        stationsData.add(StationModel(
+          stationName: data[i]['stationName'],
+          stationLocation: data[i]['stationLocation'],
+          stationLatitude: data[i]['stationLatitude'],
+          stationLongitude: data[i]['stationLongitude'],
+          stationLocationURL: data[i]['stationLocationURL'],
+          stationParkingArea: data[i]['stationParkingArea'],
+          stationContactNumber: data[i]['stationContactNumber'],
+          stationWorkingTime: data[i]['stationWorkingTime'],
+          stationParkingType: data[i]['stationParkingType'],
+          stationAmenity: data[i]['stationAmenity'],
+          chargers: data[i]['chargers'],
+          stationStatus: data[i]['stationStatus'],
+          stationPowerStandard: data[i]['stationPowerStandard'],
+        ));
+      }
       setState(() {
         getMarkersDetails();
       });
@@ -129,8 +128,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     var position = await GetLiveLocation.getUserLiveLocation();
     //store current location of user in local Storage such that we can fetch it
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('userLatitude', position.latitude);
-    await prefs.setDouble('userLongitude', position.longitude);
+    prefs.setDouble('userLatitude', position.latitude);
+    prefs.setDouble('userLongitude', position.longitude);
     animatedMapMove(position, 15.0);
   }
 
@@ -170,14 +169,15 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
 
     controller.forward();
   }
-  
 
   //this function get User Location from shared preferences
-  Future<LatLng?> getUserLocation() async {
+  Future<void> getUserLocation() async {
     final prefs = await SharedPreferences.getInstance();
-    userLocation = LatLng(prefs.getDouble('userLatitude')!, prefs.getDouble('userLongitude')!);
-    return userLocation;
-  
+    if (prefs.getDouble('userLatitude') != null &&
+        prefs.getDouble('userLongitude') != null) {
+      userLocation = LatLng(
+          prefs.getDouble('userLatitude')!, prefs.getDouble('userLongitude')!);
+    }
   }
 
   @override
@@ -207,7 +207,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
         ),
         MarkerLayerOptions(markers: [
           Marker(
-              point: userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
+              point:
+                  userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
               builder: (ctx) =>
                   const FaIcon(FontAwesomeIcons.locationCrosshairs)),
           for (final marker in markersDetails) marker

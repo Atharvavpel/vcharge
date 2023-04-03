@@ -8,7 +8,9 @@ import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 
 class ExistingHomeScreen extends StatelessWidget {
 
-  ExistingHomeScreen({super.key});
+  String userId;
+
+  ExistingHomeScreen({required this.userId ,super.key});
 
   //map controller is initialized here because we can pass it to another screens later
   MapController mapController = MapController();
@@ -23,7 +25,7 @@ class ExistingHomeScreen extends StatelessWidget {
         BgMap(mapController: mapController,),
 
         // searchBar and navBar
-        const SearchBarContainer(),
+        SearchBarContainer(userId: userId,),
 
         // location finder
         Positioned(
@@ -51,5 +53,3 @@ class ExistingHomeScreen extends StatelessWidget {
     
   }
 }
-
-

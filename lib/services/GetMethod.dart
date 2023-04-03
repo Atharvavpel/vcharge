@@ -5,7 +5,7 @@ class GetMethod {
 
   // this method is used to fetch the details of the particular models
 
-  static Future<List<dynamic>> getRequest(String url) async {
+  static Future<dynamic> getRequest(String url) async {
     var response = await http.get(Uri.parse(url));
     var body = response.body;
     return jsonDecode(body);

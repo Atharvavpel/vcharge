@@ -7,7 +7,9 @@ import 'package:vcharge/view/homeScreen/existingHomeScreen.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 class FilterPopUp extends StatefulWidget {
-  const FilterPopUp({super.key});
+  String userId;
+
+  FilterPopUp({required this.userId,super.key});
 
   @override
   State<StatefulWidget> createState() => FilterPopUpState();
@@ -40,7 +42,7 @@ class FilterPopUpState extends State<FilterPopUp> {
   Widget build(BuildContext context) {
     // print("Inside the filter method");
     return Stack(children: [
-      ExistingHomeScreen(),
+      ExistingHomeScreen(userId: widget.userId),
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Center(

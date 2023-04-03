@@ -6,9 +6,10 @@ import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
 
 class HorizontalSideBar extends StatefulWidget {
 
+  String userId;
 
  
-  const HorizontalSideBar({super.key});
+  HorizontalSideBar({required this.userId, super.key});
 
   @override
   State<HorizontalSideBar> createState() => HorizontalSideBarState();
@@ -140,7 +141,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                 setState(() {
                   isWallet = true;
                 });
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletScreen(userId: widget.userId,)));
                 Future.delayed(const Duration(seconds: 1)).then((_) {
                   setState(() {
                     isWallet = false;
