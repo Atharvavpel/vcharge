@@ -17,8 +17,6 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
 
 
-  
-
 /*
 
 keep this code for future reference:
@@ -55,7 +53,7 @@ this is screen with onclose function
 
     
 // variables for index in bottom bar
-  int selectedIndex = 0;
+  int selectedIndex = 1;
 
   
 
@@ -65,31 +63,15 @@ this is screen with onclose function
 
 // screens
     List<dynamic> screens = [
-      const ExistingHomeScreen(),
       ListOfStations(),
+      ExistingHomeScreen(),
       QRScannerWidget(),
-      // ScannerQr.qrScanner(),
-  //     FutureBuilder<dynamic>(
-  //   future: ScannerQr.qrScanner(),
-  //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-  //     if (snapshot.connectionState == ConnectionState.waiting) {
-  //       return CircularProgressIndicator();
-  //     } else if (snapshot.hasError) {
-  //       return Text('Error: ${snapshot.error}');
-  //     } else {
-  //       // Use the result of the Future to build the widget
-  //       return Text('QR code scanned: ${snapshot.data}');
-  //     }
-  //   },
-  // ),
-      const FilterPopUp(),
-          
     ];
 
 // bottom bar icons
     final items = <Widget>[
-      const Icon(Icons.home, size: 30),
       const Icon(Icons.list, size: 30),
+      const Icon(Icons.home, size: 30),
   //     IconButton(
   //       onPressed: () async {
   //   String barcodeResult = await ScannerQr().scanBarcode(); 
@@ -98,7 +80,6 @@ this is screen with onclose function
   // },
   //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
         const Icon(Icons.qr_code_scanner, size: 30),
-      const Icon(Icons.filter_alt_sharp, size: 30)
     ];
     
 

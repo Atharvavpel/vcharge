@@ -20,7 +20,7 @@ class ListOfStationsState extends State<ListOfStations> {
 
   Future<void> getStationList() async {
     var data =
-        await GetMethod.getRequest('http://192.168.0.113:8081/vst1/stations');
+        await GetMethod.getRequest('http://192.168.0.43:8081/vst1/manageStation/stations');
     setState(() {
       stationsList = data;
     });
@@ -41,13 +41,12 @@ class ListOfStationsState extends State<ListOfStations> {
 
   @override
   Widget build(BuildContext context) {
-    print("Inside the build method of listofobject");
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Stations'),
       ),
       body: Container(
-        color: Color.fromARGB(255, 215, 226, 215),
+        color: const Color.fromARGB(255, 215, 226, 215),
         child: ListView.builder(
             itemCount: stationsList.length,
             itemBuilder: (context, index) {

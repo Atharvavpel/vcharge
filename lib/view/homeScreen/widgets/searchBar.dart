@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vcharge/view/homeScreen/widgets/horizontalSidebar.dart';
+import 'package:vcharge/view/homeScreen/widgets/horizontalSideBar.dart';
 import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class SearchBarContainer extends StatefulWidget {

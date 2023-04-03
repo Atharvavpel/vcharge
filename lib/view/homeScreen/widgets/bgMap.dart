@@ -15,6 +15,7 @@ class BgMap extends StatefulWidget {
 }
 
 class BgMapState extends State<BgMap> {
+  
   //
   MapController mapController = MapController();
 
@@ -44,7 +45,7 @@ class BgMapState extends State<BgMap> {
 // this function is used to fetch the station data and embed it into the stationsData variable
   Future<void> getStationData() async {
     var data =
-        await GetMethod.getRequest('http://192.168.0.113:8081/vst1/stations');
+        await GetMethod.getRequest('http://192.168.0.43:8081/vst1/manageStation/stations');
     if (data.isNotEmpty) {
       stationsData = data.map((e) {
         return StationModel(
@@ -108,7 +109,7 @@ class BgMapState extends State<BgMap> {
       options: MapOptions(
         minZoom: 3.8,
         maxZoom: 17.0,
-        center: LatLng(18.5434725, 73.9336914), // San Francisco, CA
+        center: LatLng(18.5434725, 73.9336914),
         zoom: 14.0,
         interactiveFlags: InteractiveFlag.pinchZoom |
             InteractiveFlag

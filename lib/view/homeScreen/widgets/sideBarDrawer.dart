@@ -116,6 +116,59 @@ class SideBarDrawer extends StatelessWidget {
             ),
           ],
         ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                    // border: Border.all(),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    ],
+                    ),
+                child: const Icon(Icons.favorite_outline_outlined),
+              ),
+            ),
+            Expanded(
+              child: ListTile(
+                      title: const Text('Favourites'),
+                      onTap: () {
+              
+                      },
+                    ),
+            ),
+          ],
+        ),
+
+
+        // container
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                    // border: Border.all(),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    ],
+                    ),
+                child: const Icon(Icons.child_friendly),
+              ),
+            ),
+            Expanded(
+              child: ListTile(
+                      title: const Text('Refer a friend'),
+                      onTap: () {
+              
+                      },
+                    ),
+            ),
+          ],
+        ),
 
 
 

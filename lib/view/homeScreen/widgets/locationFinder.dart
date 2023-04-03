@@ -11,7 +11,7 @@ class LocationFinder extends StatefulWidget {
 class LocationFinderState extends State<LocationFinder> {
 
   //variable for location finder
-  bool _locationFinder = false;
+  bool locationFinder = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +24,16 @@ class LocationFinderState extends State<LocationFinder> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _locationFinder = true;
+            locationFinder = true;
           });
           Future.delayed(const Duration(seconds: 2)).then((_) {
             setState(() {
-              _locationFinder = false;
+              locationFinder = false;
             });
           });
         },
         child: CircleAvatar(
-          backgroundColor: _locationFinder ? Colors.blue : Colors.white,
+          backgroundColor: locationFinder ? Colors.blue : Colors.white,
           child: const FaIcon(
             FontAwesomeIcons.locationCrosshairs,
             color: Colors.black,
@@ -43,31 +43,3 @@ class LocationFinderState extends State<LocationFinder> {
     );
   }
 }
-
-/*
-Container(
-              margin: const EdgeInsets.only(right: 13, bottom: 10),
-              decoration: BoxDecoration(
-                  color: _locationFinder ? Colors.blue : Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                        blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                  ],
-                  borderRadius: BorderRadius.circular(100)),
-              child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _locationFinder = true;
-                    });
-                    Future.delayed(const Duration(seconds: 2)).then((_) {
-                      setState(() {
-                        _locationFinder = false;
-                      });
-                    });
-                  },
-                  icon: const Icon(
-                    Icons.my_location,
-                    size: 20,
-                  )),
-            );
-*/
