@@ -1,5 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/existingHomeScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 
@@ -128,6 +130,7 @@ this is screen with onclose function
               selectedIndex = index;
             });
           }),
+        
     );
   }
 }

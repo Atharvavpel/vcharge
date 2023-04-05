@@ -47,6 +47,8 @@ dependencies:
   pointycastle: ^3.1.1
   geolocator: ^9.0.2
   shared_preferences: ^2.0.20
+  image_picker: ^0.8.7+1
+  provider: ^6.0.1
   # encrypt: ^5.0.0
 
   
