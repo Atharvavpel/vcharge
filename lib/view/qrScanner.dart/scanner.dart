@@ -6,6 +6,8 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vcharge/view/qrScanner.dart/qrScannerOutput.dart';
 
 class QRScannerWidget extends StatefulWidget {
+  const QRScannerWidget({super.key});
+
   @override
   _QRScannerWidgetState createState() => _QRScannerWidgetState();
 }
@@ -110,7 +112,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
 
       // Handle denied permission
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Camera permission denied'),
         ),
       );
@@ -123,7 +125,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(0, 78, 230, 164),
+        backgroundColor: const Color.fromARGB(0, 78, 230, 164),
         centerTitle: true,
         title: const Text(
           "Scan and Charge",
@@ -149,7 +151,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                     Colors.transparent,
                     Colors.black.withOpacity(0.9),
                   ],
-                  stops: [0.0, 0.2, 0.8, 1.0],
+                  stops: const [0.0, 0.2, 0.8, 1.0],
                 ),
               ),
             ),
@@ -166,7 +168,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
               height: MediaQuery.of(context).size.height * 0.5,
               decoration: BoxDecoration(
                 border: Border.all(
-                    color: Color.fromARGB(255, 195, 227, 196), width: 3.0),
+                    color: const Color.fromARGB(255, 195, 227, 196), width: 3.0),
               ),
               child: (scanResult == "Failed to scan")
                   ? Container(

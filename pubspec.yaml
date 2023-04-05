@@ -47,6 +47,7 @@ dependencies:
   pointycastle: ^3.1.1
   geolocator: ^9.0.2
   shared_preferences: ^2.0.20
+  flutter_svg: ^2.0.4
   # encrypt: ^5.0.0
 
   

@@ -1,7 +1,7 @@
 class TransactionModel {
   String? initiateTransactionDate;
-  String? completeTransactionDate;
   String? initiateTransactionTime;
+  String? completeTransactionDate;
   String? completeTransactionTime;
   String? transactionAmount;
   String? transactionUTR;
@@ -10,8 +10,8 @@ class TransactionModel {
 
   TransactionModel(
       {this.initiateTransactionDate,
-      this.completeTransactionDate,
       this.initiateTransactionTime,
+      this.completeTransactionDate,
       this.completeTransactionTime,
       this.transactionAmount,
       this.transactionUTR,

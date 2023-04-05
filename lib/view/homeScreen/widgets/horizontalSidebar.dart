@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
 
@@ -8,7 +7,6 @@ class HorizontalSideBar extends StatefulWidget {
 
   String userId;
 
- 
   HorizontalSideBar({required this.userId, super.key});
 
   @override

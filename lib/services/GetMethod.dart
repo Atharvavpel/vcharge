@@ -7,7 +7,6 @@ class GetMethod {
 
   static Future<dynamic> getRequest(String url) async {
     var response = await http.get(Uri.parse(url));
-    print(response);
     var body = response.body;
     return jsonDecode(body);
   }

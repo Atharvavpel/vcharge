@@ -56,6 +56,12 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     getLocation();
   }
 
+  @override
+  void dispose() {
+    // Cancel any ongoing asynchronous operation when the widget is disposed
+    super.dispose();
+  }
+
 //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
   MaterialColor getAvailablityColor(String availiblityStatus) {
     if (availiblityStatus == 'Available') {
