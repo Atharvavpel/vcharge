@@ -27,7 +27,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   bool scanStarted = false;
 
   // variable for keeping the track of scan outputs
-  String? scanResult = " ";
+  String scanResult = " ";
 
 
   @override
@@ -94,7 +94,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   //   MaterialPageRoute(builder: (context) => QrScannerOutput(output: decrypted)),
   // );
 
-          scanResult = scanData.code;
+          scanResult = scanData.code!;
           Navigator.push(
             context,
             MaterialPageRoute(

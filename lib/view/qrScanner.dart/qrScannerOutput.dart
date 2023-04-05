@@ -144,15 +144,22 @@ class QrScannerOutput extends StatelessWidget {
 
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class QrScannerOutput extends StatelessWidget {
 
-  String? output = " ";
+  String output;
   QrScannerOutput({required this.output, super.key});
 
   @override
   Widget build(BuildContext context) {
+
+// this is used for encoding the logic ---> also encoding_decoding.dart file is also there which has the logic
+  // String decodedMsg = utf8.decode(base64.decode(output)); 
+
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -161,7 +168,7 @@ class QrScannerOutput extends StatelessWidget {
       body: Center(
         child: Container(
           
-          child: Text("Output is: $output"),
+          child: Text("Output is:$output "),
         ),
       ),
     );
