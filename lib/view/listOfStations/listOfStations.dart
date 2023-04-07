@@ -1,32 +1,101 @@
 import 'package:flutter/material.dart';
+import 'package:latlng/latlng.dart';
+import 'package:vcharge/models/stationModel.dart';
+import 'package:vcharge/services/getLiveLocation.dart';
 import 'package:vcharge/services/getMethod.dart';
+import 'dart:math' as Math;
 
+import 'package:vcharge/view/listOfStations/widgets/searchBarOfLOS.dart';
 
 class ListOfStations extends StatefulWidget {
-  const ListOfStations({super.key});
+  String userId;
+  ListOfStations({required this.userId, super.key});
 
   @override
   State<StatefulWidget> createState() => ListOfStationsState();
 }
 
 class ListOfStationsState extends State<ListOfStations> {
+  //stores current location of user
+  LatLng? userPosition;
+
   @override
   void initState() {
     super.initState();
-    getStationList();
+    // getStationList();
+    sortStationList();
   }
 
-  List<dynamic> stationsList = [];
+  //this list store the list of stations
+  List<StationModel> stationsList = [];
 
-  Future<void> getStationList() async {
-    var data =
-        await GetMethod.getRequest('http://192.168.0.43:8081/vst1/manageStation/stations');
+  //this list store the distance for user to each station
+  List<double> userToStationDistanceList = [];
+
+  //this list store the list of station and distance
+  List<Map<String, dynamic>> sortedStationDistanceList = [];
+
+  //this list container the list of sorted station
+  List<StationModel> sortedStationList = [];
+
+  Future<void> getLocationOfUser() async {
+    var position = await GetLiveLocation.getUserLiveLocation();
     setState(() {
-      stationsList = data;
+      userPosition = LatLng(position.latitude, position.longitude);
     });
   }
 
+  Future<void> getStationList() async {
+    var data = await GetMethod.getRequest(
+        'http://192.168.0.43:8081/vst1/manageStation/stations');
+    setState(() {
+      if (data != null) {
+        for (int i = 0; i < data.length; i++) {
+          stationsList.add(StationModel(
+              stationName: data[i]['stationName'],
+              stationLocation: data[i]['stationLocation'],
+              stationLatitude: data[i]['stationLatitude'],
+              stationLongitude: data[i]['stationLongitude'],
+              stationLocationURL: data[i]['stationLocationURL'],
+              stationParkingArea: data[i]['stationParkingArea'],
+              stationContactNumber: data[i]['stationContactNumber'],
+              stationWorkingTime: data[i]['stationWorkingTime'],
+              chargerNumber: data[i]['chargerNumber'],
+              stationParkingType: data[i]['stationParkingType'],
+              stationAmenity: data[i]['stationAmenity'],
+              chargers: data[i]['chargers'],
+              stationShareId: data[i]['stationShareId'],
+              stationStatus: data[i]['stationStatus'],
+              stationPowerStandard: data[i]['stationPowerStandard']));
+        }
+      }
+    });
+  }
 
+  //To calculate the distance between two points on the Earth's surface given their latitude and longitude coordinates, you can use the Haversine formula.
+  double getDistanceFromUser(LatLng latLng1, LatLng latLng2) {
+    // convert decimal degrees to radians
+    double lat1 = latLng1.latitude;
+    double lon1 = latLng1.longitude;
+    double lat2 = latLng2.latitude;
+    double lon2 = latLng2.longitude;
+
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2 - lat1); // deg2rad below
+    var dLon = deg2rad(lon2 - lon1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) *
+            Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+    return d;
+  }
+
+  double deg2rad(deg) {
+    return deg * (Math.pi / 180);
+  }
 
   //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
   MaterialColor getAvailablityColor(String availiblityStatus) {
@@ -39,18 +108,150 @@ class ListOfStationsState extends State<ListOfStations> {
     }
   }
 
+  //this function calculate distance from user to each station and store it in userToStationDistanceList
+  Future<void> getDistanceList() async {
+    await getStationList();
+    await getLocationOfUser();
+
+    userToStationDistanceList = stationsList.map((station) {
+      return getDistanceFromUser(
+          userPosition!,
+          LatLng(double.parse(station.stationLatitude),
+              double.parse(station.stationLongitude)));
+    }).toList();
+  }
+
+  //this function sort the stations on the basis of distance and store the result in sortedStationList
+  Future<void> sortStationList() async {
+    await getDistanceList();
+
+    // Combine the station and distance lists into a list of Map objects
+    sortedStationDistanceList = List.generate(
+      stationsList.length,
+      (index) => {
+        'station': stationsList[index],
+        'distance': userToStationDistanceList[index]
+      },
+    );
+
+// Sort the stationDistanceList based on the distance value in each Map object
+    sortedStationDistanceList
+        .sort((a, b) => a['distance'].compareTo(b['distance']));
+    // print(sortedStationDistanceList);
+
+// Extract the sorted station names into a new list
+    setState(() {
+      for (int i = 0; i < sortedStationDistanceList.length; i++) {
+        sortedStationList.add(sortedStationDistanceList[i]['station']);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('List of Stations'),
+    return SafeArea(
+      child: GestureDetector(
+        onTap: (){FocusScope.of(context).unfocus();},
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text('List of Stations'),
+          ),
+          body: SafeArea(
+            child: Wrap(
+              children: [
+                //Container for search bar
+                Container(
+                  margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  child: SearchBarofLOS(userId: widget.userId,)
+                ),
+                
+                //Container for List Of Station
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.73,
+                  child: sortedStationList.isEmpty
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          itemCount: sortedStationList.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                                elevation: 4,
+                                color: Color.fromARGB(255, 243, 254, 255),
+                                margin: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.02),
+                                child: ListTile(
+                                  onTap: (){},
+                                    title: Container(
+                                      child: Text(
+                                        sortedStationList[index].stationName,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize:
+                                                MediaQuery.of(context).size.width *
+                                                    0.04),
+                                      ),
+                                    ),
+                                    subtitle: //container for station address
+                                        Container(
+                                            child: Text(sortedStationList[index]
+                                                .stationLocation)),
+                                    trailing: //column for 'distance from user' and connector type
+                                        Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Wrap(
+                                          spacing:
+                                              MediaQuery.of(context).size.width *
+                                                  0.02,
+                                          children: [
+                                            //text for distance
+                                            userPosition == null
+                                                ? const CircularProgressIndicator()
+                                                : Text(
+                                                    '${sortedStationDistanceList[index]['distance'].toStringAsFixed(2)} KM', style: TextStyle(fontWeight: FontWeight.bold),),
+                
+                                            //CircleAvater to show avaliblity
+                                            CircleAvatar(
+                                              radius: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.02,
+                                              backgroundColor: getAvailablityColor(
+                                                  sortedStationList[index]
+                                                      .stationStatus),
+                                            ),
+                                          ],
+                                        ),
+                
+                                        //Container for connector type
+                                        Container(
+                                          // margin: EdgeInsets.all(
+                                          //     MediaQuery.of(context).size.width *
+                                          //         0.02),
+                                          child: Text(
+                                            sortedStationList[index]
+                                                .stationPowerStandard,
+                                            style:
+                                                const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,),
+                                          ),
+                                        )
+                                      ],
+                                    )));
+                          }),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-      body: Container(
-        color: const Color.fromARGB(255, 215, 226, 215),
-        child: ListView.builder(
-            itemCount: stationsList.length,
-            itemBuilder: (context, index) {
-              return ExpansionTile(
+    );
+  }
+}
+
+
+/*  ExpansionTile(
                 leading: CircleAvatar(
                   backgroundColor: getAvailablityColor("Available"),
                   radius: 6,
@@ -208,8 +409,4 @@ class ListOfStationsState extends State<ListOfStations> {
                   ),
                 ],
               );
-            }),
-      ),
-    );
-  }
-}
+*/

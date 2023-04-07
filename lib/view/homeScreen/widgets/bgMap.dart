@@ -88,11 +88,13 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
           stationParkingArea: data[i]['stationParkingArea'],
           stationContactNumber: data[i]['stationContactNumber'],
           stationWorkingTime: data[i]['stationWorkingTime'],
+          chargerNumber: data[i]['chargerNumber'],
           stationParkingType: data[i]['stationParkingType'],
           stationAmenity: data[i]['stationAmenity'],
           chargers: data[i]['chargers'],
+          stationShareId: data[i]['stationShareId'],
           stationStatus: data[i]['stationStatus'],
-          stationPowerStandard: data[i]['stationPowerStandard'],
+          stationPowerStandard: data[i]['stationPowerStandard']
         ));
       }
       setState(() {

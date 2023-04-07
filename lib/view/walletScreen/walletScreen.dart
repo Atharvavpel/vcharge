@@ -79,9 +79,9 @@ class WalletScreenState extends State<WalletScreen> {
 
   //this function returns an icon based on given status
   IconData getStatusIcon(String status) {
-    if (status == 'complete') {
+    if (status.trim().toLowerCase() == 'complete') {
       return Icons.done;
-    } else if (status == 'pending') {
+    } else if (status.trim().toLowerCase() == 'pending') {
       return Icons.pending;
     } else {
       return Icons.cancel;
@@ -90,9 +90,9 @@ class WalletScreenState extends State<WalletScreen> {
 
   //this function returns a color based on given status
   MaterialColor getStatusColor(String status) {
-    if (status == 'complete') {
+    if (status.trim().toLowerCase() == 'complete') {
       return Colors.green;
-    } else if (status == 'pending') {
+    } else if (status.trim().toLowerCase() == 'pending') {
       return Colors.orange;
     } else {
       return Colors.red;
@@ -219,109 +219,111 @@ class WalletScreenState extends State<WalletScreen> {
             ),
 
             //Container for listview
-            Container(
-              height: MediaQuery.of(context).size.height * 0.6,
-              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
-              child: transactionData.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      // shrinkWrap: true,
-                      itemCount: transactionData.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          color: getStatusColor(
-                                  transactionData[index].transactionStatus!)
-                              .shade50,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          elevation: 5,
-                          child: ListTile(
-                            //on tap function on listtile
-                            onTap: () {},
-
-                            //leading for transaction status
-                            leading: Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
-                              child: Center(
-                                child: CircleAvatar(
-                                    radius: MediaQuery.of(context).size.width *
-                                        0.035,
-                                    backgroundColor: getStatusColor(
-                                        transactionData[index]
+            SafeArea(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.6,
+                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
+                child: transactionData.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        // shrinkWrap: true,
+                        itemCount: transactionData.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            color: getStatusColor(
+                                    transactionData[index].transactionStatus!)
+                                .shade50,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 5,
+                            child: ListTile(
+                              //on tap function on listtile
+                              onTap: () {},
+            
+                              //leading for transaction status
+                              leading: Container(
+                                width: MediaQuery.of(context).size.width * 0.1,
+                                child: Center(
+                                  child: CircleAvatar(
+                                      radius: MediaQuery.of(context).size.width *
+                                          0.035,
+                                      backgroundColor: getStatusColor(
+                                          transactionData[index]
+                                              .transactionStatus!),
+                                      child: Icon(
+                                        getStatusIcon(transactionData[index]
                                             .transactionStatus!),
-                                    child: Icon(
-                                      getStatusIcon(transactionData[index]
-                                          .transactionStatus!),
-                                      color: Colors.white,
-                                    )),
+                                        color: Colors.white,
+                                      )),
+                                ),
+                              ),
+            
+                              // title for transaction amount
+                              title: Row(
+                                children: [
+                                  Icon(
+                                    Icons.currency_rupee,
+                                    size:
+                                        MediaQuery.of(context).size.width * 0.06,
+                                    color: Colors.black,
+                                  ),
+                                  Text(
+                                    '${transactionData[index].transactionAmount}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.055,
+                                      shadows: [
+                                        Shadow(
+                                          offset: const Offset(2.0, 2.0),
+                                          blurRadius: 3.0,
+                                          color: Colors.grey.withOpacity(0.4),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+            
+                              //subtitle for transaction date
+                              subtitle: Text(
+                                DateFormat('MMMM d, yyyy').format(
+                                    DateFormat('yyyy/MM/dd').parse(
+                                        transactionData[index]
+                                            .completeTransactionDate!)),
+                                style: TextStyle(
+                                    fontSize: MediaQuery.of(context).size.width *
+                                        0.034),
+                              ),
+            
+                              //trailing for payment method
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'Payment method',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Wallet',
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-
-                            // title for transaction amount
-                            title: Row(
-                              children: [
-                                Icon(
-                                  Icons.currency_rupee,
-                                  size:
-                                      MediaQuery.of(context).size.width * 0.06,
-                                  color: Colors.black,
-                                ),
-                                Text(
-                                  '${transactionData[index].transactionAmount}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.055,
-                                    shadows: [
-                                      Shadow(
-                                        offset: const Offset(2.0, 2.0),
-                                        blurRadius: 3.0,
-                                        color: Colors.grey.withOpacity(0.4),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            //subtitle for transaction date
-                            subtitle: Text(
-                              DateFormat('MMMM d, yyyy').format(
-                                  DateFormat('yyyy/MM/dd').parse(
-                                      transactionData[index]
-                                          .completeTransactionDate!)),
-                              style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.width *
-                                      0.034),
-                            ),
-
-                            //trailing for payment method
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'Payment method',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04,
-                                  ),
-                                ),
-                                Text(
-                                  'Wallet',
-                                  style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+              ),
             )
           ],
         ),
