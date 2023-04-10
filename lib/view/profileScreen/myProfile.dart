@@ -1,341 +1,450 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:vcharge/models/userDetailsModel.dart';
+import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
-import 'package:vcharge/view/profileScreen/profileAvtar.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key});
+  String userId;
+
+  MyProfilePage({Key? key, required this.userId}) : super(key: key);
 
   @override
-  State<MyProfilePage> createState() => _MyProfilePageState();
+  State<MyProfilePage> createState() => MyProfilePageState();
 }
 
-class _MyProfilePageState extends State<MyProfilePage> {
+class MyProfilePageState extends State<MyProfilePage> {
+  // String specificUserIdUrl = '';
+  String specificUserIdUrl =
+      "http://192.168.0.41:8081/manageUser/user?userId=USR20230405172425672";
+
+  @override
+  void initState() {
+    super.initState();
+    // specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}";
+    getUserData();
+  }
+
+  String firstName = '';
+  String lastName = '';
+  String contactNo = '';
+  String emailId = '';
+
+  Future getUserData() async {
+    var response = await GetMethod.getRequest(specificUserIdUrl);
+    firstName = response['userFirstName'];
+    lastName = response['userLastName'];
+    contactNo = response['userContactNo'];
+    emailId = response['userEmail'];
+  }
+
+  final ImagePicker picker = ImagePicker();
+  XFile? selectedImage;
+
+  Future getImage(ImageSource source) async {
+
+    try{
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile == null)  return;
+    // final imageTemporary = File(pickedFile.path);
+    setState(() {
+      selectedImage = pickedFile;
+    });
+  } catch(error) {
+    print("error: $error");
+  }
+    // setState(() {
+    //   selectedImage = pickedFile;
+    // });
+  }
+
+  Widget bottomSheet(){
+    print("inside the bottomsheet");
+    return Container(
+      height: MediaQuery.of(context).size.height* 0.20,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(400),
+          topRight: Radius.circular(400)
+        )
+      ),
+      child: Column(
+        children: [
+          const Text("Choose to import from"),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FloatingActionButton(onPressed: (){
+                print("clicked upon the gallery option");
+                getImage(ImageSource.gallery);
+                print("Done with the gallery option");
+                print("Exiting the bottomshett function");
+              }, child: const Icon(Icons.browse_gallery),),
+              FloatingActionButton(onPressed: (){
+                print("clicked upon the camera option");
+                getImage(ImageSource.camera);
+                print("Done with the camera option");
+                print("Exiting the bottomshett function");
+              }, child: const Icon(Icons.camera_alt_outlined),)
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: FractionalOffset(0.2, 0.4),
-              colors: [Color.fromARGB(255, 241, 227, 200), Color.fromARGB(255, 232, 237, 238), Color.fromARGB(255, 186, 225, 192)],
-            ),
-          ),
-          child: Stack(
-            children: [
-        
-        
-            // Stack's First child: semicircle
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8, top: 2),
-                child: Container(
-                    height: MediaQuery.of(context).size.height * 0.18,
-                    width: MediaQuery.of(context).size.width * 1,
-                    decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 152, 239, 148),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(400),
-                          bottomRight: Radius.circular(400),
-                        ))),
-              ),
-            
-            // Stack's Second child: column
-              Column(
-                children: [
-                  // Column's first child - buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // color: Colors.amber.shade50,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: Get.height * 0.3,
+                  child: Stack(
                     children: [
-                      // back arrow button
+                      greenIntroWidgetWithoutLogos(),
                       Padding(
                         padding:
-                            const EdgeInsets.only(right: 30, top: 10, left: 30),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_sharp,
-                                color: Colors.green,
-                              )),
+                            const EdgeInsets.only(top: 8, right: 20, left: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                const HomeScreen())));
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_back_sharp,
+                                    color: Colors.green,
+                                  )),
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                const SettingPage())));
+                                  },
+                                  icon: const Icon(
+                                    Icons.settings,
+                                    color: Colors.green,
+                                  )),
+                            ),
+                          ],
                         ),
                       ),
-            
-                      // settings button
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 30, right: 30, top: 10),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SettingPage(),
-                                  ),
+                      Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: InkWell(
+                              onTap: () {
+                                print("clicked on circle avtar");
+                                showModalBottomSheet(
+                                  context: context, 
+                                  builder: ((builder) => bottomSheet())
                                 );
                               },
-                              icon: const Icon(
-                                Icons.settings_sharp,
-                                color: Colors.green,
-                              )),
-                        ),
+                              child: selectedImage == null
+                                  ? Container(
+                                      width: 120,
+                                      height: 120,
+                                      margin: const EdgeInsets.only(bottom: 20),
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xffD6D6D6)),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.camera_alt_outlined,
+                                          size: 40,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 120,
+                                      height: 120,
+                                      margin: const EdgeInsets.only(bottom: 20),
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: FileImage(
+                                                  File(selectedImage!.path)),
+                                              fit: BoxFit.fill),
+                                          shape: BoxShape.circle,
+                                          color: const Color(0xffD6D6D6)),
+                                    ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            right: MediaQuery.of(context).size.width * 0.37,
+                            child: GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context, 
+                                  builder: ((builder) => bottomSheet())
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  child: CircleAvatar(
+                                      backgroundColor: Colors.blue,
+                                      child: Container(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 2),
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.028,
+                                            color: Colors.white,
+                                          ))),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),
-            
-                  // Column's second child - circle avtar
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: const Color.fromARGB(255, 188, 222, 189),
-                      border:
-                          Border.all(color: const Color.fromARGB(255, 148, 225, 41)),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: ProfileAvatarWidget()
-                    ),
-                  ),
-            
-                  // Column's third child: name row
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 4),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.85,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Name:"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.57,
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.black,
-                                    width: 2,
-                                    
-                                  )
-                                )
-                              ),
-                              child: const Center(child: Text("Mr. Sherlock Holmes",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15
-                                ),
-                              )),
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-            
-                  // Column's fourth child: mobile no. row
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.85,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Mobile No:"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.57,
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.black,
-                                    width: 2,
-                                  )
-                                )
-                              ),
-                              child: const Center(child: Text("+91 9393939393",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15
-                                ),
-                              )),
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-            
-                  // Column's fifth child: email id row
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.85,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Email ID:"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.57,
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.black,
-                                    width: 2,
-                                  )
-                                )
-                              ),
-                              child: const Center(child: Text("sherlock@outlook.com",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15
-                                ),
-                              )),
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-            
-                  // Column's sixth child: simple container
-        
-                  // savings container
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-                    child: Row(
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 23),
+                  child: Form(
+                    child: Column(
                       children: [
-                        Expanded(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              // color: const Color.fromARGB(255, 247, 222, 185),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all()                            
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                    children: [
-                                      const Text("Savings", 
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Icon(Icons.currency_rupee_sharp),
-                                          ),
-                                          Text("200")
-                                        ],
-                                      )
-                                    ],
-                                  )
-                            ),
-                          ),
+                        TextContainer('Name', Icons.person_outlined,
+                            'Snehal Matke', (String? input) {}),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.01),
+                        TextContainer('Contact No', Icons.home_outlined,
+                            '+91 9393939393', (String? input) {}),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
-                      ),
-        
-                      // sessions container
-                      Expanded(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              // color: const Color.fromARGB(255, 185, 217, 247),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all()                            
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                    children: [
-                                      const Text("Sessions", 
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Icon(Icons.event_note),
-                                          ),
-                                          Text("02")
-                                        ],
-                                      )
-                                    ],
-                                  )
-                            ),
-                          ),
+                        TextContainer('Email id', Icons.card_travel,
+                            'snehal@gmail.com', (String? input) {}),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
-                      ),
-        
-                      // referrals container
-                      Expanded(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              // color: const Color.fromARGB(255, 195, 247, 185),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all()                            
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                    children: [
-                                      const Text("Referrals", 
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Icon(Icons.person_2),
-                                          ),
-                                          Text("02")
-                                        ],
-                                      )
-                                    ],
-                                  )
-                            ),
-                          ),
-                        ),
-                      ),
                       ],
                     ),
-                  )
-                      ],
-                    ),
-              
-            // Stack's third child: logo widget
-              Positioned(
-                  bottom: 10,
-                  left: MediaQuery.of(context).size.width * 0.34,
-                  child: VirtuosoLogo())
-            ],
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                IntrinsicHeight(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16.0),
+                              bottomLeft: Radius.circular(16.0),
+                            ),
+                          ),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "Savings",
+                                  style: TextStyle(fontWeight: FontWeight.w400),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.height *
+                                          0.02,
+                                      top: MediaQuery.of(context).size.height *
+                                          0.0047),
+                                  child: Row(
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(Icons.currency_rupee_sharp),
+                                      ),
+                                      Text(
+                                        "200",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w800),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.04,
+                          child: const VerticalDivider()),
+                      Expanded(
+                        child: Container(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "Sessions",
+                                  style: TextStyle(fontWeight: FontWeight.w400),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.height *
+                                          0.03,
+                                      top: MediaQuery.of(context).size.height *
+                                          0.0047),
+                                  child: Row(
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(Icons.event),
+                                      ),
+                                      Text(
+                                        "02",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w800),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.04,
+                          child: const VerticalDivider()),
+                      Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(),
+                          ),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "Referrals",
+                                  style: TextStyle(fontWeight: FontWeight.w400),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.height *
+                                          0.02),
+                                  child: Row(
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Icon(Icons.person_2),
+                                      ),
+                                      Text(
+                                        "02",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w800),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                ),
+                Center(
+                  child: Container(
+                    child: const VirtuosoLogo(),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  TextContainer(
+      String title, IconData iconData, String name, Function validator,
+      {Function? onTap, bool readOnly = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.02,
+        ),
+        Container(
+          width: Get.width,
+          height: MediaQuery.of(context).size.height * 0.05,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 1,
+                    blurRadius: 1)
+              ],
+              borderRadius: BorderRadius.circular(8)),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, top: 8, bottom: 8),
+            child: Text(name),
+          ),
+        )
+      ],  
+    );
+  }
+
+  Widget greenIntroWidgetWithoutLogos(
+      {String title = "My Profile", String? subtitle}) {
+    return Container(
+      width: Get.width,
+      decoration: const BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(400),
+              bottomRight: Radius.circular(400))),
+      height: Get.height * 0.2,
     );
   }
 }

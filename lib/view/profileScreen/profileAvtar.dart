@@ -27,73 +27,75 @@ class _ProfileAvatarWidgetState extends State<ProfileAvatarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Stack(
-        children: [
-          CircleAvatar(
-            radius: 100,
-            backgroundColor: Colors.white,
-            foregroundImage: _image != null
-                ? FileImage(_image!)
-                : const AssetImage('assets/images/myProfile.jpg')
-                    as ImageProvider<Object>?,
-            child: _image == null
-                ? const Icon(
-                    Icons.person,
-                    size: 130,
-                  )
-                : null,
-          ),
-
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: IconButton(onPressed: (){
-              _getImage();
-            }, icon: const Icon(Icons.camera_alt_sharp, size: 30)),
-          )
-          
-        ],
+    return Stack(
+      children: [
+        ClipOval(
+    child: Material(
+      color: Colors.transparent,
+      child: Ink.image(
+        image: const AssetImage('assets/images/myProfile2.jpg'),
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width * 0.5,
+        height: MediaQuery.of(context).size.height * 0.25,
+        child: InkWell(
+          onTap: () {
+            // Handle onTap
+          },
+        ),
       ),
+    ),
+  ),
+
+        Positioned(
+          bottom: 2,
+          right: 6,
+          child: GestureDetector(
+            onTap: (){
+              _getImage();
+            },
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                child: CircleAvatar(
+                  backgroundColor: Colors.blue,
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Icon(Icons.edit, size: MediaQuery.of(context).size.height * 0.028, color: Colors.white,))),
+                ),
+              ),
+          ),
+          ),
+        
+      ],
     );
 
 
 
-
-
-
-
-
-
-
-
-
-
-    // return GestureDetector(
-    //   onTap: _getImage,
-    //   child: Padding(
-    //     padding: const EdgeInsets.all(10.0),
-    //     child: Stack(
-    //       children: [
-    //         CircleAvatar(
-    //           radius: 100,
-    //           backgroundColor: Colors.white,
-    //           backgroundImage: _image != null
-    //               ? FileImage(_image!)
-    //               : const AssetImage('assets/images/myProfile.jpg')
-    //                   as ImageProvider<Object>?,
-    //           child: _image == null
-    //               ? const Icon(
-    //                   Icons.person,
-    //                   size: 130,
-    //                 )
-    //               : null,
-    //         ),
-            
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }
+
+
+
+/*
+
+
+CircleAvatar(
+                radius: 100,
+                backgroundColor: Colors.white,
+                foregroundImage: _image != null
+                    ? FileImage(_image!)
+                    : const AssetImage('assets/images/myProfile.jpg')
+                        as ImageProvider<Object>?,
+                child: _image == null
+                    ? const Icon(
+                        Icons.person,
+                        size: 130,
+                      )
+                    : null,
+              ),
+
+
+
+*/

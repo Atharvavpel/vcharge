@@ -74,7 +74,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const MyProfilePage()));
+                                  builder: (context) => MyProfilePage(userId: widget.userId.toString())));
                         },
                         icon: const Icon(Icons.person),
                         iconSize: 30,
