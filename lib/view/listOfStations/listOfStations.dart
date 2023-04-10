@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
+import 'package:vcharge/models/chargerModel.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
 import 'package:vcharge/services/getMethod.dart';
 import 'dart:math' as Math;
 
 import 'package:vcharge/view/listOfStations/widgets/searchBarOfLOS.dart';
+import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
 class ListOfStations extends StatefulWidget {
   String userId;
@@ -51,22 +53,7 @@ class ListOfStationsState extends State<ListOfStations> {
     setState(() {
       if (data != null) {
         for (int i = 0; i < data.length; i++) {
-          stationsList.add(StationModel(
-              stationName: data[i]['stationName'],
-              stationLocation: data[i]['stationLocation'],
-              stationLatitude: data[i]['stationLatitude'],
-              stationLongitude: data[i]['stationLongitude'],
-              stationLocationURL: data[i]['stationLocationURL'],
-              stationParkingArea: data[i]['stationParkingArea'],
-              stationContactNumber: data[i]['stationContactNumber'],
-              stationWorkingTime: data[i]['stationWorkingTime'],
-              chargerNumber: data[i]['chargerNumber'],
-              stationParkingType: data[i]['stationParkingType'],
-              stationAmenity: data[i]['stationAmenity'],
-              chargers: data[i]['chargers'],
-              stationShareId: data[i]['stationShareId'],
-              stationStatus: data[i]['stationStatus'],
-              stationPowerStandard: data[i]['stationPowerStandard']));
+          stationsList.add(StationModel.fromJson(data[i]));
         }
       }
     });
@@ -116,8 +103,8 @@ class ListOfStationsState extends State<ListOfStations> {
     userToStationDistanceList = stationsList.map((station) {
       return getDistanceFromUser(
           userPosition!,
-          LatLng(double.parse(station.stationLatitude),
-              double.parse(station.stationLongitude)));
+          LatLng(double.parse(station.stationLatitude!),
+              double.parse(station.stationLongitude!)));
     }).toList();
   }
 
@@ -151,7 +138,9 @@ class ListOfStationsState extends State<ListOfStations> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: GestureDetector(
-        onTap: (){FocusScope.of(context).unfocus();},
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -162,11 +151,13 @@ class ListOfStationsState extends State<ListOfStations> {
               children: [
                 //Container for search bar
                 Container(
-                  margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  child: SearchBarofLOS(userId: widget.userId,)
-                ),
-                
+                    margin: EdgeInsets.all(
+                        MediaQuery.of(context).size.width * 0.04),
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    child: SearchBarofLOS(
+                      userId: widget.userId,
+                    )),
+
                 //Container for List Of Station
                 Container(
                   height: MediaQuery.of(context).size.height * 0.73,
@@ -181,50 +172,70 @@ class ListOfStationsState extends State<ListOfStations> {
                                 margin: EdgeInsets.all(
                                     MediaQuery.of(context).size.width * 0.02),
                                 child: ListTile(
-                                  onTap: (){},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  StationsSpecificDetails(
+                                                    stationModel:
+                                                        sortedStationList[
+                                                            index],
+                                                  )));
+                                    },
                                     title: Container(
                                       child: Text(
-                                        sortedStationList[index].stationName,
+                                        sortedStationList[index].stationName!,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize:
-                                                MediaQuery.of(context).size.width *
-                                                    0.04),
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04),
                                       ),
                                     ),
                                     subtitle: //container for station address
                                         Container(
-                                            child: Text(sortedStationList[index]
-                                                .stationLocation)),
+                                            child: Text(
+                                      sortedStationList[index].stationLocation!,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
                                     trailing: //column for 'distance from user' and connector type
                                         Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Wrap(
-                                          spacing:
-                                              MediaQuery.of(context).size.width *
-                                                  0.02,
+                                          spacing: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.02,
                                           children: [
                                             //text for distance
                                             userPosition == null
                                                 ? const CircularProgressIndicator()
                                                 : Text(
-                                                    '${sortedStationDistanceList[index]['distance'].toStringAsFixed(2)} KM', style: TextStyle(fontWeight: FontWeight.bold),),
-                
+                                                    '${sortedStationDistanceList[index]['distance'].toStringAsFixed(2)} KM',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+
                                             //CircleAvater to show avaliblity
                                             CircleAvatar(
                                               radius: MediaQuery.of(context)
                                                       .size
                                                       .width *
                                                   0.02,
-                                              backgroundColor: getAvailablityColor(
-                                                  sortedStationList[index]
-                                                      .stationStatus),
+                                              backgroundColor:
+                                                  getAvailablityColor(
+                                                      sortedStationList[index]
+                                                          .stationStatus!),
                                             ),
                                           ],
                                         ),
-                
+
                                         //Container for connector type
                                         Container(
                                           // margin: EdgeInsets.all(
@@ -232,9 +243,11 @@ class ListOfStationsState extends State<ListOfStations> {
                                           //         0.02),
                                           child: Text(
                                             sortedStationList[index]
-                                                .stationPowerStandard,
-                                            style:
-                                                const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,),
+                                                .stationPowerStandard!,
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         )
                                       ],

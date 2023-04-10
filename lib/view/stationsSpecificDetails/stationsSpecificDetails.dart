@@ -1,604 +1,426 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/stationModel.dart';
 
 class StationsSpecificDetails extends StatefulWidget {
-  final StationModel stationModel;
+  StationModel? stationModel;
+
+  StationsSpecificDetails({required this.stationModel, super.key});
+
   @override
   State<StatefulWidget> createState() => StationsSpecificDetailsState();
-
-  const StationsSpecificDetails(this.stationModel, {super.key});
 }
 
 class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   List<dynamic> chargerList = [];
+  StationModel? stationModel;
+
+  //true indicates Amenity button is selected and false indicated Review button
+  bool selectedButton = true;
 
   @override
   void initState() {
     super.initState();
-    chargerList = widget.stationModel.chargers ?? [];
-    print(chargerList);
+    stationModel = widget.stationModel;
+    chargerList = widget.stationModel!.chargers!;
+  }
+
+  //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
+  MaterialColor getAvailablityColor(String availiblityStatus) {
+    if (availiblityStatus == 'Available') {
+      return Colors.green;
+    } else if (availiblityStatus == 'NotAvailable') {
+      return Colors.red;
+    } else {
+      return Colors.orange;
+    }
+  }
+
+  IconData getIconForAmenity(String amenity) {
+    if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms') {
+      return Icons.cabin;
+    } else if (amenity.toLowerCase().replaceAll(" ", "") == 'loungearea') {
+      return Icons.local_cafe;
+    } else if (amenity.toLowerCase().replaceAll(" ", "") == 'foodservice') {
+      return Icons.restaurant;
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'shops') {
+      return Icons.shopping_bag;
+    } else {
+      return Icons.abc;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Station"),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            //Container for station heading and share button
+            Container(
+              margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.width * 0.05,
+                left: MediaQuery.of(context).size.width * 0.06,
+                right: MediaQuery.of(context).size.width * 0.06,
+                bottom: MediaQuery.of(context).size.width * 0.02,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  //Expanded for station name
+                  Expanded(
+                      flex: 6,
+                      child: Text(
+                        stationModel!.stationName!,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.width * 0.06),
+                      )),
+                  
+                  //Expanded for share Icon
+                  Expanded(
+                      flex: 1,
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.share,
+                            size: MediaQuery.of(context).size.width * 0.07,
+                          )))
+                ],
+              ),
+            ),
 
-    //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
-    MaterialColor getAvailablityColor(String availiblityStatus){
-      if(availiblityStatus == 'Available'){
-        return Colors.green;
-      }
-      else if(availiblityStatus == 'NotAvailable'){
-        return Colors.red;
-      }
-      else{
-        return Colors.orange;
-      }
-    }
+            //Container for station address
+            Container(
+              child: Row(
+                children: [
+                  //container for location Icon
+                  Container(
+                    child: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.directions)),
+                  ),
+                  //conteinr for station address text
+                  Expanded(
+                    child: Container(
+                      child: Text(
+                        stationModel!.stationLocation!,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("${widget.stationModel.stationName}"),
-      ),
-      body: ListView.builder(
-          itemCount: chargerList.length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 5),
-              child: Card(
-                elevation: 4.0,
-                child: ExpansionTile(
-                  leading: CircleAvatar(backgroundColor: Colors.green, radius: 7,),
-                  title: Text(chargerList[index]['chargerName'], style: const TextStyle(fontWeight: FontWeight.bold),),
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          //container for location
-                          Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.shade400,
-                                  borderRadius: BorderRadius.circular(7)),
-                              margin: const EdgeInsets.all(5),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 5, right: 5, bottom: 1, top: 1),
-                                child: Row(children: [
-                                  const Icon(Icons.location_on_rounded),
-                                  Text(
-                                      "${widget.stationModel.stationLocation}"),
-                                ]),
-                              )),
+            //Container for station phone number
+            Container(
+              child: Row(
+                children: [
+                  //container for call Icon
+                  Container(
+                    child: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.call)),
+                  ),
+                  //conteiner for station contact number text
+                  Container(
+                    child: Text(
+                      stationModel!.stationContactNumber!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-                          //container for phone number
-                          Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade400,
-                                borderRadius: BorderRadius.circular(7),
-                              ),
-                              margin: const EdgeInsets.all(5),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 5, right: 5, bottom: 1, top: 1),
-                                child: Row(children: [
-                                  const Icon(Icons.phone),
-                                  Text(
-                                      "${widget.stationModel.stationContactNumber}"),
-                                ]),
-                              )),
+            //Container for add to favorite
+            Container(
+              child: Row(
+                children: [
+                  //container for favorite Icon
+                  Container(
+                    child: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.favorite)),
+                  ),
+                  //container for add to favorite text
+                  Container(
+                    child: const Text(
+                      'Add to Favorite',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-                          //Container for charger type and charger availiblity type
-                          Container(
-                            margin: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade400,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                //Container for charger type
-                                // Container(
-                                //   width: 110,
-                                //   height: 80,
-                                //   margin: const EdgeInsets.only(
-                                //     top: 10,
-                                //     bottom: 10,
-                                //   ),
-                                //   decoration: BoxDecoration(
-                                //       color: Colors.grey.shade300,
-                                //       borderRadius: BorderRadius.circular(5)),
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.only(
-                                //         top: 10, bottom: 10, left: 4, right: 4),
-                                //     child: Column(
-                                //       mainAxisAlignment:
-                                //           MainAxisAlignment.center,
-                                //       children: [
-                                //         const Text('Charger Type'),
-                                //         const Divider(
-                                //           color: Color.fromARGB(255, 0, 0, 0),
-                                //           thickness: 2,
-                                //           indent: 20,
-                                //           endIndent: 20,
-                                //         ),
-                                //         Text(chargerList[index]
-                                //             ['chargerType'])
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
+            //Container for station active time
+            Container(
+              child: Row(
+                children: [
+                  //container for watch icon
+                  Container(
+                    child: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.watch_later)),
+                  ),
+                  //container for station active time text
+                  Container(
+                    child: Text(
+                      stationModel!.stationWorkingTime!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-                                //container for availiblity type
-                                Container(
-                                  width: 110,
-                                  height: 80,
-                                  margin: const EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 4, right: 4),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Text('Availability'),
-                                        Divider(
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                          thickness: 2,
-                                          indent: 20,
-                                          endIndent: 20,
-                                        ),
-                                        Text('Available')
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+            //Container for Amenity and review button
+            Container(
+              child: Wrap(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //Row container 2 button for amineties and review
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: selectedButton
+                                ? Colors.green
+                                : Colors.white, // Set the button color
                           ),
-
-                          //Container for cost and chargerId
-                          Container(
-                            margin: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade400,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                //Container for cost
-                                Container(
-                                  width: 110,
-                                  height: 80,
-                                  margin: const EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 4, right: 4),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Text('Cost'),
-                                        Divider(
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                          thickness: 2,
-                                          indent: 20,
-                                          endIndent: 20,
-                                        ),
-                                        Text(
-                                            '30/kWh')
-                                      ],
-                                    ),
-                                  ),
-                                ),
-
-                                // const VerticalDivider(
-                                //   color: Colors. black,
-                                //   thickness: 2,
-                                //   indent: 20,
-                                //   endIndent: 20,
-                                // ),
-
-                                //Container for charger Id
-                                // Container(
-                                //   width: 110,
-                                //   height: 80,
-                                //   margin: const EdgeInsets.only(
-                                //     top: 10,
-                                //     bottom: 10,
-                                //   ),
-                                //   decoration: BoxDecoration(
-                                //       borderRadius: BorderRadius.circular(5),
-                                //       color: Colors.grey.shade300,
-                                //     ),
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.only(
-                                //         top: 10, bottom: 10, left: 4, right: 4),
-                                //     child: Column(
-                                //       mainAxisAlignment:
-                                //           MainAxisAlignment.center,
-                                //       children: [
-                                //         const Text('ChargerID'),
-                                //         const Divider(
-                                //           color: Color.fromARGB(255, 0, 0, 0),
-                                //           thickness: 2,
-                                //           indent: 20,
-                                //           endIndent: 20,
-                                //         ),
-                                //         Text(
-                                //             '${chargerList[index]['chargerId']}')
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
-                              ],
-                            ),
+                          onPressed: () {
+                            setState(() {
+                              selectedButton = true;
+                            });
+                          },
+                          child: Text('Amenities',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: selectedButton
+                                      ? Colors.white
+                                      : Colors.black))),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: selectedButton
+                                ? Colors.white
+                                : Colors.green, // Set the button color
                           ),
+                          onPressed: () {
+                            setState(() {
+                              selectedButton = false;
+                            });
+                          },
+                          child: Text(
+                            'Reviews',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: selectedButton
+                                    ? Colors.black
+                                    : Colors.white),
+                          )),
+                    ],
+                  ),
 
-                          //container for connector type and support
+                  //This container consist of 2 container for amenities and review
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    child: AnimatedSwitcher(
+                      switchInCurve: Curves.easeInOut,
+                      switchOutCurve: Curves.easeInOut,
+                      duration: const Duration(milliseconds: 500),
+                      child: selectedButton
+                          ?
+                          //Container for Amenities
                           Container(
-                            margin: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade400,
-                              borderRadius: BorderRadius.circular(10),
+                              alignment: Alignment.center,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      stationModel!.stationAmenity!.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.width *
+                                              0.028),
+                                      child: Column(
+                                        children: [
+                                          //Amenity icon
+                                          Icon(
+                                            getIconForAmenity(stationModel!
+                                                .stationAmenity![index]),
+                                            size: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06,
+                                            color: Colors.green,
+                                          ),
+                                          //Amenity text
+                                          Text(
+                                            stationModel!.stationAmenity![index],
+                                            style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            )
+                          :
+                          //Container for reviews
+                          Container(
+                              alignment: Alignment.center,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      stationModel!.stationAmenity!.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.65,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.green.shade100,
+                                              child: Icon(Icons.person),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.01),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  const Text(
+                                                    'Anyone name',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    'Dummy Text, for demo perpose, written for no reason. Please Ignore this',
+                                                    style: TextStyle(
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.03),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                //Container for connector type
-                                Container(
-                                  width: 110,
-                                  // height: 80,
-                                  margin: const EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 4, right: 4),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text('Connector Type',textAlign: TextAlign.center,),
-                                        const Divider(
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                          thickness: 2,
-                                          indent: 20,
-                                          endIndent: 20,
-                                        ),
-                                        Text(
-                                            '${chargerList[index]['chargerConnectorType']}')
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-                                // const VerticalDivider(
-                                //   color: Colors. black,
-                                //   thickness: 2,
-                                //   indent: 20,
-                                //   endIndent: 20,
-                                // ),
+            //Container for Charger List
+            Container(
+              child: Column(
+                children: [
+                  //Container for chargers heading
+                  Container(
+                    width: double.maxFinite,
+                    color: Colors.green.shade100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Chargers',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize:
+                                MediaQuery.of(context).size.width * 0.045),
+                      ),
+                    ),
+                  ),
 
-                                //Container for support
-                                Container(
-                                  // width: 110,
-                                  // height: 80,
-                                  margin: const EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
+                  //Container for charger list
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.34,
+                    child: ListView.builder(
+                        itemCount: stationModel!.chargers!.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            color: Color.fromARGB(255, 239, 255, 255),
+                            child: ExpansionTile(
+                              //leading
+                              leading: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  //card to show availability as a circular avatar
+                                  Card(
+                                    elevation: 4,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.06)
                                     ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 4, right: 4),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        const Text('Support'),
-                                        IconButton(
-                                          onPressed: (){}, 
-                                          icon: const Icon(Icons.support_agent, size: 40,)
-                                        )
-                                      ],
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          getAvailablityColor('Available'),
+                                      radius: MediaQuery.of(context).size.width *
+                                          0.03,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        
-                          SizedBox(
-                            width: 220,
-                            child: ElevatedButton(
-                              onPressed: (){},
-                              child: Row(
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: FaIcon(FontAwesomeIcons.bookmark),
-                                  ),
-                                  Text('Book Charging Session',style: TextStyle(fontWeight: FontWeight.bold))
                                 ],
                               ),
+                              //title - name of charger
+                              title: Text(
+                                stationModel!.chargers![index].chargerName!,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              //subtitle
+                              subtitle: Text("Number of connectors: ${stationModel!.chargers![index].chargerNumberOfConnector}"),
+                              //children
+                              children: [
+                                
+                              ],
                             ),
-                          ),
-
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                          );
+                        }),
+                  )
+                ],
               ),
-            );
-          }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
-
-
-
-
-// class OnPressStation extends StatefulWidget{
-//   StationModel stationModel;
-//   @override
-//   State<StatefulWidget> createState() => OnPressStationState();
-//   OnPressStation(this.stationModel);
-// }
-// class OnPressStationState extends State<OnPressStation>{
-//   @override
-//   Widget build(BuildContext context) {
-//     return AlertDialog(
-//       title: Text("${widget.stationModel.stationName}"),
-//       actions: [
-//         Container(
-//           margin: const EdgeInsets.all(15.0),
-//           child: Column(
-//             children: [
-//               //container for location
-//               Container(
-//                   decoration: BoxDecoration(
-//                       color: Colors.grey.shade400,
-//                       borderRadius: BorderRadius.circular(7)),
-//                   margin: const EdgeInsets.all(5),
-//                   child: Padding(
-//                     padding: const EdgeInsets.only(
-//                         left: 5, right: 5, bottom: 1, top: 1),
-//                     child: Row(children: [
-//                       const Icon(Icons.location_on_rounded),
-//                       Text("${widget.stationModel.stationLocation}"),
-//                     ]),
-//                   )),
-
-//               //container for phone number
-//               Container(
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey.shade400,
-//                     borderRadius: BorderRadius.circular(7),
-//                   ),
-//                   margin: const EdgeInsets.all(5),
-//                   child: Padding(
-//                     padding: const EdgeInsets.only(
-//                         left: 5, right: 5, bottom: 1, top: 1),
-//                     child: Row(children: [
-//                       const Icon(Icons.phone),
-//                       Text("${widget.stationModel.stationContactNumber}"),
-//                     ]),
-//                   )),
-
-//               Container(
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                   children: [
-//                     //Container for charger type
-//                     Container(
-//                       width: 110,
-//                       height: 80,
-//                       margin: const EdgeInsets.only(
-//                         top: 10,
-//                         bottom: 10,
-//                       ),
-//                       decoration: BoxDecoration(
-//                           color: Colors.grey.shade400,
-//                           borderRadius: BorderRadius.circular(10)),
-//                       child: Padding(
-//                         padding: const EdgeInsets.only(top: 10, bottom: 10, left: 4, right: 4),
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: const [
-//                             Text('Charger Type'),
-//                             Divider(
-//                               color: Color.fromARGB(255, 0, 0, 0),
-//                               thickness: 2,
-//                               indent: 20,
-//                               endIndent: 20,
-//                             ),
-//                             Text('Level 1 Charger')
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-                    
-//                     //container for availiblity type
-//                     Container(
-//                       width: 110,
-//                       height: 80,
-//                       margin: const EdgeInsets.only(
-//                         top: 10,
-//                         bottom: 10,
-//                       ),
-//                       decoration: BoxDecoration(
-//                           color: Colors.grey.shade400,
-//                           borderRadius: BorderRadius.circular(10)),
-//                       child: Padding(
-//                         padding: const EdgeInsets.only(top: 10, bottom: 10, left: 4, right: 4),
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: const [
-//                             Text('Availability'),
-//                             Divider(
-//                               color: Color.fromARGB(255, 0, 0, 0),
-//                               thickness: 2,
-//                               indent: 20,
-//                               endIndent: 20,
-//                             ),
-//                             Text('Busy')
-//                           ],
-//                         ),
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               )
-//             ],
-//           ),
-//         )
-//       ],
-//     );
-//   }
-
-// }
-
-// class OnPressCharger extends StatefulWidget {
-//   StationModel stationModel;
-//   @override
-//   State<StatefulWidget> createState() => OnPressChargerState();
-
-//   OnPressCharger(this.stationModel);
-// }
-
-// class OnPressChargerState extends State<OnPressCharger> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return AlertDialog(
-//       title: Text("${widget.stationModel.stationName}"),
-//       actions: [
-//         Container(
-//           margin: const EdgeInsets.all(15.0),
-//           child: Column(
-//             children: [
-//               //container for location
-//               Container(
-//                   decoration: BoxDecoration(
-//                       color: Colors.grey.shade400,
-//                       borderRadius: BorderRadius.circular(7)),
-//                   margin: const EdgeInsets.all(5),
-//                   child: Padding(
-//                     padding: const EdgeInsets.only(
-//                         left: 5, right: 5, bottom: 1, top: 1),
-//                     child: Row(children: [
-//                       const Icon(Icons.location_on_rounded),
-//                       Text("${widget.stationModel.stationLocation}"),
-//                     ]),
-//                   )),
-
-//               //container for phone number
-//               Container(
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey.shade400,
-//                     borderRadius: BorderRadius.circular(7),
-//                   ),
-//                   margin: const EdgeInsets.all(5),
-//                   child: Padding(
-//                     padding: const EdgeInsets.only(
-//                         left: 5, right: 5, bottom: 1, top: 1),
-//                     child: Row(children: [
-//                       const Icon(Icons.phone),
-//                       Text("${widget.stationModel.stationContactNumber}"),
-//                     ]),
-//                   )),
-
-//               Container(
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                   children: [
-//                     //Container for charger type
-//                     Container(
-//                       width: 110,
-//                       height: 80,
-//                       margin: const EdgeInsets.only(
-//                         top: 10,
-//                         bottom: 10,
-//                       ),
-//                       decoration: BoxDecoration(
-//                           color: Colors.grey.shade400,
-//                           borderRadius: BorderRadius.circular(10)),
-//                       child: Padding(
-//                         padding: const EdgeInsets.only(top: 10, bottom: 10, left: 4, right: 4),
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: const [
-//                             Text('Charger Type'),
-//                             Divider(
-//                               color: Color.fromARGB(255, 0, 0, 0),
-//                               thickness: 2,
-//                               indent: 20,
-//                               endIndent: 20,
-//                             ),
-//                             Text('Level 1 Charger')
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-                    
-//                     //container for availiblity type
-//                     Container(
-//                       width: 110,
-//                       height: 80,
-//                       margin: const EdgeInsets.only(
-//                         top: 10,
-//                         bottom: 10,
-//                       ),
-//                       decoration: BoxDecoration(
-//                           color: Colors.grey.shade400,
-//                           borderRadius: BorderRadius.circular(10)),
-//                       child: Padding(
-//                         padding: const EdgeInsets.only(top: 10, bottom: 10, left: 4, right: 4),
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: const [
-//                             Text('Availability'),
-//                             Divider(
-//                               color: Color.fromARGB(255, 0, 0, 0),
-//                               thickness: 2,
-//                               indent: 20,
-//                               endIndent: 20,
-//                             ),
-//                             Text('Busy')
-//                           ],
-//                         ),
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               )
-//             ],
-//           ),
-//         )
-//       ],
-//     );
-//   }
-// }

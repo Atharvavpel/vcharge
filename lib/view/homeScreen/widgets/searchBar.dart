@@ -40,12 +40,15 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: Row(
                   children: [
+                    //drawer button
                     Builder(
                       builder: (context) => IconButton(
+                        key: const Key('drawerButton'),
                         icon: const Icon(Icons.menu),
                         onPressed: () => Scaffold.of(context).openDrawer(),
                       ),
                     ),
+                    // expanded for search text field
                     const Expanded(
                       flex: 7,
                       child: Padding(
@@ -58,15 +61,20 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                         ),
                       ),
                     ),
+
+                    //Expanded for notification button
                     Expanded(
                       flex: 1,
                       child: IconButton(
+                        key: const Key('notificationButton'),
                         onPressed: () {
                         },
                         icon: const Icon(Icons.notifications),
                         iconSize: 30,
                       ),
                     ),
+
+                    //Expanded for profile button
                     Expanded(
                       flex: 2,
                       child: IconButton(
