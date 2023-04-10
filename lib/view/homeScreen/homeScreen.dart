@@ -63,7 +63,7 @@ this is screen with onclose function
   Widget build(BuildContext context) {
 // screens
     List<dynamic> screens = [
-      ListOfStations(),
+      ListOfStations(userId: userId,),
       ExistingHomeScreen(userId: userId,),
       QRScannerWidget(),
       // ScannerQr.qrScanner(),
@@ -104,19 +104,19 @@ this is screen with onclose function
     ];
 
     return Scaffold(
-// this variable is used to extend the background to the appbar
+    // this variable is used to extend the background to the appbar
       extendBodyBehindAppBar: true,
-
-// this variable is used to extend the background to the bottombar
+    
+    // this variable is used to extend the background to the bottombar
       extendBody: true,
-
-// this is drawer function
+    
+    // this is drawer function
       drawer: const SideBarDrawer(),
-
-// this is body
-      body: screens[selectedIndex],
-
-// this is bottom bar
+    
+    // this is body
+      body: SafeArea(child: screens[selectedIndex]),
+    
+    // this is bottom bar
       bottomNavigationBar: CurvedNavigationBar(
           height: MediaQuery.of(context).size.height * 0.07,
           animationCurve: Curves.easeInOut,

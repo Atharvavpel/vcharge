@@ -16,32 +16,6 @@ Key: 1234
 
 
 
-/*
-
-import 'package:flutter/material.dart';
-import 'package:flutter_string_encryption/flutter_string_encryption.dart';
-
-class QrScannerOutput extends StatelessWidget {
-
-void decrypt() async {
-  final publicKey = await parseKeyFromFile<RSAPublicKey>('test/public.pem');
-  final privKey = await parseKeyFromFile<RSAPrivateKey>('test/private.pem');
-
-  final plainText = output;
-  final encrypter = Encrypter(RSA(publicKey: publicKey, privateKey: privKey));
-
-  final encrypted = encrypter.encrypt(plainText!);
-  decrypted = encrypter.decrypt(output as Encrypted);
-
-  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  print(encrypted.base64); // kO9EbgbrSwiq0EYz0aBdljHSC/rci2854Qa+nugbhKjidlezNplsEqOxR+pr1RtICZGAtv0YGevJBaRaHS17eHuj7GXo1CM3PR6pjGxrorcwR5Q7/bVEePESsimMbhHWF+AkDIX4v0CwKx9lgaTBgC8/yJKiLmQkyDCj64J3JSE=
-}
-
-}
-
-*/ 
-
-
 
 
 

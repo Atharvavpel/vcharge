@@ -13,6 +13,8 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+
+
 // variables for storing the values in the sections
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -80,10 +82,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // container for name section
-        
+
+
+              // container for name section     
               Row(
                 children: [
+
                   // container for first name
                   Expanded(
                     child: Padding(
@@ -115,9 +119,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   )
                 ],
               ),
-        
-              // contianer for dob and gender
-        
+
+              // contianer for dob and gender        
               Row(
                 children: [
                   // container for date of birth
@@ -177,11 +180,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     controller: addressController,
                   ),
               ),
-        
-              // contianer for dob and gender
-        
+
+
+              // contianer for pincode and city        
               Row(
                 children: [
+
+                  // container for pincode
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -195,6 +200,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
                   ),
+                  
+                  // container for city
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -213,6 +220,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ),
       ),
+
+      // update button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
