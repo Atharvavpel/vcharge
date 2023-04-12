@@ -246,111 +246,108 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                       child: selectedButton
                           ?
                           //Container for Amenities
-                          Expanded(
-                            child: Container(
-                                alignment: Alignment.center,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        stationModel!.stationAmenity!.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: EdgeInsets.all(
-                                            MediaQuery.of(context).size.width *
-                                                0.02),
-                                        child: Column(
-                                          children: [
-                                            //Amenity icon
-                                            Icon(
-                                              getIconForAmenity(stationModel!
-                                                  .stationAmenity![index]),
-                                              size: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.06,
-                                              color: Colors.green,
+                          Container(
+                              alignment: Alignment.center,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      stationModel!.stationAmenity!.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.height *
+                                              0.01),
+                                      child: Column(
+                                        children: [
+                                          //Amenity icon
+                                          Icon(
+                                            getIconForAmenity(stationModel!
+                                                .stationAmenity![index]),
+                                            size: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06,
+                                            color: Colors.green,
+                                          ),
+                                          //Amenity text
+                                          Text(
+                                            stationModel!
+                                                .stationAmenity![index],
+                                            style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            )
+                          :
+                          
+                          //Container for reviews
+                          Container(
+                              alignment: Alignment.center,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      stationModel!.stationAmenity!.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.65,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.green.shade100,
+                                              child: const Icon(Icons.person),
                                             ),
-                                            //Amenity text
-                                            Text(
-                                              stationModel!
-                                                  .stationAmenity![index],
-                                              style: TextStyle(
-                                                  fontSize: MediaQuery.of(context)
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(
+                                                  MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.04),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ),
-                          )
-                          :
-                          //Container for reviews
-                          Expanded(
-                            child: Container(
-                                alignment: Alignment.center,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        stationModel!.stationAmenity!.length,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        width: MediaQuery.of(context).size.width *
-                                            0.65,
-                                        child: Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.green.shade100,
-                                                child: const Icon(Icons.person),
+                                                      0.01),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  const Text(
+                                                    'Anyone name',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    'Dummy Text, for demo perpose, written for no reason. Please Ignore this',
+                                                    style: TextStyle(
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.03),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  )
+                                                ],
                                               ),
                                             ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsets.all(
-                                                    MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                        0.01),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    const Text(
-                                                      'Anyone name',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    Text(
-                                                      'Dummy Text, for demo perpose, written for no reason. Please Ignore this',
-                                                      style: TextStyle(
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.03),
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ),
-                          ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            ),
                     ),
                   ),
                 ],
