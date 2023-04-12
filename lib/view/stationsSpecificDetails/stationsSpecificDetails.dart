@@ -255,8 +255,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding: EdgeInsets.all(
-                                          MediaQuery.of(context).size.width *
-                                              0.028),
+                                          MediaQuery.of(context).size.height *
+                                              0.01),
                                       child: Column(
                                         children: [
                                           //Amenity icon
