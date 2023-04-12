@@ -243,7 +243,10 @@ dynamic selectedState;
                     cursorColor: Colors.green,
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
-                        label: Text("Email"), border: OutlineInputBorder()),
+                        label: Text("Email"), 
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.email),
+                    ),
                     controller: emailController,
                   ),
                 ),

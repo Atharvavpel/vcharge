@@ -87,7 +87,7 @@ class ReservePopUpState extends State<ReservePopUp> {
     return Padding(
       padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.65,
+        height: MediaQuery.of(context).size.height * 0.75,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
