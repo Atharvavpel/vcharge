@@ -93,115 +93,107 @@ class ReservePopUpState extends State<ReservePopUp> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //this container contains a wrap, which consist 2 text -> stationName and chargerName
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: Wrap(
-                  direction: Axis.vertical,
-                  children: [
-                    //Station Heading text
-                    Container(
-                      child: Text(
-                        stationName!,
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                            fontWeight: FontWeight.bold),
-                      ),
+            Container(
+              // margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+              child: Wrap(
+                direction: Axis.vertical,
+                children: [
+                  //Station Heading text
+                  Container(
+                    child: Text(
+                      stationName!,
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
+                          fontWeight: FontWeight.bold),
                     ),
-                    //Station Heading text
-                    Container(
-                      child: Text(chargerModel!.chargerSerialNumber!),
-                    ),
-                  ],
-                ),
+                  ),
+                  //Station Heading text
+                  Container(
+                    child: Text(chargerModel!.chargerSerialNumber!),
+                  ),
+                ],
               ),
             ),
 
             //container for station location
-            Expanded(
-              flex:2,
-              child: Container(
-                child: Row(
-                  children: [
-                    const Icon(Icons.location_on_rounded),
-                    Text(
-                      stationLocation!,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
+            Container(
+              child: Row(
+                children: [
+                  const Icon(Icons.location_on_rounded),
+                  Text(
+                    stationLocation!,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
               ),
             ),
 
             //Container for socket and avaliblity
-            Expanded(
-              flex: 2,
-              child: Container(
+            Container(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                //container for charger socket
+                Container(
                   child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //container for charger socket
-                  Container(
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Socket: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '${chargerModel!.chargerMountType}',
-                        ),
-                      ],
-                    ),
+                    children: [
+                      const Text(
+                        'Socket: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${chargerModel!.chargerMountType}',
+                      ),
+                    ],
                   ),
-            
-                  //container for charger availiblity
-                  Container(
-                    child: Row(
-                      children: const [
-                        Text(
-                          'Availability: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Available',
-                        ),
-                      ],
-                    ),
+                ),
+
+                //container for charger availiblity
+                Container(
+                  child: Row(
+                    children: const [
+                      Text(
+                        'Availability: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Available',
+                      ),
+                    ],
                   ),
-                ],
-              )),
-            ),
+                ),
+              ],
+            )),
 
             //Column for date picker
-            Expanded(
-              flex: 5,
-              child: Column(
-                children: [
-                  //container for date text
-                  Container(
-                    width: double.maxFinite,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Choose a date',
+            Column(
+              children: [
+                //container for date text
+                Container(
+                  width: double.maxFinite,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Choose a date',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.width * 0.05),
+                      ),
+                      Text(DateFormat('MMM dd, yyyy').format(selectedDate),
                           style: TextStyle(
+                              color: Colors.grey,
                               fontWeight: FontWeight.bold,
-                              fontSize: MediaQuery.of(context).size.width * 0.05),
-                        ),
-                        Text(DateFormat('MMM dd, yyyy').format(selectedDate),
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.035))
-                      ],
-                    ),
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.035))
+                    ],
                   ),
-                  //container for date picker
-                  Card(
+                ),
+                //container for date picker
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  child: Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     child: DatePicker(
@@ -217,151 +209,142 @@ class ReservePopUpState extends State<ReservePopUp> {
                       },
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
 
             //column for timeslot dropdown
-            Expanded(
-              flex: 5,
-              child: Column(
-                children: [
-                  //container for choose time text
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Choose your slot',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.width * 0.05),
-                    ),
+            Column(
+              children: [
+                //container for choose time text
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Choose your slot',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.width * 0.05),
                   ),
-                  //container for time slot drop down
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: // Return a DropdownButton widget with the following properties:
-                        Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.05,
-                          vertical: MediaQuery.of(context).size.width * 0.015),
-                      child: DropdownButton<DateTime>(
-                          underline: Container(),
-                          menuMaxHeight: MediaQuery.of(context).size.height * 0.3,
-                          isExpanded: true,
-                          value:
-                              selectedTimeSlot, // Set the currently selected time slot as the initial value
-                          onChanged: (value) {
-                            // When the user selects a time slot, update the selectedTimeSlot variable and rebuild the widget
-                            setState(() {
-                              selectedTimeSlot = value!;
-                            });
-                          },
-                          // Create a list of DropdownMenuItem widgets based on the timeSlots list
-                          items: timeSlotsList!
-                              .map(
-                                (e) => DropdownMenuItem<DateTime>(
-                                  value:
-                                      e, // Set the value of the DropdownMenuItem to the current time slot
-                                  // Display the hour value of the time slot as a Text widget
-                                  child: Text(
-                                    '${e.hour.toString().padLeft(2, '0')}:00', // Format the hour value as a two-digit string with leading zeros
-                                    style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.05,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                ),
+                //container for time slot drop down
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  child: // Return a DropdownButton widget with the following properties:
+                      Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.05,
+                        vertical: MediaQuery.of(context).size.width * 0.015),
+                    child: DropdownButton<DateTime>(
+                        underline: Container(),
+                        menuMaxHeight: MediaQuery.of(context).size.height * 0.3,
+                        isExpanded: true,
+                        value:
+                            selectedTimeSlot, // Set the currently selected time slot as the initial value
+                        onChanged: (value) {
+                          // When the user selects a time slot, update the selectedTimeSlot variable and rebuild the widget
+                          setState(() {
+                            selectedTimeSlot = value!;
+                          });
+                        },
+                        // Create a list of DropdownMenuItem widgets based on the timeSlots list
+                        items: timeSlotsList!
+                            .map(
+                              (e) => DropdownMenuItem<DateTime>(
+                                value:
+                                    e, // Set the value of the DropdownMenuItem to the current time slot
+                                // Display the hour value of the time slot as a Text widget
+                                child: Text(
+                                  '${e.hour.toString().padLeft(2, '0')}:00', // Format the hour value as a two-digit string with leading zeros
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.05,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              )
-                              .toList()),
-                    ),
+                              ),
+                            )
+                            .toList()),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
 
             //Container for wallet balance and credit button
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.green.shade100,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Row(
-                        children: [
-                          const Text('Wallet balance is '),
-                          //rupees icon
-                          Icon(
-                            Icons.currency_rupee,
-                            size: MediaQuery.of(context).size.width * 0.05,
-                          ),
-                          walletAmount == null
-                              ? const CircularProgressIndicator()
-                              : Text(
-                                  walletAmount!,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.045),
-                                ),
-                        ],
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        AddMoneyScreen(userId: widget.userId)));
-                          },
-                          child: const Text('Credit'))
-                    ],
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.green.shade100,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding:
+                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        const Text('Wallet balance is '),
+                        //rupees icon
+                        Icon(
+                          Icons.currency_rupee,
+                          size: MediaQuery.of(context).size.width * 0.05,
+                        ),
+                        walletAmount == null
+                            ? const CircularProgressIndicator()
+                            : Text(
+                                walletAmount!,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.045),
+                              ),
+                      ],
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddMoneyScreen(userId: widget.userId)));
+                        },
+                        child: const Text('Credit'))
+                  ],
                 ),
               ),
             ),
 
             //Container for reserve button
-            Expanded(
-              flex: 2,
-              child: Container(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: () {
-                    postBooking(jsonEncode({
-                      "bookingType": "Reservation",
-                      "bookingStationId": widget.stationId,
-                      "bookingDate": DateFormat("yyyy-MM-dd").format(selectedDate),
-                      "bookingTime": DateFormat("HH:mm:ss").format(selectedTimeSlot),
-                    }));
-                    Navigator.of(context).pop();
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ReservationDonePopUp(
-                            stationName: widget.stationName,
-                            chargerSerialNumber:
-                                chargerModel!.chargerSerialNumber!,
-                            stationLocation: widget.stationLocation,
-                            bookingId: 'BKG0012324',
-                            bookginStatus: 'Confirmed',
-                            bookingDate: selectedDate,
-                            bookingTime: selectedTimeSlot,
-                          );
-                        });
-                  },
-                  child: const Text(
-                    'Reserve',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+            Container(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                onPressed: () {
+                  postBooking(jsonEncode({
+                    "bookingType": "Reservation",
+                    "bookingStationId": widget.stationId,
+                    "bookingDate": DateFormat("yyyy-MM-dd").format(selectedDate),
+                    "bookingTime": DateFormat("HH:mm:ss").format(selectedTimeSlot),
+                  }));
+                  Navigator.of(context).pop();
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ReservationDonePopUp(
+                          stationName: widget.stationName,
+                          chargerSerialNumber:
+                              chargerModel!.chargerSerialNumber!,
+                          stationLocation: widget.stationLocation,
+                          bookingId: 'BKG0012324',
+                          bookginStatus: 'Confirmed',
+                          bookingDate: selectedDate,
+                          bookingTime: selectedTimeSlot,
+                        );
+                      });
+                },
+                child: const Text(
+                  'Reserve',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ),
