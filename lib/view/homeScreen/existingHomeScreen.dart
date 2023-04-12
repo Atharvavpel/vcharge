@@ -25,7 +25,7 @@ class ExistingHomeScreen extends StatelessWidget {
         children: [
     
           // background map
-          BgMap(mapController: mapController,),
+          BgMap(mapController: mapController, userId: userId),
     
           // searchBar and navBar
           SearchBarContainer(userId: userId,),

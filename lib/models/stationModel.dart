@@ -1,6 +1,7 @@
 import 'chargerModel.dart';
 
 class StationModel {
+  String? stationId;
   String? stationName;
   String? stationHostId;
   String? stationVendorId;
@@ -20,7 +21,8 @@ class StationModel {
   String? stationPowerStandard;
 
   StationModel(
-      {this.stationName,
+      {this.stationId,
+      this.stationName,
       this.stationHostId,
       this.stationVendorId,
       this.stationLocation,
@@ -39,6 +41,7 @@ class StationModel {
       this.stationPowerStandard});
 
   StationModel.fromJson(Map<String, dynamic> json) {
+    stationId = json['stationId'];
     stationName = json['stationName'];
     stationHostId = json['stationHostId'];
     stationVendorId = json['stationVendorId'];
@@ -65,6 +68,7 @@ class StationModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['stationId'] = stationId;
     data['stationName'] = stationName;
     data['stationHostId'] = stationHostId;
     data['stationVendorId'] = stationVendorId;
