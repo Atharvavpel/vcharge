@@ -114,7 +114,7 @@ this is screen with onclose function
       drawer: const SideBarDrawer(),
     
     // this is body
-      body: SafeArea(child: screens[selectedIndex]),
+      body: screens[selectedIndex],
     
     // this is bottom bar
       bottomNavigationBar: CurvedNavigationBar(

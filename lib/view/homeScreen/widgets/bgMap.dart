@@ -10,6 +10,8 @@ import 'package:vcharge/services/getMethod.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../models/chargerModel.dart';
+
 class BgMap extends StatefulWidget {
   MapController mapController = MapController();
 
@@ -78,24 +80,9 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     var data = await GetMethod.getRequest(
         'http://192.168.0.43:8081/vst1/manageStation/stations');
     if (data.isNotEmpty) {
+      // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
       for (int i = 0; i < data.length; i++) {
-        stationsData.add(StationModel(
-          stationName: data[i]['stationName'],
-          stationLocation: data[i]['stationLocation'],
-          stationLatitude: data[i]['stationLatitude'],
-          stationLongitude: data[i]['stationLongitude'],
-          stationLocationURL: data[i]['stationLocationURL'],
-          stationParkingArea: data[i]['stationParkingArea'],
-          stationContactNumber: data[i]['stationContactNumber'],
-          stationWorkingTime: data[i]['stationWorkingTime'],
-          chargerNumber: data[i]['chargerNumber'],
-          stationParkingType: data[i]['stationParkingType'],
-          stationAmenity: data[i]['stationAmenity'],
-          chargers: data[i]['chargers'],
-          stationShareId: data[i]['stationShareId'],
-          stationStatus: data[i]['stationStatus'],
-          stationPowerStandard: data[i]['stationPowerStandard']
-        ));
+        stationsData.add(StationModel.fromJson(data[i]));
       }
       setState(() {
         getMarkersDetails();
@@ -117,7 +104,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => StationsSpecificDetails(idx)));
+                    builder: (context) => StationsSpecificDetails(stationModel: idx,)));
           },
           child: FaIcon(
             FontAwesomeIcons.locationDot,

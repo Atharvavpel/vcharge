@@ -8,6 +8,6 @@ class GetMethod {
   static Future<dynamic> getRequest(String url) async {
     var response = await http.get(Uri.parse(url));
     var body = response.body;
-    return jsonDecode(body);
+    return json.decode(body);
   }
 }
