@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
+import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+
+  String userId;
+  SettingPage({super.key, required this.userId});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
@@ -23,7 +26,7 @@ class _SettingPageState extends State<SettingPage> {
         appBar: AppBar(
           centerTitle: true,
           leading: IconButton(onPressed: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> MyProfilePage(userId: widget.userId.toString()) ));
           }, icon: Icon(Icons.arrow_circle_left, 
           size: MediaQuery.of(context).size.width * 0.1,)),
           title: const Text("Settings"),
@@ -56,7 +59,7 @@ class _SettingPageState extends State<SettingPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: ((context) => const EditProfileScreen())),
+                        builder: ((context) => EditProfileScreen(userId: widget.userId.toString(),))),
                   );
                 },
                 title: const Text(

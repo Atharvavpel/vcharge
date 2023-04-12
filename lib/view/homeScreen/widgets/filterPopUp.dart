@@ -6,7 +6,7 @@ import 'package:vcharge/view/homeScreen/homeScreen.dart';
 class FilterPopUp extends StatefulWidget {
   String userId;
 
-  FilterPopUp({required this.userId,super.key});
+  FilterPopUp({required this.userId, super.key});
 
   @override
   State<StatefulWidget> createState() => FilterPopUpState();
@@ -47,8 +47,7 @@ class FilterPopUpState extends State<FilterPopUp> {
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 130, 199, 85),
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15)),
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             ),
             width: double.maxFinite,
             child: Padding(
@@ -65,20 +64,20 @@ class FilterPopUpState extends State<FilterPopUp> {
                         color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-      
+
                   //Cross Button
                   Positioned(
                       top: 5,
                       right: 8,
                       child: GestureDetector(
                         onTap: () {
-                              Navigator.of(context).pop();
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             const HomeScreen()));
-                            },
+                          Navigator.of(context).pop();
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //             const HomeScreen()));
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(3),
@@ -97,7 +96,7 @@ class FilterPopUpState extends State<FilterPopUp> {
               ),
             ),
           ),
-      
+
           //Folowing id the container for all the other assets
           Container(
             height: 500,
@@ -147,66 +146,72 @@ class FilterPopUpState extends State<FilterPopUp> {
                     ),
                   ),
                 ),
-      
+
                 //Container for "show available chargers only" section
                 Container(
                   // margin: const EdgeInsets.all(5),
                   child: Padding(
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03, right: MediaQuery.of(context).size.width * 0.03),
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.03,
+                        right: MediaQuery.of(context).size.width * 0.03),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                      const Text(
-                        'Show Available Charger Only',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.center,
-                      ),
-                      Switch(
-                        value: availableToggleButton,
-                        onChanged: (newValue) {
-                          setState(() {
-                            availableToggleButton = newValue;
-                          });
-                        },
-                        activeTrackColor:
-                            const Color.fromARGB(255, 144, 228, 66),
-                        activeColor: const Color.fromARGB(255, 244, 244, 244),
-                      )
-                    ]),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Show Available Charger Only',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                          Switch(
+                            value: availableToggleButton,
+                            onChanged: (newValue) {
+                              setState(() {
+                                availableToggleButton = newValue;
+                              });
+                            },
+                            activeTrackColor:
+                                const Color.fromARGB(255, 144, 228, 66),
+                            activeColor:
+                                const Color.fromARGB(255, 244, 244, 244),
+                          )
+                        ]),
                   ),
                 ),
-      
+
                 //Container for "Show Private Chargers also"
                 Container(
                   // margin: const EdgeInsets.all(5),
                   width: double.infinity,
                   child: Padding(
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03, right: MediaQuery.of(context).size.width * 0.03),
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.03,
+                        right: MediaQuery.of(context).size.width * 0.03),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                        const Text(
-                          'Show Private Chargers Also',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
-                        ),
-                        Switch(
-                          value: privateToggleButton,
-                          onChanged: (newValue) {
-                            setState(() {
-                              privateToggleButton = newValue;
-                            });
-                          },
-                          activeTrackColor:
-                              const Color.fromARGB(255, 144, 228, 66),
-                          activeColor: const Color.fromARGB(255, 244, 244, 244),
-                        )
-                      ]),
+                          const Text(
+                            'Show Private Chargers Also',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                          Switch(
+                            value: privateToggleButton,
+                            onChanged: (newValue) {
+                              setState(() {
+                                privateToggleButton = newValue;
+                              });
+                            },
+                            activeTrackColor:
+                                const Color.fromARGB(255, 144, 228, 66),
+                            activeColor:
+                                const Color.fromARGB(255, 244, 244, 244),
+                          )
+                        ]),
                   ),
                 ),
-      
+
                 //Container for Connector Type
                 Container(
                     width: double.maxFinite,
@@ -262,7 +267,7 @@ class FilterPopUpState extends State<FilterPopUp> {
               ],
             ),
           ),
-      
+
           //Container for the Apply button and reset button
           Container(
             margin: const EdgeInsets.all(8.0),

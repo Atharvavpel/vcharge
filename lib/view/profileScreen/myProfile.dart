@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vcharge/models/userDetailsModel.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MyProfilePage extends StatefulWidget {
   String userId;
@@ -23,12 +23,13 @@ class MyProfilePageState extends State<MyProfilePage> {
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.41:8081/manageUser/user?userId=USR20230405172425672";
+      "http://192.168.0.41:8081/manageUser/user?userId=USR20230410143236933";
 
   @override
   void initState() {
     super.initState();
     // specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}";
+    print("In init state");
     getUserData();
   }
 
@@ -37,14 +38,21 @@ class MyProfilePageState extends State<MyProfilePage> {
   String lastName = '';
   String contactNo = '';
   String emailId = '';
+  var profilePhoto = '';
 
 // function for fetching the user data
   Future getUserData() async {
+    print("in the get method");
     var response = await GetMethod.getRequest(specificUserIdUrl);
-    firstName = response['userFirstName'];
-    lastName = response['userLastName'];
-    contactNo = response['userContactNo'];
-    emailId = response['userEmail'];
+    setState(() {
+      firstName = response['userFirstName'] ?? '';
+      lastName = response['userLastName'] ?? '';
+      contactNo = response['userContactNo'] ?? '';
+      emailId = response['userEmail'] ?? '';
+      profilePhoto = response['userProfilePhoto'] ?? '';
+    });
+
+    print(profilePhoto);
   }
 
 // variable for picking the image from the gallery or camera
@@ -53,17 +61,35 @@ class MyProfilePageState extends State<MyProfilePage> {
 // var for storing the selected image
   File? selectedImage;
 
+// function for gallery and camera permissions
+  Future<void> requestPermissions() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.storage,
+    ].request();
+    print(statuses);
+  }
+
 // function for fetching the image from the device
   Future getImage(ImageSource source) async {
-    try {
-      // temp var used to store the image once picked
-      final pickedFile = await picker.pickImage(source: source);
-      if (pickedFile == null) return;
-      setState(() {
-        selectedImage = File(pickedFile.path);
-      });
-    } catch (error) {
-      print("error: $error");
+    PermissionStatus cameraStatus = await Permission.camera.status;
+    PermissionStatus storageStatus = await Permission.storage.status;
+    if (cameraStatus.isGranted && storageStatus.isGranted) {
+      try {
+        // temp var used to store the image once picked
+        final pickedFile = await picker.pickImage(source: source);
+        if (pickedFile == null) return;
+        setState(() {
+          selectedImage = File(pickedFile.path);
+        });
+      } catch (error) {
+        print("error: $error");
+      }
+    } else {
+      // The user has not granted the necessary permissions, show an error message.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please grant the necessary permissions.')),
+      );
     }
   }
 
@@ -90,6 +116,7 @@ class MyProfilePageState extends State<MyProfilePage> {
                 // gallery icon
                 FloatingActionButton(
                   onPressed: () {
+                    requestPermissions();
                     print("clicked upon the gallery option");
                     getImage(ImageSource.gallery);
                     print("Done with the gallery option");
@@ -101,6 +128,7 @@ class MyProfilePageState extends State<MyProfilePage> {
                 // camera icon
                 FloatingActionButton(
                   onPressed: () {
+                    requestPermissions();
                     print("clicked upon the camera option");
                     getImage(ImageSource.camera);
                     print("Done with the camera option");
@@ -131,7 +159,7 @@ class MyProfilePageState extends State<MyProfilePage> {
   }
 
 // function for displaying the sessions, referrals etc widget
-  textContainer(
+  Widget textContainer(
       String title, IconData iconData, String name, Function validator,
       {Function? onTap, bool readOnly = false}) {
     return Column(
@@ -171,8 +199,6 @@ class MyProfilePageState extends State<MyProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
-
           // back button
           CircleAvatar(
             backgroundColor: Colors.white,
@@ -197,7 +223,8 @@ class MyProfilePageState extends State<MyProfilePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => const SettingPage())));
+                          builder: ((context) =>
+                              SettingPage(userId: widget.userId.toString()))));
                 },
                 icon: const Icon(
                   Icons.settings,
@@ -214,38 +241,48 @@ class MyProfilePageState extends State<MyProfilePage> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: InkWell(
-        onTap: () {
-          print("clicked on circle avtar");
-          showModalBottomSheet(
-              context: context, builder: ((builder) => bottomSheet()));
-        },
-        child: selectedImage == null
-            ? Container(
-                width: 120,
-                height: 120,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: Color(0xffD6D6D6)),
-                child: const Center(
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 40,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            : Container(
-                width: 120,
-                height: 120,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: FileImage(File(selectedImage!.path)),
-                        fit: BoxFit.fill),
-                    shape: BoxShape.circle,
-                    color: const Color(0xffD6D6D6)),
-              ),
-      ),
+          onTap: () {
+            print("clicked on circle avtar");
+            showModalBottomSheet(
+                context: context, builder: ((builder) => bottomSheet()));
+          },
+          child: profilePhoto == ''
+              ? selectedImage == null
+                  ? Container(
+                      width: 120,
+                      height: 120,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Color(0xffD6D6D6)),
+                      child: const Center(
+                        child: Icon(
+                          Icons.camera_alt_outlined,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: 120,
+                      height: 120,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: FileImage(File(selectedImage!.path)),
+                              fit: BoxFit.fill),
+                          shape: BoxShape.circle,
+                          color: const Color(0xffD6D6D6)),
+                    )
+              : Container(
+                  width: 120,
+                  height: 120,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(profilePhoto), fit: BoxFit.fill),
+                      shape: BoxShape.circle,
+                      color: Color(0xffD6D6D6)),
+                )),
     );
   }
 
@@ -285,15 +322,15 @@ class MyProfilePageState extends State<MyProfilePage> {
       child: Form(
         child: Column(
           children: [
-            textContainer('Name', Icons.person_outlined, 'Snehal Matke',
+            textContainer('Name', Icons.person_outlined, '$firstName $lastName',
                 (String? input) {}),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            textContainer('Contact No', Icons.home_outlined, '+91 9393939393',
+            textContainer('Contact No', Icons.home_outlined, contactNo,
                 (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            textContainer('Email id', Icons.card_travel, 'snehal@gmail.com',
+            textContainer('Email id', Icons.card_travel, emailId,
                 (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
@@ -501,3 +538,42 @@ class MyProfilePageState extends State<MyProfilePage> {
     );
   }
 }
+
+
+
+
+/*
+
+
+selectedImage == null
+            ? Container(
+                width: 120,
+                height: 120,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Color(0xffD6D6D6)),
+                child: const Center(
+                  child: Icon(
+                    Icons.camera_alt_outlined,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : Container(
+                width: 120,
+                height: 120,
+                margin: const EdgeInsets.only(bottom: 20),
+                
+                decoration: BoxDecoration( 
+                  image: DecorationImage( image: FileImage(File(selectedImage!.path)), 
+                  fit: BoxFit.fill), 
+                  shape: BoxShape.circle, 
+                  color: const Color(0xffD6D6D6)),
+                    
+              ),
+
+
+
+
+*/
