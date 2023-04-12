@@ -54,6 +54,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 8),
                         child: TextField(
+                          key: Key('searchTextField'),
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: " Search here",
@@ -78,6 +79,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                     Expanded(
                       flex: 2,
                       child: IconButton(
+                        key: const Key('profileButton'),
                         onPressed: () {
                           Navigator.push(
                               context,

@@ -14,8 +14,9 @@ import '../../../models/chargerModel.dart';
 
 class BgMap extends StatefulWidget {
   MapController mapController = MapController();
+  String userId;
 
-  BgMap({required this.mapController, super.key});
+  BgMap({required this.userId, required this.mapController, super.key});
 
   @override
   State<StatefulWidget> createState() => BgMapState();
@@ -104,7 +105,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => StationsSpecificDetails(stationModel: idx,)));
+                    builder: (context) => StationsSpecificDetails( stationModel: idx, userId: widget.userId,)));
           },
           child: FaIcon(
             FontAwesomeIcons.locationDot,

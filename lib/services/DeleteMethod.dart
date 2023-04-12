@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 
-class PostMethod{
+class DeleteMethod{
 
   // this method handles the delete request with respect to the specific id:  
   // this method has been made static to make it available in complete project

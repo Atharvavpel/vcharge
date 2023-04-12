@@ -180,7 +180,7 @@ class ListOfStationsState extends State<ListOfStations> {
                                                   StationsSpecificDetails(
                                                     stationModel:
                                                         sortedStationList[
-                                                            index],
+                                                            index], userId: widget.userId,
                                                   )));
                                     },
                                     title: Container(

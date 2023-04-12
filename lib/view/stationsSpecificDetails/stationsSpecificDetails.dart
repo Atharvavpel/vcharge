@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
 
 class StationsSpecificDetails extends StatefulWidget {
   StationModel? stationModel;
+  String userId;
 
-  StationsSpecificDetails({required this.stationModel, super.key});
+  StationsSpecificDetails({required this.userId, required this.stationModel, super.key});
 
   @override
   State<StatefulWidget> createState() => StationsSpecificDetailsState();
@@ -37,7 +41,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   IconData getIconForAmenity(String amenity) {
     if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms') {
-      return Icons.cabin;
+      return Icons.hotel;
     } else if (amenity.toLowerCase().replaceAll(" ", "") == 'loungearea') {
       return Icons.local_cafe;
     } else if (amenity.toLowerCase().replaceAll(" ", "") == 'foodservice') {
@@ -80,7 +84,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             fontWeight: FontWeight.bold,
                             fontSize: MediaQuery.of(context).size.width * 0.06),
                       )),
-                  
+
                   //Expanded for share Icon
                   Expanded(
                       flex: 1,
@@ -267,7 +271,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                           ),
                                           //Amenity text
                                           Text(
-                                            stationModel!.stationAmenity![index],
+                                            stationModel!
+                                                .stationAmenity![index],
                                             style: TextStyle(
                                                 fontSize: MediaQuery.of(context)
                                                         .size
@@ -298,7 +303,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             child: CircleAvatar(
                                               backgroundColor:
                                                   Colors.green.shade100,
-                                              child: Icon(Icons.person),
+                                              child: const Icon(Icons.person),
                                             ),
                                           ),
                                           Expanded(
@@ -354,13 +359,19 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                 children: [
                   //Container for chargers heading
                   Container(
+                    margin: const EdgeInsets.only(left: 2, right: 2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 151, 202, 96),
+                            width: 2)),
                     width: double.maxFinite,
-                    color: Colors.green.shade100,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'Chargers',
                         style: TextStyle(
+                            color: const Color.fromARGB(255, 151, 202, 96),
                             fontWeight: FontWeight.bold,
                             fontSize:
                                 MediaQuery.of(context).size.width * 0.045),
@@ -375,11 +386,12 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                         itemCount: stationModel!.chargers!.length,
                         itemBuilder: (context, index) {
                           return Card(
-                            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
+                            margin: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * 0.015),
                             elevation: 4,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            color: Color.fromARGB(255, 239, 255, 255),
+                            color: const Color.fromARGB(255, 239, 255, 255),
                             child: ExpansionTile(
                               //leading
                               leading: Column(
@@ -389,13 +401,15 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   Card(
                                     elevation: 4,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.06)
-                                    ),
+                                        borderRadius: BorderRadius.circular(
+                                            MediaQuery.of(context).size.width *
+                                                0.06)),
                                     child: CircleAvatar(
                                       backgroundColor:
                                           getAvailablityColor('Available'),
-                                      radius: MediaQuery.of(context).size.width *
-                                          0.03,
+                                      radius:
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
                                     ),
                                   ),
                                 ],
@@ -403,13 +417,49 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                               //title - name of charger
                               title: Text(
                                 stationModel!.chargers![index].chargerName!,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                               //subtitle
-                              subtitle: Text("Number of connectors: ${stationModel!.chargers![index].chargerNumberOfConnector}"),
+                              subtitle: Text(
+                                  "Number of connectors: ${stationModel!.chargers![index].chargerNumberOfConnector}"),
                               //children
                               children: [
-                                
+                                //Row for reserve button and scan to charge button
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    //button for reserve
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                      top: Radius.circular(
+                                                          15.0)),
+                                            ),
+                                            isScrollControlled: true,
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                ReservePopUp(
+                                              stationName:
+                                                  stationModel!.stationName!,
+                                              stationLocation: stationModel!
+                                                  .stationLocation!,
+                                              chargerModel: stationModel!
+                                                  .chargers![index], userId: widget.userId, stationId: stationModel!.stationId!,
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Reserve')),
+                                    //button for scan to reserve
+                                    ElevatedButton(
+                                        onPressed: () {},
+                                        child: const Text('Scan to Charge')),
+                                  ],
+                                ),
                               ],
                             ),
                           );

@@ -43,6 +43,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
 // container - vehicle addition
             GestureDetector(
+              key: const Key('myVehicleButton'),
               onTap: () {
                 setState(() {
                   isVehicle = true;
@@ -90,6 +91,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
 // container - Route
             GestureDetector(
+              key: const Key('routeButton'),
               onTap: () {
                 setState(() {
                   isMapRoute = true;
@@ -135,6 +137,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
  // container - my wallet            
             GestureDetector(
+              key: const Key('myWalletButton'),
               onTap: () {
                 setState(() {
                   isWallet = true;
@@ -181,6 +184,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
 // container - favourites
             GestureDetector(
+              key: const Key('favouriteButton'),
               onTap: () {
                 setState(() {
                   isFavourite = true;
@@ -226,6 +230,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
 // container - reservations
             GestureDetector(
+              key: const Key('reservationButton'),
               onTap: () {
                 setState(() {
                   isReservation = true;
@@ -270,6 +275,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
 // container - more optionsPage
             GestureDetector(
+              key: const Key('moreOptionButton'),
               onTap: () {
                 setState(() {
                   isMore = true;
