@@ -190,7 +190,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
             //Container for Amenity and review button
             Container(
-              child: Wrap(
+              child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //Row container 2 button for amineties and review
@@ -199,7 +199,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                     children: [
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: selectedButton
+                            backgroundColor: selectedButton
                                 ? Colors.green
                                 : Colors.white, // Set the button color
                           ),
@@ -216,7 +216,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                       : Colors.black))),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: selectedButton
+                            backgroundColor: selectedButton
                                 ? Colors.white
                                 : Colors.green, // Set the button color
                           ),
@@ -235,7 +235,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           )),
                     ],
                   ),
-
+              
                   //This container consist of 2 container for amenities and review
                   Container(
                     height: MediaQuery.of(context).size.height * 0.08,
@@ -285,6 +285,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   }),
                             )
                           :
+                          
                           //Container for reviews
                           Container(
                               alignment: Alignment.center,
