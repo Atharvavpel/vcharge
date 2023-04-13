@@ -53,7 +53,7 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('Add Vehicle'),
                       onTap: () {
-                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AddVehicleScreen()));
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddVehicleScreen()));
                       },
                     ),
             ),

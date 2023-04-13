@@ -29,7 +29,7 @@ class MyProfilePageState extends State<MyProfilePage> {
   void initState() {
     super.initState();
     // specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}";
-    print("In init state");
+    // print("In init state");
     getUserData();
   }
 
@@ -42,7 +42,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 
 // function for fetching the user data
   Future getUserData() async {
-    print("in the get method");
+    // print("in the get method");
     var response = await GetMethod.getRequest(specificUserIdUrl);
     setState(() {
       firstName = response['userFirstName'] ?? '';
@@ -52,7 +52,7 @@ class MyProfilePageState extends State<MyProfilePage> {
       profilePhoto = response['userProfilePhoto'] ?? '';
     });
 
-    print(profilePhoto);
+    // print(profilePhoto);
   }
 
 // variable for picking the image from the gallery or camera
@@ -67,7 +67,7 @@ class MyProfilePageState extends State<MyProfilePage> {
       Permission.camera,
       Permission.storage,
     ].request();
-    print(statuses);
+    // print(statuses);
   }
 
 // function for fetching the image from the device
@@ -83,19 +83,19 @@ class MyProfilePageState extends State<MyProfilePage> {
           selectedImage = File(pickedFile.path);
         });
       } catch (error) {
-        print("error: $error");
+        // print("error: $error");
       }
     } else {
       // The user has not granted the necessary permissions, show an error message.
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please grant the necessary permissions.')),
+        const SnackBar(content: Text('Please grant the necessary permissions.')),
       );
     }
   }
 
 // function which returns the bottomsheet image
   Widget bottomSheet() {
-    print("inside the bottomsheet");
+    // print("inside the bottomsheet");
     return Container(
       height: MediaQuery.of(context).size.height * 0.20,
       child: Padding(
@@ -281,7 +281,7 @@ class MyProfilePageState extends State<MyProfilePage> {
                       image: DecorationImage(
                           image: NetworkImage(profilePhoto), fit: BoxFit.fill),
                       shape: BoxShape.circle,
-                      color: Color(0xffD6D6D6)),
+                      color: const Color(0xffD6D6D6)),
                 )),
     );
   }

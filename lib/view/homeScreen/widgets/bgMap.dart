@@ -10,8 +10,6 @@ import 'package:vcharge/services/getMethod.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../models/chargerModel.dart';
-
 class BgMap extends StatefulWidget {
   MapController mapController = MapController();
   String userId;

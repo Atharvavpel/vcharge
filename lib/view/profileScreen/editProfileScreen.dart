@@ -91,8 +91,8 @@ dynamic selectedState;
         selectedState = data['userState'] ?? '';
 
 
-        print("the value of genderSelected is in initsate is: $selectedGender");
-        print("the value of genderSelected is in initsate is: $selectedState");
+        // print("the value of genderSelected is in initsate is: $selectedGender");
+        // print("the value of genderSelected is in initsate is: $selectedState");
       });
     }
   }
@@ -109,7 +109,7 @@ dynamic selectedState;
       DateFormat formatter = DateFormat(
           'yyyy-MM-dd'); // You can change the format as per your requirement
       final String dateOfBirth = formatter.format(picked).toString();
-      print(dateOfBirth);
+      // print(dateOfBirth);
       setState(() {
         dateOfBirthController.text =
             dateOfBirth; // You can format this as per your requirement
@@ -134,7 +134,7 @@ dynamic selectedState;
           'userState' : selectedState,
         }));
 
-    print("Success");
+    // print("Success");
   }
 
   @override
@@ -223,8 +223,8 @@ dynamic selectedState;
                           setState(() {
                             selectedGender = value as String; // Update the currently selected value in the dropdown
                                           
-                            print(
-                                "the value of genderSelected is: $selectedGender");
+                            // print(
+                            //     "the value of genderSelected is: $selectedGender");
                           });
                         },
                         decoration: const InputDecoration(
@@ -277,8 +277,8 @@ dynamic selectedState;
                           setState(() {
                             selectedState = value as String; // Update the currently selected value in the dropdown
                                           
-                            print(
-                                "the value of selectedState is: $selectedState");
+                            // print(
+                            //     "the value of selectedState is: $selectedState");
                           });
                         },
                         decoration: const InputDecoration(

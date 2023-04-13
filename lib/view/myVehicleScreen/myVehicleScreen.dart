@@ -6,7 +6,8 @@ import 'package:vcharge/view/myVehicleScreen/widgets/showVehilcleDetailsPopup.da
 import '../../models/vehicleModel.dart';
 
 class MyVehicleScreen extends StatefulWidget {
-  const MyVehicleScreen({super.key});
+  String userId;
+  MyVehicleScreen({required this.userId, super.key});
 
   @override
   State<StatefulWidget> createState() => MyVehicleScreenState();
@@ -17,77 +18,23 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
   // List<VehicleModel> vehicleList = [];
 
   //Initializing the list manually for demo purpose
-  List<VehicleModel> vehicleList = [
-    VehicleModel(
-        vehicleBrandName: "Tesla",
-        vehicleModelName: "Model S",
-        vehicleClass: "Luxury Sedan",
-        vehicleColour: "Red",
-        vehicleType: "Electric",
-        vehicleBatteryType: "Lithium-ion",
-        vehicleBatteryCapacity: "100 kWh",
-        vehicleAdaptorType: "Type 2",
-        vehicleTimeToChargeRegular: "8 hours",
-        vehicleTimeToChargeFast: "1 hour",
-        vehicleChargingStandard: "Type 2",
-        vehicleRange: "412 miles",
-        vehicleDriveModes: ["Sport", "Comfort", "Eco"]),
-    VehicleModel(
-      vehicleBrandName: "Toyota",
-      vehicleModelName: "Prius",
-      vehicleClass: "Compact Hatchback",
-      vehicleColour: "Blue",
-      vehicleType: "Hybrid",
-      vehicleBatteryType: "Nickel-Metal Hydride",
-      vehicleBatteryCapacity: "1.31 kWh",
-      vehicleAdaptorType: "Type 1",
-      vehicleTimeToChargeRegular: "2.5 hours",
-      vehicleTimeToChargeFast: "N/A",
-      vehicleChargingStandard: "CSS 2",
-      vehicleRange: "640 miles",
-      vehicleDriveModes: ["Normal", "Eco", "Power"],
-    ),
-    VehicleModel(
-      vehicleBrandName: "Ford",
-      vehicleModelName: "F-150 Lightning",
-      vehicleClass: "Pickup Truck",
-      vehicleColour: "White",
-      vehicleType: "Electric",
-      vehicleBatteryType: "Lithium-ion",
-      vehicleBatteryCapacity: "115 kWh",
-      vehicleAdaptorType: "CSS 2",
-      vehicleTimeToChargeRegular: "10 hours",
-      vehicleTimeToChargeFast: "0.5 hours",
-      vehicleChargingStandard: "CSS 2",
-      vehicleRange: "300 miles",
-      vehicleDriveModes: ["Normal", "Sport", "Off-road"],
-    ),
-  ];
+  List<VehicleModel> vehicleList = [];
 
   @override
   void initState() {
     super.initState();
-    // getVehicleData('url');
+    getVehicleData();
   }
 
-  Future<void> getVehicleData(String url) async {
-    var data = await GetMethod.getRequest(url);
-    vehicleList = data.map((e) {
-      return VehicleModel(
-          vehicleBrandName: data[e]['vehicleBrandName'],
-          vehicleModelName: data[e]['vehicleModelName'],
-          vehicleClass: data[e]['vehicleClass'],
-          vehicleColour: data[e]['vehicleColour'],
-          vehicleType: data[e]['vehicleType'],
-          vehicleBatteryType: data[e]['vehicleBatteryType'],
-          vehicleBatteryCapacity: data[e]['vehicleBatteryCapacity'],
-          vehicleAdaptorType: data[e]['vehicleAdaptorType'],
-          vehicleTimeToChargeRegular: data[e]['vehicleTimeToChargeRegular'],
-          vehicleTimeToChargeFast: data[e]['vehicleTimeToChargeFast'],
-          vehicleChargingStandard: data[e]['vehicleChargingStandard'],
-          vehicleRange: data[e]['vehicleRange'],
-          vehicleDriveModes: data[e]['vehicleDriveModes']);
-    }).toList();
+  Future<void> getVehicleData() async {
+    var data = await GetMethod.getRequest('http://192.168.0.41:8081/manageUser/getVehicle?userId=${widget.userId}');
+    setState(() {
+      if (data != null) {
+        for (int i = 0; i < data.length; i++) {
+          vehicleList.add(VehicleModel.fromJson(data[i]));
+        }
+      }
+    });
   }
 
   @override
@@ -96,9 +43,9 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
       appBar: AppBar(
         title: const Text('My Vehicle'),
       ),
-      body: Stack(
-        children: [
-          ListView.builder(
+      body: vehicleList.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
               itemCount: vehicleList.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
@@ -212,33 +159,24 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
                   ),
                 );
               }),
-          
-          
-          //Following is the code for the Add Vehicle Button
-          Positioned(
-            bottom: 0,
-            width: MediaQuery.of(context).size.width,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  // color: Colors.amber,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AddVehicleScreen()));
-                    },
-                    child: const Text('Add Vehicle', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AddVehicleScreen()));
+        },
+        child: const Text(
+          'Add Vehicle',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
       ),
 
       // bottomNavigationBar: Padding(
