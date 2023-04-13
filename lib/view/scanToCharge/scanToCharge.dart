@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:vcharge/services/GetMethod.dart';
 
+import '../startChargingScreen/startChargingScreen.dart';
 import '../walletScreen/addMoneyScreen.dart';
 
 class ScanToCharge extends StatefulWidget {
@@ -699,7 +700,9 @@ class ScanToChargeState extends State<ScanToCharge> {
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 146, 204, 81)),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => StartChargingScreen()));
+                  },
                   child: const Text('Start Charging')),
             ),
           )
