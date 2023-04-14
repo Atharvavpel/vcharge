@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'widgets/stopChargingAlertPopup.dart';
+
 class StartChargingScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => StartChargingScreenState();
@@ -145,7 +147,14 @@ class StartChargingScreenState extends State<StartChargingScreen> {
                     borderRadius: BorderRadius.circular(10)),
                 margin: EdgeInsets.all(Get.width * 0.05),
                 child: InkWell(
-                  onTap: (){},
+                  onTap: () {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StopChargingAlertPopUp();
+                        });
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -168,8 +177,6 @@ class StartChargingScreenState extends State<StartChargingScreen> {
                   ),
                 ),
               )
-            
-            
             ],
           ),
         ),

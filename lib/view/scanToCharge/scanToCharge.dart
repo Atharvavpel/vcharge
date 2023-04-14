@@ -487,9 +487,8 @@ class ScanToChargeState extends State<ScanToCharge> {
                                                       newValue.toInt();
                                                 });
                                               },
-                                              label: unitsSliderValue
-                                                      .toStringAsFixed(0) +
-                                                  'units',
+                                              label: '${unitsSliderValue
+                                                      .toStringAsFixed(0)} Units',
                                             ),
                                           ),
                                         ),
