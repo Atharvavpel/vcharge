@@ -326,7 +326,6 @@ class ReservePopUpState extends State<ReservePopUp> {
                     "bookingDate": DateFormat("yyyy-MM-dd").format(selectedDate),
                     "bookingTime": DateFormat("HH:mm:ss").format(selectedTimeSlot),
                   }));
-                  Navigator.of(context).pop();
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {

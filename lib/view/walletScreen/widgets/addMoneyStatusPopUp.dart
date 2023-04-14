@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 
@@ -79,6 +81,18 @@ class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
                         ),
                       ),
                     ),
+                  ),
+
+                  //Cross button
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.of(context).pop();
+                        Navigator.pop(context);
+                      },
+                      child: FaIcon(FontAwesomeIcons.x, color: Colors.white,size: Get.width * 0.045,)),
                   ),
                 ],
               )),
