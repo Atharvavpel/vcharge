@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:vcharge/models/chargerModel.dart';
 import 'package:vcharge/view/scanToCharge/scanToCharge.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
@@ -17,7 +19,7 @@ class StationsSpecificDetails extends StatefulWidget {
 }
 
 class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
-  List<dynamic> chargerList = [];
+  List<ChargerModel> chargerList = [];
   StationModel? stationModel;
 
   //true indicates Amenity button is selected and false indicated Review button
@@ -32,9 +34,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
   MaterialColor getAvailablityColor(String availiblityStatus) {
-    if (availiblityStatus == 'Available') {
+    if (availiblityStatus.toLowerCase() == 'available') {
       return Colors.green;
-    } else if (availiblityStatus == 'NotAvailable') {
+    } else if (availiblityStatus.toLowerCase() == 'unavailable') {
       return Colors.red;
     } else {
       return Colors.orange;
@@ -444,7 +446,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 ),
                               )
                             : ListView.builder(
-                                itemCount: stationModel!.chargers!.length,
+                                itemCount: chargerList.length,
                                 itemBuilder: (context, index) {
                                   return Card(
                                     margin: EdgeInsets.all(
@@ -456,110 +458,217 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             BorderRadius.circular(10)),
                                     color: const Color.fromARGB(
                                         255, 239, 255, 255),
-                                    child: ExpansionTile(
-                                      //leading
-                                      leading: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                    child: Theme(
+                                      data: Theme.of(context).copyWith(
+                                          dividerColor: Colors.transparent),
+                                      child: ExpansionTile(
+                                        //title - name of charger
+                                        title: Text(
+                                          stationModel!
+                                              .chargers![index].chargerName!,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+
+                                        //subtitle
+                                        subtitle: Text(
+                                            "Number of Guns: ${stationModel!.chargers![index].chargerNumberOfConnector}"),
+
+                                        //children
                                         children: [
-                                          //card to show availability as a circular avatar
-                                          Card(
-                                            elevation: 4,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06)),
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  getAvailablityColor(
-                                                      'Available'),
-                                              radius: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.03,
-                                            ),
+                                          // column to show connectors
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Connectors',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        Get.width * 0.047),
+                                              ),
+                                              chargerList[index].connectors ==
+                                                      null
+                                                  ? const Center(
+                                                      child:
+                                                          Text('No Connector'),
+                                                    )
+                                                  : ListView.separated(
+                                                      shrinkWrap: true,
+                                                      separatorBuilder:
+                                                          (context, index) {
+                                                        return Divider(
+                                                          color: Colors
+                                                              .grey.shade100,
+                                                          thickness: 1,
+                                                          height: 1,
+                                                        );
+                                                      },
+                                                      itemCount:
+                                                          chargerList[index]
+                                                              .connectors!
+                                                              .length,
+                                                      itemBuilder:
+                                                          (context, connector) {
+                                                        return ExpansionTile(
+                                                          //Column for circle avatar
+                                                          leading: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              CircleAvatar(
+                                                                backgroundColor: getAvailablityColor(chargerList[
+                                                                        index]
+                                                                    .connectors![
+                                                                        connector]
+                                                                    .connectorStatus!),
+                                                                radius: 10,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          //Row for connector type and socket
+                                                          title: Row(
+                                                            children: [
+                                                              Text(
+                                                                '${chargerList[index].connectors![connector].connectorType!}, ',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize: Get
+                                                                            .width *
+                                                                        0.048),
+                                                              ),
+                                                              Text(
+                                                                '${chargerList[index].connectors![connector].connectorSocket}',
+                                                                style: TextStyle(
+                                                                    fontSize: Get
+                                                                            .width *
+                                                                        0.048),
+                                                              ),
+                                                            ],
+                                                          ),
+
+                                                          //Row for cost and o/p power
+                                                          subtitle: Row(
+                                                            children: [
+                                                              //Row for cost
+                                                              Row(
+                                                                children: [
+                                                                  const Text(
+                                                                    'Cost: ',
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color: Colors
+                                                                            .grey),
+                                                                  ),
+                                                                  Text(
+                                                                    chargerList[
+                                                                            index]
+                                                                        .connectors![
+                                                                            connector]
+                                                                        .connectorCharges!,
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .grey),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              const Text(' '),
+                                                              //Row for o/p power
+                                                              Row(
+                                                                children: [
+                                                                  const Text(
+                                                                    'O/P Power: ',
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color: Colors
+                                                                            .grey),
+                                                                  ),
+                                                                  Text(
+                                                                    '${chargerList[index].connectors![connector].connectorOutputPower}',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .grey),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+
+                                                          //children for reserve and charge button
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                //button for reserve
+                                                                ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      showModalBottomSheet(
+                                                                        shape:
+                                                                            const RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.vertical(top: Radius.circular(15.0)),
+                                                                        ),
+                                                                        isScrollControlled:
+                                                                            true,
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext context) =>
+                                                                                ReservePopUp(
+                                                                          stationName:
+                                                                              stationModel!.stationName!,
+                                                                          stationLocation:
+                                                                              stationModel!.stationLocation!,
+                                                                          chargerModel:
+                                                                              stationModel!.chargers![index],
+                                                                          userId:
+                                                                              widget.userId,
+                                                                          stationId:
+                                                                              stationModel!.stationId!,
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    child: const Text(
+                                                                        'Reserve')),
+                                                                //button for charge
+                                                                ElevatedButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) => ScanToCharge(
+                                                                                  stationLocation: stationModel!.stationLocation!,
+                                                                                  stationName: stationModel!.stationName!,
+                                                                                  userId: widget.userId,
+                                                                                )));
+                                                                  },
+                                                                  child: const Text(
+                                                                      'Charge'),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        );
+                                                      })
+                                            ],
                                           ),
                                         ],
                                       ),
-
-                                      //title - name of charger
-                                      title: Text(
-                                        stationModel!
-                                            .chargers![index].chargerName!,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-
-                                      //subtitle
-                                      subtitle: Text(
-                                          "Number of connectors: ${stationModel!.chargers![index].chargerNumberOfConnector}"),
-
-                                      //children
-                                      children: [
-                                        //Row for reserve button and scan to charge button
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            //button for reserve
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  showModalBottomSheet(
-                                                    shape:
-                                                        const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.vertical(
-                                                              top: Radius
-                                                                  .circular(
-                                                                      15.0)),
-                                                    ),
-                                                    isScrollControlled: true,
-                                                    context: context,
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        ReservePopUp(
-                                                      stationName: stationModel!
-                                                          .stationName!,
-                                                      stationLocation:
-                                                          stationModel!
-                                                              .stationLocation!,
-                                                      chargerModel:
-                                                          stationModel!
-                                                              .chargers![index],
-                                                      userId: widget.userId,
-                                                      stationId: stationModel!
-                                                          .stationId!,
-                                                    ),
-                                                  );
-                                                },
-                                                child: const Text('Reserve')),
-                                            //button for scan to reserve
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ScanToCharge(
-                                                                stationLocation:
-                                                                    stationModel!
-                                                                        .stationLocation!, stationName: stationModel!
-                                                                        .stationName!, userId: widget.userId,
-                                                              )));
-                                                },
-                                                child: const Text(
-                                                    'Scan to Charge')),
-                                          ],
-                                        ),
-                                      ],
                                     ),
                                   );
                                 }),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
