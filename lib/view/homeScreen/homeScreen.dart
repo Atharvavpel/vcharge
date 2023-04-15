@@ -103,16 +103,61 @@ this is screen with onclose function
       //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
     ];
 
-    return Scaffold(
+
+    // return Scaffold(
+
+    // // this variable is used to extend the background to the appbar
+    //   extendBodyBehindAppBar: true,
+    
+    // // this variable is used to extend the background to the bottombar
+    //   extendBody: true,
+    
+    // // this is drawer function
+    //   drawer: SideBarDrawer(userId: userId),
+    
+    // // this is body
+    //   body: screens[selectedIndex],
+    
+    // // this is bottom bar
+    //   bottomNavigationBar: CurvedNavigationBar(
+    //       height: MediaQuery.of(context).size.height * 0.07,
+    //       animationCurve: Curves.easeInOut,
+    //       backgroundColor: Colors.transparent,
+    //       buttonBackgroundColor: Colors.white,
+    //       animationDuration: const Duration(milliseconds: 300),
+    //       items: items,
+    //       index: selectedIndex,
+    //       onTap: (index) {
+    //         setState(() {
+    //           selectedIndex = index;
+    //         });
+    //       }),
+        
+    // );
+
+
+
+    return WillPopScope(
+    onWillPop: () async {
+      if (selectedIndex != 1) {
+        // if not on home screen, navigate to home screen and return false
+        setState(() {
+          selectedIndex = 1;
+        });
+        return false;
+      } else {
+        // if on home screen, allow back button press to close the app
+        return true;
+      }
+    },
+    child: Scaffold(
+
     // this variable is used to extend the background to the appbar
       extendBodyBehindAppBar: true,
     
     // this variable is used to extend the background to the bottombar
       extendBody: true,
-    
-    // this is drawer function
-      drawer: const SideBarDrawer(),
-    
+      drawer: SideBarDrawer(userId: userId),
     // this is body
       body: screens[selectedIndex],
     
@@ -131,6 +176,10 @@ this is screen with onclose function
             });
           }),
         
-    );
+    )
+  );
+
+    
   }
 }
+

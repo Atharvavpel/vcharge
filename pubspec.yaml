@@ -53,6 +53,8 @@ dependencies:
   get: ^4.6.5
   intl: ^0.17.0
   date_picker_timeline: ^1.2.3
+  share_plus: ^6.3.2
+  url_launcher: ^6.1.10
   # encrypt: ^5.0.0
 
   
