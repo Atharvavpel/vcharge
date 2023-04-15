@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
-import 'package:vcharge/models/chargerModel.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
 import 'package:vcharge/services/getMethod.dart';
@@ -159,7 +158,7 @@ class ListOfStationsState extends State<ListOfStations> {
                     )),
 
                 //Container for List Of Station
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height * 0.73,
                   child: sortedStationList.isEmpty
                       ? const Center(child: CircularProgressIndicator())
@@ -168,7 +167,7 @@ class ListOfStationsState extends State<ListOfStations> {
                           itemBuilder: (context, index) {
                             return Card(
                                 elevation: 4,
-                                color: Color.fromARGB(255, 243, 254, 255),
+                                color: const Color.fromARGB(255, 243, 254, 255),
                                 margin: EdgeInsets.all(
                                     MediaQuery.of(context).size.width * 0.02),
                                 child: ListTile(
@@ -183,24 +182,21 @@ class ListOfStationsState extends State<ListOfStations> {
                                                             index], userId: widget.userId,
                                                   )));
                                     },
-                                    title: Container(
-                                      child: Text(
-                                        sortedStationList[index].stationName!,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.04),
-                                      ),
+                                    title: Text(
+                                      sortedStationList[index].stationName!,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.04),
                                     ),
                                     subtitle: //container for station address
-                                        Container(
-                                            child: Text(
+                                        Text(
                                       sortedStationList[index].stationLocation!,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                    )),
+                                    ),
                                     trailing: //column for 'distance from user' and connector type
                                         Column(
                                       mainAxisAlignment:
@@ -217,7 +213,7 @@ class ListOfStationsState extends State<ListOfStations> {
                                                 ? const CircularProgressIndicator()
                                                 : Text(
                                                     '${sortedStationDistanceList[index]['distance'].toStringAsFixed(2)} KM',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
@@ -237,17 +233,12 @@ class ListOfStationsState extends State<ListOfStations> {
                                         ),
 
                                         //Container for connector type
-                                        Container(
-                                          // margin: EdgeInsets.all(
-                                          //     MediaQuery.of(context).size.width *
-                                          //         0.02),
-                                          child: Text(
-                                            sortedStationList[index]
-                                                .stationPowerStandard!,
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                        Text(
+                                          sortedStationList[index]
+                                              .stationPowerStandard!,
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         )
                                       ],

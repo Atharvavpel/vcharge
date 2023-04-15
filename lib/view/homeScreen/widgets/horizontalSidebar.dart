@@ -53,7 +53,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                     isVehicle = false;
                   });
                 });
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> MyVehicleScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> MyVehicleScreen(userId: widget.userId,)));
               },
               child: Container(
                 margin: const EdgeInsets.only(right: 10),

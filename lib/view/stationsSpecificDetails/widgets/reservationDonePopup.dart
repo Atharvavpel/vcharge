@@ -69,6 +69,7 @@ class ReservationDonePopUpState extends State<ReservationDonePopUp> {
                       child: IconButton(
                           onPressed: () {
                             Navigator.of(context).pop();
+                            Navigator.of(context).pop();
                           },
                           icon: const FaIcon(
                             FontAwesomeIcons.x,

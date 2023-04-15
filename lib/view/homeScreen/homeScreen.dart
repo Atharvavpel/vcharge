@@ -1,9 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/existingHomeScreen.dart';
-import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/listOfStations/listOfStations.dart';
@@ -65,7 +62,7 @@ this is screen with onclose function
     List<dynamic> screens = [
       ListOfStations(userId: userId,),
       ExistingHomeScreen(userId: userId,),
-      QRScannerWidget(),
+      const QRScannerWidget(),
       // ScannerQr.qrScanner(),
       //     FutureBuilder<dynamic>(
       //   future: ScannerQr.qrScanner(),

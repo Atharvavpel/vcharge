@@ -82,31 +82,31 @@ class ChargerModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['chargerName'] = this.chargerName;
-    data['chargerNumber'] = this.chargerNumber;
-    data['chargerInputVoltage'] = this.chargerInputVoltage;
-    data['chargerOutputVoltage'] = this.chargerOutputVoltage;
-    data['chargerMinInputAmpere'] = this.chargerMinInputAmpere;
-    data['chargerMaxInputAmpere'] = this.chargerMaxInputAmpere;
-    data['chargerOutputAmpere'] = this.chargerOutputAmpere;
-    data['chargerInputFrequency'] = this.chargerInputFrequency;
-    data['chargerOutputFrequency'] = this.chargerOutputFrequency;
-    data['chargerIPRating'] = this.chargerIPRating;
-    data['chargerMountType'] = this.chargerMountType;
-    data['chargerNumberOfConnector'] = this.chargerNumberOfConnector;
-    data['isRFID'] = this.isRFID;
-    data['chargerSerialNumber'] = this.chargerSerialNumber;
-    data['chargerOCPPProtocol'] = this.chargerOCPPProtocol;
-    data['chargerConnectorType'] = this.chargerConnectorType;
-    data['isAppSupport'] = this.isAppSupport;
-    data['isTBCutOff'] = this.isTBCutOff;
-    data['isAntitheft'] = this.isAntitheft;
-    data['isLEDDisplay'] = this.isLEDDisplay;
-    data['isLEDIndications'] = this.isLEDIndications;
-    data['isSmart'] = this.isSmart;
-    if (this.connectors != null) {
-      data['connectors'] = this.connectors!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['chargerName'] = chargerName;
+    data['chargerNumber'] = chargerNumber;
+    data['chargerInputVoltage'] = chargerInputVoltage;
+    data['chargerOutputVoltage'] = chargerOutputVoltage;
+    data['chargerMinInputAmpere'] = chargerMinInputAmpere;
+    data['chargerMaxInputAmpere'] = chargerMaxInputAmpere;
+    data['chargerOutputAmpere'] = chargerOutputAmpere;
+    data['chargerInputFrequency'] = chargerInputFrequency;
+    data['chargerOutputFrequency'] = chargerOutputFrequency;
+    data['chargerIPRating'] = chargerIPRating;
+    data['chargerMountType'] = chargerMountType;
+    data['chargerNumberOfConnector'] = chargerNumberOfConnector;
+    data['isRFID'] = isRFID;
+    data['chargerSerialNumber'] = chargerSerialNumber;
+    data['chargerOCPPProtocol'] = chargerOCPPProtocol;
+    data['chargerConnectorType'] = chargerConnectorType;
+    data['isAppSupport'] = isAppSupport;
+    data['isTBCutOff'] = isTBCutOff;
+    data['isAntitheft'] = isAntitheft;
+    data['isLEDDisplay'] = isLEDDisplay;
+    data['isLEDIndications'] = isLEDIndications;
+    data['isSmart'] = isSmart;
+    if (connectors != null) {
+      data['connectors'] = connectors!.map((v) => v.toJson()).toList();
     }
     return data;
   }

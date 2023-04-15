@@ -4,6 +4,7 @@ import 'package:vcharge/view/homeScreen/widgets/horizontalSideBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/profileScreen/myProfile.dart';
 
+// ignore: must_be_immutable
 class SearchBarContainer extends StatefulWidget {
 
   String userId;

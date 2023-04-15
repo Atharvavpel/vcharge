@@ -21,12 +21,12 @@ class ConnectorModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['connectorType'] = this.connectorType;
-    data['connectorSocket'] = this.connectorSocket;
-    data['connectorStatus'] = this.connectorStatus;
-    data['connectorOutputPower'] = this.connectorOutputPower;
-    data['connectorCharges'] = this.connectorCharges;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['connectorType'] = connectorType;
+    data['connectorSocket'] = connectorSocket;
+    data['connectorStatus'] = connectorStatus;
+    data['connectorOutputPower'] = connectorOutputPower;
+    data['connectorCharges'] = connectorCharges;
     return data;
   }
 }

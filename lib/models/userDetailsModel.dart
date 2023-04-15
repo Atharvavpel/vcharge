@@ -1,4 +1,3 @@
-import 'package:vcharge/models/transactionModel.dart';
 
 class UserDetailsModel {
   String? userId;
