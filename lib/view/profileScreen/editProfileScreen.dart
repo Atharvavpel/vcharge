@@ -78,7 +78,7 @@ dynamic selectedState;
 // function for fetching specific user data
   Future<void> getUserData() async {
     var data = await GetMethod.getRequest(
-        "http://localhost:8081/manageUser/user?userId=USR20230410143236933");
+        "http://192.168.0.41:8081/manageUser/user?userId=USR20230410143236933");
 
     if (data != null) {
       setState(() {
