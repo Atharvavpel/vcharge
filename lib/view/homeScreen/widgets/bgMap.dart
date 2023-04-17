@@ -38,6 +38,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   // map controller for accessing map properties
   MapController? mapController;
 
+  AnimationController? animationController;
+
   // subscription to location updates
   // late StreamSubscription<loc.LocationData> locationSubscription;
 
@@ -50,15 +52,17 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    getUserLocation();
     mapController = widget.mapController;
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this);
     getStationData();
-    // getUserLiveLocation();
+    getUserLocation();
     getLocation();
   }
 
   @override
   void dispose() {
+    animationController?.dispose();
     // Cancel any ongoing asynchronous operation when the widget is disposed
     super.dispose();
   }
@@ -76,16 +80,20 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
 
 // this function is used to fetch the station data and embed it into the stationsData variable
   Future<void> getStationData() async {
+    try {
     var data = await GetMethod.getRequest(
         'http://192.168.0.43:8081/vst1/manageStation/stations');
-    if (data.isNotEmpty) {
-      // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
-      for (int i = 0; i < data.length; i++) {
-        stationsData.add(StationModel.fromJson(data[i]));
+      if (data != null || data.isNotEmpty) {
+        // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
+        for (int i = 0; i < data.length; i++) {
+          stationsData.add(StationModel.fromJson(data[i]));
+        }
+        setState(() {
+          getMarkersDetails();
+        });
       }
-      setState(() {
-        getMarkersDetails();
-      });
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -103,7 +111,10 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => StationsSpecificDetails( stationModel: idx, userId: widget.userId,)));
+                    builder: (context) => StationsSpecificDetails(
+                          stationModel: idx,
+                          userId: widget.userId,
+                        )));
           },
           child: FaIcon(
             FontAwesomeIcons.locationDot,
@@ -115,8 +126,6 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     }).toList();
   }
 
-  //this is setter function for mapController, so that we can set mapvalue outside this dart file
-
   //This function get the live location of the user using GetLiveLocation class
   Future<void> getLocation() async {
     var position = await GetLiveLocation.getUserLiveLocation();
@@ -124,7 +133,10 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     final prefs = await SharedPreferences.getInstance();
     prefs.setDouble('userLatitude', position.latitude);
     prefs.setDouble('userLongitude', position.longitude);
-    animatedMapMove(position, 15.0);
+    if (mounted) {
+      // Call the animatedMapMove method only if the widget is still mounted
+      animatedMapMove(position, 15.0);
+    }
   }
 
   //This function is use to animate the map when the mapController.move() is called
@@ -138,30 +150,40 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     final zoomTween = Tween<double>(begin: mapController!.zoom, end: destZoom);
 
     // Create a animation controller that has a duration and a TickerProvider.
-    final controller = AnimationController(
+    animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     // The animation determines what path the animation will take. You can try different Curves values, although I found
     // fastOutSlowIn to be my favorite.
     final Animation<double> animation =
-        CurvedAnimation(parent: controller, curve: Curves.easeInOut);
+        CurvedAnimation(parent: animationController!, curve: Curves.easeInOut);
+// Create a TickerFuture that completes when the animation has finished.
+    final animationFuture = animationController!.animateTo(1.0);
 
-    controller.addListener(() {
-      setState(() {
-        mapController!.move(
-            LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
-            zoomTween.evaluate(animation));
-      });
-    });
-
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.dispose();
-      } else if (status == AnimationStatus.dismissed) {
-        controller.dispose();
+    animationController!.addListener(() {
+      if (mounted) {
+        setState(() {
+          mapController!.move(
+              LatLng(
+                  latTween.evaluate(animation), lngTween.evaluate(animation)),
+              zoomTween.evaluate(animation));
+        });
       }
     });
 
-    controller.forward();
+    // animationFuture.whenComplete(() {
+    //   // When the animation is complete, dispose of the controller.
+    //   animationController!.dispose();
+    // });
+
+    // animation.addStatusListener((status) {
+    //   if (status == AnimationStatus.completed) {
+    //     animationController!.dispose();
+    //   } else if (status == AnimationStatus.dismissed) {
+    //     animationController!.dispose();
+    //   }
+    // });
+
+    animationController!.forward();
   }
 
   //this function get User Location from shared preferences
@@ -189,8 +211,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
           onPositionChanged: (mapPosition, boolValue) {
             userLocation = mapPosition.center!;
           }),
-      layers: [
-        TileLayerOptions(
+      children: [
+        TileLayer(
           urlTemplate:
               'https://api.mapbox.com/styles/v1/atharva70/clf990hij00ck01pg9fcgv02h/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXRoYXJ2YTcwIiwiYSI6ImNsZjk3cTUxZDJjc2czems3N2F3d2Y2aWUifQ._j3hKxoBC_Gnh4-qddn8lg',
           additionalOptions: {
@@ -199,7 +221,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             'id': 'mapbox.satellite',
           },
         ),
-        MarkerLayerOptions(markers: [
+        MarkerLayer(markers: [
           Marker(
               point:
                   userLocation ?? LatLng(18.562323835185673, 73.93812780854178),

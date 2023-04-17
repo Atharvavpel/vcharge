@@ -4,7 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   geolocator_windows
+<<<<<<< HEAD
+=======
   share_plus
+>>>>>>> 12c25089029ec04d5f873a631ea309f2b01aac76
   url_launcher_windows
 )
 

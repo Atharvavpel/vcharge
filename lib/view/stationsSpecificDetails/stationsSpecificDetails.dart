@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vcharge/models/chargerModel.dart';
 import 'package:vcharge/view/scanToCharge/scanToCharge.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
@@ -24,6 +25,14 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   //true indicates Amenity button is selected and false indicated Review button
   bool selectedButton = true;
+
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   void initState() {
@@ -148,8 +157,13 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           //container for call Icon
                           Expanded(
                             flex: 2,
-                            child: Container(
-                              child: const Icon(Icons.call),
+                            child: InkWell(
+                              onTap: (){
+                                _makePhoneCall('tel: 7030356762');
+                              },
+                              child: Container(
+                                child: const Icon(Icons.call),
+                              ),
                             ),
                           ),
                           //conteiner for station contact number text
@@ -487,10 +501,18 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                         Get.width * 0.047),
                                               ),
                                               chargerList[index].connectors ==
-                                                      null
-                                                  ? const Center(
-                                                      child:
-                                                          Text('No Connector'),
+                                                          null ||
+                                                      chargerList[index]
+                                                          .connectors!
+                                                          .isEmpty
+                                                  ? Padding(
+                                                      padding: EdgeInsets.all(
+                                                          Get.height * 0.02),
+                                                      child: const Text(
+                                                        'No Connector',
+                                                        style: TextStyle(
+                                                            color: Colors.grey),
+                                                      ),
                                                     )
                                                   : ListView.separated(
                                                       shrinkWrap: true,
