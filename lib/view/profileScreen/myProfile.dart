@@ -23,7 +23,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.41:8081/manageUser/user?userId=USR20230410143236933";
+      "http://localhost:8081/manageUser/user?userId=USR20230410143236933";
 
   @override
   void initState() {
