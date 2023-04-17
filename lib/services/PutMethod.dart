@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PutMethod{
 
@@ -13,7 +15,17 @@ class PutMethod{
       body: body
     );
     if(response.statusCode == 200){
-      print('Put Successful');
+      
+      Fluttertoast.showToast(
+          // msg: "Data updated successfully",
+          msg: response.body,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+
     }else{
       print('Error: ${response.statusCode}');
     }

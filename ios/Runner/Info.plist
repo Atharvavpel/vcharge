@@ -11,6 +11,14 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes</string>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  	<string>tel</string>
+  	<string>mailto</string>
+  	<string>sms</string>
+  	<string>whatsapp</string>
+	</array>
 	
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

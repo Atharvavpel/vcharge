@@ -3,7 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
 
 class SideBarDrawer extends StatelessWidget {
-  const SideBarDrawer({super.key});
+
+  String userId;
+
+  SideBarDrawer({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/putMethod.dart';
-import 'package:vcharge/view/settingScreen/settingPage.dart';
+import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 
 class EditProfileScreen extends StatefulWidget {
@@ -168,6 +170,7 @@ dynamic selectedState;
                           cursorColor: Colors.green,
                           textAlign: TextAlign.center,
                           decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.person),
                               label: Text("First-Name"),
                               border: OutlineInputBorder()),
                           controller: firstNameController,
@@ -183,6 +186,7 @@ dynamic selectedState;
                           cursorColor: Colors.green,
                           textAlign: TextAlign.center,
                           decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.person),
                               label: Text("Last-Name"),
                               border: OutlineInputBorder()),
                           controller: lastNameController,
@@ -259,12 +263,65 @@ dynamic selectedState;
                     maxLines: 10,
                     cursorColor: Colors.green,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        label: Text("Address"), border: OutlineInputBorder()),
+                    decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.all(Get.width* 0.03),
+                          child: const FaIcon(FontAwesomeIcons.addressBook),
+                        ),
+                        label: const Text("Address"), border: const OutlineInputBorder()),
                     controller: addressController,
                   ),
                 ),
     
+    
+                // contianer for pincode and city
+                Row(
+                  children: [
+
+                    // container for city
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: TextFormField(
+                          cursorColor: Colors.green,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.all(Get.width* 0.03),
+                                child: const FaIcon(FontAwesomeIcons.city),
+                              ),
+                              label: const Text("City"), 
+                              border: const OutlineInputBorder()),
+                          controller: cityController,
+                        ),
+                      ),
+                    ),
+
+                    // container for pincode
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: TextFormField(
+                          cursorColor: Colors.green,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                                padding: EdgeInsets.all(Get.width* 0.03),
+                                child: const Icon(Icons.numbers),
+                              ),
+                              label: const Text("Pincode"),
+                              border: const OutlineInputBorder()),
+                          controller: pincodeController,
+                        ),
+                      ),
+                    ),
+    
+                    
+                  ],
+                ),
+
+
+
                 // container for state section
                 Padding(
                   padding: const EdgeInsets.all(15.0),
@@ -287,62 +344,10 @@ dynamic selectedState;
                         ),
 
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                       ),
                 ),
-    
-                // contianer for pincode and city
-                Row(
-                  children: [
 
-                    // container for city
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          cursorColor: Colors.green,
-                          textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
-                              label: Text("City"), border: OutlineInputBorder()),
-                          controller: cityController,
-                        ),
-                      ),
-                    ),
 
-                    // container for pincode
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          cursorColor: Colors.green,
-                          textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
-                              label: Text("Pincode"),
-                              border: OutlineInputBorder()),
-                          controller: pincodeController,
-                        ),
-                      ),
-                    ),
-    
-                    
-                  ],
-                ),
               ],
             ),
           ),
@@ -354,7 +359,7 @@ dynamic selectedState;
           onPressed: () {
             updateUserDetails();
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SettingPage(userId: widget.userId)));
+                MaterialPageRoute(builder: (context) => MyProfilePage(userId: widget.userId)));
           },
           label: const Text("Update"),
         ),

@@ -142,7 +142,7 @@ class QrScannerOutput extends StatelessWidget {
       body: Center(
         child: Container(
           
-          child: Text("Output is:$output "),
+          child: Text("Output is : $output "),
         ),
       ),
     );

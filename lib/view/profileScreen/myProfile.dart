@@ -150,11 +150,11 @@ class MyProfilePageState extends State<MyProfilePage> {
     return Container(
       width: Get.width,
       decoration: const BoxDecoration(
-          color: Colors.green,
+          color: Color.fromARGB(255, 198, 235, 199),
           borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(400),
-              bottomRight: Radius.circular(400))),
-      height: Get.height * 0.2,
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30))),
+      height: Get.height * 0.17,
     );
   }
 
@@ -195,7 +195,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 // function for nav bar icons -> back button and settings button
   Widget rowContainingNavBarIcons() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -238,51 +238,72 @@ class MyProfilePageState extends State<MyProfilePage> {
 
 // function for the profile avtar
   Widget profileAvtarWidget() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: InkWell(
-          onTap: () {
-            print("clicked on circle avtar");
-            showModalBottomSheet(
-                context: context, builder: ((builder) => bottomSheet()));
-          },
-          child: profilePhoto == ''
-              ? selectedImage == null
-                  ? Container(
-                      width: 120,
-                      height: 120,
-                      margin: const EdgeInsets.only(bottom: 20),
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Color(0xffD6D6D6)),
-                      child: const Center(
-                        child: Icon(
-                          Icons.camera_alt_outlined,
-                          size: 40,
-                          color: Colors.white,
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: InkWell(
+            onTap: () {
+              print("clicked on circle avtar");
+              showModalBottomSheet(
+                  context: context, builder: ((builder) => bottomSheet()));
+            },
+            child: profilePhoto == ''
+                ? selectedImage == null
+                    ? Container(
+                        width: MediaQuery.of(context).size.width* 0.45,
+                        height: MediaQuery.of(context).size.height* 0.2,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.rectangle, color: Color(0xffD6D6D6)),
+                        child: const Center(
+                          child: Icon(
+                            Icons.camera_alt_outlined,
+                            size: 40,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    )
-                  : Container(
-                      width: 120,
-                      height: 120,
-                      margin: const EdgeInsets.only(bottom: 20),
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: FileImage(File(selectedImage!.path)),
-                              fit: BoxFit.fill),
-                          shape: BoxShape.circle,
-                          color: const Color(0xffD6D6D6)),
-                    )
-              : Container(
-                  width: 120,
-                  height: 120,
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(profilePhoto), fit: BoxFit.fill),
-                      shape: BoxShape.circle,
-                      color: const Color(0xffD6D6D6)),
-                )),
+                      )
+                    : Container(
+                        width: MediaQuery.of(context).size.width* 0.45,
+                        height: MediaQuery.of(context).size.height* 0.2,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: FileImage(File(selectedImage!.path)),
+                                fit: BoxFit.cover),
+                            shape: BoxShape.rectangle,
+                            color: const Color(0xffD6D6D6)),
+                      )
+                : Container(
+                    width: MediaQuery.of(context).size.width* 0.45,
+                    height: MediaQuery.of(context).size.height* 0.2,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset:  Offset(
+                          5.0,
+                          5.0,
+                        ),
+                        blurRadius: 10.0,
+                        spreadRadius: 2.0,
+                      ), //BoxShadow
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0,
+                      ), //BoxShadow
+                    ],
+                        image: DecorationImage(
+                            image: NetworkImage(profilePhoto), fit: BoxFit.cover),
+                        shape: BoxShape.rectangle,
+                        color: Color(0xffD6D6D6)),
+                  )),
+      ),
     );
   }
 
@@ -290,7 +311,7 @@ class MyProfilePageState extends State<MyProfilePage> {
   Widget editIconOverProfileAvtar() {
     return Positioned(
       bottom: 10,
-      right: MediaQuery.of(context).size.width * 0.37,
+      right: MediaQuery.of(context).size.width * 0.25,
       child: GestureDetector(
         onTap: () {
           showModalBottomSheet(
@@ -482,7 +503,10 @@ class MyProfilePageState extends State<MyProfilePage> {
                       Stack(
                         children: [
                           // profile avtar widget
-                          profileAvtarWidget(),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 50.0),
+                            child: profileAvtarWidget(),
+                          ),
 
                           // edit button over the profie avtar
                           editIconOverProfileAvtar(),
@@ -540,40 +564,3 @@ class MyProfilePageState extends State<MyProfilePage> {
 }
 
 
-
-
-/*
-
-
-selectedImage == null
-            ? Container(
-                width: 120,
-                height: 120,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: Color(0xffD6D6D6)),
-                child: const Center(
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 40,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            : Container(
-                width: 120,
-                height: 120,
-                margin: const EdgeInsets.only(bottom: 20),
-                
-                decoration: BoxDecoration( 
-                  image: DecorationImage( image: FileImage(File(selectedImage!.path)), 
-                  fit: BoxFit.fill), 
-                  shape: BoxShape.circle, 
-                  color: const Color(0xffD6D6D6)),
-                    
-              ),
-
-
-
-
-*/

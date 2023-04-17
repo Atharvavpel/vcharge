@@ -1,3 +1,15 @@
+/*
+
+as you know, i have three buttons in the bottom navigation bar, default app opens at the index = 1 
+button and at index = 0, there is a list of all stations page and index = 2, has the qr scanner
+page. What i want is, when i am at the scanner page or say the list of all stations page, 
+once user clicks the back button which comes by default on the android, it should come back to the home button
+which is by default set and it should not terminate the application and close it.
+
+*/
+
+
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/models/transactionModel.dart';
