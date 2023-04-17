@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
+import 'package:vcharge/view/helpSupportScreen/helpSupportScreen.dart';
+import 'package:vcharge/view/referFriendScreen/referFriend.dart';
+import 'package:vcharge/view/walletScreen/walletScreen.dart';
 
 class SideBarDrawer extends StatelessWidget {
 
@@ -84,7 +87,15 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('Wallet'),
                       onTap: () {
-              
+              Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WalletScreen(userId: userId,))
+                      ).then((value) {
+                        Future.delayed(const Duration(milliseconds: 250), () {
+                          Navigator.pop(context); // Close the drawer smoothly
+                        });
+                      });
                       },
                     ),
             ),
@@ -113,7 +124,7 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('Reservations'),
                       onTap: () {
-              
+                        
                       },
                     ),
             ),
@@ -138,7 +149,7 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('Favourites'),
                       onTap: () {
-              
+              Navigator.pop(context);
                       },
                     ),
             ),
@@ -166,7 +177,15 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('Refer a friend'),
                       onTap: () {
-              
+              Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ReferFriend())
+                      ).then((value) {
+                        Future.delayed(const Duration(milliseconds: 250), () {
+                          Navigator.pop(context); // Close the drawer smoothly
+                        });
+                      });
                       },
                     ),
             ),
@@ -195,7 +214,7 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('FAQ'),
                       onTap: () {
-              
+              Navigator.pop(context);
                       },
                     ),
             ),
@@ -223,7 +242,15 @@ class SideBarDrawer extends StatelessWidget {
               child: ListTile(
                       title: const Text('Help & Support'),
                       onTap: () {
-              
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HelpSupportScreen())
+                      ).then((value) {
+                        Future.delayed(const Duration(milliseconds: 250), () {
+                          Navigator.pop(context); // Close the drawer smoothly
+                        });
+                      });
                       },
                     ),
             ),
