@@ -8,8 +8,6 @@ which is by default set and it should not terminate the application and close it
 
 */
 
-
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/models/transactionModel.dart';
@@ -31,7 +29,7 @@ class WalletScreen extends StatefulWidget {
 class WalletScreenState extends State<WalletScreen> {
   WalletModel? walletDetail;
   List<TransactionModel> transactionData = [];
-  
+
   //user name
   var userFirstName = "...";
   var userLastName = "...";
@@ -44,9 +42,10 @@ class WalletScreenState extends State<WalletScreen> {
     super.initState();
   }
 
-  Future<void> getUserName() async{
-    var data = await GetMethod.getRequest('http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}');
-    if(data != null){
+  Future<void> getUserName() async {
+    var data = await GetMethod.getRequest(
+        'http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}');
+    if (data != null) {
       setState(() {
         userFirstName = data['userFirstName'];
         userLastName = data['userLastName'];
@@ -69,24 +68,28 @@ class WalletScreenState extends State<WalletScreen> {
 
   //this function fetch the transaction details according to userId and store it to transactionData list
   Future<void> getTransactionDetails() async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.41:8081/manageUser/getTransaction?userId=${widget.userId}');
-    setState(() {
-      if (data != null) {
-        for (int i = 0; i < data.length; i++) {
-          transactionData.add(TransactionModel(
-            initiateTransactionDate: data[i]['initiateTransactionDate'],
-            completeTransactionDate: data[i]['completeTransactionDate'],
-            initiateTransactionTime: data[i]['initiateTransactionTime'],
-            completeTransactionTime: data[i]['completeTransactionTime'],
-            transactionAmount: data[i]['transactionAmount'],
-            transactionUTR: data[i]['transactionUTR'],
-            transactionStatus: data[i]['transactionStatus'],
-            createdDate: data[i]['createdDate'],
-          ));
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.41:8081/manageUser/getTransaction?userId=${widget.userId}');
+      setState(() {
+        if (data != null) {
+          for (int i = 0; i < data.length; i++) {
+            transactionData.add(TransactionModel(
+              initiateTransactionDate: data[i]['initiateTransactionDate'],
+              completeTransactionDate: data[i]['completeTransactionDate'],
+              initiateTransactionTime: data[i]['initiateTransactionTime'],
+              completeTransactionTime: data[i]['completeTransactionTime'],
+              transactionAmount: data[i]['transactionAmount'],
+              transactionUTR: data[i]['transactionUTR'],
+              transactionStatus: data[i]['transactionStatus'],
+              createdDate: data[i]['createdDate'],
+            ));
+          }
         }
-      }
-    });
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   //this function returns an icon based on given status
@@ -234,7 +237,8 @@ class WalletScreenState extends State<WalletScreen> {
             SafeArea(
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.6,
-                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
+                margin:
+                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
                 child: transactionData.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : ListView.builder(
@@ -251,14 +255,15 @@ class WalletScreenState extends State<WalletScreen> {
                             child: ListTile(
                               //on tap function on listtile
                               onTap: () {},
-            
+
                               //leading for transaction status
                               leading: Container(
                                 width: MediaQuery.of(context).size.width * 0.1,
                                 child: Center(
                                   child: CircleAvatar(
-                                      radius: MediaQuery.of(context).size.width *
-                                          0.035,
+                                      radius:
+                                          MediaQuery.of(context).size.width *
+                                              0.035,
                                       backgroundColor: getStatusColor(
                                           transactionData[index]
                                               .transactionStatus!),
@@ -269,14 +274,14 @@ class WalletScreenState extends State<WalletScreen> {
                                       )),
                                 ),
                               ),
-            
+
                               // title for transaction amount
                               title: Row(
                                 children: [
                                   Icon(
                                     Icons.currency_rupee,
-                                    size:
-                                        MediaQuery.of(context).size.width * 0.06,
+                                    size: MediaQuery.of(context).size.width *
+                                        0.06,
                                     color: Colors.black,
                                   ),
                                   Text(
@@ -297,7 +302,7 @@ class WalletScreenState extends State<WalletScreen> {
                                   ),
                                 ],
                               ),
-            
+
                               //subtitle for transaction date
                               subtitle: Text(
                                 DateFormat('MMMM d, yyyy').format(
@@ -305,13 +310,15 @@ class WalletScreenState extends State<WalletScreen> {
                                         transactionData[index]
                                             .completeTransactionDate!)),
                                 style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.width *
-                                        0.034),
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.034),
                               ),
-            
+
                               //trailing for payment method
                               trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
                                     'Payment method',

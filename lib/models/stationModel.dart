@@ -1,5 +1,6 @@
 import 'chargerModel.dart';
 
+//Following is a basic model for all the staion details
 class StationModel {
   String? stationId;
   String? stationName;
@@ -91,4 +92,36 @@ class StationModel {
     return data;
   }
 }
+
+
+//Following is the model for some specific details of station
+class RequiredStationDetailsModel {
+  String? stationId;
+  String? stationLatitude;
+  String? stationLongitude;
+  String? stationStatus;
+
+  RequiredStationDetailsModel(
+      {this.stationId,
+      this.stationLatitude,
+      this.stationLongitude,
+      this.stationStatus});
+
+  RequiredStationDetailsModel.fromJson(Map<String, dynamic> json) {
+    stationId = json['stationId'];
+    stationLatitude = json['stationLatitude'];
+    stationLongitude = json['stationLongitude'];
+    stationStatus = json['stationStatus'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['stationId'] = stationId;
+    data['stationLatitude'] = stationLatitude;
+    data['stationLongitude'] = stationLongitude;
+    data['stationStatus'] = stationStatus;
+    return data;
+  }
+}
+
 

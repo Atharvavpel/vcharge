@@ -23,6 +23,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
     super.initState();
   }
 
+  //this function add the amount to current amount of amountController to the, and if the amountController is empty, it initialize the value of amountController with the given amount 
   void addToAmountController(int amount) {
     setState(() {
       if (amountController.text.isNotEmpty) {

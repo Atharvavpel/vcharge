@@ -576,6 +576,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  radio_button_form_field:
+    dependency: "direct main"
+    description:
+      name: radio_button_form_field
+      sha256: "25392c72c725f61c0532a92ea4f456f317983a700822052f47cdd57249982477"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   share_plus:
     dependency: "direct main"
     description:

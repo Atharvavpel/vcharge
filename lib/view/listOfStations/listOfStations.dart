@@ -39,6 +39,7 @@ class ListOfStationsState extends State<ListOfStations> {
   //this list container the list of sorted station
   List<StationModel> sortedStationList = [];
 
+  //get current location of the user
   Future<void> getLocationOfUser() async {
     var position = await GetLiveLocation.getUserLiveLocation();
     setState(() {
@@ -48,18 +49,18 @@ class ListOfStationsState extends State<ListOfStations> {
 
   Future<void> getStationList() async {
     try {
-  var data = await GetMethod.getRequest(
-      'http://192.168.0.43:8081/vst1/manageStation/stations');
-  setState(() {
-    if (data != null) {
-      for (int i = 0; i < data.length; i++) {
-        stationsList.add(StationModel.fromJson(data[i]));
-      }
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.43:8081/vst1/manageStation/stations');
+      setState(() {
+        if (data != null) {
+          for (int i = 0; i < data.length; i++) {
+            stationsList.add(StationModel.fromJson(data[i]));
+          }
+        }
+      });
+    } catch (e) {
+      print(e);
     }
-  });
-} catch (e) {
-  print(e);
-}
   }
 
   //To calculate the distance between two points on the Earth's surface given their latitude and longitude coordinates, you can use the Haversine formula.
@@ -89,9 +90,9 @@ class ListOfStationsState extends State<ListOfStations> {
 
   //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
   MaterialColor getAvailablityColor(String availiblityStatus) {
-    if (availiblityStatus == 'Available') {
+    if (availiblityStatus.toLowerCase().replaceAll(' ', '') == 'available') {
       return Colors.green;
-    } else if (availiblityStatus == 'NotAvailable') {
+    } else if (availiblityStatus.toLowerCase().replaceAll(' ', '') == 'unavailable') {
       return Colors.red;
     } else {
       return Colors.orange;
@@ -183,7 +184,8 @@ class ListOfStationsState extends State<ListOfStations> {
                                                   StationsSpecificDetails(
                                                     stationModel:
                                                         sortedStationList[
-                                                            index], userId: widget.userId,
+                                                            index],
+                                                    userId: widget.userId,
                                                   )));
                                     },
                                     title: Text(
