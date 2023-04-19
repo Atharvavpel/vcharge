@@ -50,7 +50,7 @@ class ListOfStationsState extends State<ListOfStations> {
   Future<void> getStationList() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.43:8081/vst1/manageStation/stations');
+          'http://192.168.0.43:8081/vst1/manageStation/getRequiredStationsDetails');
       setState(() {
         if (data != null) {
           for (int i = 0; i < data.length; i++) {

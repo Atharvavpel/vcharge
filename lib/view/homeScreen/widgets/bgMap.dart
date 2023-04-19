@@ -74,7 +74,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   Future<void> getStationData() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.43:8081/vst1/manageStation/stations');
+          'http://192.168.0.43:8081/vst1/manageStation/getRequiredStationsDetails');
       if (data != null || data.isNotEmpty) {
         // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
         for (int i = 0; i < data.length; i++) {

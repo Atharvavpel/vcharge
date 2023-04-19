@@ -5,17 +5,18 @@ class SearchingWidget extends SearchDelegate{
 
 
 Future<List<dynamic>> fetchData(String keyword) async {
+
+  if(keyword.length < 2) return [];
+
   final url = "http://192.168.0.43:8081/vst1/manageStation/search?query=$keyword";
   final response = await GetMethod.getRequest(url);
   return response;
+  
 }
-
 
 
 String? selectedQuery;
 dynamic result;
-
-dynamic output;
 
 // this method is used to display the right side of the search
 
@@ -46,7 +47,7 @@ dynamic output;
 // this method is used when we tap the search button
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
+    return FutureBuilder<List<dynamic>>(    
     future: fetchData(query),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -58,7 +59,7 @@ dynamic output;
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, index) {
-              final item = data[index] as Map<String, dynamic>;
+              final item = data[index];
               return Column(
                 children: [
                   Text(item['stationId']),
@@ -83,7 +84,7 @@ dynamic output;
   
 
 // this button is used to display the suggestions
-  @override
+@override
 Widget buildSuggestions(BuildContext context) {
   return FutureBuilder<List<dynamic>>(
     future: fetchData(query),
@@ -97,7 +98,7 @@ Widget buildSuggestions(BuildContext context) {
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, index) {
-              final item = data[index] as Map<String, dynamic>;
+              final item = data[index];
               return ListTile(
                 title: Text(item["stationName"]),
                 subtitle: Text(item["stationLocation"]),
