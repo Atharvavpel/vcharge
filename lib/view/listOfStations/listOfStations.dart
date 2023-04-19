@@ -8,6 +8,8 @@ import 'dart:math' as Math;
 import 'package:vcharge/view/listOfStations/widgets/searchBarOfLOS.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
+import '../../utils/staticVariablesForMap.dart';
+
 class ListOfStations extends StatefulWidget {
   String userId;
   ListOfStations({required this.userId, super.key});
@@ -28,7 +30,7 @@ class ListOfStationsState extends State<ListOfStations> {
   }
 
   //this list store the list of stations
-  List<StationModel> stationsList = [];
+  List<RequiredStationDetailsModel> stationsList = [];
 
   //this list store the distance for user to each station
   List<double> userToStationDistanceList = [];
@@ -48,16 +50,18 @@ class ListOfStationsState extends State<ListOfStations> {
   }
 
   Future<void> getStationList() async {
-    try {
+   try {
       var data = await GetMethod.getRequest(
           'http://192.168.0.43:8081/vst1/manageStation/getRequiredStationsDetails');
-      setState(() {
-        if (data != null) {
-          for (int i = 0; i < data.length; i++) {
-            stationsList.add(StationModel.fromJson(data[i]));
-          }
+      if (data != null || data.isNotEmpty) {
+        // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
+        for (int i = 0; i < data.length; i++) {
+          stationsList.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
-      });
+        setState(() {
+          StaticVariablesForMap.getMarkersDetails(context, stationsList);
+        });
+      }
     } catch (e) {
       print(e);
     }
@@ -182,9 +186,9 @@ class ListOfStationsState extends State<ListOfStations> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   StationsSpecificDetails(
-                                                    stationModel:
+                                                    stationId:
                                                         sortedStationList[
-                                                            index],
+                                                            index].stationId!,
                                                     userId: widget.userId,
                                                   )));
                                     },

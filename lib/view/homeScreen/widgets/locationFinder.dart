@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
 
+import '../../../utils/staticVariablesForMap.dart';
+
 class LocationFinder extends StatefulWidget {
   //getting mapController as parameter
   MapController mapController;
@@ -16,7 +18,7 @@ class LocationFinder extends StatefulWidget {
 class LocationFinderState extends State<LocationFinder>
     with TickerProviderStateMixin {
   //initializing mapController in this state
-  MapController? mapController;
+  // MapController? mapController;
 
   //variable for location finder
   bool locationFinder = false;
@@ -24,7 +26,6 @@ class LocationFinderState extends State<LocationFinder>
   @override
   void initState() {
     super.initState();
-    mapController = widget.mapController;
   }
 
   //This function is use to animate the map when the mapController.move() is called
@@ -32,10 +33,10 @@ class LocationFinderState extends State<LocationFinder>
     // Create some tweens. These serve to split up the transition from one location to another.
     // In our case, we want to split the transition be<tween> our current map center and the destination.
     final latTween = Tween<double>(
-        begin: mapController!.center.latitude, end: destLocation.latitude);
+        begin: StaticVariablesForMap.mapController.center.latitude, end: destLocation.latitude);
     final lngTween = Tween<double>(
-        begin: mapController!.center.longitude, end: destLocation.longitude);
-    final zoomTween = Tween<double>(begin: mapController!.zoom, end: destZoom);
+        begin: StaticVariablesForMap.mapController.center.longitude, end: destLocation.longitude);
+    final zoomTween = Tween<double>(begin: StaticVariablesForMap.mapController.zoom, end: destZoom);
 
     // Create a animation controller that has a duration and a TickerProvider.
     final controller = AnimationController(
@@ -47,7 +48,7 @@ class LocationFinderState extends State<LocationFinder>
 
     controller.addListener(() {
       setState(() {
-        mapController!.move(
+        StaticVariablesForMap.mapController.move(
             LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
             zoomTween.evaluate(animation));
       });

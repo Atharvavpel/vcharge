@@ -48,7 +48,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   // late StreamSubscription<loc.LocationData> locationSubscription;
 
   // list which loads the station data
-  List<StationModel> stationsData = [];
+  List<RequiredStationDetailsModel> stationsData = [];
 
   
 
@@ -78,7 +78,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
       if (data != null || data.isNotEmpty) {
         // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
         for (int i = 0; i < data.length; i++) {
-          stationsData.add(StationModel.fromJson(data[i]));
+          stationsData.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
         setState(() {
           StaticVariablesForMap.getMarkersDetails(context, stationsData);
@@ -115,13 +115,13 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     final zoomTween = Tween<double>(begin: StaticVariablesForMap.mapController.zoom, end: destZoom);
 
     // Create a animation controller that has a duration and a TickerProvider.
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
+    // animationController = AnimationController(
+    //     duration: const Duration(milliseconds: 1000), vsync: this);
     // The animation determines what path the animation will take. You can try different Curves values, although I found
     // fastOutSlowIn to be my favorite.
     final Animation<double> animation =
         CurvedAnimation(parent: animationController!, curve: Curves.easeInOut);
-// Create a TickerFuture that completes when the animation has finished.
+    // Create a TickerFuture that completes when the animation has finished.
     final animationFuture = animationController!.animateTo(1.0);
 
     animationController!.addListener(() {
@@ -167,7 +167,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
       mapController: StaticVariablesForMap.mapController,
       options: MapOptions(
           minZoom: 5,
-          maxZoom: 17.0,
+          // maxZoom: 17.0,
           center: StaticVariablesForMap.userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
           zoom: 15.0,
           //by this command, the map will not be able to rotate
