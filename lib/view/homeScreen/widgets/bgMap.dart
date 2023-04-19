@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vcharge/models/stationModel.dart';
@@ -81,8 +82,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
 // this function is used to fetch the station data and embed it into the stationsData variable
   Future<void> getStationData() async {
     try {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.43:8081/vst1/manageStation/stations');
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.43:8081/vst1/manageStation/stations');
       if (data != null || data.isNotEmpty) {
         // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
         for (int i = 0; i < data.length; i++) {
@@ -215,21 +216,56 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
         TileLayer(
           urlTemplate:
               'https://api.mapbox.com/styles/v1/atharva70/clf990hij00ck01pg9fcgv02h/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXRoYXJ2YTcwIiwiYSI6ImNsZjk3cTUxZDJjc2czems3N2F3d2Y2aWUifQ._j3hKxoBC_Gnh4-qddn8lg',
-          additionalOptions: {
+          additionalOptions: const  {
             'accessToken':
                 'pk.eyJ1IjoiYXRoYXJ2YTcwIiwiYSI6ImNsZjk3cTUxZDJjc2czems3N2F3d2Y2aWUifQ._j3hKxoBC_Gnh4-qddn8lg',
             'id': 'mapbox.satellite',
           },
         ),
-        MarkerLayer(markers: [
-          Marker(
-              point:
-                  userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
-              builder: (ctx) =>
-                  const FaIcon(FontAwesomeIcons.locationCrosshairs)),
-          for (final marker in markersDetails) marker
-        ]),
+        MarkerLayer(
+          markers: [
+            //user location marker
+              Marker(
+                point: userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
+                builder: (ctx) => const FaIcon(FontAwesomeIcons.locationCrosshairs),
+              ),],
+        ),
+        MarkerClusterLayerWidget(
+          options: MarkerClusterLayerOptions(
+            maxClusterRadius: 45,
+            size: const Size(40, 40),
+            anchor: AnchorPos.align(AnchorAlign.center),
+            // fitBoundsOptions property is used to configure how the map view should adjust its zoom and centering when a cluster or marker is clicked.
+            fitBoundsOptions: const FitBoundsOptions(
+              padding: EdgeInsets.all(50),
+              maxZoom: 18,
+            ),
+            markers: [
+              //Station markers
+              for (final marker in markersDetails) marker
+            ],
+            builder: (context, markers) {
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                elevation: 5,
+                color: Colors.green,
+                child: Center(
+                  child: Text(
+                    markers.length.toString(),
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
 }
+
+/*
+
+*/
