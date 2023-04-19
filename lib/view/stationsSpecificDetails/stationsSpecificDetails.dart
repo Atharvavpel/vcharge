@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vcharge/models/chargerModel.dart';
+import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/scanToCharge/scanToCharge.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
 
 class StationsSpecificDetails extends StatefulWidget {
-  StationModel? stationModel;
+  String stationId;
   String userId;
 
   StationsSpecificDetails(
-      {required this.userId, required this.stationModel, super.key});
+      {required this.userId, required this.stationId, super.key});
 
   @override
   State<StatefulWidget> createState() => StationsSpecificDetailsState();
@@ -21,7 +22,9 @@ class StationsSpecificDetails extends StatefulWidget {
 
 class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   List<ChargerModel> chargerList = [];
-  StationModel? stationModel;
+  String? stationId;
+
+  StationModel? stationDetails;
 
   //true indicates Amenity button is selected and false indicated Review button
   bool selectedButton = true;
@@ -37,8 +40,16 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   @override
   void initState() {
     super.initState();
-    stationModel = widget.stationModel;
-    chargerList = widget.stationModel!.chargers!;
+    stationId = widget.stationId;
+    chargerList = stationDetails!.chargers!;
+  }
+
+  Future<void> getStationDetails() async {
+    var data = await GetMethod.getRequest(
+        'http://192.168.0.43:8081/vst1/manageStation/getStationByStationId?stationId=${widget.stationId}');
+    setState(() {
+      stationDetails = StationModel.fromJson(data);
+    });
   }
 
   //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
@@ -74,7 +85,12 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
           centerTitle: true,
           title: const Text("Station"),
         ),
-        body: Column(
+        body: 
+        stationDetails==null 
+        ?
+        Center(child: CircularProgressIndicator(),)
+        : 
+        Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             //Container for station heading and share button
@@ -92,7 +108,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                     Expanded(
                         flex: 6,
                         child: Text(
-                          stationModel!.stationName!,
+                          stationDetails!.stationName!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize:
@@ -139,7 +155,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             flex: 14,
                             child: Container(
                               child: Text(
-                                stationModel!.stationLocation!,
+                                stationDetails!.stationLocation!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -158,7 +174,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           Expanded(
                             flex: 2,
                             child: InkWell(
-                              onTap: (){
+                              onTap: () {
                                 _makePhoneCall('tel: 7030356762');
                               },
                               child: Container(
@@ -171,7 +187,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             flex: 14,
                             child: Container(
                               child: Text(
-                                stationModel!.stationContactNumber!,
+                                stationDetails!.stationContactNumber!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -225,7 +241,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             flex: 14,
                             child: Container(
                               child: Text(
-                                stationModel!.stationWorkingTime!,
+                                stationDetails!.stationWorkingTime!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -305,7 +321,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount:
-                                        stationModel!.stationAmenity!.length,
+                                        stationDetails!.stationAmenity!.length,
                                     itemBuilder: (context, index) {
                                       return Padding(
                                         padding: EdgeInsets.all(
@@ -315,7 +331,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                           children: [
                                             //Amenity icon
                                             Icon(
-                                              getIconForAmenity(stationModel!
+                                              getIconForAmenity(stationDetails!
                                                   .stationAmenity![index]),
                                               size: MediaQuery.of(context)
                                                       .size
@@ -325,7 +341,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             ),
                                             //Amenity text
                                             Text(
-                                              stationModel!
+                                              stationDetails!
                                                   .stationAmenity![index],
                                               style: TextStyle(
                                                   fontSize:
@@ -347,7 +363,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount:
-                                        stationModel!.stationAmenity!.length,
+                                        stationDetails!.stationAmenity!.length,
                                     itemBuilder: (context, index) {
                                       return Container(
                                         width:
@@ -448,7 +464,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                       flex: 23,
                       child: Container(
                         // height: MediaQuery.of(context).size.height * 0.4,
-                        child: stationModel!.chargers!.isEmpty
+                        child: stationDetails!.chargers!.isEmpty
                             ? Center(
                                 child: Text(
                                   'No charger to show',
@@ -478,7 +494,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                       child: ExpansionTile(
                                         //title - name of charger
                                         title: Text(
-                                          stationModel!
+                                          stationDetails!
                                               .chargers![index].chargerName!,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -486,7 +502,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
                                         //subtitle
                                         subtitle: Text(
-                                            "Number of Guns: ${stationModel!.chargers![index].chargerNumberOfConnector}"),
+                                            "Number of Guns: ${stationDetails!.chargers![index].chargerNumberOfConnector}"),
 
                                         //children
                                         children: [
@@ -647,15 +663,15 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                             (BuildContext context) =>
                                                                                 ReservePopUp(
                                                                           stationName:
-                                                                              stationModel!.stationName!,
+                                                                              stationDetails!.stationName!,
                                                                           stationLocation:
-                                                                              stationModel!.stationLocation!,
+                                                                              stationDetails!.stationLocation!,
                                                                           chargerModel:
-                                                                              stationModel!.chargers![index],
+                                                                              stationDetails!.chargers![index],
                                                                           userId:
                                                                               widget.userId,
                                                                           stationId:
-                                                                              stationModel!.stationId!,
+                                                                              stationDetails!.stationId!,
                                                                         ),
                                                                       );
                                                                     },
@@ -669,8 +685,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (context) => ScanToCharge(
-                                                                                  stationLocation: stationModel!.stationLocation!,
-                                                                                  stationName: stationModel!.stationName!,
+                                                                                  stationLocation: stationDetails!.stationLocation!,
+                                                                                  stationName: stationDetails!.stationName!,
                                                                                   userId: widget.userId,
                                                                                 )));
                                                                   },
