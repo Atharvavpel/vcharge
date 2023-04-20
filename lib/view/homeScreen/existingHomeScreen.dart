@@ -9,37 +9,45 @@ import 'package:vcharge/view/homeScreen/widgets/searchBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 
-class ExistingHomeScreen extends StatelessWidget {
+import '../../utils/staticVariablesForMap.dart';
+
+class ExistingHomeScreen extends StatefulWidget {
   String userId;
 
   ExistingHomeScreen({required this.userId, super.key});
 
-  //map controller is initialized here because we can pass it to another screens later
-  late MapController mapController = MapController();
+  @override
+  State<StatefulWidget> createState() => ExistingHomeScreenState();
+}
+
+class ExistingHomeScreenState extends State<ExistingHomeScreen> {
+  //SetState call back function
+  updateState() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     // print("Inside the build method of homescreen");
     return SafeArea(
       child: Scaffold(
-        drawer: SideBarDrawer(userId: userId),
+        drawer: SideBarDrawer(userId: widget.userId),
         body: Stack(
           children: [
             // background map
-            BgMap(mapController: mapController, userId: userId),
+            BgMap(userId: widget.userId),
 
             // searchBar and navBar
             SearchBarContainer(
-              userId: userId,
+              userId: widget.userId,
+              callBack: updateState,
             ),
 
             // location finder
             Positioned(
               bottom: 0,
               right: 0,
-              child: LocationFinder(
-                mapController: mapController,
-              ),
+              child: LocationFinder(updateState: updateState),
             ),
 
             // Virtuoso logo
@@ -72,7 +80,7 @@ class ExistingHomeScreen extends StatelessWidget {
                       showBottomSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return FilterPopUp(userId: userId);
+                            return FilterPopUp(userId: widget.userId);
                           });
                     },
                     child: const Icon(

@@ -15,10 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/staticVariablesForMap.dart';
 
 class BgMap extends StatefulWidget {
-  MapController mapController = MapController();
   String userId;
 
-  BgMap({required this.userId, required this.mapController, super.key});
+  BgMap({required this.userId, super.key});
 
   @override
   State<StatefulWidget> createState() => BgMapState();
@@ -30,17 +29,8 @@ class BgMap extends StatefulWidget {
 }
 
 class BgMapState extends State<BgMap> with TickerProviderStateMixin {
-  //bool to check if location services are enabled
-  // late bool serviceEnabled;
-
-  //variable to store user data
-  // late loc.LocationData locationData;
-
   // the user's live location data
-  // LatLng? userLocation;
-
-  // map controller for accessing map properties
-  // MapController? mapController;
+  static LatLng? userLocation;
 
   AnimationController? animationController;
 
@@ -48,14 +38,13 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   // late StreamSubscription<loc.LocationData> locationSubscription;
 
   // list which loads the station data
-  List<RequiredStationDetailsModel> stationsData = [];
+  static List<RequiredStationDetailsModel> stationsData = [];
 
   
 
   @override
   void initState() {
     super.initState();
-    StaticVariablesForMap.mapController = widget.mapController;
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     getStationData();
@@ -69,6 +58,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     // Cancel any ongoing asynchronous operation when the widget is disposed
     super.dispose();
   }
+
 
 // this function is used to fetch the station data and embed it into the stationsData variable
   Future<void> getStationData() async {
@@ -156,7 +146,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getDouble('userLatitude') != null &&
         prefs.getDouble('userLongitude') != null) {
-      StaticVariablesForMap.userLocation = LatLng(
+      BgMapState.userLocation = LatLng(
           prefs.getDouble('userLatitude')!, prefs.getDouble('userLongitude')!);
     }
   }
@@ -166,14 +156,15 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     return FlutterMap(
       mapController: StaticVariablesForMap.mapController,
       options: MapOptions(
-          minZoom: 5,
-          // maxZoom: 17.0,
-          center: StaticVariablesForMap.userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
+          minZoom: 2,
+          maxZoom: 17.0,
+          center: BgMapState.userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
           zoom: 15.0,
           //by this command, the map will not be able to rotate
           interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
           onPositionChanged: (mapPosition, boolValue) {
-            StaticVariablesForMap.userLocation = mapPosition.center!;
+            // BgMapState.userLocation = mapPosition.center!;
+            setState(() {});
           }),
       children: [
         TileLayer(
@@ -192,7 +183,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             Marker(
               anchorPos: AnchorPos.align(AnchorAlign.center),
               point:
-                  StaticVariablesForMap.userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
+                  BgMapState.userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
               builder: (ctx) => Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
