@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
+// import 'package:vcharge/view/listOfStations/widgets/losSearchingWidget.dart';
+import 'package:vcharge/view/listOfStations/widgets/losSearchingWidget.dart';
+
 
 class SearchBarofLOS extends StatefulWidget {
   String userId;
@@ -27,12 +31,23 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
         ],
       ),
       child: TextField(
-        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.055),
+        readOnly: true,
+        onTap: (){
+          showSearch(
+                    context: context, 
+                    delegate: losSearchingWidget()
+                  );
+        },
         decoration: InputDecoration(
             border: InputBorder.none,
-            label: const Text('Search Station'),
+            hintText: "Search Stations",
             prefixIcon: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showSearch(
+                    context: context, 
+                    delegate: losSearchingWidget()
+                  );
+                },
                 icon: Icon(
                   Icons.search_rounded,
                   size: MediaQuery.of(context).size.width * 0.07,

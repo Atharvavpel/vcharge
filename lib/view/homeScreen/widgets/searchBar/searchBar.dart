@@ -72,7 +72,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                 padding: EdgeInsets.only(
                     top: Get.height * 0.015,
                     left: Get.width * 0.03,
-                    right: Get.width * 0.03,
+                    right: Get.width * 0.05,
                     bottom: Get.height * 0.005),
                 child: Container(
                   height: Get.height * 0.06,
