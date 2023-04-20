@@ -139,6 +139,7 @@ class ListOfStationsState extends State<ListOfStations> {
       for (int i = 0; i < sortedStationDistanceList.length; i++) {
         sortedStationList.add(sortedStationDistanceList[i]['station']);
       }
+      print(sortedStationList);
     });
   }
 

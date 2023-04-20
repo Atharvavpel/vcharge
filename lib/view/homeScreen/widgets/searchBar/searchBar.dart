@@ -9,8 +9,9 @@ import 'package:http/http.dart' as http;
 // ignore: must_be_immutable
 class SearchBarContainer extends StatefulWidget {
   String userId;
+  void callBack;
 
-  SearchBarContainer({required this.userId, super.key});
+  SearchBarContainer({required this.userId, required this.callBack,super.key});
 
   @override
   State<SearchBarContainer> createState() => SearchBarContainerState();

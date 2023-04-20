@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:vcharge/services/getLiveLocation.dart';
+import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 
+import '../../../services/getLiveLocation.dart';
 import '../../../utils/staticVariablesForMap.dart';
 
 class LocationFinder extends StatefulWidget {
   //getting mapController as parameter
-  MapController mapController;
-  LocationFinder({required this.mapController, super.key});
+  final VoidCallback updateState;
+  LocationFinder({required this.updateState, super.key});
 
   @override
   State<LocationFinder> createState() => LocationFinderState();
@@ -33,10 +33,13 @@ class LocationFinderState extends State<LocationFinder>
     // Create some tweens. These serve to split up the transition from one location to another.
     // In our case, we want to split the transition be<tween> our current map center and the destination.
     final latTween = Tween<double>(
-        begin: StaticVariablesForMap.mapController.center.latitude, end: destLocation.latitude);
+        begin: StaticVariablesForMap.mapController.center.latitude,
+        end: destLocation.latitude);
     final lngTween = Tween<double>(
-        begin: StaticVariablesForMap.mapController.center.longitude, end: destLocation.longitude);
-    final zoomTween = Tween<double>(begin: StaticVariablesForMap.mapController.zoom, end: destZoom);
+        begin: StaticVariablesForMap.mapController.center.longitude,
+        end: destLocation.longitude);
+    final zoomTween = Tween<double>(
+        begin: StaticVariablesForMap.mapController.zoom, end: destZoom);
 
     // Create a animation controller that has a duration and a TickerProvider.
     final controller = AnimationController(
@@ -68,12 +71,13 @@ class LocationFinderState extends State<LocationFinder>
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        splashColor: Colors.blue,
         onTap: () async {
           //first getting the location of the user
-          var position = await GetLiveLocation.getUserLiveLocation();
+          BgMapState.userLocation = await GetLiveLocation.getUserLiveLocation();
+          // BgMapState.userLocation = LatLng(18.55556416469021, 73.92609101382075);
+          widget.updateState;
           //then animating him to his location
-          animatedMapMove(position, 15);
+          animatedMapMove(BgMapState.userLocation!, 15);
         },
         child: Container(
           decoration: BoxDecoration(boxShadow: const [
@@ -90,31 +94,3 @@ class LocationFinderState extends State<LocationFinder>
         ));
   }
 }
-
-/*
-Container(
-              margin: const EdgeInsets.only(right: 13, bottom: 10),
-              decoration: BoxDecoration(
-                  color: _locationFinder ? Colors.blue : Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                        blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                  ],
-                  borderRadius: BorderRadius.circular(100)),
-              child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _locationFinder = true;
-                    });
-                    Future.delayed(const Duration(seconds: 2)).then((_) {
-                      setState(() {
-                        _locationFinder = false;
-                      });
-                    });
-                  },
-                  icon: const Icon(
-                    Icons.my_location,
-                    size: 20,
-                  )),
-            );
-*/

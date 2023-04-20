@@ -35,12 +35,11 @@ class SideBarDrawer extends StatelessWidget {
         ),
 
 
-// this is the real widget for displaying the list of items
+        // this is the real widget for displaying the list of items
 
 
 
-// container - vehicle addition
-
+        // container - vehicle addition
         Row(
           children: [
             Padding(
@@ -48,10 +47,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const FaIcon(FontAwesomeIcons.car,size: 20,color: Color.fromARGB(255, 51, 50, 50),),
               ),
@@ -68,7 +67,7 @@ class SideBarDrawer extends StatelessWidget {
         ),
         
 
-// container - wallet
+        // container - wallet
         Row(
           children: [
             Padding(
@@ -76,10 +75,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const Icon(Icons.wallet),
               ),
@@ -105,7 +104,7 @@ class SideBarDrawer extends StatelessWidget {
 
 
 
-// container - reservation
+        // container - reservation
         Row(
           children: [
             Padding(
@@ -113,10 +112,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const Icon(Icons.book_online),
               ),
@@ -131,6 +130,8 @@ class SideBarDrawer extends StatelessWidget {
             ),
           ],
         ),
+        
+        
         Row(
           children: [
             Padding(
@@ -138,10 +139,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const Icon(Icons.favorite_outline_outlined),
               ),
@@ -166,10 +167,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const Icon(Icons.child_friendly),
               ),
@@ -195,7 +196,7 @@ class SideBarDrawer extends StatelessWidget {
 
 
 
-// container - FAQ
+        // container - FAQ
         Row(
           children: [
             Padding(
@@ -203,10 +204,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const Icon(Icons.question_answer),
               ),
@@ -223,7 +224,7 @@ class SideBarDrawer extends StatelessWidget {
         ),
 
 
-// container - help and support      
+        // container - help and support      
         Row(
           children: [
             Padding(
@@ -231,10 +232,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const Icon(Icons.headphones),
               ),
@@ -259,7 +260,7 @@ class SideBarDrawer extends StatelessWidget {
         ),
 
 
-// container - logout
+        // container - logout
         Row(
           children: [
             Padding(
@@ -267,10 +268,10 @@ class SideBarDrawer extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(
                     // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                    // ],
                     ),
                 child: const Icon(Icons.logout),
               ),

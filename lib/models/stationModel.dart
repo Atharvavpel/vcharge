@@ -98,7 +98,7 @@ class StationModel {
     data['stationWorkingTime'] = stationWorkingTime;
     data['chargerNumber'] = chargerNumber;
     data['stationParkingType'] = stationParkingType;
-    data['stationAmenity'] = stationAmenity;
+    data['stationAmenity'] = stationAmenity ;
     if (chargers != null) {
       data['chargers'] = chargers!.map((v) => v.toJson()).toList();
     }
