@@ -23,7 +23,8 @@ class StaticVariablesForMap {
   // this is the list which stores the markers related to the all stations on the map
   static List<Marker> markersDetails = [];
 
-  static Future<void> getMarkersDetails(BuildContext context, List<dynamic> stationsData) async {
+  static Future<void> getMarkersDetails(BuildContext context, 
+  List<RequiredStationDetailsModel> stationsData) async {
     markersDetails = stationsData.map((idx) {
       return Marker(
         // width: 20.0,
@@ -38,7 +39,7 @@ class StaticVariablesForMap {
                 context,
                 MaterialPageRoute(
                     builder: (context) => StationsSpecificDetails(
-                          stationId: idx,
+                          stationId: idx.stationId!,
                           userId: userId,
                         )));
           },

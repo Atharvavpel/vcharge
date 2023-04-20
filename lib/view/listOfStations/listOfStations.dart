@@ -39,7 +39,7 @@ class ListOfStationsState extends State<ListOfStations> {
   List<Map<String, dynamic>> sortedStationDistanceList = [];
 
   //this list container the list of sorted station
-  List<StationModel> sortedStationList = [];
+  List<RequiredStationDetailsModel> sortedStationList = [];
 
   //get current location of the user
   Future<void> getLocationOfUser() async {
@@ -203,7 +203,7 @@ class ListOfStationsState extends State<ListOfStations> {
                                     ),
                                     subtitle: //container for station address
                                         Text(
-                                      sortedStationList[index].stationLocation!,
+                                      sortedStationList[index].stationArea!,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -243,14 +243,14 @@ class ListOfStationsState extends State<ListOfStations> {
                                         ),
 
                                         //Container for connector type
-                                        Text(
-                                          sortedStationList[index]
-                                              .stationPowerStandard!,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
+                                        // Text(
+                                        //   sortedStationList[index]
+                                        //       .stationPowerStandard!,
+                                        //   style: const TextStyle(
+                                        //     color: Colors.grey,
+                                        //     fontWeight: FontWeight.bold,
+                                        //   ),
+                                        // )
                                       ],
                                     )));
                           }),

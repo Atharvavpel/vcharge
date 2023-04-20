@@ -5,7 +5,7 @@ import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 import 'package:vcharge/view/homeScreen/widgets/locationFinder.dart';
 import 'package:vcharge/view/homeScreen/widgets/markerHints.dart';
-import 'package:vcharge/view/homeScreen/widgets/searchBar.dart';
+import 'package:vcharge/view/homeScreen/widgets/searchBar/searchBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 

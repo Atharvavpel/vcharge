@@ -155,7 +155,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             flex: 14,
                             child: Container(
                               child: Text(
-                                stationDetails!.stationLocation!,
+                                stationDetails!.stationArea!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -665,7 +665,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                           stationName:
                                                                               stationDetails!.stationName!,
                                                                           stationLocation:
-                                                                              stationDetails!.stationLocation!,
+                                                                              stationDetails!.stationArea!,
                                                                           chargerModel:
                                                                               stationDetails!.chargers![index],
                                                                           userId:
@@ -685,7 +685,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (context) => ScanToCharge(
-                                                                                  stationLocation: stationDetails!.stationLocation!,
+                                                                                  stationLocation: stationDetails!.stationArea!,
                                                                                   stationName: stationDetails!.stationName!,
                                                                                   userId: widget.userId,
                                                                                 )));

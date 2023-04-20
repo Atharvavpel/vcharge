@@ -61,7 +61,9 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     getStationData();
     getUserLocation();
     getLocation();
+    StaticVariablesForMap.getMarkersDetails(context, StaticVariablesForMap.stationsData);
   }
+
 
   @override
   void dispose() {
