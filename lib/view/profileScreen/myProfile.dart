@@ -3,13 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vcharge/services/GetMethod.dart';
+import 'package:vcharge/services/GetMethod.dart'; 
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+
 class MyProfilePage extends StatefulWidget {
+
+
   String userId;
 
   MyProfilePage({Key? key, required this.userId}) : super(key: key);
@@ -23,7 +26,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.41:8081/manageUser/user?userId=USR20230410143236933";
+      "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230420100343328";
 
   @override
   void initState() {
@@ -41,9 +44,12 @@ class MyProfilePageState extends State<MyProfilePage> {
   var profilePhoto = '';
 
 // function for fetching the user data
-  Future getUserData() async {
+  Future<void> getUserData() async {
+
     // print("in the get method");
+
     var response = await GetMethod.getRequest(specificUserIdUrl);
+    
     setState(() {
       firstName = response['userFirstName'] ?? '';
       lastName = response['userLastName'] ?? '';
@@ -54,6 +60,50 @@ class MyProfilePageState extends State<MyProfilePage> {
 
     // print(profilePhoto);
   }
+
+
+
+
+
+// Future<void> getUserData() async {
+
+//   final client = await Client.connect('redis://localhost:6379');
+//   Commands cmd = client.asCommands<String,String>();
+
+//   try {
+//     var response = await GetMethod.getRequest(specificUserIdUrl);
+
+//     // Store the profile photo and first name + last name in Redis
+//     // await client.set('userProfilePhoto', response['userProfilePhoto'] ?? '');
+//     // await client.set('userFirstName', response['userFirstName'] ?? '');
+//     // await client.set('userLastName', response['userLastName'] ?? '');
+
+//     await cmd.set('userProfilePhoto', response['userProfilePhoto'] ?? '');
+//     await cmd.set('userFirstName', response['userFirstName'] ?? '');
+//     await cmd.set('userLastName', response['userLastName'] ?? '');
+
+
+//     // Update the state of the widget with the retrieved data
+//     setState(() {
+//       firstName = response['userFirstName'] ?? '';
+//       lastName = response['userLastName'] ?? '';
+//       contactNo = response['userContactNo'] ?? '';
+//       emailId = response['userEmail'] ?? '';
+//       profilePhoto = response['userProfilePhoto'] ?? '';
+//     });
+//   } finally {
+//     // Close the Redis connection when done
+//     await client.disconnect();
+//   }
+
+  
+// }
+
+
+
+
+
+
 
 // variable for picking the image from the gallery or camera
   final ImagePicker picker = ImagePicker();

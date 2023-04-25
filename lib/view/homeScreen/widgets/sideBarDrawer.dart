@@ -1,16 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
 import 'package:vcharge/view/helpSupportScreen/helpSupportScreen.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 
 import '../../referFriendScreen/referFriend.dart';
 
-class SideBarDrawer extends StatelessWidget {
+class SideBarDrawer extends StatefulWidget {
 
   String userId;
 
   SideBarDrawer({super.key, required this.userId});
+
+  @override
+  State<SideBarDrawer> createState() => _SideBarDrawerState();
+}
+
+class _SideBarDrawerState extends State<SideBarDrawer> {
+
+
+  // variables for storing the only displaying user details
+  String firstName = '';
+  String lastName = '';
+  var profilePhoto = '';
+
+
+String specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=USR20230410143236933";
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +109,7 @@ class SideBarDrawer extends StatelessWidget {
               Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => WalletScreen(userId: userId,))
+                            builder: (context) => WalletScreen(userId: widget.userId,))
                       ).then((value) {
                         Future.delayed(const Duration(milliseconds: 250), () {
                           Navigator.pop(context); // Close the drawer smoothly

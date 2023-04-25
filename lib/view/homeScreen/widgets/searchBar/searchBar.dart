@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vcharge/view/homeScreen/widgets/horizontalSideBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/searchBar/searchingWidget.dart';
-import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/profileScreen/myProfile.dart';
 import 'package:http/http.dart' as http;
 
