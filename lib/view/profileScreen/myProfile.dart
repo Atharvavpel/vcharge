@@ -11,14 +11,14 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 class MyProfilePage extends StatefulWidget {
+  String? userId;
 
+  MyProfilePage({super.key, required this.userId});
 
-  String userId;
-
-  MyProfilePage({Key? key, required this.userId}) : super(key: key);
+  
 
   @override
-  State<MyProfilePage> createState() => MyProfilePageState();
+  State<StatefulWidget> createState() => MyProfilePageState();
 }
 
 class MyProfilePageState extends State<MyProfilePage> {
@@ -47,9 +47,7 @@ class MyProfilePageState extends State<MyProfilePage> {
   Future<void> getUserData() async {
 
     // print("in the get method");
-
-    var response = await GetMethod.getRequest(specificUserIdUrl);
-    
+    var response = await GetMethod.getRequest("http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}");
     setState(() {
       firstName = response['userFirstName'] ?? '';
       lastName = response['userLastName'] ?? '';

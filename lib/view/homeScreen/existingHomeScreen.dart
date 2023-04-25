@@ -9,7 +9,6 @@ import 'package:vcharge/view/homeScreen/widgets/searchBar/searchBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 
-import '../../utils/staticVariablesForMap.dart';
 
 class ExistingHomeScreen extends StatefulWidget {
   String userId;

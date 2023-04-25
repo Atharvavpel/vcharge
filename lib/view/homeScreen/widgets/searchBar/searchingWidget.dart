@@ -3,7 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:vcharge/main.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getMethod.dart';
-import 'package:vcharge/utils/staticVariablesForMap.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 

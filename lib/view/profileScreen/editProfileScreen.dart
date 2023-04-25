@@ -123,7 +123,7 @@ dynamic selectedState;
   Future updateUserDetails() async {
     var response = await PutMethod.putRequest(
         "http://192.168.0.41:8081/manageUser/user?userId=",
-        "USR20230410143236933",
+        widget.userId,
         jsonEncode({
           'userFirstName': firstNameController.text,
           'userLastName': lastNameController.text,
