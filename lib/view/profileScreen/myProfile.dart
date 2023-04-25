@@ -10,20 +10,18 @@ import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MyProfilePage extends StatefulWidget {
-  String userId;
+  String? userId;
 
-  MyProfilePage({Key? key, required this.userId}) : super(key: key);
+  MyProfilePage({super.key, required this.userId});
+
+  
 
   @override
-  State<MyProfilePage> createState() => MyProfilePageState();
+  State<StatefulWidget> createState() => MyProfilePageState();
 }
 
 class MyProfilePageState extends State<MyProfilePage> {
 // variables for storing the REST API
-
-  // String specificUserIdUrl = '';
-  String specificUserIdUrl =
-      "http://192.168.0.41:8081/manageUser/user?userId=USR20230410143236933";
 
   @override
   void initState() {
@@ -43,7 +41,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 // function for fetching the user data
   Future getUserData() async {
     // print("in the get method");
-    var response = await GetMethod.getRequest(specificUserIdUrl);
+    var response = await GetMethod.getRequest("http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}");
     setState(() {
       firstName = response['userFirstName'] ?? '';
       lastName = response['userLastName'] ?? '';

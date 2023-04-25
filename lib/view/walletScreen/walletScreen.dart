@@ -44,7 +44,7 @@ class WalletScreenState extends State<WalletScreen> {
 
   Future<void> getUserName() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}');
+        'http://192.168.0.41:8081/manageUser/getUser?userId=${widget.userId}');
     if (data != null) {
       setState(() {
         userFirstName = data['userFirstName'];

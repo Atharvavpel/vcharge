@@ -36,7 +36,8 @@ class ReservePopUpState extends State<ReservePopUp> {
   ChargerModel? chargerModel;
 
   var selectedDate = DateTime.now();
-  DateTime selectedTimeSlot = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
+  DateTime selectedTimeSlot = DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
   List<DateTime>? timeSlotsList;
   String? walletAmount;
 
@@ -57,11 +58,15 @@ class ReservePopUpState extends State<ReservePopUp> {
   }
 
   Future<void> getWalletAmount() async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.41:8081/manageUser/getWallet?userId=${widget.userId}');
-    setState(() {
-      walletAmount = data['walletAmount'];
-    });
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.41:8081/manageUser/getWallet?userId=${widget.userId}');
+      setState(() {
+        walletAmount = data['walletAmount'];
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   // This method generates a list of DateTime objects representing each hour slot in the current day
@@ -323,8 +328,10 @@ class ReservePopUpState extends State<ReservePopUp> {
                   postBooking(jsonEncode({
                     "bookingType": "Reservation",
                     "bookingStationId": widget.stationId,
-                    "bookingDate": DateFormat("yyyy-MM-dd").format(selectedDate),
-                    "bookingTime": DateFormat("HH:mm:ss").format(selectedTimeSlot),
+                    "bookingDate":
+                        DateFormat("yyyy-MM-dd").format(selectedDate),
+                    "bookingTime":
+                        DateFormat("HH:mm:ss").format(selectedTimeSlot),
                   }));
                   showDialog(
                       context: context,

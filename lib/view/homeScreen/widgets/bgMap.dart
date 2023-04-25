@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'dart:math' as Math;
 import 'package:latlong2/latlong.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
@@ -12,7 +13,8 @@ import 'package:vcharge/services/getMethod.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../utils/staticVariablesForMap.dart';
+import '../../../utils/availabilityColorFunction.dart';
+import '../homeScreen.dart';
 
 class BgMap extends StatefulWidget {
   String userId;
@@ -29,29 +31,30 @@ class BgMap extends StatefulWidget {
 }
 
 class BgMapState extends State<BgMap> with TickerProviderStateMixin {
+  String url_temp = 'http://192.168.0.43:8080/manageStation/stations';
+
   // the user's live location data
   static LatLng? userLocation;
 
   AnimationController? animationController;
 
-  // subscription to location updates
-  // late StreamSubscription<loc.LocationData> locationSubscription;
+  // map controller for accessing map properties
+  static MapController mapController = MapController();
+
+  static StreamSubscription? subscription;
 
   // list which loads the station data
   static List<RequiredStationDetailsModel> stationsData = [];
 
-  
+  // this is the list which stores the markers related to the all stations on the map
+  static List<Marker> markersDetails = [];
 
   @override
   void initState() {
     super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
-    getStationData();
-    getUserLocation();
-    getLocation();
   }
-
 
   @override
   void dispose() {
@@ -60,19 +63,18 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     super.dispose();
   }
 
-
 // this function is used to fetch the station data and embed it into the stationsData variable
-  Future<void> getStationData() async {
+  Future<void> getStationData(String url) async {
     try {
-      var data = await GetMethod.getRequest(
-          'http://192.168.0.43:8081/vst1/manageStation/getRequiredStationsDetails');
+      var data = await GetMethod.getRequest(url);
       if (data != null || data.isNotEmpty) {
         // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
+        stationsData.clear();
         for (int i = 0; i < data.length; i++) {
           stationsData.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
         setState(() {
-          StaticVariablesForMap.getMarkersDetails(context, stationsData);
+          BgMapState.getMarkersDetails(context, stationsData);
         });
       }
     } catch (e) {
@@ -80,18 +82,52 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     }
   }
 
-  
+  static Future<void> getMarkersDetails(
+      BuildContext context, List<dynamic> stationsData) async {
+    markersDetails = stationsData.map((idx) {
+      return Marker(
+        // width: 20.0,
+        // height: 20.0,
+        anchorPos:
+            AnchorPos.align(AnchorAlign.center), //change center to bottom
+        point: LatLng(double.parse(idx.stationLatitude!),
+            double.parse(idx.stationLongitude!)),
+        builder: (ctx) => GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => StationsSpecificDetails(
+                          stationId: idx.stationId,
+                          userId: HomeScreenState.userId,
+                        )));
+          },
+          child: FaIcon(
+            FontAwesomeIcons.locationDot,
+            size: 30,
+            color: AvaliblityColor.getAvailablityColor(idx.stationStatus!),
+          ),
+        ),
+      );
+    }).toList();
+  }
 
   //This function get the live location of the user using GetLiveLocation class
   Future<void> getLocation() async {
-    var position = await GetLiveLocation.getUserLiveLocation();
-    //store current location of user in local Storage such that we can fetch it
     final prefs = await SharedPreferences.getInstance();
-    prefs.setDouble('userLatitude', position.latitude);
-    prefs.setDouble('userLongitude', position.longitude);
+    if (prefs.getDouble('userLatitude') != null &&
+        prefs.getDouble('userLongitude') != null) {
+      BgMapState.userLocation = LatLng(
+          prefs.getDouble('userLatitude')!, prefs.getDouble('userLongitude')!);
+    } else {
+      BgMapState.userLocation = await GetLiveLocation.getUserLiveLocation();
+      //store current location of user in local Storage such that we can fetch it
+      prefs.setDouble('userLatitude', BgMapState.userLocation!.latitude);
+      prefs.setDouble('userLongitude', BgMapState.userLocation!.longitude);
+    }
     if (mounted) {
       // Call the animatedMapMove method only if the widget is still mounted
-      animatedMapMove(position, 15.0);
+      animatedMapMove(BgMapState.userLocation!, 15.0);
     }
   }
 
@@ -100,10 +136,13 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     // Create some tweens. These serve to split up the transition from one location to another.
     // In our case, we want to split the transition be<tween> our current map center and the destination.
     final latTween = Tween<double>(
-        begin: StaticVariablesForMap.mapController.center.latitude, end: destLocation.latitude);
+        begin: BgMapState.mapController.center.latitude,
+        end: destLocation.latitude);
     final lngTween = Tween<double>(
-        begin: StaticVariablesForMap.mapController.center.longitude, end: destLocation.longitude);
-    final zoomTween = Tween<double>(begin: StaticVariablesForMap.mapController.zoom, end: destZoom);
+        begin: BgMapState.mapController.center.longitude,
+        end: destLocation.longitude);
+    final zoomTween =
+        Tween<double>(begin: BgMapState.mapController.zoom, end: destZoom);
 
     // Create a animation controller that has a duration and a TickerProvider.
     // animationController = AnimationController(
@@ -118,7 +157,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     animationController!.addListener(() {
       if (mounted) {
         setState(() {
-          StaticVariablesForMap.mapController.move(
+          BgMapState.mapController.move(
               LatLng(
                   latTween.evaluate(animation), lngTween.evaluate(animation)),
               zoomTween.evaluate(animation));
@@ -142,32 +181,62 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     animationController!.forward();
   }
 
-  //this function get User Location from shared preferences
-  Future<void> getUserLocation() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getDouble('userLatitude') != null &&
-        prefs.getDouble('userLongitude') != null) {
-      BgMapState.userLocation = LatLng(
-          prefs.getDouble('userLatitude')!, prefs.getDouble('userLongitude')!);
-    }
+  //To calculate the distance between two points on the Earth's surface given their latitude and longitude coordinates, you can use the Haversine formula.
+  double getDistance(LatLng latLng1, LatLng latLng2) {
+    // convert decimal degrees to radians
+    double lat1 = latLng1.latitude;
+    double lon1 = latLng1.longitude;
+    double lat2 = latLng2.latitude;
+    double lon2 = latLng2.longitude;
+
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2 - lat1); // deg2rad below
+    var dLon = deg2rad(lon2 - lon1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) *
+            Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+    return d;
+  }
+
+  double deg2rad(deg) {
+    return deg * (Math.pi / 180);
   }
 
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-      mapController: StaticVariablesForMap.mapController,
+      mapController: BgMapState.mapController,
       options: MapOptions(
           minZoom: 2,
           maxZoom: 17.0,
-          center: BgMapState.userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
+          center: BgMapState.userLocation,
           zoom: 15.0,
           //by this command, the map will not be able to rotate
           interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+          onMapReady: () {
+            getLocation();
+            subscription =
+                mapController.mapEventStream.listen((MapEvent mapEvent) {
+              if (mapEvent is MapEventMoveEnd) {
+                getStationData(
+                  'http://192.168.0.43:8080/manageStation/getAllStationByGeoLocation?longitude=${BgMapState.mapController.center!.longitude}&latitude=${BgMapState.mapController.center!.latitude}&maxDistance=${getDistance(BgMapState.mapController.bounds!.northEast!, BgMapState.mapController.bounds!.southWest!) * 1000}');
+                // do something
+              }
+            });
+            // BgMapState.userLocation = mapController.center;
+          },
           onPositionChanged: (mapPosition, boolValue) {
-            // BgMapState.userLocation = mapPosition.center!;
-            setState(() {});
+            setState(() {
+              getLocation();
+              // print('${mapPosition.center!.longitude} ${mapPosition.center!.latitude} ${getDistance(mapPosition.bounds!.northEast!, mapPosition.bounds!.southWest!)*1000}');
+            });
           }),
       children: [
+        //tile layer
         TileLayer(
           urlTemplate:
               'https://api.mapbox.com/styles/v1/atharva70/clf990hij00ck01pg9fcgv02h/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXRoYXJ2YTcwIiwiYSI6ImNsZjk3cTUxZDJjc2czems3N2F3d2Y2aWUifQ._j3hKxoBC_Gnh4-qddn8lg',
@@ -177,14 +246,15 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             'id': 'mapbox.satellite',
           },
         ),
-        
+
+        //location marker
         MarkerLayer(
           markers: [
             //user location marker
             Marker(
               anchorPos: AnchorPos.align(AnchorAlign.center),
-              point:
-                  BgMapState.userLocation ?? LatLng(18.562323835185673, 73.93812780854178),
+              point: BgMapState.userLocation ??
+                  LatLng(18.562323835185673, 73.93812780854178),
               builder: (ctx) => Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
@@ -204,6 +274,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             ),
           ],
         ),
+
+        //cluster layer
         MarkerClusterLayerWidget(
           options: MarkerClusterLayerOptions(
             maxClusterRadius: 45,
@@ -216,7 +288,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             ),
             markers: [
               //Station markers
-              for (final marker in StaticVariablesForMap.markersDetails) marker
+              for (final marker in BgMapState.markersDetails) marker
             ],
             builder: (context, markers) {
               return Card(

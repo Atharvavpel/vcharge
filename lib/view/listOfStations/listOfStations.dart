@@ -3,12 +3,13 @@ import 'package:latlng/latlng.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
 import 'package:vcharge/services/getMethod.dart';
+import 'package:vcharge/utils/availabilityColorFunction.dart';
+import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'dart:math' as Math;
 
 import 'package:vcharge/view/listOfStations/widgets/searchBarOfLOS.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
-import '../../utils/staticVariablesForMap.dart';
 
 class ListOfStations extends StatefulWidget {
   String userId;
@@ -59,7 +60,7 @@ class ListOfStationsState extends State<ListOfStations> {
           stationsList.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
         setState(() {
-          StaticVariablesForMap.getMarkersDetails(context, stationsList);
+          BgMapState.getMarkersDetails(context, stationsList);
         });
       }
     } catch (e) {
@@ -92,16 +93,6 @@ class ListOfStationsState extends State<ListOfStations> {
     return deg * (Math.pi / 180);
   }
 
-  //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
-  MaterialColor getAvailablityColor(String availiblityStatus) {
-    if (availiblityStatus.toLowerCase().replaceAll(' ', '') == 'available') {
-      return Colors.green;
-    } else if (availiblityStatus.toLowerCase().replaceAll(' ', '') == 'unavailable') {
-      return Colors.red;
-    } else {
-      return Colors.orange;
-    }
-  }
 
   //this function calculate distance from user to each station and store it in userToStationDistanceList
   Future<void> getDistanceList() async {
@@ -236,7 +227,7 @@ class ListOfStationsState extends State<ListOfStations> {
                                                       .width *
                                                   0.02,
                                               backgroundColor:
-                                                  getAvailablityColor(
+                                                  AvaliblityColor.getAvailablityColor(
                                                       sortedStationList[index]
                                                           .stationStatus!),
                                             ),

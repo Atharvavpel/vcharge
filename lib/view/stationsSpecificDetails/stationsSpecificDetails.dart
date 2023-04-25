@@ -58,8 +58,10 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
       var data = await GetMethod.getRequest(
           'http://192.168.0.43:8081/vst1/manageStation/getStationChargers?stationId=${stationId}');
       if (data != null) {
-        chargerList = data.forEach((v) {
-          chargerList.add(ChargerModel.fromJson(v));
+        setState(() {
+          for(int i=0; i<data.length; i++){
+            chargerList.add(ChargerModel.fromJson(data[i]));
+          }
         });
       }
     } catch (e) {
@@ -191,7 +193,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   flex: 2,
                                   child: InkWell(
                                     onTap: () {
-                                      _makePhoneCall('tel: 7030356762');
+                                      _makePhoneCall('tel: ${stationDetails!.stationContactNumber}');
                                     },
                                     child: Container(
                                       child: const Icon(Icons.call),
@@ -689,7 +691,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                               builder: (BuildContext context) => ReservePopUp(
                                                                                 stationName: stationDetails!.stationName!,
                                                                                 stationLocation: stationDetails!.stationArea!,
-                                                                                chargerModel: stationDetails!.chargers![index],
+                                                                                chargerModel: chargerList[index],
                                                                                 userId: widget.userId,
                                                                                 stationId: stationDetails!.stationId!,
                                                                               ),
@@ -731,6 +733,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                       ),
                     ),
                   ),
+                
                 ],
               ),
       ),
