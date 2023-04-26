@@ -4,7 +4,7 @@ import 'package:vcharge/view/passwordScreen/widget/confirmationSuccessPopUp.dart
 
 class ChangePasswordScreen extends StatefulWidget {
 
-  String emailId;
+  dynamic emailId;
 
   ChangePasswordScreen({super.key, required this.emailId});
 

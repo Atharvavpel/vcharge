@@ -51,6 +51,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vcharge/services/GetMethod.dart';
+import 'package:vcharge/services/redisConnection.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -91,6 +93,22 @@ class MyProfilePageState extends State<MyProfilePage> {
   String contactNo = '';
   String emailId = '';
   var profilePhoto = '';
+
+Future<void> getUserData() async {
+  final response = await GetMethod.getRequest(specificUserIdUrl);
+
+  await RedisConnection.set("profilePhoto", response['userProfilePhoto']);
+  await RedisConnection.set("firstName", response['userFirstName']);
+  await RedisConnection.set("lastName", response['userLastName']);
+  await RedisConnection.set("contactNo", response['userContactNo']);
+  await RedisConnection.set("emailId", response['userEmailId']);
+  setState(() {
+    
+  });
+}
+
+
+dynamic profiePhoto = RedisConnection.get("profilePhoto");
 
 // variable for picking the image from the gallery or camera
   final ImagePicker picker = ImagePicker();
@@ -192,7 +210,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 
 // function for displaying the sessions, referrals etc widget
   Widget textContainer(
-      String title, IconData iconData, String name, Function validator,
+      String title, IconData iconData, dynamic name, Function validator,
       {Function? onTap, bool readOnly = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +276,7 @@ class MyProfilePageState extends State<MyProfilePage> {
                       MaterialPageRoute(
                           builder: ((context) =>
                               SettingPage(userId: widget.userId.toString(),
-                              emailId: emailId.toString(),
+                              emailId: RedisConnection.get("emailId"),
                               ))));
                 },
                 icon: const Icon(
@@ -285,7 +303,7 @@ class MyProfilePageState extends State<MyProfilePage> {
               showModalBottomSheet(
                   context: context, builder: ((builder) => bottomSheet()));
             },
-            child: profilePhoto == ''
+            child: profilePhoto == " "
                 ? selectedImage == null
                     ? Container(
                         width: MediaQuery.of(context).size.width* 0.45,
@@ -336,7 +354,7 @@ class MyProfilePageState extends State<MyProfilePage> {
                       ), //BoxShadow
                     ],
                         image: DecorationImage(
-                            image: NetworkImage(profilePhoto), fit: BoxFit.cover),
+                            image: NetworkImage("https://i.ibb.co/72mwSwS/WIN-20230410-18-16-42-Pro.jpg"), fit: BoxFit.cover),
                         shape: BoxShape.rectangle,
                         color: Color(0xffD6D6D6)),
                   )),
@@ -384,19 +402,19 @@ class MyProfilePageState extends State<MyProfilePage> {
           children: [
 
             // container for name
-            textContainer('Name', Icons.person_outlined, '$firstName $lastName',
+            textContainer('Name', Icons.person_outlined, 'Sneha Matke',
                 (String? input) {}),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
 
             // container for contact no
-            textContainer('Contact No', Icons.home_outlined, contactNo,
+            textContainer('Contact No', Icons.home_outlined, "324242342234",
                 (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
 
             // container for email id
-            textContainer('Email id', Icons.card_travel, emailId,
+            textContainer('Email id', Icons.card_travel, "snehal@gmail.com",
                 (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,

@@ -115,8 +115,8 @@ class RequiredStationDetailsModel {
   String? stationId;
   String? stationName;
   String? stationArea;
-  String? stationLatitude;
-  String? stationLongitude;
+  double? stationLatitude;
+  double? stationLongitude;
   String? stationCity;
   String? stationStatus;
 

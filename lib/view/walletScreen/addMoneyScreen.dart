@@ -95,6 +95,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
                         child: Card(
                           elevation: 5,
                           child: TextField(
+                            key: const Key('amountTextField'),
                             controller: amountController,
                             style: TextStyle(
                                 fontSize:
@@ -117,6 +118,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
                           children: [
                             //button for add 100
                             ElevatedButton(
+                              key: const Key('add100Button'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                 ),
@@ -130,6 +132,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
 
                             //button for add 500
                             ElevatedButton(
+                              key: const Key('add500Button'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                 ),
@@ -143,6 +146,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
 
                             //button for add 1000
                             ElevatedButton(
+                              key: const Key('add1000Button'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                 ),
@@ -163,6 +167,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
 
               //Proceed to Add Button
               GestureDetector(
+                key: const Key('proceedToAddButton'),
                 onTap: () {
                   showDialog(
                     context: context, 

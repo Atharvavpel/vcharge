@@ -58,6 +58,7 @@ dependencies:
   flutter_map_marker_cluster: ^1.1.0
   radio_button_form_field: ^0.0.4
   redis: ^3.1.0
+  # dartis: ^0.4.0
   # encrypt: ^5.0.0
 
   

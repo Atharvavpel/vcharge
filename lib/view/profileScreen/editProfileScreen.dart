@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/putMethod.dart';
-import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 
 class EditProfileScreen extends StatefulWidget {

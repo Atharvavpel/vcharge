@@ -7,7 +7,7 @@ import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
 class SettingPage extends StatefulWidget {
 
   String userId;
-  String emailId;
+  dynamic emailId;
   SettingPage({super.key, required this.userId, required this.emailId});
 
   @override

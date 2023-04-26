@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 
 import '../../../services/getLiveLocation.dart';
+import '../../../services/redisConnection.dart';
 
 class LocationFinder extends StatefulWidget {
   //getting mapController as parameter
@@ -17,17 +18,14 @@ class LocationFinder extends StatefulWidget {
 
 class LocationFinderState extends State<LocationFinder>
     with TickerProviderStateMixin {
-
   //variable for location finder
   bool locationFinder = false;
 
-  Future<void> getToUserLocation() async{
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getDouble('userLatitude') != null &&
-        prefs.getDouble('userLongitude') != null) {
-      BgMapState.userLocation = LatLng(
-          prefs.getDouble('userLatitude')!, prefs.getDouble('userLongitude')!);
-    }
+  Future<void> getToUserLocation() async {
+    var userLat = await RedisConnection.get('userLatitude');
+    var userLong = await RedisConnection.get('userLongitude');
+    BgMapState.userLocation = LatLng(double.parse(userLat), double.parse(userLong));
+
     if (mounted) {
       // Call the animatedMapMove method only if the widget is still mounted
       animatedMapMove(BgMapState.userLocation!, 15.0);
@@ -38,7 +36,6 @@ class LocationFinderState extends State<LocationFinder>
   void initState() {
     super.initState();
   }
-  
 
   //This function is use to animate the map when the mapController.move() is called
   void animatedMapMove(LatLng destLocation, double destZoom) {
@@ -50,8 +47,8 @@ class LocationFinderState extends State<LocationFinder>
     final lngTween = Tween<double>(
         begin: BgMapState.mapController.center.longitude,
         end: destLocation.longitude);
-    final zoomTween = Tween<double>(
-        begin: BgMapState.mapController.zoom, end: destZoom);
+    final zoomTween =
+        Tween<double>(begin: BgMapState.mapController.zoom, end: destZoom);
 
     // Create a animation controller that has a duration and a TickerProvider.
     final controller = AnimationController(

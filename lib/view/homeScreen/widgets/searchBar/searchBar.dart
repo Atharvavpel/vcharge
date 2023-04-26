@@ -92,6 +92,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
 
                   // main textfield for storing the different widgets
                   child: TextField(
+                    key: const Key('searchBar'),
                     focusNode: searchFocus,
                     readOnly: true,
 
@@ -127,7 +128,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
 
                       // notifications and profile icond
                       suffixIcon: SizedBox(
-                        width: Get.width* 0.25,
+                        width: Get.width* 0.3,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

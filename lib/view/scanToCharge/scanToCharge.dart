@@ -50,7 +50,7 @@ class ScanToChargeState extends State<ScanToCharge> {
         'http://192.168.0.41:8081/manageUser/getWallet?userId=${widget.userId}');
     if (data != null) {
       setState(() {
-        walletAmount = data['walletAmount'];
+        walletAmount = data['walletAmount'].toString();
       });
     }
   }
