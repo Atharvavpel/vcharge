@@ -10,6 +10,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
 import 'package:vcharge/services/getMethod.dart';
+import 'package:vcharge/services/redisConnection.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,6 +55,12 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
+    redisCalls();
+  }
+
+  Future<void> redisCalls() async{
+    await RedisConnection.set('userLocation', 10);
+    print(await RedisConnection.get('userLocation'));
   }
 
   @override
@@ -67,8 +74,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   Future<void> getStationData(String url) async {
     try {
       var data = await GetMethod.getRequest(url);
-      if (data != null || data.isNotEmpty) {
-        // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
+      if (data.isNotEmpty) {
+        print('Data Not Empty');
         stationsData.clear();
         for (int i = 0; i < data.length; i++) {
           stationsData.add(RequiredStationDetailsModel.fromJson(data[i]));
@@ -77,54 +84,65 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
           BgMapState.getMarkersDetails(context, stationsData);
         });
       }
+      else{
+        print("Empty Data");
+      }
     } catch (e) {
       print(e);
     }
   }
 
-  static Future<void> getMarkersDetails(
-      BuildContext context, List<dynamic> stationsData) async {
-    markersDetails = stationsData.map((idx) {
-      return Marker(
-        // width: 20.0,
-        // height: 20.0,
-        anchorPos:
-            AnchorPos.align(AnchorAlign.center), //change center to bottom
-        point: LatLng(double.parse(idx.stationLatitude!),
-            double.parse(idx.stationLongitude!)),
-        builder: (ctx) => GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => StationsSpecificDetails(
-                          stationId: idx.stationId,
-                          userId: HomeScreenState.userId,
-                        )));
-          },
-          child: FaIcon(
-            FontAwesomeIcons.locationDot,
-            size: 30,
-            color: AvaliblityColor.getAvailablityColor(idx.stationStatus!),
-          ),
-        ),
-      );
-    }).toList();
+  static Future<void> getMarkersDetails(BuildContext context,
+      List<RequiredStationDetailsModel> stationsData) async {
+    try {
+        markersDetails = stationsData.map((idx) {
+          return Marker(
+            // width: 20.0,
+            // height: 20.0,
+            anchorPos:
+                AnchorPos.align(AnchorAlign.center), //change center to bottom
+            point: LatLng(idx.stationLatitude!,
+                idx.stationLongitude!),
+            builder: (ctx) => GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StationsSpecificDetails(
+                              stationId: idx.stationId!,
+                              userId: HomeScreenState.userId,
+                            )));
+              },
+              child: FaIcon(
+                FontAwesomeIcons.locationDot,
+                size: 30,
+                color: AvaliblityColor.getAvailablityColor(idx.stationStatus!),
+              ),
+            ),
+          );
+        }).toList();
+    } catch (e) {
+      // TODO
+      print(e);
+    }
   }
 
   //This function get the live location of the user using GetLiveLocation class
   Future<void> getLocation() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getDouble('userLatitude') != null &&
-        prefs.getDouble('userLongitude') != null) {
-      BgMapState.userLocation = LatLng(
-          prefs.getDouble('userLatitude')!, prefs.getDouble('userLongitude')!);
-    } else {
+    var userLat = await RedisConnection.get('userLatitude');
+    var userLong = await RedisConnection.get('userLongitude');
+    if (userLat != null && userLong != null) {
+      BgMapState.userLocation = LatLng(double.parse(userLat),double.parse(userLong));
+    } 
+    
+    else {
       BgMapState.userLocation = await GetLiveLocation.getUserLiveLocation();
+      
       //store current location of user in local Storage such that we can fetch it
-      prefs.setDouble('userLatitude', BgMapState.userLocation!.latitude);
-      prefs.setDouble('userLongitude', BgMapState.userLocation!.longitude);
+      await RedisConnection.set('userLatitude', BgMapState.userLocation!.latitude.toString());
+      await RedisConnection.set('userLongitude', BgMapState.userLocation!.longitude.toString());
     }
+
     if (mounted) {
       // Call the animatedMapMove method only if the widget is still mounted
       animatedMapMove(BgMapState.userLocation!, 15.0);
@@ -211,7 +229,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     return FlutterMap(
       mapController: BgMapState.mapController,
       options: MapOptions(
-          minZoom: 2,
+          minZoom: 3,
           maxZoom: 17.0,
           center: BgMapState.userLocation,
           zoom: 15.0,
@@ -222,18 +240,24 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             subscription =
                 mapController.mapEventStream.listen((MapEvent mapEvent) {
               if (mapEvent is MapEventMoveEnd) {
+                // print('Hit');
+                // print(BgMapState.mapController.center.longitude.toDouble());
+                double long = BgMapState.mapController.center.longitude;
+                double lat = BgMapState.mapController.center.latitude;
+                double dist = getDistance(
+                        BgMapState.mapController.bounds!.northEast!,
+                        BgMapState.mapController.bounds!.southWest!) *500;
                 getStationData(
-                  'http://192.168.0.43:8080/manageStation/getAllStationByGeoLocation?longitude=${BgMapState.mapController.center!.longitude}&latitude=${BgMapState.mapController.center!.latitude}&maxDistance=${getDistance(BgMapState.mapController.bounds!.northEast!, BgMapState.mapController.bounds!.southWest!) * 1000}');
-                // do something
+                    'http://192.168.0.43:8080/manageStation/getAllStationByGeoLocation?longitude=$long&latitude=$lat&maxDistance=$dist');
               }
             });
             // BgMapState.userLocation = mapController.center;
           },
           onPositionChanged: (mapPosition, boolValue) {
-            setState(() {
-              getLocation();
-              // print('${mapPosition.center!.longitude} ${mapPosition.center!.latitude} ${getDistance(mapPosition.bounds!.northEast!, mapPosition.bounds!.southWest!)*1000}');
-            });
+            // setState(() {
+            //   getLocation();
+            //   // print('${mapPosition.center!.longitude} ${mapPosition.center!.latitude} ${getDistance(mapPosition.bounds!.northEast!, mapPosition.bounds!.southWest!)*1000}');
+            // });
           }),
       children: [
         //tile layer

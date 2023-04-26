@@ -102,8 +102,8 @@ class ListOfStationsState extends State<ListOfStations> {
     userToStationDistanceList = stationsList.map((station) {
       return getDistanceFromUser(
           userPosition!,
-          LatLng(double.parse(station.stationLatitude!),
-              double.parse(station.stationLongitude!)));
+          LatLng(station.stationLatitude!,
+              station.stationLongitude!));
     }).toList();
   }
 

@@ -57,10 +57,11 @@ class WalletScreenState extends State<WalletScreen> {
   Future<void> getWalletDetails() async {
     var data = await GetMethod.getRequest(
         "http://192.168.0.41:8081/manageUser/getWallet?userId=${widget.userId}");
+        
     // print(data);
     setState(() {
       walletDetail = WalletModel(
-          walletAmount: data['walletAmount'],
+          walletAmount: data['walletAmount'].toString(),
           walletCurrency: data['walletCurrency'],
           walletStatus: data['walletStatus']);
     });
@@ -79,7 +80,7 @@ class WalletScreenState extends State<WalletScreen> {
               completeTransactionDate: data[i]['completeTransactionDate'],
               initiateTransactionTime: data[i]['initiateTransactionTime'],
               completeTransactionTime: data[i]['completeTransactionTime'],
-              transactionAmount: data[i]['transactionAmount'],
+              transactionAmount: data[i]['transactionAmount'].toString(),
               transactionUTR: data[i]['transactionUTR'],
               transactionStatus: data[i]['transactionStatus'],
               createdDate: data[i]['createdDate'],
@@ -195,6 +196,7 @@ class WalletScreenState extends State<WalletScreen> {
 
                       //Container for credit button
                       ElevatedButton(
+                        key: const Key('creditButton'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color.fromARGB(255, 130, 199, 85),

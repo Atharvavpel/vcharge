@@ -75,6 +75,7 @@ class ExistingHomeScreenState extends State<ExistingHomeScreen> {
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: GestureDetector(
+                    key: const Key('filterButton'),
                     onTap: () {
                       showBottomSheet(
                           context: context,

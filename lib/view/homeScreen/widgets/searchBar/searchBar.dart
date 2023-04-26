@@ -84,6 +84,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                     color: Colors.white,
                   ),
                   child: TextField(
+                    key: const Key('searchBar'),
                     focusNode: searchFocus,
                     readOnly: true,
 
@@ -139,7 +140,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                       
                       hintStyle: const TextStyle(color: Colors.black),
                       suffixIcon: SizedBox(
-                        width: Get.width* 0.25,
+                        width: Get.width* 0.3,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

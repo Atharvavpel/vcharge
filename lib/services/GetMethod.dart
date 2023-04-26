@@ -7,7 +7,11 @@ class GetMethod {
 
   static Future<dynamic> getRequest(String url) async {
     var response = await http.get(Uri.parse(url));
-    var body = response.body;
-    return json.decode(body);
+    if(response.statusCode == 200){
+      return json.decode(response.body);
+    }
+    else{
+      return response.statusCode;
+    }
   }
 }
