@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class ReservationDonePopUp extends StatefulWidget {
+
   String stationName;
   String chargerSerialNumber;
   String stationLocation;

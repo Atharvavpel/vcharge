@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// class for building up an alert dialogue box for stopping the charging
+
 class StopChargingAlertPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

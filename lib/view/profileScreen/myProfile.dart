@@ -1,10 +1,56 @@
+/*
+
+----------------- SAMPLE REDIS CONNECTION CODE ------------------
+
+
+// Client variable for redis connection
+dynamic client;
+
+// Command variable for redis connection
+dynamic cmd;
+
+
+
+Future<void> getUserData() async {
+  client = RedisConnection();
+  final response = await GetMethod.getRequest(specificUserIdUrl);
+
+  profilePhoto = response['userProfilePhoto'];
+  firstName = response['userFirstName'];
+  lastName = response['userLastName'];
+  contactNo = response['userContactNo'];
+  emailId = response['userEmail'];
+
+
+    cmd = await client.connect('192.168.0.136', 6379);
+    await cmd.send_object(['SET','profilePhoto', profilePhoto]);
+    await cmd.send_object(['SET','firstName', firstName]);
+    await cmd.send_object(['SET','lastName', lastName]);
+    client.close();
+  setState(() {
+    
+  });
+}
+
+
+
+
+
+
+
+*/
+
+
+
+
+
+
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vcharge/services/GetMethod.dart'; 
-import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,25 +61,28 @@ class MyProfilePage extends StatefulWidget {
 
   MyProfilePage({super.key, required this.userId});
 
-  
-
   @override
   State<StatefulWidget> createState() => MyProfilePageState();
 }
 
 class MyProfilePageState extends State<MyProfilePage> {
+
+
+
+
 // variables for storing the REST API
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230420100343328";
+      "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230410143236933";
 
+
+// initstate function calling the getuserData method
   @override
   void initState() {
     super.initState();
     // specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}";
-    // print("In init state");
-    getUserData();
+    // getUserData();
   }
 
 // variables for storing the only displaying user details
@@ -42,66 +91,6 @@ class MyProfilePageState extends State<MyProfilePage> {
   String contactNo = '';
   String emailId = '';
   var profilePhoto = '';
-
-// function for fetching the user data
-  Future<void> getUserData() async {
-
-    // print("in the get method");
-    var response = await GetMethod.getRequest("http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}");
-    setState(() {
-      firstName = response['userFirstName'] ?? '';
-      lastName = response['userLastName'] ?? '';
-      contactNo = response['userContactNo'] ?? '';
-      emailId = response['userEmail'] ?? '';
-      profilePhoto = response['userProfilePhoto'] ?? '';
-    });
-
-    // print(profilePhoto);
-  }
-
-
-
-
-
-// Future<void> getUserData() async {
-
-//   final client = await Client.connect('redis://localhost:6379');
-//   Commands cmd = client.asCommands<String,String>();
-
-//   try {
-//     var response = await GetMethod.getRequest(specificUserIdUrl);
-
-//     // Store the profile photo and first name + last name in Redis
-//     // await client.set('userProfilePhoto', response['userProfilePhoto'] ?? '');
-//     // await client.set('userFirstName', response['userFirstName'] ?? '');
-//     // await client.set('userLastName', response['userLastName'] ?? '');
-
-//     await cmd.set('userProfilePhoto', response['userProfilePhoto'] ?? '');
-//     await cmd.set('userFirstName', response['userFirstName'] ?? '');
-//     await cmd.set('userLastName', response['userLastName'] ?? '');
-
-
-//     // Update the state of the widget with the retrieved data
-//     setState(() {
-//       firstName = response['userFirstName'] ?? '';
-//       lastName = response['userLastName'] ?? '';
-//       contactNo = response['userContactNo'] ?? '';
-//       emailId = response['userEmail'] ?? '';
-//       profilePhoto = response['userProfilePhoto'] ?? '';
-//     });
-//   } finally {
-//     // Close the Redis connection when done
-//     await client.disconnect();
-//   }
-
-  
-// }
-
-
-
-
-
-
 
 // variable for picking the image from the gallery or camera
   final ImagePicker picker = ImagePicker();
@@ -161,14 +150,12 @@ class MyProfilePageState extends State<MyProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+
                 // gallery icon
                 FloatingActionButton(
                   onPressed: () {
                     requestPermissions();
-                    print("clicked upon the gallery option");
                     getImage(ImageSource.gallery);
-                    print("Done with the gallery option");
-                    print("Exiting the bottomshett function");
                   },
                   child: const Icon(Icons.image),
                 ),
@@ -177,10 +164,7 @@ class MyProfilePageState extends State<MyProfilePage> {
                 FloatingActionButton(
                   onPressed: () {
                     requestPermissions();
-                    print("clicked upon the camera option");
                     getImage(ImageSource.camera);
-                    print("Done with the camera option");
-                    print("Exiting the bottomshett function");
                   },
                   child: const Icon(Icons.camera_alt_outlined),
                 )
@@ -213,12 +197,16 @@ class MyProfilePageState extends State<MyProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
+        // displaying text
         Text(
           title,
         ),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.02,
         ),
+
+        // displaying name
         Container(
           width: Get.width,
           height: MediaQuery.of(context).size.height * 0.05,
@@ -252,10 +240,7 @@ class MyProfilePageState extends State<MyProfilePage> {
             backgroundColor: Colors.white,
             child: IconButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => const HomeScreen())));
+                  Navigator.pop(context);
                 },
                 icon: const Icon(
                   Icons.arrow_back_sharp,
@@ -272,7 +257,9 @@ class MyProfilePageState extends State<MyProfilePage> {
                       context,
                       MaterialPageRoute(
                           builder: ((context) =>
-                              SettingPage(userId: widget.userId.toString()))));
+                              SettingPage(userId: widget.userId.toString(),
+                              emailId: emailId.toString(),
+                              ))));
                 },
                 icon: const Icon(
                   Icons.settings,
@@ -291,8 +278,10 @@ class MyProfilePageState extends State<MyProfilePage> {
       child: Align(
         alignment: Alignment.bottomCenter,
         child: InkWell(
+
+
+          // funtions for handling the edit profile photo widget
             onTap: () {
-              print("clicked on circle avtar");
               showModalBottomSheet(
                   context: context, builder: ((builder) => bottomSheet()));
             },
@@ -361,6 +350,8 @@ class MyProfilePageState extends State<MyProfilePage> {
       bottom: 10,
       right: MediaQuery.of(context).size.width * 0.25,
       child: GestureDetector(
+
+        // funtions for handling the edit profile photo widget
         onTap: () {
           showModalBottomSheet(
               context: context, builder: ((builder) => bottomSheet()));
@@ -391,14 +382,20 @@ class MyProfilePageState extends State<MyProfilePage> {
       child: Form(
         child: Column(
           children: [
+
+            // container for name
             textContainer('Name', Icons.person_outlined, '$firstName $lastName',
                 (String? input) {}),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+
+            // container for contact no
             textContainer('Contact No', Icons.home_outlined, contactNo,
                 (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
+
+            // container for email id
             textContainer('Email id', Icons.card_travel, emailId,
                 (String? input) {}),
             SizedBox(
@@ -550,13 +547,13 @@ class MyProfilePageState extends State<MyProfilePage> {
                       rowContainingNavBarIcons(),
                       Stack(
                         children: [
-                          // profile avtar widget
+// profile avtar widget
                           Padding(
                             padding: const EdgeInsets.only(top: 50.0),
                             child: profileAvtarWidget(),
                           ),
 
-                          // edit button over the profie avtar
+// edit button over the profie avtar
                           editIconOverProfileAvtar(),
                         ],
                       )
@@ -567,23 +564,24 @@ class MyProfilePageState extends State<MyProfilePage> {
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
 
-                // display user details
+// display user details
                 displayUserDetails(),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
 
-                // container for sessions, referrals, savings
+// container for sessions, referrals, savings
                 IntrinsicHeight(
                   child: Row(
                     children: [
-                      // savings portal
+
+// savings portal
                       userSavingsPortal(),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.04,
                           child: const VerticalDivider()),
 
-                      // sessions portal
+// sessions portal
                       userSessionsPortal(),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.04,
@@ -596,7 +594,7 @@ class MyProfilePageState extends State<MyProfilePage> {
                   height: MediaQuery.of(context).size.height * 0.1,
                 ),
 
-                // logo section
+// logo section
                 Center(
                   child: Container(
                     child: const VirtuosoLogo(),

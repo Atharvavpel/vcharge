@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
+import 'package:vcharge/view/passwordScreen/changePasswordScreen.dart';
 import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
-import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class SettingPage extends StatefulWidget {
 
   String userId;
-  SettingPage({super.key, required this.userId});
+  String emailId;
+  SettingPage({super.key, required this.userId, required this.emailId});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
+
   // variable for tracking dark mode status
   bool isDarkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+
     // var for updating the dark and light mode upon certain condition
     final themeChanger = Provider.of<DarkThemeProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          leading: IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> MyProfilePage(userId: widget.userId.toString()) ));
-          }, icon: Icon(Icons.arrow_circle_left, 
-          size: MediaQuery.of(context).size.width * 0.1,)),
           title: const Text("Settings"),
         ),
         body: Column(children: [
-          // profile section
+
+
+// profile section
           Container(
             width: double.infinity,
             color: Colors.green.shade200,
@@ -69,9 +70,6 @@ class _SettingPageState extends State<SettingPage> {
                     fontWeight: FontWeight.w500
                   ),
                 ),
-                // leading: const CircleAvatar(
-                //   backgroundColor: Color.fromARGB(255, 245, 180, 82),
-                //   child: Icon(Icons.edit, color: Colors.white,)),
                 leading: const Icon(Icons.edit,),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
@@ -88,7 +86,11 @@ class _SettingPageState extends State<SettingPage> {
             child: Padding(
               padding: const EdgeInsets.only(left: 5, right: 5),
               child: ListTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, 
+                    MaterialPageRoute(builder: (context)=> ChangePasswordScreen(emailId: widget.emailId.toString()) )
+                  );
+                },
                 title: const Text(
                   "Change Password",
                   textAlign: TextAlign.start,
@@ -105,7 +107,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
 
-          // notifications section
+// notifications section
           Container(
             width: double.infinity,
             color: Colors.green.shade200,
@@ -183,7 +185,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
 
-          // actions section
+// actions section
           Container(
             width: double.infinity,
             color: Colors.green.shade200,
@@ -198,6 +200,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
           ),
+          
 // Delete container
           Container(
             decoration: const BoxDecoration(

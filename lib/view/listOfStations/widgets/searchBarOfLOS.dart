@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
-// import 'package:vcharge/view/listOfStations/widgets/losSearchingWidget.dart';
 import 'package:vcharge/view/listOfStations/widgets/losSearchingWidget.dart';
 
 
@@ -15,6 +14,8 @@ class SearchBarofLOS extends StatefulWidget {
 }
 
 class SearchBarofLOSState extends State<SearchBarofLOS> {
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,6 +33,8 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
       ),
       child: TextField(
         readOnly: true,
+
+        // function for opeing the searching widget
         onTap: (){
           showSearch(
                     context: context, 
@@ -41,6 +44,8 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: "Search Stations",
+
+            // search icon - it also opens the searching widget
             prefixIcon: IconButton(
                 onPressed: () {
                   showSearch(
@@ -52,6 +57,8 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
                   Icons.search_rounded,
                   size: MediaQuery.of(context).size.width * 0.07,
                 )),
+
+            // filter icon - it is displayed at the right side
             suffixIcon: IconButton(
                 onPressed: () {
                   showDialog(context: context, builder: (BuildContext context) {

@@ -15,10 +15,13 @@ class losSearchingWidget extends SearchDelegate{
     return response;
   }
 
+// storing the query entered by the user
   String? selectedQuery;
+
+// storing the result after the seraching process
   dynamic result;
 
-
+// function for displaying the clear button in searchbar
   @override
   List<Widget>? buildActions(BuildContext context) {
     return[
@@ -29,6 +32,7 @@ class losSearchingWidget extends SearchDelegate{
     ];
   }
 
+// function for displaying the back button in searchbar
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
@@ -36,6 +40,8 @@ class losSearchingWidget extends SearchDelegate{
       icon: const Icon(Icons.arrow_back)
     );
   }
+
+// function for displaying the searching results
 @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
@@ -82,7 +88,7 @@ class losSearchingWidget extends SearchDelegate{
 
 
   
-// this button is used to display the suggestions
+// function for displaying the suggestions as the user begins to enter the keyword in searchbar
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder<List<dynamic>>(

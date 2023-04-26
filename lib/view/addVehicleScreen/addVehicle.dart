@@ -20,8 +20,10 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
   // ignore: prefer_typing_uninitialized_variables
   var selectedCarModel;
 
+// this is the list for manufacturers
   var manufacturarList = ['Tata', 'Tesla', 'Hundai', 'Kia', "BMW"];
 
+// this is the list for the car models
   var carModelList = [
     'Nexon',
     'Model S',
@@ -31,8 +33,10 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
     'BMW i4 M20'
   ];
 
+// variable for taking registration number
   var regNoController = TextEditingController();
 
+// variable for the nick-name input field
   var nickNameController = TextEditingController();
 
   @override
@@ -49,6 +53,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   //Heading Text
                   const Center(
                     child: Text(
@@ -62,6 +67,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
+                      // vehicle type heading
                       const Padding(
                         padding: EdgeInsets.only(left: 8, right: 8),
                         child: Text(
@@ -74,6 +81,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+
                           //check box for two wheeler
                           Row(
                             children: [
@@ -91,6 +99,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                               ),
                             ],
                           ),
+
                           //check box for four wheeler
                           Row(
                             children: [
@@ -108,6 +117,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                               )
                             ],
                           ),
+
                           //check box for three wheeler
                           Row(
                             children: [
@@ -128,6 +138,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                         ],
                       ),
 
+                      // validation widget
                       Visibility(
                         child: const Text('Please select vehicle type'),
                       )
@@ -329,6 +340,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
+
+
                           //row for vehicle name
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,6 +366,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                             ],
                           ),
 
+
                           //row for connector type
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -375,6 +389,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                               ))
                             ],
                           ),
+
 
                           //row for Battery Capacity
                           Row(
@@ -407,6 +422,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
             ),
           ),
         ),
+
+        // floating action button for adding vehicle
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {

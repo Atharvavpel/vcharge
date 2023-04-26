@@ -12,10 +12,12 @@ class ReferFriend extends StatefulWidget {
 }
 
 class _ReferFriendState extends State<ReferFriend> {
+  // String variables for storing the instructions
   String firstInstruction = "Share your Referral link";
   String secondInstruction = "Your friend will recieve a referral link";
-  String thirdInstruction ="Friend signs up and completes fast charging session";
-     String fourthInstruction="You'll receive reward";
+  String thirdInstruction =
+      "Friend signs up and completes fast charging session";
+  String fourthInstruction = "You'll receive reward";
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +30,6 @@ class _ReferFriendState extends State<ReferFriend> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
-
-
             // Invite and earn
             Container(
               margin: EdgeInsets.only(
@@ -38,29 +37,24 @@ class _ReferFriendState extends State<ReferFriend> {
               child: Text(
                 "Invite & Earn",
                 style: TextStyle(
-                  fontSize: Get.height * 0.025,
-                  fontWeight: FontWeight.w500
-                ),
+                    fontSize: Get.height * 0.025, fontWeight: FontWeight.w500),
               ),
             ),
 
-
-
-
             // image container
             Container(
-              margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.08),
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.08),
               height: MediaQuery.of(context).size.height * 0.32,
               child: SvgPicture.asset('assets/images/referFriend.svg'),
             ),
-
-
 
             // row for instructions
 
             // first instruction
             Padding(
-              padding:  EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.09),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.09),
               child: Container(
                   width: MediaQuery.of(context).size.width * 0.87,
                   child: Row(
@@ -92,7 +86,6 @@ class _ReferFriendState extends State<ReferFriend> {
               child: Container(
                   width: MediaQuery.of(context).size.width * 0.87,
                   child: Row(
-                    
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
@@ -144,8 +137,8 @@ class _ReferFriendState extends State<ReferFriend> {
                     ],
                   )),
             ),
- //fourth Instruction
-  Padding(
+            //fourth Instruction
+            Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: Container(
                   width: MediaQuery.of(context).size.width * 0.87,
@@ -173,10 +166,9 @@ class _ReferFriendState extends State<ReferFriend> {
                   )),
             ),
 
-
             // sharing button
             Container(
-              margin: EdgeInsets.only(top: Get.height* 0.04),
+              margin: EdgeInsets.only(top: Get.height * 0.04),
               child: ElevatedButton(
                   onPressed: () {
                     Share.share("https://virtuososofttech.com/");
@@ -195,8 +187,6 @@ class _ReferFriendState extends State<ReferFriend> {
                   )),
             ),
           ]),
-
-
     );
   }
 }

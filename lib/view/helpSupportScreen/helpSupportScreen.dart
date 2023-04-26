@@ -14,9 +14,12 @@ class HelpSupportScreen extends StatefulWidget {
 }
 
 class _HelpSupportScreenState extends State<HelpSupportScreen> {
+
+ // var for officeLocation 
   String officeLocationAddress =
       "Pride Icon, 108-109, Thite Vasti, Thite Nagar, Kharadi, Pune, Maharashtra, 411014";
 
+// function for making phone call
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
@@ -25,6 +28,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// function for sending email
   Future<void> sendEmail({required String email, String subject = ""}) async {
     String mail = "mailto:$email?subject=$subject";
     if (await canLaunchUrl(Uri.parse(mail))) {
@@ -34,15 +38,17 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// function for opening whatsapp
   Future<void> openWhatsapp(
       {required BuildContext context,
       required String text,
       required String number}) async {
-    var whatsapp = number; //+92xx enter like this
+    var whatsapp = number; 
     var whatsappURlAndroid =
         "whatsapp://send?phone=" + whatsapp + "&text=$text";
     var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
     if (Platform.isIOS) {
+
       // for iOS phone only
       if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
         await launchUrl(Uri.parse(
@@ -52,8 +58,11 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Whatsapp not installed")));
       }
-    } else {
-      // android , web
+    } 
+    
+    // for android phones as well as for web also
+    else {
+      
       if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
         await launchUrl(Uri.parse(whatsappURlAndroid));
       } else {
@@ -63,8 +72,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// function for launchMaps
   void launchMaps(double latitude, double longitude) async {
-    // final url = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
     final url =
         'https://www.google.com/maps/place/Virtuoso+SoftTech/@$latitude,$longitude,17z/data=!4m6!3m5!1s0x3bc2c1f2f1569095:0xead616dbb3ceeabc!8m2!3d18.5434676!4d73.9362535!16s%2Fg%2F11sd0h5jyp';
     if (await canLaunchUrl(Uri.parse(url))) {
@@ -74,6 +83,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// function for opening facebook
   void openFacebookPage() async {
     const String facebookUrlScheme =
         'facebook://user?screen_name=VirtuosoSoftTech';
@@ -92,6 +102,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// function for opening instagram
   Future<void> openInstagramProfile(String username) async {
     final instagramUrlScheme = 'intagram://user?screen_name=$username/';
     final instagramUrlWeb = 'https://www.instagram.com/$username/';
@@ -105,6 +116,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// function for opening twitter
   Future<void> openTwitterPage() async {
     const twitterUrlScheme = 'twitter://user?screen_name=VirtuosoSoftech';
     const twitterUrlWeb = 'https://twitter.com/VirtuosoSoftech';
@@ -118,6 +130,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// function for opening company's website
   void website() async {
     const websiteUrl = 'https://virtuososofttech.com/';
     if (await canLaunchUrl(Uri.parse(websiteUrl))) {
@@ -127,16 +140,19 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     }
   }
 
+// controllers having values when one wants to raise a doubt
   TextEditingController titleController = TextEditingController();
   dynamic selectedCategory;
   dynamic selectedSubCategory;
   TextEditingController descriptionController = TextEditingController();
   TextEditingController uploadPhotoController = TextEditingController();
 
+// list for selecting category and subcategory
   List<String> categoryList = ['Technical', 'Financial'];
   List<String> subCategoryList1 = ['Stations', 'Chargers', 'Connectors'];
   List<String> subCategoryList2 = ['Booking', 'Transactions', 'Wallet'];
 
+// bool variable indicating that by default subcategory dropdown will be enabled
   bool isSubCategoryEnabled = true;
 
   @override
@@ -150,17 +166,23 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+
             // buttons
             Padding(
               padding: EdgeInsets.only(top: Get.height * 0.02),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+
+
+    // button for raising a ticket
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the button color
+                        backgroundColor: Colors.white,
                       ),
                       onPressed: () {
+
+              // bottom sheet for raising a dount using controllers
                         showModalBottomSheet(
                             context: context,
                             builder: (BuildContext context) {
@@ -168,11 +190,11 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    // used to handle the onFocus() activities
 
+                                    // used to handle the onFocus() activities
                                     FocusScope.of(context).unfocus();
                                   },
 
@@ -183,8 +205,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          // container for title section
 
+                                          // container for title section
                                           Padding(
                                             padding: const EdgeInsets.all(15.0),
                                             child: TextFormField(
@@ -199,9 +221,12 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                             ),
                                           ),
 
+                                          // categories and respective subcategories
                                           Container(
                                               child: Row(
                                             children: [
+
+                                              // section for categroy dropdown
                                               Expanded(
                                                 child: DropdownButtonFormField(
                                                   value: selectedCategory,
@@ -227,6 +252,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                                   ),
                                                 ),
                                               ),
+
+                                              // section for subcategory
                                               Expanded(
                                                 child: DropdownButtonFormField(
                                                   value: selectedSubCategory,
@@ -257,8 +284,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                             ],
                                           )),
 
-                                          // container for Description section
 
+                                          // container for Description section
                                           Padding(
                                             padding: const EdgeInsets.all(15.0),
                                             child: TextFormField(
@@ -282,8 +309,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                             ),
                                           ),
 
-                                          // container for upload Photo section
 
+                                          // container for upload Photo section
                                           Padding(
                                             padding: const EdgeInsets.all(15.0),
                                             child: TextFormField(
@@ -306,6 +333,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                               controller: uploadPhotoController,
                                             ),
                                           ),
+
+
+                                          // button for submiting the doubt or ticket
                                           ElevatedButton(
                                               onPressed: () {
                                                 print(
@@ -327,6 +357,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black))),
+
+
+ // button for ticket history                             
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Set the button color
@@ -341,7 +374,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
               ),
             ),
 
-            // image container
+// image container
             Container(
               margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.09),
               height: MediaQuery.of(context).size.height * 0.26,
@@ -355,7 +388,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
               child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      _makePhoneCall('tel: 7030356762');
+                      _makePhoneCall('tel: 7796386605');
                     });
                   },
                   child: Container(
@@ -373,7 +406,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                         Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            "7030356762",
+                            "7796386605",
                             style: TextStyle(
                               fontSize: Get.height * 0.02,
                               // fontWeight: FontWeight.w400
@@ -427,8 +460,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                     openWhatsapp(
                         context: context,
                         text:
-                            "Hi this is an application currently under development",
-                        number: "7030356762");
+                            "Welcome to Vcharge support!",
+                        number: "7796386605");
                   },
                   child: Container(
                     width: Get.width * 0.7,
@@ -436,7 +469,11 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FaIcon(FontAwesomeIcons.whatsapp),
+
+                        // whatsapp icon
+                        const FaIcon(FontAwesomeIcons.whatsapp),
+
+                        // whtsapp text
                         Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
@@ -451,7 +488,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                   )),
             ),
 
-// icons
+// icons for bottom bar
             Container(
               width: Get.width * 0.6,
               height: Get.height * 0.05,
@@ -460,6 +497,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  
                   // facebook icon
                   Container(
                     width: Get.width * 0.07,

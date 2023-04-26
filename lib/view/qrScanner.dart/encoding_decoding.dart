@@ -1,3 +1,10 @@
+/*
+
+---------------------- File for future purpose of encoding and decoding after one scans the qr code
+
+*/
+
+
 import 'dart:convert';
 
 String decrypt(String encodedMsg){

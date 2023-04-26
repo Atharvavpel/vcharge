@@ -18,22 +18,25 @@ class SearchBarContainer extends StatefulWidget {
 
 class SearchBarContainerState extends State<SearchBarContainer> {
 
+// focus node variable for implementing focus on searchbar
   FocusNode? searchFocus;
 
 
+// init function calling the focusnode function
   @override
   void initState() {
     super.initState();
     searchFocus = FocusNode();
   }
 
-
+// variable for storing the keystore characters while searching 
   dynamic keyStroke;
 
+// variable for storing the searchData - complete word or so 
   dynamic searchData;
 
+// function for finding relevant results against the searches
   Future<void> fetchData(String keyword) async {
-    print("Entered the fetchData");
     String url =
         "http://192.168.0.43:8081/vst1/manageStation/search?query=$keyword";
 
@@ -45,7 +48,6 @@ class SearchBarContainerState extends State<SearchBarContainer> {
       if (response.statusCode == 200) {
         setState(() {
           searchData = response.body;
-          print("the searched data is: $searchData");
         });
       } else {
         throw Exception('Failed to load data');
@@ -59,10 +61,14 @@ class SearchBarContainerState extends State<SearchBarContainer> {
     
   }
 
+
+// searchbar textfield having drawer, search textfied and notifications and profile icon
   dynamic searchBarContainer() {
     return SafeArea(
       child: Column(
         children: [
+
+          // for unfocusing the taping gesture
           GestureDetector(
             onTap: (){
               searchFocus!.unfocus();
@@ -83,10 +89,13 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                     borderRadius: BorderRadius.circular(Get.height * 0.01),
                     color: Colors.white,
                   ),
+
+                  // main textfield for storing the different widgets
                   child: TextField(
                     focusNode: searchFocus,
                     readOnly: true,
 
+                    // function for calling the searching option - searchDelegate widget
                     onTap: () {
                       showSearch(
                         context: context, 
@@ -94,36 +103,13 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                       );
                     },
 
-                    // onChanged: (value) {
-                    //   showSearch(
-                    //     context: context, 
-                    //     delegate: SearchingWidget()
-                    //   );
-                    // },
-
-
-                    
-
-
-
-
-                    // onSubmitted: (value) {  
-                    //   searchFocus!.unfocus();
-                    // },
-                    // onChanged: (value) => fetchData(value),
-                    // onTap: (){
-                    //   showBottomSheet(
-                    //             context: context,
-                    //             builder: (BuildContext context) {
-                    //               return SearchingWidget();
-                    //             });
-                    // },
                     
                     decoration: InputDecoration(
           
-                      // contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
+
+                      // drawer button icon
                       prefixIcon: Padding(
                         padding: EdgeInsets.only(right: Get.width* 0.03),
                         child: IconButton(
@@ -138,11 +124,15 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                       hintText: "Search here",
                       
                       hintStyle: const TextStyle(color: Colors.black),
+
+                      // notifications and profile icond
                       suffixIcon: SizedBox(
                         width: Get.width* 0.25,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+
+                            // notification icon button
                             IconButton(
                               key: const Key('notificationButton'),
                               onPressed: () {},
@@ -152,6 +142,8 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                               ),
                               iconSize: Get.height * 0.036,
                             ),
+
+                            // profile icon button
                             IconButton(
                               key: const Key('profileButton'),
                               onPressed: () {
@@ -178,7 +170,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                 )),
           ),
 
-          // alternate side bar
+          // sidebar below the searching widget or textfield
           HorizontalSideBar(
             userId: widget.userId,
           ),
@@ -194,166 +186,4 @@ class SearchBarContainerState extends State<SearchBarContainer> {
   }
 }
 
-
-/*
-
-
-String? searchQuery = "http://192.168.0.43:8081/vst1/manageStation/search?q=";
-
-TextField(
-  onChanged: (String value) {
-    // Concatenate the search query and the current search value
-    String fullSearchQuery = searchQuery! + value;
-
-    // Use the full search query to fetch the data
-    fetchData(fullSearchQuery);
-  },
-  decoration: InputDecoration(
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-    enabledBorder: InputBorder.none,
-    focusedBorder: InputBorder.none,
-    prefixIcon: IconButton(
-      key: const Key('drawerButton'),
-      icon: const Icon(
-        Icons.menu,
-        color: Colors.black,
-      ),
-      onPressed: () => Scaffold.of(context).openDrawer(),
-    ),
-    suffixIcon: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        IconButton(
-          key: const Key('notificationButton'),
-          onPressed: () {},
-          icon: const Icon(
-            Icons.notifications,
-            color: Colors.black,
-          ),
-          iconSize: Get.height * 0.036,
-        ),
-        IconButton(
-          key: const Key('profileButton'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyProfilePage(
-                  userId: widget.userId.toString()
-                ),
-              ),
-            );
-          },
-          icon: const Icon(
-            Icons.person,
-            color: Colors.black,
-          ),
-          iconSize: Get.height * 0.036,
-        ),
-      ],
-    ),
-    hintText: "Search here", 
-    hintStyle: const TextStyle(
-      color: Colors.black
-    ),
-  ),
-);
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-// drawer button
-                  IconButton(
-                      key: const Key('drawerButton'),
-                      icon: const Icon(Icons.menu),
-                      onPressed: () => Scaffold.of(context).openDrawer()),
-
-                  // expanded for search text field
-                  // Expanded(
-                  //   flex: 7,
-                  //   child: Padding(
-                  //     padding: EdgeInsets.only(left: 8),
-                  //     child: TextField(
-                  //       key: Key('searchTextField'),
-                  //       decoration: InputDecoration(
-                  //         border: InputBorder.none,
-                  //         hintText: " Search here",
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
-                  Expanded(
-                    flex: 7,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: TextField(
-                        key: Key('searchTextField'),
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: " Search here",
-                        ),
-                        onChanged: (text) {
-                          setState(() {
-                            keyStroke = text;
-                          });
-                          
-                          // make network call to fetch search results
-                          final url = searchQuery!
-                              .replaceAll('value_entered_by_user', keyStroke);
-                          // use the url to fetch data using http or dio package
-                          // update the search results in the state
-                        },
-                      ),
-                    ),
-                  ),
-
-                  //Expanded for notification button
-                  Expanded(
-                    flex: 1,
-                    child: IconButton(
-                      key: const Key('notificationButton'),
-                      onPressed: () {},
-                      icon: const Icon(Icons.notifications),
-                      iconSize: 30,
-                    ),
-                  ),
-
-                  //Expanded for profile button
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                      key: const Key('profileButton'),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyProfilePage(
-                                    userId: widget.userId.toString())));
-                      },
-                      icon: const Icon(Icons.person),
-                      iconSize: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-
-
-*/
+  

@@ -18,6 +18,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+
 // variables for storing the values in the sections
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -64,9 +65,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   'Uttarakhand',
   'West Bengal',
 ];
+
+// variable for storing the selected state
 dynamic selectedState;
 
 
+// init state function calling the getUserData
   @override
   void initState() {
     super.initState();
@@ -78,7 +82,7 @@ dynamic selectedState;
 // function for fetching specific user data
   Future<void> getUserData() async {
     var data = await GetMethod.getRequest(
-        "http://192.168.0.41:8081/manageUser/user?userId=USR20230410143236933");
+        "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230410143236933");
 
     if (data != null) {
       setState(() {
@@ -93,8 +97,6 @@ dynamic selectedState;
         selectedState = data['userState'] ?? '';
 
 
-        // print("the value of genderSelected is in initsate is: $selectedGender");
-        // print("the value of genderSelected is in initsate is: $selectedState");
       });
     }
   }
@@ -324,28 +326,25 @@ dynamic selectedState;
 
                 // container for state section
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: DropdownButtonFormField(
-                        value: selectedState, // Set the currently selected value in the dropdown
-                        items: statesIndia.map((e) {
-                          return DropdownMenuItem(value: e, child: Text(e));
-                        }).toList(), // Set the list of items to display in the dropdown
-                        onChanged: (value) {
-                          setState(() {
-                            selectedState = value as String; // Update the currently selected value in the dropdown
-                                          
-                            // print(
-                            //     "the value of selectedState is: $selectedState");
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          label: Text("State"),
-                          border: OutlineInputBorder()
-                        ),
-
-
-                      ),
-                ),
+  padding: const EdgeInsets.all(15.0),
+  child: DropdownButtonFormField(
+    value: selectedState, // Set the currently selected value in the dropdown
+    items: statesIndia.map((e) {
+      return DropdownMenuItem(value: e, child: Text(e));
+    }).toList(), // Set the list of items to display in the dropdown
+    onChanged: (value) {
+      setState(() {
+        selectedState = value as String; // Update the currently selected value in the dropdown
+        cityController.text = ''; // Clear the city field when the state changes
+        print("the value of selectedState is: $selectedState");
+      });
+    },
+    decoration: const InputDecoration(
+      label: Text("State"),
+      border: OutlineInputBorder()
+    ),
+  ),
+),
 
 
               ],
@@ -358,8 +357,8 @@ dynamic selectedState;
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             updateUserDetails();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MyProfilePage(userId: widget.userId)));
+            Navigator.pop(context);
+            Navigator.pop(context);
           },
           label: const Text("Update"),
         ),

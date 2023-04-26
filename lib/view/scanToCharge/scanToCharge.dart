@@ -7,6 +7,7 @@ import '../startChargingScreen/startChargingScreen.dart';
 import '../walletScreen/addMoneyScreen.dart';
 
 class ScanToCharge extends StatefulWidget {
+
   String stationName;
   String stationLocation;
   String userId;
@@ -22,24 +23,28 @@ class ScanToCharge extends StatefulWidget {
 }
 
 class ScanToChargeState extends State<ScanToCharge> {
+
   //activeButton to track time, units and money aciveness
   //1 = time, 2 = units and 3 = money
   int activeButton = 1;
-
   int timeSliderValue = 6;
   int unitsSliderValue = 100;
   int moneySliderValue = 1000;
 
+// boolean variable for keeping track of the toggling effect
   bool customizeToggle = false;
 
+// variable for keeping the track of the wallet amount
   var walletAmount;
 
+// init state method to call the getWalletAmount method
   @override
   void initState() {
     getWalletAmount();
     super.initState();
   }
 
+// function for fetching the wallet amount 
   Future<void> getWalletAmount() async {
     var data = await GetMethod.getRequest(
         'http://192.168.0.41:8081/manageUser/getWallet?userId=${widget.userId}');
@@ -60,6 +65,8 @@ class ScanToChargeState extends State<ScanToCharge> {
       ),
       body: Column(
         children: [
+
+          
           //Expanded for station Name
           Expanded(
             flex: 7,

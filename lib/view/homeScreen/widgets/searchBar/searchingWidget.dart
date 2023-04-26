@@ -18,12 +18,16 @@ class SearchingWidget extends SearchDelegate {
     return response;
   }
 
+// variable for storing the keyword user entered
   String? selectedQuery;
+
+// var for storing the result of searching
   dynamic result;
+
+// list of stations came after the search results
   List<RequiredStationDetailsModel> stationsData = [];
 
-// this method is used to display the right side of the search
-
+// this method is used to display the right side of the search or say the clear button
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -35,8 +39,7 @@ class SearchingWidget extends SearchDelegate {
     ];
   }
 
-// this method is used to display the left hand side widgets
-
+// this method is used to display the left hand side widgets or say the arrow back method
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
@@ -46,62 +49,8 @@ class SearchingWidget extends SearchDelegate {
         icon: const Icon(Icons.arrow_back));
   }
 
+
 // this method is used when we tap the search button
-  // @override
-  // Widget buildResults(BuildContext context) {
-
-  //   return Container(color: Colors.amber,);
-
-    // return FutureBuilder<List<dynamic>>(
-    //   future: fetchData(query),
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //     if (snapshot.hasData) {
-    //       final data = snapshot.data!;
-    //       if (data.isNotEmpty) {
-    //         return ListView.builder(
-    //           itemCount: data.length,
-    //           itemBuilder: (context, index) {
-    //             final item = data[index];
-
-    //             return ListTile(
-    //               title: Text(item["stationName"]),
-    //               subtitle: Text(item["stationArea"]),
-    //               leading: const Icon(Icons.location_city),
-    //               onTap: () {
-    //                 stationsData.add(RequiredStationDetailsModel(
-    //                   stationId: item['stationId'],
-    //                   stationArea: item['stationArea'],
-    //                   stationLatitude: item['stationLatitude'],
-    //                   stationLongitude: item['stationLongitude'],
-    //                   stationStatus: item['stationStatus'],
-    //                 ));
-
-    //                 StaticVariablesForMap.getMarkersDetails(
-    //                     context, stationsData);
-    //               },
-    //             );
-    //           },
-    //         );
-    //       } else {
-    //         return const Center(child: Text("No results found."));
-    //       }
-    //     } else if (snapshot.hasError) {
-    //       return const Center(child: Text("Error fetching results."));
-    //     } else {
-    //       return const SizedBox.shrink();
-    //     }
-    //   },
-    // );
-  // }
-
-
-
-
-
-
 @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
