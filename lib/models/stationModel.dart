@@ -7,8 +7,8 @@ class StationModel {
   String? stationHostId;
   String? stationVendorId;
   String? stationArea;
-  String? stationLatitude;
-  String? stationLongitude;
+  double? stationLatitude;
+  double? stationLongitude;
   String? stationLocationURL;
   String? stationAddressLineOne;
   String? stationAddressLineTwo;
@@ -146,6 +146,45 @@ class RequiredStationDetailsModel {
     data['stationArea'] = stationArea;
     data['stationLatitude'] = stationLatitude;
     data['stationLongitude'] = stationLongitude;
+    data['stationCity'] = stationCity;
+    data['stationStatus'] = stationStatus;
+    return data;
+  }
+}
+
+
+//Following is the model for some specific details of station for favourite page
+class FovouriteStationDetailsModel {
+  String? stationId;
+  String? stationName;
+  String? stationAddressLineOne;
+  String? stationAddressLineTwo;
+  String? stationCity;
+  String? stationStatus;
+
+  FovouriteStationDetailsModel(
+      {this.stationId,
+      this.stationName,
+      this.stationAddressLineOne,
+      this.stationAddressLineTwo,
+      this.stationCity,
+      this.stationStatus,});
+
+  FovouriteStationDetailsModel.fromJson(Map<String, dynamic> json) {
+    stationId = json['stationId'];
+    stationName = json['stationName'];
+    stationAddressLineOne = json['stationAddressLineOne'];
+    stationAddressLineTwo = json['stationAddressLineTwo'];
+    stationCity = json['stationCity'];
+    stationStatus = json['stationStatus'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['stationId'] = stationId;
+    data['stationName'] = stationName;
+    data['stationAddressLineOne'] = stationAddressLineOne;
+    data['stationAddressLineTwo'] = stationAddressLineTwo;
     data['stationCity'] = stationCity;
     data['stationStatus'] = stationStatus;
     return data;

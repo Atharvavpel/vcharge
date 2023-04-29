@@ -29,14 +29,6 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   //true indicates Amenity button is selected and false indicated Review button
   bool selectedButton = true;
 
-  Future<void> _makePhoneCall(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -47,7 +39,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   Future<void> getStationDetails() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.43:8081/vst1/manageStation/getStationByStationId?stationId=${widget.stationId}');
+        'http://192.168.0.43:8080/manageStation/getStationByStationId?stationId=${widget.stationId}');
     setState(() {
       stationDetails = StationModel.fromJson(data);
     });
@@ -56,7 +48,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   Future<void> getChargerList() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.43:8081/vst1/manageStation/getStationChargers?stationId=${stationId}');
+          'http://192.168.0.43:8080/manageStation/getStationChargers?stationId=${stationId}');
       if (data != null) {
         setState(() {
           for(int i=0; i<data.length; i++){
@@ -94,6 +86,14 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     }
   }
 
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(

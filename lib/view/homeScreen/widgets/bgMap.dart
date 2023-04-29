@@ -55,14 +55,14 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
-    redisCalls();
+    // redisTest();
   }
 
-  Future<void> redisCalls() async{
-    await RedisConnection.set('userLocation', 10);
-    print(await RedisConnection.get('userLocation'));
-  }
-
+  // void redisTest() async{
+  //   await RedisConnection.set('any', 'thing');
+  //   print(await RedisConnection.get('any'));
+  // }
+  
   @override
   void dispose() {
     animationController?.dispose();
@@ -103,20 +103,24 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
                 AnchorPos.align(AnchorAlign.center), //change center to bottom
             point: LatLng(idx.stationLatitude!,
                 idx.stationLongitude!),
-            builder: (ctx) => GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StationsSpecificDetails(
-                              stationId: idx.stationId!,
-                              userId: HomeScreenState.userId,
-                            )));
-              },
-              child: FaIcon(
-                FontAwesomeIcons.locationDot,
-                size: 30,
-                color: AvaliblityColor.getAvailablityColor(idx.stationStatus!),
+            builder: (ctx) => Semantics(
+              label: "StationMarker",
+              hint: "Redirect you to sspecific details of that station",
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StationsSpecificDetails(
+                                stationId: idx.stationId!,
+                                userId: HomeScreenState.userId,
+                              )));
+                },
+                child: FaIcon(
+                  FontAwesomeIcons.locationDot,
+                  size: 30,
+                  color: AvaliblityColor.getAvailablityColor(idx.stationStatus!),
+                ),
               ),
             ),
           );
@@ -130,7 +134,9 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   //This function get the live location of the user using GetLiveLocation class
   Future<void> getLocation() async {
     var userLat = await RedisConnection.get('userLatitude');
+    // print('$userLat');
     var userLong = await RedisConnection.get('userLongitude');
+    // print('$userLong');
     if (userLat != null && userLong != null) {
       BgMapState.userLocation = LatLng(double.parse(userLat),double.parse(userLong));
     } 
@@ -246,9 +252,9 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
                 double lat = BgMapState.mapController.center.latitude;
                 double dist = getDistance(
                         BgMapState.mapController.bounds!.northEast!,
-                        BgMapState.mapController.bounds!.southWest!) *500;
+                        BgMapState.mapController.bounds!.southWest!) *1000;
                 getStationData(
-                    'http://192.168.0.43:8080/manageStation/getAllStationByGeoLocation?longitude=$long&latitude=$lat&maxDistance=$dist');
+                    'http://192.168.0.43:8080/manageStation/getStationsLocation?longitude=$long&latitude=$lat&maxDistance=$dist');
               }
             });
             // BgMapState.userLocation = mapController.center;

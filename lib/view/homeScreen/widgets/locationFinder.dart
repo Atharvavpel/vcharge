@@ -22,13 +22,18 @@ class LocationFinderState extends State<LocationFinder>
   bool locationFinder = false;
 
   Future<void> getToUserLocation() async {
-    var userLat = await RedisConnection.get('userLatitude');
-    var userLong = await RedisConnection.get('userLongitude');
-    BgMapState.userLocation = LatLng(double.parse(userLat), double.parse(userLong));
+    try {
+      var userLat = await RedisConnection.get('userLatitude');
+      var userLong = await RedisConnection.get('userLongitude');
+      BgMapState.userLocation =
+          LatLng(double.parse(userLat), double.parse(userLong));
 
-    if (mounted) {
-      // Call the animatedMapMove method only if the widget is still mounted
-      animatedMapMove(BgMapState.userLocation!, 15.0);
+      if (mounted) {
+        // Call the animatedMapMove method only if the widget is still mounted
+        animatedMapMove(BgMapState.userLocation!, 15.0);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -79,22 +84,25 @@ class LocationFinderState extends State<LocationFinder>
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () async {
-          getToUserLocation();
-        },
-        child: Container(
-          decoration: BoxDecoration(boxShadow: const [
-            BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
-          ], borderRadius: BorderRadius.circular(30)),
-          margin: const EdgeInsets.only(right: 13, bottom: 10),
-          child: CircleAvatar(
-            backgroundColor: locationFinder ? Colors.blue : Colors.white,
-            child: const FaIcon(
-              FontAwesomeIcons.locationCrosshairs,
-              color: Colors.black,
+    return Semantics(
+      label: "locationFinder",
+      child: InkWell(
+          onTap: () async {
+            getToUserLocation();
+          },
+          child: Container(
+            decoration: BoxDecoration(boxShadow: const [
+              BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
+            ], borderRadius: BorderRadius.circular(30)),
+            margin: const EdgeInsets.only(right: 13, bottom: 10),
+            child: CircleAvatar(
+              backgroundColor: locationFinder ? Colors.blue : Colors.white,
+              child: const FaIcon(
+                FontAwesomeIcons.locationCrosshairs,
+                color: Colors.black,
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }

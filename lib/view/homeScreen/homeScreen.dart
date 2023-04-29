@@ -14,8 +14,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-
-
 /*
 
 keep this code for future reference:
@@ -51,7 +49,7 @@ this is screen with onclose function
     */
 
   //this the user ID of the current user who is logged in
-  static String userId = "USR20230420100343328";
+  static String userId = "USR20230420142756296";
 
 // variables for index in bottom bar
   int selectedIndex = 1;
@@ -60,9 +58,18 @@ this is screen with onclose function
   Widget build(BuildContext context) {
 // screens
     List<dynamic> screens = [
-      ListOfStations(userId: userId,),
-      ExistingHomeScreen(userId: userId,),
-      const QRScannerWidget(),
+      Semantics(
+          label: "listOfStationPage",
+          child: ListOfStations(
+            userId: userId,
+          )),
+      Semantics(
+        label: "homePage",
+        child: ExistingHomeScreen(
+          userId: userId,
+        ),
+      ),
+      Semantics(label: "scannerPage", child: const QRScannerWidget()),
       // ScannerQr.qrScanner(),
       //     FutureBuilder<dynamic>(
       //   future: ScannerQr.qrScanner(),
@@ -83,14 +90,14 @@ this is screen with onclose function
     final items = <Widget>[
       const Icon(Icons.list, size: 30),
       const Icon(Icons.home, size: 30),
-  //     IconButton(
-  //       onPressed: () async {
-  //   String barcodeResult = await ScannerQr().scanBarcode(); 
-  //   print(barcodeResult);
-  //    // Do something with the barcode result, such as navigate to a new screen
-  // },
-  //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
-        const Icon(Icons.qr_code_scanner, size: 30),
+      //     IconButton(
+      //       onPressed: () async {
+      //   String barcodeResult = await ScannerQr().scanBarcode();
+      //   print(barcodeResult);
+      //    // Do something with the barcode result, such as navigate to a new screen
+      // },
+      //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
+      const Icon(Icons.qr_code_scanner, size: 30),
       //     IconButton(
       //       onPressed: () async {
       //   String barcodeResult = await ScannerQr().scanBarcode();
@@ -100,21 +107,20 @@ this is screen with onclose function
       //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
     ];
 
-
     // return Scaffold(
 
     // // this variable is used to extend the background to the appbar
     //   extendBodyBehindAppBar: true,
-    
+
     // // this variable is used to extend the background to the bottombar
     //   extendBody: true,
-    
+
     // // this is drawer function
     //   drawer: SideBarDrawer(userId: userId),
-    
+
     // // this is body
     //   body: screens[selectedIndex],
-    
+
     // // this is bottom bar
     //   bottomNavigationBar: CurvedNavigationBar(
     //       height: MediaQuery.of(context).size.height * 0.07,
@@ -129,54 +135,46 @@ this is screen with onclose function
     //           selectedIndex = index;
     //         });
     //       }),
-        
+
     // );
 
-
-
     return WillPopScope(
-    onWillPop: () async {
-      if (selectedIndex != 1) {
-        // if not on home screen, navigate to home screen and return false
-        setState(() {
-          selectedIndex = 1;
-        });
-        return false;
-      } else {
-        // if on home screen, allow back button press to close the app
-        return true;
-      }
-    },
-    child: Scaffold(
-
-    // this variable is used to extend the background to the appbar
-      extendBodyBehindAppBar: true,
-    
-    // this variable is used to extend the background to the bottombar
-      extendBody: true,
-      drawer: SideBarDrawer(userId: userId),
-    // this is body
-      body: screens[selectedIndex],
-    
-    // this is bottom bar
-      bottomNavigationBar: CurvedNavigationBar(
-          height: MediaQuery.of(context).size.height * 0.07,
-          animationCurve: Curves.easeInOut,
-          backgroundColor: Colors.transparent,
-          buttonBackgroundColor: Colors.white,
-          animationDuration: const Duration(milliseconds: 300),
-          items: items,
-          index: selectedIndex,
-          onTap: (index) {
+        onWillPop: () async {
+          if (selectedIndex != 1) {
+            // if not on home screen, navigate to home screen and return false
             setState(() {
-              selectedIndex = index;
+              selectedIndex = 1;
             });
-          }),
-        
-    )
-  );
+            return false;
+          } else {
+            // if on home screen, allow back button press to close the app
+            return true;
+          }
+        },
+        child: Scaffold(
+          // this variable is used to extend the background to the appbar
+          extendBodyBehindAppBar: true,
 
-    
+          // this variable is used to extend the background to the bottombar
+          extendBody: true,
+          drawer: SideBarDrawer(userId: userId),
+          // this is body
+          body: screens[selectedIndex],
+
+          // this is bottom bar
+          bottomNavigationBar: CurvedNavigationBar(
+              height: MediaQuery.of(context).size.height * 0.07,
+              animationCurve: Curves.easeInOut,
+              backgroundColor: Colors.transparent,
+              buttonBackgroundColor: Colors.white,
+              animationDuration: const Duration(milliseconds: 300),
+              items: items,
+              index: selectedIndex,
+              onTap: (index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              }),
+        ));
   }
 }
-
