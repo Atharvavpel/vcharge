@@ -156,7 +156,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                       child: ListTile(
                         title: const Text('Reservations'),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen(userId: widget.userId,)));
                         },
                       ),
                     ),

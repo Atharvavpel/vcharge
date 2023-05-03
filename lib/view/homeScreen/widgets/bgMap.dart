@@ -80,6 +80,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
         for (int i = 0; i < data.length; i++) {
           stationsData.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
+        print(stationsData);
         setState(() {
           BgMapState.getMarkersDetails(context, stationsData);
         });
@@ -134,11 +135,16 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   //This function get the live location of the user using GetLiveLocation class
   Future<void> getLocation() async {
     var userLat = await RedisConnection.get('userLatitude');
-    // print('$userLat');
     var userLong = await RedisConnection.get('userLongitude');
-    // print('$userLong');
+
     if (userLat != null && userLong != null) {
       BgMapState.userLocation = LatLng(double.parse(userLat),double.parse(userLong));
+      var currentLocation = await GetLiveLocation.getUserLiveLocation();
+      if(currentLocation.latitude!=userLat && currentLocation.longitude!=userLong){
+        setState(() {
+          BgMapState.userLocation = currentLocation;
+        });
+      }
     } 
     
     else {
@@ -243,6 +249,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
           interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
           onMapReady: () {
             getLocation();
+            getStationData(
+                    'http://192.168.0.43:8080/manageStation/getStationsLocation?longitude=${BgMapState.mapController.center.longitude}&latitude=${BgMapState.mapController.center.latitude}&maxDistance=5000');
             subscription =
                 mapController.mapEventStream.listen((MapEvent mapEvent) {
               if (mapEvent is MapEventMoveEnd) {

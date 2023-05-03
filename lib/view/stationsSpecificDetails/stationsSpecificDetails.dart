@@ -39,7 +39,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   Future<void> getStationDetails() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.43:8080/manageStation/getStationByStationId?stationId=${widget.stationId}');
+        'http://192.168.0.43:8080/manageStation/getStation?stationId=${widget.stationId}');
     setState(() {
       stationDetails = StationModel.fromJson(data);
     });
