@@ -67,25 +67,28 @@ class ExistingHomeScreenState extends State<ExistingHomeScreen> {
             Positioned(
               bottom: Get.height * 0.14,
               right: 0,
-              child: Container(
-                decoration: BoxDecoration(boxShadow: const [
-                  BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
-                ], borderRadius: BorderRadius.circular(30)),
-                margin: const EdgeInsets.only(right: 13, bottom: 10),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: GestureDetector(
-                    key: const Key('filterButton'),
-                    onTap: () {
-                      showBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return FilterPopUp(userId: widget.userId);
-                          });
-                    },
-                    child: const Icon(
-                      Icons.filter_alt_sharp,
-                      color: Colors.black,
+              child: Semantics(
+                label: "filterButton",
+                child: GestureDetector(
+                  key: const Key('filterButton'),
+                  onTap: () {
+                    showBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return FilterPopUp(userId: widget.userId);
+                        });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(boxShadow: const [
+                      BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
+                    ], borderRadius: BorderRadius.circular(30)),
+                    margin: const EdgeInsets.only(right: 13, bottom: 10),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: const Icon(
+                        Icons.filter_alt_sharp,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),

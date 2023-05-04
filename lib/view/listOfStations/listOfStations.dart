@@ -23,6 +23,8 @@ class ListOfStationsState extends State<ListOfStations> {
   //stores current location of user
   LatLng? userPosition;
 
+  String getStationUrl = 'http://192.168.0.43:8080/manageStation/getRequiredStationsDetails';
+
   @override
   void initState() {
     super.initState();
@@ -50,18 +52,21 @@ class ListOfStationsState extends State<ListOfStations> {
     });
   }
 
-  Future<void> getStationList() async {
+  Future<void> getStationList(String url) async {
    try {
-      var data = await GetMethod.getRequest(
-          'http://192.168.0.43:8081/vst1/manageStation/getRequiredStationsDetails');
-      if (data != null || data.isNotEmpty) {
-        // stationsData = data.map((e) => StationModel.fromJson(e)).toList();
+      var data = await GetMethod.getRequest(url);
+      if (data.isNotEmpty) {
+        print('Data Not Empty');
+        stationsList.clear();
         for (int i = 0; i < data.length; i++) {
           stationsList.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
         setState(() {
           BgMapState.getMarkersDetails(context, stationsList);
         });
+      }
+      else{
+        print("Empty Data");
       }
     } catch (e) {
       print(e);
@@ -96,7 +101,7 @@ class ListOfStationsState extends State<ListOfStations> {
 
   //this function calculate distance from user to each station and store it in userToStationDistanceList
   Future<void> getDistanceList() async {
-    await getStationList();
+    await getStationList(getStationUrl);
     await getLocationOfUser();
 
     userToStationDistanceList = stationsList.map((station) {

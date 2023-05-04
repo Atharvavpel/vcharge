@@ -10,17 +10,15 @@ class SearchBarContainer extends StatefulWidget {
   String userId;
   void callBack;
 
-  SearchBarContainer({required this.userId, required this.callBack,super.key});
+  SearchBarContainer({required this.userId, required this.callBack, super.key});
 
   @override
   State<SearchBarContainer> createState() => SearchBarContainerState();
 }
 
 class SearchBarContainerState extends State<SearchBarContainer> {
-
 // focus node variable for implementing focus on searchbar
   FocusNode? searchFocus;
-
 
 // init function calling the focusnode function
   @override
@@ -29,10 +27,10 @@ class SearchBarContainerState extends State<SearchBarContainer> {
     searchFocus = FocusNode();
   }
 
-// variable for storing the keystore characters while searching 
+// variable for storing the keystore characters while searching
   dynamic keyStroke;
 
-// variable for storing the searchData - complete word or so 
+// variable for storing the searchData - complete word or so
   dynamic searchData;
 
 // function for finding relevant results against the searches
@@ -40,37 +38,31 @@ class SearchBarContainerState extends State<SearchBarContainer> {
     String url =
         "http://192.168.0.43:8081/vst1/manageStation/search?query=$keyword";
 
-        final response = await http.get(Uri.parse(url));
-    
+    final response = await http.get(Uri.parse(url));
+
     setState(() {
-      
       try {
-      if (response.statusCode == 200) {
-        setState(() {
-          searchData = response.body;
-        });
-      } else {
-        throw Exception('Failed to load data');
+        if (response.statusCode == 200) {
+          setState(() {
+            searchData = response.body;
+          });
+        } else {
+          throw Exception('Failed to load data');
+        }
+      } catch (error) {
+        print("the error is: $error");
       }
-    } catch (error) {
-      print("the error is: $error");
-    }
-
-
     });
-    
   }
-
 
 // searchbar textfield having drawer, search textfied and notifications and profile icon
   dynamic searchBarContainer() {
     return SafeArea(
       child: Column(
         children: [
-
           // for unfocusing the taping gesture
           GestureDetector(
-            onTap: (){
+            onTap: () {
               searchFocus!.unfocus();
             },
             child: Padding(
@@ -91,81 +83,84 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                   ),
 
                   // main textfield for storing the different widgets
-                  child: TextField(
-                    key: const Key('searchBar'),
-                    focusNode: searchFocus,
-                    readOnly: true,
+                  child: Semantics(
+                    label: "searchTextField",
+                    child: TextField(
+                      key: const Key('searchBar'),
+                      focusNode: searchFocus,
+                      readOnly: true,
 
-                    // function for calling the searching option - searchDelegate widget
-                    onTap: () {
-                      showSearch(
-                        context: context, 
-                        delegate: SearchingWidget()
-                      );
-                    },
+                      // function for calling the searching option - searchDelegate widget
+                      onTap: () {
+                        showSearch(
+                            context: context, delegate: SearchingWidget());
+                      },
 
-                    
-                    decoration: InputDecoration(
-          
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
+                      decoration: InputDecoration(
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
 
-                      // drawer button icon
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.only(right: Get.width* 0.03),
-                        child: IconButton(
-                          key: const Key('drawerButton'),
-                          icon: const Icon(
-                            Icons.menu,
-                            color: Colors.black,
+                        // drawer button icon
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.only(right: Get.width * 0.03),
+                          child: IconButton(
+                            key: const Key('drawerButton'),
+                            icon: const Icon(
+                              Icons.menu,
+                              color: Colors.black,
+                            ),
+                            onPressed: () => Scaffold.of(context).openDrawer(),
                           ),
-                          onPressed: () => Scaffold.of(context).openDrawer(),
                         ),
-                      ),
-                      hintText: "Search here",
-                      
-                      hintStyle: const TextStyle(color: Colors.black),
+                        hintText: "Search here",
 
-                      // notifications and profile icond
-                      suffixIcon: SizedBox(
-                        width: Get.width* 0.3,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
+                        hintStyle: const TextStyle(color: Colors.black),
 
-                            // notification icon button
-                            IconButton(
-                              key: const Key('notificationButton'),
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.notifications,
-                                color: Colors.black,
-                              ),
-                              iconSize: Get.height * 0.036,
-                            ),
-
-                            // profile icon button
-                            IconButton(
-                              key: const Key('profileButton'),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MyProfilePage(
-                                        userId: widget.userId.toString()),
+                        // notifications and profile icond
+                        suffixIcon: SizedBox(
+                          width: Get.width * 0.3,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // notification icon button
+                              Semantics(
+                                label: "notificationButton",
+                                child: IconButton(
+                                  key: const Key('notificationButton'),
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.notifications,
+                                    color: Colors.black,
                                   ),
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.person,
-                                color: Colors.black,
+                                  iconSize: Get.height * 0.036,
+                                ),
                               ),
-                              iconSize: Get.height * 0.036,
-                            ),
-                          ],
+
+                              // profile icon button
+                              Semantics(
+                                label: "profileButton",
+                                child: IconButton(
+                                  key: const Key('profileButton'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MyProfilePage(
+                                            userId: widget.userId.toString()),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.person,
+                                    color: Colors.black,
+                                  ),
+                                  iconSize: Get.height * 0.036,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      
                     ),
                   ),
                 )),
@@ -186,5 +181,3 @@ class SearchBarContainerState extends State<SearchBarContainer> {
     return searchBarContainer();
   }
 }
-
-  
