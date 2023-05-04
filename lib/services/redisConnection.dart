@@ -5,8 +5,8 @@ class RedisConnection {
   static int serverPort = 6379;
 
   static Future<dynamic> get(String key) async {
-    try {
       var redisClient = redis.RedisConnection();
+    try {
       var conn = await redisClient.connect(serverIp, serverPort);
       var response = conn.send_object(["GET", key]);
       // redisClient.close();

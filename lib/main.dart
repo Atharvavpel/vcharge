@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
-import 'package:flutter_driver/driver_extension.dart';
 
 
 
 void main() {
-  enableFlutterDriverExtension();
-  runApp(
+  runApp( 
     const MyApp(),
   );
 }
