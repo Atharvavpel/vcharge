@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
+import 'package:vcharge/view/faqScreen/faqScreen.dart';
 import 'package:vcharge/view/helpSupportScreen/helpSupportScreen.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 
@@ -78,7 +79,15 @@ String specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=USR2
               child: ListTile(
                       title: const Text('Add Vehicle'),
                       onTap: () {
-                         Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddVehicleScreen()));
+              Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddVehicleScreen())
+                      ).then((value) {
+                        Future.delayed(const Duration(milliseconds: 250), () {
+                          Navigator.pop(context); // Close the drawer smoothly
+                        });
+                      });
                       },
                     ),
             ),
@@ -235,7 +244,15 @@ String specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=USR2
               child: ListTile(
                       title: const Text('FAQ'),
                       onTap: () {
-              Navigator.pop(context);
+              // Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => const FaqScreen())
+              //         ).then((value) {
+              //           Future.delayed(const Duration(milliseconds: 250), () {
+              //             Navigator.pop(context); // Close the drawer smoothly
+              //           });
+              //         });
                       },
                     ),
             ),

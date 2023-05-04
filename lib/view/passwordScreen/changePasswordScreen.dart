@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vcharge/view/passwordScreen/widget/confirmationSuccessPopUp.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
 
-  dynamic emailId;
-
+  String? emailId;
   ChangePasswordScreen({super.key, required this.emailId});
 
   @override

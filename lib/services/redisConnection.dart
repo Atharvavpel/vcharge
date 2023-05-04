@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:redis/redis.dart' as redis;
 
 class RedisConnection{
-  static String serverIp = "192.168.0.136";
+  static String serverIp = "192.168.0.49";
   static int serverPort = 6379;
 
   static Future<dynamic> get(String key) async{

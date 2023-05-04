@@ -6,11 +6,28 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/putMethod.dart';
-
+import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class EditProfileScreen extends StatefulWidget {
+
+  final GlobalKey<MyProfilePageState> myProfilePageKey;
+
+
   String userId;
-  EditProfileScreen({super.key, required this.userId});
+
+  String? firstNameEdited;
+  String? lastNameEdited;
+  String? emailIdEdited;
+  String? contactNoEdited;
+
+  EditProfileScreen({super.key, 
+                    required this.userId, 
+                    required this.firstNameEdited,
+                    required this.lastNameEdited,
+                    required this.contactNoEdited,
+                    required this.emailIdEdited,
+                    required this.myProfilePageKey
+                });
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -76,12 +93,14 @@ dynamic selectedState;
     getUserData();
   }
 
+  String specificUrl = "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230420100343328";
+
+  
 
 
 // function for fetching specific user data
   Future<void> getUserData() async {
-    var data = await GetMethod.getRequest(
-        "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230410143236933");
+    var data = await GetMethod.getRequest(specificUrl);
 
     if (data != null) {
       setState(() {
@@ -122,9 +141,9 @@ dynamic selectedState;
 
 // function for updating the specific user data
   Future updateUserDetails() async {
-    var response = await PutMethod.putRequest(
-        "http://192.168.0.41:8081/manageUser/user?userId=",
-        widget.userId,
+
+    await PutMethod.putRequest(
+        "http://192.168.0.41:8081/manageUser/updateUser?userId=","USR20230420100343328",
         jsonEncode({
           'userFirstName': firstNameController.text,
           'userLastName': lastNameController.text,
@@ -135,9 +154,10 @@ dynamic selectedState;
           'userCity': cityController.text,
           'userGender': selectedGender,
           'userState' : selectedState,
-        }));
+        })
+        );
 
-    // print("Success");
+    print("Success");
   }
 
   @override
@@ -356,8 +376,12 @@ dynamic selectedState;
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             updateUserDetails();
+            widget.myProfilePageKey.currentState?.setState(() {
+              
+            });
             Navigator.pop(context);
             Navigator.pop(context);
+            // Navigator.popUntil(context, ModalRoute.withName('/MyProfilePage'));
           },
           label: const Text("Update"),
         ),
@@ -365,3 +389,6 @@ dynamic selectedState;
     );
   }
 }
+
+
+              
