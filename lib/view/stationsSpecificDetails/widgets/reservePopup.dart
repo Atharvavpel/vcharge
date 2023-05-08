@@ -14,16 +14,22 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 class ReservePopUp extends StatefulWidget {
   String stationId;
   String stationName;
+  String stationHostId;
+  String stationVendorId;
   String stationLocation;
   ChargerModel chargerModel;
+  String connectorSocket;
   String userId;
 
   ReservePopUp(
       {required this.userId,
       required this.stationId,
       required this.stationName,
+      required this.stationHostId,
+      required this.stationVendorId,
       required this.stationLocation,
       required this.chargerModel,
+      required this.connectorSocket,
       super.key});
 
   @override
@@ -39,7 +45,7 @@ class ReservePopUpState extends State<ReservePopUp> {
   DateTime selectedTimeSlot = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
   List<DateTime>? timeSlotsList;
-  String? walletAmount;
+  double? walletAmount;
 
   @override
   void initState() {
@@ -52,9 +58,10 @@ class ReservePopUpState extends State<ReservePopUp> {
     super.initState();
   }
 
-  Future<void> postBooking(body) async {
+  Future<int> postBooking(body) async {
     var data = await PostMethod.postRequest(
-        'http://192.168.0.46:9090/vst1/booking', body);
+        'http://192.168.0.41:4040/manageBooking/booking', body);
+    return data;
   }
 
   Future<void> getWalletAmount() async {
@@ -297,7 +304,7 @@ class ReservePopUpState extends State<ReservePopUp> {
                         walletAmount == null
                             ? const CircularProgressIndicator()
                             : Text(
-                                walletAmount!,
+                                '$walletAmount',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize:
@@ -324,29 +331,35 @@ class ReservePopUpState extends State<ReservePopUp> {
             Container(
               alignment: Alignment.center,
               child: ElevatedButton(
-                onPressed: () {
-                  postBooking(jsonEncode({
+                onPressed: () async {
+                  var response = await postBooking(jsonEncode({
                     "bookingType": "Reservation",
+                    "bookingHostId": widget.stationHostId,
+                    "bookingCustomerId": widget.userId,
                     "bookingStationId": widget.stationId,
                     "bookingDate":
                         DateFormat("yyyy-MM-dd").format(selectedDate),
                     "bookingTime":
                         DateFormat("HH:mm:ss").format(selectedTimeSlot),
+                    "bookingSocket": widget.connectorSocket,
+                    "bookingStatus": "confirmed",
                   }));
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ReservationDonePopUp(
-                          stationName: widget.stationName,
-                          chargerSerialNumber:
-                              chargerModel!.chargerSerialNumber!,
-                          stationLocation: widget.stationLocation,
-                          bookingId: 'BKG0012324',
-                          bookginStatus: 'Confirmed',
-                          bookingDate: selectedDate,
-                          bookingTime: selectedTimeSlot,
-                        );
-                      });
+                  if (response == 200) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ReservationDonePopUp(
+                            stationName: widget.stationName,
+                            chargerSerialNumber:
+                                chargerModel!.chargerSerialNumber!,
+                            stationLocation: widget.stationLocation,
+                            bookingId: 'BKG0012324',
+                            bookginStatus: 'Confirmed',
+                            bookingDate: selectedDate,
+                            bookingTime: selectedTimeSlot,
+                          );
+                        });
+                  }
                 },
                 child: const Text(
                   'Reserve',

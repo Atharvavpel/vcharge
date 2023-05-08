@@ -61,7 +61,7 @@ class UpcomingBookingDetailsPopUpState
 
         //ListTile for station name, address and direction icon
         Expanded(
-          flex: 10,
+          flex: 6,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
             child: ListTile(

@@ -48,10 +48,10 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   Future<void> getChargerList() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.43:8080/manageStation/getStationChargers?stationId=${stationId}');
+          'http://192.168.0.43:8080/manageCharger/getChargers?stationId=${stationId}');
       if (data != null) {
         setState(() {
-          for(int i=0; i<data.length; i++){
+          for (int i = 0; i < data.length; i++) {
             chargerList.add(ChargerModel.fromJson(data[i]));
           }
         });
@@ -93,7 +93,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
       throw 'Could not launch $url';
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -193,7 +193,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   flex: 2,
                                   child: InkWell(
                                     onTap: () {
-                                      _makePhoneCall('tel: ${stationDetails!.stationContactNumber}');
+                                      _makePhoneCall(
+                                          'tel: ${stationDetails!.stationContactNumber}');
                                     },
                                     child: Container(
                                       child: const Icon(Icons.call),
@@ -693,7 +694,10 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                                 stationLocation: stationDetails!.stationArea!,
                                                                                 chargerModel: chargerList[index],
                                                                                 userId: widget.userId,
-                                                                                stationId: stationDetails!.stationId!,
+                                                                                stationId: stationDetails!.stationId!, 
+                                                                                stationHostId: stationDetails!.stationHostId!,
+                                                                                stationVendorId: stationDetails!.stationVendorId!,
+                                                                                connectorSocket: chargerList[index].connectors![connector].connectorSocket!,
                                                                               ),
                                                                             );
                                                                           },
@@ -733,7 +737,6 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                       ),
                     ),
                   ),
-                
                 ],
               ),
       ),

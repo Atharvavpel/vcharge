@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/models/bookingModel.dart';
 import 'package:vcharge/services/GetMethod.dart';
+import 'package:vcharge/view/reservationsScreen/widgets/bookingHistoryDetailsPopUp.dart';
 import 'package:vcharge/view/reservationsScreen/widgets/upcomingBookingDetailsPopUp.dart';
 
 class ReservationScreen extends StatefulWidget {
@@ -28,12 +29,12 @@ class ReservationScreenState extends State<ReservationScreen> {
     // TODO: implement initState
     super.initState();
     getbookingDetails();
-    getStationNameAndAddress();
+    getStationNameAndAddress('STN20230505105447818');
   }
 
-  Future<void> getStationNameAndAddress() async {
+  Future<void> getStationNameAndAddress(String stationId) async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.43:8080/manageStation/getStation?stationId=STN20230502102753410');
+        'http://192.168.0.43:8080/manageStation/getStation?stationId=$stationId');
     stationName = data['stationName'];
     stationAddress =
         '${data['stationAddressLineOne']}, ${data['stationAddressLineTwo']}, ${data['stationCity']}';
@@ -41,7 +42,7 @@ class ReservationScreenState extends State<ReservationScreen> {
 
   Future<void> getbookingDetails() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.46:4040/managebooking/bookingscustomer?bookingCustomerId=${widget.userId}');
+        'http://192.168.0.41:4040/manageBooking/bookingsCustomer?bookingCustomerId=${widget.userId}');
     if (data != null && data.isNotEmpty) {
       setState(() {
         for (int i = 0; i < data.length; i++) {
@@ -154,7 +155,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    color: Color.fromARGB(255, 235, 255, 254),
+                                    color: const Color.fromARGB(255, 235, 255, 254),
                                     margin: EdgeInsets.symmetric(
                                         horizontal: Get.width * 0.02,
                                         vertical: Get.height * 0.01),
@@ -202,7 +203,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         Card(
                                                             elevation: 0,
                                                             color:
-                                                                Color.fromARGB(
+                                                                const Color.fromARGB(
                                                                     255,
                                                                     203,
                                                                     255,
@@ -256,7 +257,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         Card(
                                                             elevation: 0,
                                                             color:
-                                                                Color.fromARGB(
+                                                                const Color.fromARGB(
                                                                     255,
                                                                     203,
                                                                     255,
@@ -359,18 +360,24 @@ class ReservationScreenState extends State<ReservationScreen> {
                             })
                     : //List for history
                     bookingHistoryList.isEmpty
-                        ? const CircularProgressIndicator()
+                        ? const Center(child: CircularProgressIndicator())
                         : ListView.builder(
                             itemCount: bookingHistoryList.length,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context){
+                                    return BookingHistoryDetailsPopUp(bookingModel: bookingHistoryList[index], stationName: stationName!,);
+                                  });
+                                },
                                 child: Card(
                                     elevation: 3,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    color: Color.fromARGB(255, 235, 255, 254),
+                                    color: const Color.fromARGB(255, 235, 255, 254),
                                     margin: EdgeInsets.symmetric(
                                         horizontal: Get.width * 0.02,
                                         vertical: Get.height * 0.01),
@@ -381,13 +388,12 @@ class ReservationScreenState extends State<ReservationScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           //Station Name
-                                          // Text(
-                                          //   bookingHistoryList[index]
-                                          //       .bookingStationName!,
-                                          //   style: TextStyle(
-                                          //       fontWeight: FontWeight.bold,
-                                          //       fontSize: Get.width * 0.05),
-                                          // ),
+                                          Text(
+                                            stationName!,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: Get.width * 0.05),
+                                          ),
 
                                           //Row for booking ID, socket Type, and booking Status
                                           Container(
@@ -419,7 +425,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         Card(
                                                             elevation: 0,
                                                             color:
-                                                                Color.fromARGB(
+                                                                const Color.fromARGB(
                                                                     255,
                                                                     203,
                                                                     255,
@@ -473,7 +479,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         Card(
                                                             elevation: 0,
                                                             color:
-                                                                Color.fromARGB(
+                                                                const Color.fromARGB(
                                                                     255,
                                                                     203,
                                                                     255,
@@ -582,7 +588,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                 //Row for amount paid
                                                 Row(
                                                   children: [
-                                                    Text(
+                                                    const Text(
                                                       'Amount Paid',
                                                       style: TextStyle(
                                                           fontWeight:
@@ -590,7 +596,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                     ),
                                                     Card(
                                                         elevation: 0,
-                                                        color: Color.fromARGB(
+                                                        color: const Color.fromARGB(
                                                             255, 203, 255, 204),
                                                         child: Padding(
                                                           padding: EdgeInsets
@@ -601,7 +607,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                                   horizontal:
                                                                       Get.width *
                                                                           0.015),
-                                                          child: Text(
+                                                          child: const Text(
                                                             'Rs. 300',
                                                             style: TextStyle(
                                                                 fontWeight:

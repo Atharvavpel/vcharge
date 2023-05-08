@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import 'cancelReservationPopUp.dart';
+import 'cancelReservationPopUp2.dart';
 
 class CancleReservAlertPopUp extends StatelessWidget {
   @override
@@ -32,15 +32,16 @@ class CancleReservAlertPopUp extends StatelessWidget {
       actions: [
         InkWell(
           onTap: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
+            Navigator.of(context).pop();
             showModalBottomSheet(
+              useSafeArea: true,
+              isScrollControlled: true,
               context: context, 
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
               ),
               builder: (context){
-              return CancelReservtionPopUp();
+              return SafeArea(child: CancelReservtionPopUp());
             });
           },
           child: Container(
