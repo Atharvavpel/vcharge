@@ -6,11 +6,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/putMethod.dart';
+import 'package:vcharge/services/redisConnection.dart';
 import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class EditProfileScreen extends StatefulWidget {
-
-  final GlobalKey<MyProfilePageState> myProfilePageKey;
 
 
   String userId;
@@ -21,12 +20,13 @@ class EditProfileScreen extends StatefulWidget {
   String? contactNoEdited;
 
   EditProfileScreen({super.key, 
+  
+
                     required this.userId, 
                     required this.firstNameEdited,
                     required this.lastNameEdited,
                     required this.contactNoEdited,
                     required this.emailIdEdited,
-                    required this.myProfilePageKey
                 });
 
   @override
@@ -154,10 +154,17 @@ dynamic selectedState;
           'userCity': cityController.text,
           'userGender': selectedGender,
           'userState' : selectedState,
+
+          
+
         })
         );
 
-    print("Success");
+    RedisConnection.set('firstName', firstNameController.text);
+    RedisConnection.set('lastName', lastNameController.text);
+    RedisConnection.set('emailId', emailController.text);
+
+
   }
 
   @override
@@ -355,7 +362,6 @@ dynamic selectedState;
       setState(() {
         selectedState = value as String; // Update the currently selected value in the dropdown
         cityController.text = ''; // Clear the city field when the state changes
-        print("the value of selectedState is: $selectedState");
       });
     },
     decoration: const InputDecoration(
@@ -376,12 +382,13 @@ dynamic selectedState;
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             updateUserDetails();
-            widget.myProfilePageKey.currentState?.setState(() {
-              
-            });
             Navigator.pop(context);
             Navigator.pop(context);
             // Navigator.popUntil(context, ModalRoute.withName('/MyProfilePage'));
+            // Navigator.push(
+            //   context, 
+            //   MaterialPageRoute(builder: (context)=> MyProfilePage(userId: widget.userId))
+            // );
           },
           label: const Text("Update"),
         ),

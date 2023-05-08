@@ -3,11 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/passwordScreen/changePasswordScreen.dart';
 import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
-import 'package:vcharge/view/profileScreen/myProfile.dart';
+import 'package:vcharge/view/profileScreen/userProfile.dart';
 
 class SettingPage extends StatefulWidget {
 
-  final GlobalKey<MyProfilePageState> myProfilePageKey;
 
   String userId;
   String? firstNameEdited;
@@ -15,12 +14,13 @@ class SettingPage extends StatefulWidget {
   String? emailIdEdited;
   String? contactNoEdited;
 
-  SettingPage({super.key, required this.userId,
+  SettingPage({super.key, 
+  
+                    required this.userId,
                     required this.firstNameEdited,
                     required this.lastNameEdited,
                     required this.contactNoEdited,
                     required this.emailIdEdited,
-                    required this.myProfilePageKey
                     });
 
   @override
@@ -79,7 +79,6 @@ class _SettingPageState extends State<SettingPage> {
                           lastNameEdited: widget.lastNameEdited.toString(),
                           emailIdEdited: widget.emailIdEdited.toString(),
                           contactNoEdited: widget.contactNoEdited.toString(),
-                          myProfilePageKey: widget.myProfilePageKey,
                         ))),
                   );
                   });

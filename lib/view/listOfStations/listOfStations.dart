@@ -13,6 +13,7 @@ import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dar
 
 class ListOfStations extends StatefulWidget {
   String userId;
+
   ListOfStations({required this.userId, super.key});
 
   @override
@@ -23,7 +24,7 @@ class ListOfStationsState extends State<ListOfStations> {
   //stores current location of user
   LatLng? userPosition;
 
-  String getStationUrl = 'http://192.168.0.43:8080/manageStation/getRequiredStationsDetails';
+  String getStationUrl = 'http://192.168.0.43:8080/manageStation/getStationInterface';
 
   @override
   void initState() {
@@ -39,10 +40,10 @@ class ListOfStationsState extends State<ListOfStations> {
   List<double> userToStationDistanceList = [];
 
   //this list store the list of station and distance
-  List<Map<String, dynamic>> sortedStationDistanceList = [];
+  static List<Map<String, dynamic>> sortedStationDistanceList = [];
 
   //this list container the list of sorted station
-  List<RequiredStationDetailsModel> sortedStationList = [];
+  static List<RequiredStationDetailsModel> sortedStationList = [];
 
   //get current location of the user
   Future<void> getLocationOfUser() async {

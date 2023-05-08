@@ -69,8 +69,6 @@ class MyProfilePage extends StatefulWidget {
 
 class MyProfilePageState extends State<MyProfilePage> {
 
-final GlobalKey<MyProfilePageState> myProfilePageKey = GlobalKey<MyProfilePageState>();
-
 // variables for storing the REST API
 
   // String specificUserIdUrl = '';
@@ -83,7 +81,6 @@ final GlobalKey<MyProfilePageState> myProfilePageKey = GlobalKey<MyProfilePageSt
   void initState() {
     super.initState();
     setState(() {
-      print("in the set state of myprofile"); 
     });
     // specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}";
     getUserData();
@@ -115,17 +112,27 @@ Future<void> getUserData() async {
   emailId = response['userEmail'];
 
 
-    cmd = await client.connect('192.168.0.49', 6379);
+    cmd = await client.connect('192.168.0.206', 6379);
     await cmd.send_object(['SET','profilePhoto', profilePhoto]);
     await cmd.send_object(['SET','firstName', firstName]);
     await cmd.send_object(['SET','lastName', lastName]);
     await cmd.send_object(['SET','emailId', emailId]);
     await cmd.send_object(['SET','contactNo', contactNo]);
     client.close();
+
+  // UserProfile userProfile = UserProfile(firstName: firstName, lastName: lastName, emailId: emailId);
+
   setState(() {
     
   });
 }
+
+void updateUserProfile(){
+  setState(() {
+    print("inside the update profile function");
+  });
+}
+
 
 // variable for picking the image from the gallery or camera
   final ImagePicker picker = ImagePicker();
@@ -135,7 +142,7 @@ Future<void> getUserData() async {
 
 // function for gallery and camera permissions
   Future<void> requestPermissions() async {
-    Map<Permission, PermissionStatus> statuses = await [
+    Map<Permission, PermissionStatus> status = await [
       Permission.camera,
       Permission.storage,
     ].request();
@@ -297,7 +304,6 @@ Future<void> getUserData() async {
                               lastNameEdited: lastName,
                               contactNoEdited: contactNo,
                               emailIdEdited: emailId,
-                              myProfilePageKey: myProfilePageKey,
                               ))));
                 },
                 icon: const Icon(
