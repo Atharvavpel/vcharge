@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:vcharge/main.dart';
 import 'package:vcharge/models/stationModel.dart';
-import 'package:vcharge/services/getMethod.dart';
+import 'package:vcharge/services/getMethod.dart'; 
 import 'package:latlong2/latlong.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 
@@ -13,7 +13,7 @@ class SearchingWidget extends SearchDelegate {
     if (keyword.length < 2) return [];
 
     final url =
-        "http://192.168.0.43:8081/vst1/manageStation/search?query=$keyword";
+        "http://192.168.0.43:8080/manageStation/getStationsByKeyword?query=$keyword";
     final response = await GetMethod.getRequest(url);
     return response;
   }
@@ -70,8 +70,8 @@ class SearchingWidget extends SearchDelegate {
                   children: [
                     Text(item['stationName']),
                     Text(item['stationId']),
-                    Text(item['stationLatitude']),
-                    Text(item['stationLongitude']),
+                    Text('${item['stationLatitude']}'),
+                    Text('${item['stationLongitude']}'),
                     Text(item['stationStatus']),
                     Text(item['stationArea']),
                     const Divider(height: 10,),

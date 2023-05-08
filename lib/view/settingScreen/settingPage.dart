@@ -3,12 +3,25 @@ import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/passwordScreen/changePasswordScreen.dart';
 import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
+import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 class SettingPage extends StatefulWidget {
 
+  final GlobalKey<MyProfilePageState> myProfilePageKey;
+
   String userId;
-  dynamic emailId;
-  SettingPage({super.key, required this.userId, required this.emailId});
+  String? firstNameEdited;
+  String? lastNameEdited;
+  String? emailIdEdited;
+  String? contactNoEdited;
+
+  SettingPage({super.key, required this.userId,
+                    required this.firstNameEdited,
+                    required this.lastNameEdited,
+                    required this.contactNoEdited,
+                    required this.emailIdEdited,
+                    required this.myProfilePageKey
+                    });
 
   @override
   State<SettingPage> createState() => _SettingPageState();
@@ -57,11 +70,20 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.only(left: 5, right: 5),
               child: ListTile(
                 onTap: () {
-                  Navigator.push(
+                  setState(() {
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: ((context) => EditProfileScreen(userId: widget.userId.toString(),))),
+                        builder: ((context) => EditProfileScreen(userId: widget.userId.toString(),
+                          firstNameEdited: widget.firstNameEdited.toString(),
+                          lastNameEdited: widget.lastNameEdited.toString(),
+                          emailIdEdited: widget.emailIdEdited.toString(),
+                          contactNoEdited: widget.contactNoEdited.toString(),
+                          myProfilePageKey: widget.myProfilePageKey,
+                        ))),
                   );
+                  });
+                  
                 },
                 title: const Text(
                   "Edit Profile",
@@ -88,7 +110,9 @@ class _SettingPageState extends State<SettingPage> {
               child: ListTile(
                 onTap: () {
                   Navigator.push(context, 
-                    MaterialPageRoute(builder: (context)=> ChangePasswordScreen(emailId: widget.emailId.toString()) )
+                    MaterialPageRoute(builder: (context)=> ChangePasswordScreen(
+                      emailId: widget.emailIdEdited.toString()
+                    ) )
                   );
                 },
                 title: const Text(

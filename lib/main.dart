@@ -6,7 +6,7 @@ import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 
 void main() {
-  runApp(
+  runApp( 
     const MyApp(),
   );
 }

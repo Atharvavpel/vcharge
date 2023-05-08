@@ -52,10 +52,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vcharge/services/GetMethod.dart';
-import 'package:vcharge/services/redisConnection.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:redis/redis.dart' as redis;
 
 
 class MyProfilePage extends StatefulWidget {
@@ -69,23 +69,26 @@ class MyProfilePage extends StatefulWidget {
 
 class MyProfilePageState extends State<MyProfilePage> {
 
-
-
+final GlobalKey<MyProfilePageState> myProfilePageKey = GlobalKey<MyProfilePageState>();
 
 // variables for storing the REST API
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230410143236933";
+      "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230420100343328";
 
 
 // initstate function calling the getuserData method
   @override
   void initState() {
     super.initState();
+    setState(() {
+      print("in the set state of myprofile"); 
+    });
     // specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}";
-    // getUserData();
+    getUserData();
   }
+
 
 // variables for storing the only displaying user details
   String firstName = '';
@@ -94,21 +97,35 @@ class MyProfilePageState extends State<MyProfilePage> {
   String emailId = '';
   var profilePhoto = '';
 
+// Client variable for redis connection
+dynamic client;
+
+// Command variable for redis connection
+dynamic cmd;
+
 Future<void> getUserData() async {
+
+  client = redis.RedisConnection();
   final response = await GetMethod.getRequest(specificUserIdUrl);
 
-  await RedisConnection.set("profilePhoto", response['userProfilePhoto']);
-  await RedisConnection.set("firstName", response['userFirstName']);
-  await RedisConnection.set("lastName", response['userLastName']);
-  await RedisConnection.set("contactNo", response['userContactNo']);
-  await RedisConnection.set("emailId", response['userEmailId']);
+  profilePhoto = response['userProfilePhoto'];
+  firstName = response['userFirstName'];
+  lastName = response['userLastName'];
+  contactNo = response['userContactNo'];
+  emailId = response['userEmail'];
+
+
+    cmd = await client.connect('192.168.0.49', 6379);
+    await cmd.send_object(['SET','profilePhoto', profilePhoto]);
+    await cmd.send_object(['SET','firstName', firstName]);
+    await cmd.send_object(['SET','lastName', lastName]);
+    await cmd.send_object(['SET','emailId', emailId]);
+    await cmd.send_object(['SET','contactNo', contactNo]);
+    client.close();
   setState(() {
     
   });
 }
-
-
-dynamic profiePhoto = RedisConnection.get("profilePhoto");
 
 // variable for picking the image from the gallery or camera
   final ImagePicker picker = ImagePicker();
@@ -276,7 +293,11 @@ dynamic profiePhoto = RedisConnection.get("profilePhoto");
                       MaterialPageRoute(
                           builder: ((context) =>
                               SettingPage(userId: widget.userId.toString(),
-                              emailId: RedisConnection.get("emailId"),
+                              firstNameEdited: firstName,
+                              lastNameEdited: lastName,
+                              contactNoEdited: contactNo,
+                              emailIdEdited: emailId,
+                              myProfilePageKey: myProfilePageKey,
                               ))));
                 },
                 icon: const Icon(
@@ -354,9 +375,9 @@ dynamic profiePhoto = RedisConnection.get("profilePhoto");
                       ), //BoxShadow
                     ],
                         image: DecorationImage(
-                            image: NetworkImage("https://i.ibb.co/72mwSwS/WIN-20230410-18-16-42-Pro.jpg"), fit: BoxFit.cover),
+                            image: NetworkImage(profilePhoto), fit: BoxFit.cover),
                         shape: BoxShape.rectangle,
-                        color: Color(0xffD6D6D6)),
+                        color: const Color(0xffD6D6D6)),
                   )),
       ),
     );
@@ -402,19 +423,19 @@ dynamic profiePhoto = RedisConnection.get("profilePhoto");
           children: [
 
             // container for name
-            textContainer('Name', Icons.person_outlined, 'Sneha Matke',
+            textContainer('Name', Icons.person_outlined, " $firstName $lastName",
                 (String? input) {}),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
 
             // container for contact no
-            textContainer('Contact No', Icons.home_outlined, "324242342234",
+            textContainer('Contact No', Icons.home_outlined, contactNo,
                 (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
 
             // container for email id
-            textContainer('Email id', Icons.card_travel, "snehal@gmail.com",
+            textContainer('Email id', Icons.card_travel, emailId,
                 (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
