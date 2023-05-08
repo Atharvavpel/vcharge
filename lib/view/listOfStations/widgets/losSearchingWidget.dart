@@ -10,7 +10,7 @@ class losSearchingWidget extends SearchDelegate{
     if (keyword.length < 2) return [];
 
     final url =
-        "http://192.168.0.43:8081/vst1/manageStation/search?query=$keyword";
+        "http://192.168.0.243:8096/vst1/manageStation/search?query=$keyword";
     final response = await GetMethod.getRequest(url);
     return response;
   }

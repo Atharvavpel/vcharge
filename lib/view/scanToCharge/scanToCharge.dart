@@ -47,7 +47,7 @@ class ScanToChargeState extends State<ScanToCharge> {
 // function for fetching the wallet amount 
   Future<void> getWalletAmount() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.41:8081/manageUser/getWallet?userId=${widget.userId}');
+        'http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}');
     if (data != null) {
       setState(() {
         walletAmount = data['walletAmount'].toString();

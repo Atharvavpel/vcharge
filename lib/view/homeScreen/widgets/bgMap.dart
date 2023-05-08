@@ -32,7 +32,7 @@ class BgMap extends StatefulWidget {
 }
 
 class BgMapState extends State<BgMap> with TickerProviderStateMixin {
-  String url_temp = 'http://192.168.0.43:8080/manageStation/stations';
+  String url_temp = 'http://192.168.0.243:8096/manageStation/stations';
 
   // the user's live location data
   static LatLng? userLocation;
@@ -260,7 +260,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
                         BgMapState.mapController.bounds!.northEast!,
                         BgMapState.mapController.bounds!.southWest!) *1000;
                 getStationData(
-                    'http://192.168.0.43:8080/manageStation/getStationsLocation?longitude=$long&latitude=$lat&maxDistance=$dist');
+                    'http://192.168.0.243:8096/manageStation/getStationsLocation?longitude=$long&latitude=$lat&maxDistance=$dist');
               }
             });
             // BgMapState.userLocation = mapController.center;

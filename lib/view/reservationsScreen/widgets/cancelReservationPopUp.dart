@@ -152,7 +152,7 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   var response = await PutMethod.putRequest(
-                      'http://192.168.0.46:4040/managebooking/booking?bookingId=',
+                      'http://192.168.0.243:8099/managebooking/booking?bookingId=',
                       bookingModel!.bookingId!,
                       jsonEncode({
                         "bookingCancellationReason":

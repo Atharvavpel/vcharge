@@ -20,7 +20,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
   Future<void> getFavouriteList() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.41:8081/manageUser/getFavorites?userId=${widget.userId}');
+          'http://192.168.0.243:8097/manageUser/getFavorites?userId=${widget.userId}');
       if (data != null && data.isNotEmpty) {
         favouriteList.clear();
         setState(() {

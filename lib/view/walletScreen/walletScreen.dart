@@ -44,7 +44,7 @@ class WalletScreenState extends State<WalletScreen> {
 
   Future<void> getUserName() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.41:8081/manageUser/getUser?userId=${widget.userId}');
+        'http://192.168.0.243:8097/manageUser/getUser?userId=${widget.userId}');
     if (data != null) {
       setState(() {
         userFirstName = data['userFirstName'];
@@ -56,7 +56,7 @@ class WalletScreenState extends State<WalletScreen> {
   //fetch the wallet details according to userId and store it to walletDetail variable
   Future<void> getWalletDetails() async {
     var data = await GetMethod.getRequest(
-        "http://192.168.0.41:8081/manageUser/getWallet?userId=${widget.userId}");
+        "http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}");
         
     // print(data);
     setState(() {
@@ -71,7 +71,7 @@ class WalletScreenState extends State<WalletScreen> {
   Future<void> getTransactionDetails() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.41:8081/manageUser/getTransaction?userId=${widget.userId}');
+          'http://192.168.0.243:8097/manageUser/getTransaction?userId=${widget.userId}');
       setState(() {
         if (data != null) {
           for (int i = 0; i < data.length; i++) {

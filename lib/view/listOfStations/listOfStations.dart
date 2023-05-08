@@ -23,7 +23,7 @@ class ListOfStationsState extends State<ListOfStations> {
   //stores current location of user
   LatLng? userPosition;
 
-  String getStationUrl = 'http://192.168.0.43:8080/manageStation/getStations';
+  String getStationUrl = 'http://192.168.0.243:8096/manageStation/getStations';
 
   @override
   void initState() {

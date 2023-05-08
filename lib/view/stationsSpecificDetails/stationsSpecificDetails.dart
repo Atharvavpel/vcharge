@@ -39,7 +39,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   Future<void> getStationDetails() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.43:8080/manageStation/getStation?stationId=${widget.stationId}');
+        'http://192.168.0.243:8096/manageStation/getStation?stationId=${widget.stationId}');
     setState(() {
       stationDetails = StationModel.fromJson(data);
     });
@@ -48,7 +48,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   Future<void> getChargerList() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.43:8080/manageCharger/getChargers?stationId=${stationId}');
+          'http://192.168.0.243:8096/manageCharger/getChargers?stationId=${stationId}');
       if (data != null) {
         setState(() {
           for (int i = 0; i < data.length; i++) {

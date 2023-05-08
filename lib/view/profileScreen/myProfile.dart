@@ -73,7 +73,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230420100343328";
+      "http://192.168.0.243:8097/manageUser/getUser?userId=USR20230420100343328";
 
 
 // initstate function calling the getuserData method
@@ -82,7 +82,7 @@ class MyProfilePageState extends State<MyProfilePage> {
     super.initState();
     setState(() {
     });
-    // specificUserIdUrl = "http://192.168.0.41:8081/manageUser/user?userId=${widget.userId}";
+    // specificUserIdUrl = "http://192.168.0.243:8097/manageUser/user?userId=${widget.userId}";
     getUserData();
   }
 

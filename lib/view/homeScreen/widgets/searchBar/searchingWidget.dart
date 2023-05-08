@@ -20,7 +20,7 @@ class SearchingWidget extends SearchDelegate {
     if (keyword.length < 2) return [];
 
     final url =
-        "http://192.168.0.43:8080/manageStation/getStationsByKeyword?query=$keyword";
+        "http://192.168.0.243:8096/manageStation/getStationsByKeyword?query=$keyword";
     final response = await GetMethod.getRequest(url);
     return response;
   }

@@ -58,7 +58,7 @@ class FAQWidgetState extends State<FAQWidget> {
     super.initState();
   }
 
-  String specificUrl = "http://192.168.0.41:8083/managefaq/faqs";
+  String specificUrl = "http://192.168.0.243:8098/managefaq/faqs";
 
   Future<void> getFaqDetails() async {
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vcharge/view/homeScreen/widgets/horizontalSideBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/searchBar/searchingWidget.dart';
-import 'package:vcharge/view/listOfStations/listOfStations.dart';
 import 'package:vcharge/view/profileScreen/myProfile.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,7 +36,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
 // function for finding relevant results against the searches
   Future<void> fetchData(String keyword) async {
     String url =
-        "http://192.168.0.43:8081/vst1/manageStation/search?query=$keyword";
+        "http://192.168.0.243:8096/vst1/manageStation/search?query=$keyword";
 
     final response = await http.get(Uri.parse(url));
 

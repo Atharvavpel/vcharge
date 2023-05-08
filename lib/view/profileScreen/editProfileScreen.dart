@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -93,7 +94,7 @@ dynamic selectedState;
     getUserData();
   }
 
-  String specificUrl = "http://192.168.0.41:8081/manageUser/getUser?userId=USR20230420100343328";
+  String specificUrl = "http://192.168.0.243:8097/manageUser/getUser?userId=USR20230420100343328";
 
   
 
@@ -143,7 +144,7 @@ dynamic selectedState;
   Future updateUserDetails() async {
 
     var response = await PutMethod.putRequest(
-        "http://192.168.0.41:8081/manageUser/updateUser?userId=","USR20230420100343328",
+        "http://192.168.0.243:8097/manageUser/updateUser?userId=","USR20230420100343328",
         jsonEncode({
           'userFirstName': firstNameController.text,
           'userLastName': lastNameController.text,
@@ -157,8 +158,31 @@ dynamic selectedState;
 
           
 
+          
+
         })
         );
+
+
+        (response==200)? 
+        Fluttertoast.showToast(
+          msg: " Data updated successfully",
+          // msg: "Successfully Created",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0) : 
+
+        Fluttertoast.showToast(
+          msg: " Updation failed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
 
     RedisConnection.set('firstName', firstNameController.text);
     RedisConnection.set('lastName', lastNameController.text);

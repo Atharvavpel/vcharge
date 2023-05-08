@@ -29,7 +29,7 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
   Future<void> getVehicleData() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.41:8081/manageUser/getVehicle?userId=${widget.userId}');
+          'http://192.168.0.243:8097/manageUser/getVehicle?userId=${widget.userId}');
       setState(() {
         if (data != null) {
           for (int i = 0; i < data.length; i++) {
