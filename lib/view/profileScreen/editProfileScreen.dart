@@ -142,7 +142,7 @@ dynamic selectedState;
 // function for updating the specific user data
   Future updateUserDetails() async {
 
-    await PutMethod.putRequest(
+    var response = await PutMethod.putRequest(
         "http://192.168.0.41:8081/manageUser/updateUser?userId=","USR20230420100343328",
         jsonEncode({
           'userFirstName': firstNameController.text,

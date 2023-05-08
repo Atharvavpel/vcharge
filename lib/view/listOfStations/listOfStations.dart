@@ -10,7 +10,6 @@ import 'dart:math' as Math;
 import 'package:vcharge/view/listOfStations/widgets/searchBarOfLOS.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
-
 class ListOfStations extends StatefulWidget {
   String userId;
 
@@ -24,13 +23,18 @@ class ListOfStationsState extends State<ListOfStations> {
   //stores current location of user
   LatLng? userPosition;
 
-  String getStationUrl = 'http://192.168.0.43:8080/manageStation/getStationInterface';
+  String getStationUrl = 'http://192.168.0.43:8080/manageStation/getStations';
 
   @override
   void initState() {
     super.initState();
     // getStationList();
     sortStationList();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
   }
 
   //this list store the list of stations
@@ -54,7 +58,7 @@ class ListOfStationsState extends State<ListOfStations> {
   }
 
   Future<void> getStationList(String url) async {
-   try {
+    try {
       var data = await GetMethod.getRequest(url);
       if (data.isNotEmpty) {
         print('Data Not Empty');
@@ -65,8 +69,7 @@ class ListOfStationsState extends State<ListOfStations> {
         setState(() {
           BgMapState.getMarkersDetails(context, stationsList);
         });
-      }
-      else{
+      } else {
         print("Empty Data");
       }
     } catch (e) {
@@ -99,17 +102,14 @@ class ListOfStationsState extends State<ListOfStations> {
     return deg * (Math.pi / 180);
   }
 
-
   //this function calculate distance from user to each station and store it in userToStationDistanceList
   Future<void> getDistanceList() async {
     await getStationList(getStationUrl);
     await getLocationOfUser();
 
     userToStationDistanceList = stationsList.map((station) {
-      return getDistanceFromUser(
-          userPosition!,
-          LatLng(station.stationLatitude!,
-              station.stationLongitude!));
+      return getDistanceFromUser(userPosition!,
+          LatLng(station.stationLatitude!, station.stationLongitude!));
     }).toList();
   }
 
@@ -185,8 +185,8 @@ class ListOfStationsState extends State<ListOfStations> {
                                               builder: (context) =>
                                                   StationsSpecificDetails(
                                                     stationId:
-                                                        sortedStationList[
-                                                            index].stationId!,
+                                                        sortedStationList[index]
+                                                            .stationId!,
                                                     userId: widget.userId,
                                                   )));
                                     },
@@ -232,8 +232,8 @@ class ListOfStationsState extends State<ListOfStations> {
                                                       .size
                                                       .width *
                                                   0.02,
-                                              backgroundColor:
-                                                  AvaliblityColor.getAvailablityColor(
+                                              backgroundColor: AvaliblityColor
+                                                  .getAvailablityColor(
                                                       sortedStationList[index]
                                                           .stationStatus!),
                                             ),

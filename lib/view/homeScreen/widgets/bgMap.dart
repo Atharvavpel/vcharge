@@ -247,10 +247,8 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
           zoom: 15.0,
           //by this command, the map will not be able to rotate
           interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-          onMapReady: () {
-            getLocation();
-            getStationData(
-                    'http://192.168.0.43:8080/manageStation/getStationsLocation?longitude=${BgMapState.mapController.center.longitude}&latitude=${BgMapState.mapController.center.latitude}&maxDistance=5000');
+          onMapReady: () async {
+            await getLocation();
             subscription =
                 mapController.mapEventStream.listen((MapEvent mapEvent) {
               if (mapEvent is MapEventMoveEnd) {

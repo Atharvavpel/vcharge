@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:vcharge/services/PutMethod.dart';
 
 import '../../../models/bookingModel.dart';
 import 'cancelReservAlertPopUp.dart';
@@ -38,19 +41,20 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Form(
         key: formKey,
-        child: Wrap(children: [
+        child: Column(children: [
           //"Booking Details" Heading text
           Container(
             width: double.infinity,
             decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 113, 174, 76),
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10))),
             child: Center(
                 child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -63,7 +67,7 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
               ),
             )),
           ),
-    
+
           //Select Reason heading
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -73,7 +77,7 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
                   fontWeight: FontWeight.bold, fontSize: Get.width * 0.05),
             ),
           ),
-    
+
           //Select Reason dropDownMenu
           Card(
             elevation: 3,
@@ -102,13 +106,13 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
                 });
               },
               validator: (value) {
-                if(value == null){
+                if (value == null) {
                   return 'Please select a reason';
                 }
               },
             ),
           ),
-    
+
           //Addition info heading
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -118,7 +122,7 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
                   fontWeight: FontWeight.bold, fontSize: Get.width * 0.05),
             ),
           ),
-    
+
           // Addition info text field
           Card(
             elevation: 3,
@@ -142,30 +146,45 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
               },
             ),
           ),
-    
+
           //Submit button
-          Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.05, vertical: Get.height * 0.01),
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: () {
-                  if(formKey.currentState!.validate()){
+          ElevatedButton(
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  var response = await PutMethod.putRequest(
+                      'http://192.168.0.46:4040/managebooking/booking?bookingId=',
+                      bookingModel!.bookingId!,
+                      jsonEncode({
+                        "bookingCancellationReason":
+                            "$selectedReason ${additionInfo.text.toString()}}",
+                        "bookingCancellationReqDate": DateTime.now(),
+                      }));
+                  if (response == 200) {
                     showDialog(
-                      barrierDismissible: false,
-                      context: context, 
-                      builder: (context){
-                      return CancellationDonePopUp();
-                    });
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return CancellationDonePopUp();
+                        });
                   }
-                  else{
-                    print('Un Successful');
-                  }
-                },
-                child: const Text('Submit'),
-              )),
+                }
+              },
+              child: const Text('Submit'))
         ]),
       ),
     );
   }
 }
+
+/*
+Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: Get.width * 0.05, vertical: Get.height * 0.01),
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: (){},
+                child: const Text('Submit'),
+              )),
+
+// 
+*/
