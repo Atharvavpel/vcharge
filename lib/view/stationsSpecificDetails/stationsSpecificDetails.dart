@@ -79,7 +79,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   }
 
   IconData getIconForAmenity(String amenity) {
-    if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms') {
+    if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms' || amenity.replaceAll(" ", "").toLowerCase() == 'restroom' ) {
       return Icons.hotel;
     } else if (amenity.toLowerCase().replaceAll(" ", "") == 'loungearea') {
       return Icons.local_cafe;
@@ -87,7 +87,19 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
       return Icons.restaurant;
     } else if (amenity.replaceAll(" ", "").toLowerCase() == 'shops') {
       return Icons.shopping_bag;
-    } else {
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'wifi') {
+      return Icons.wifi;
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'restaurants') {
+      return Icons.restaurant;
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'telephone') {
+      return Icons.call;
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'evaccessorystore' || amenity.replaceAll(" ", "").toLowerCase() == 'evaccessarystore' ) {
+      return Icons.store;
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'garden') {
+      return Icons.park_outlined;
+    }
+    
+    else {
       return Icons.abc;
     }
   }
