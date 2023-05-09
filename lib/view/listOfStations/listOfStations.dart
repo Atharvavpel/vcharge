@@ -29,11 +29,14 @@ class ListOfStationsState extends State<ListOfStations> {
   void initState() {
     super.initState();
     // getStationList();
-    sortStationList();
+    userPosition = LatLng(BgMapState.userLocation!.latitude, BgMapState.userLocation!.longitude);
+    if (mounted) {
+      sortStationList();
+    }
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
@@ -49,12 +52,17 @@ class ListOfStationsState extends State<ListOfStations> {
   //this list container the list of sorted station
   static List<RequiredStationDetailsModel> sortedStationList = [];
 
+  //this list container the list of sorted distance according to station
+  static List<double> sortedDistanceList = [];
+
   //get current location of the user
   Future<void> getLocationOfUser() async {
     var position = await GetLiveLocation.getUserLiveLocation();
-    setState(() {
-      userPosition = LatLng(position.latitude, position.longitude);
-    });
+    if (mounted) {
+      setState(() {
+        userPosition = LatLng(position.latitude, position.longitude);
+      });
+    }
   }
 
   Future<void> getStationList(String url) async {
@@ -66,9 +74,11 @@ class ListOfStationsState extends State<ListOfStations> {
         for (int i = 0; i < data.length; i++) {
           stationsList.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
-        setState(() {
-          BgMapState.getMarkersDetails(context, stationsList);
-        });
+        if (mounted) {
+          setState(() {
+            BgMapState.getMarkersDetails(context, stationsList);
+          });
+        }
       } else {
         print("Empty Data");
       }
@@ -105,7 +115,7 @@ class ListOfStationsState extends State<ListOfStations> {
   //this function calculate distance from user to each station and store it in userToStationDistanceList
   Future<void> getDistanceList() async {
     await getStationList(getStationUrl);
-    await getLocationOfUser();
+    // await getLocationOfUser();
 
     userToStationDistanceList = stationsList.map((station) {
       return getDistanceFromUser(userPosition!,
@@ -115,6 +125,12 @@ class ListOfStationsState extends State<ListOfStations> {
 
   //this function sort the stations on the basis of distance and store the result in sortedStationList
   Future<void> sortStationList() async {
+    stationsList.clear();
+    userToStationDistanceList.clear();
+    sortedStationDistanceList.clear();
+    sortedStationList.clear();
+    sortedDistanceList.clear();
+    
     await getDistanceList();
 
     // Combine the station and distance lists into a list of Map objects
@@ -127,17 +143,19 @@ class ListOfStationsState extends State<ListOfStations> {
     );
 
 // Sort the stationDistanceList based on the distance value in each Map object
-    sortedStationDistanceList
-        .sort((a, b) => a['distance'].compareTo(b['distance']));
+    sortedStationDistanceList.sort((a, b) => a['distance'].compareTo(b['distance']));
     // print(sortedStationDistanceList);
 
 // Extract the sorted station names into a new list
-    setState(() {
-      for (int i = 0; i < sortedStationDistanceList.length; i++) {
-        sortedStationList.add(sortedStationDistanceList[i]['station']);
-      }
-      print(sortedStationList);
-    });
+    if (mounted) {
+  setState(() {
+    for (int i = 0; i < sortedStationDistanceList.length; i++) {
+      sortedStationList.add(sortedStationDistanceList[i]['station']);
+      sortedDistanceList.add(sortedStationDistanceList[i]['distance']);
+    }
+    print(sortedStationList);
+  });
+}
   }
 
   @override
@@ -217,10 +235,10 @@ class ListOfStationsState extends State<ListOfStations> {
                                               0.02,
                                           children: [
                                             //text for distance
-                                            userPosition == null
+                                            sortedDistanceList[index] == null
                                                 ? const CircularProgressIndicator()
                                                 : Text(
-                                                    '${sortedStationDistanceList[index]['distance'].toStringAsFixed(2)} KM',
+                                                    '${sortedDistanceList[index].toStringAsFixed(2)} KM',
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),

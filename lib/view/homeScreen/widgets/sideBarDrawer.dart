@@ -86,7 +86,13 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const AddVehicleScreen()));
+                                      const AddVehicleScreen())).then((value) {
+                            Future.delayed(const Duration(milliseconds: 250),
+                                () {
+                              Navigator.pop(
+                                  context); // Close the drawer smoothly
+                            });
+                          });
                         },
                       ),
                     ),
@@ -157,7 +163,19 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                       child: ListTile(
                         title: const Text('Reservations'),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen(userId: widget.userId,)));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReservationScreen(
+                                        userId: widget.userId,
+                                      ))).then((value) {
+                            Future.delayed(const Duration(milliseconds: 250),
+                                () {
+                              Navigator.pop(
+                                  context); // Close the drawer smoothly
+                            });
+                          });
+                          ;
                         },
                       ),
                     ),
@@ -192,7 +210,13 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      FavouriteSceen(userId: widget.userId)));
+                                      FavouriteSceen(userId: widget.userId))).then((value) {
+                            Future.delayed(const Duration(milliseconds: 250),
+                                () {
+                              Navigator.pop(
+                                  context); // Close the drawer smoothly
+                            });
+                          });;
                         },
                       ),
                     ),
@@ -263,10 +287,10 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                         title: const Text('FAQ'),
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      FAQWidget())).then((value) {
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FAQWidget()))
+                              .then((value) {
                             Future.delayed(const Duration(milliseconds: 250),
                                 () {
                               Navigator.pop(

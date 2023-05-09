@@ -38,11 +38,17 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   }
 
   Future<void> getStationDetails() async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.243:8096/manageStation/getStation?stationId=${widget.stationId}');
-    setState(() {
-      stationDetails = StationModel.fromJson(data);
-    });
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.243:8096/manageStation/getStation?stationId=${widget.stationId}');
+      // print(widget.stationId);
+      setState(() {
+        stationDetails = StationModel.fromJson(data);
+      });
+    } catch (e) {
+      // TODO
+      print(e);
+    }
   }
 
   Future<void> getChargerList() async {
@@ -706,7 +712,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                                 stationLocation: stationDetails!.stationArea!,
                                                                                 chargerModel: chargerList[index],
                                                                                 userId: widget.userId,
-                                                                                stationId: stationDetails!.stationId!, 
+                                                                                stationId: stationDetails!.stationId!,
                                                                                 stationHostId: stationDetails!.stationHostId!,
                                                                                 stationVendorId: stationDetails!.stationVendorId!,
                                                                                 connectorSocket: chargerList[index].connectors![connector].connectorSocket!,

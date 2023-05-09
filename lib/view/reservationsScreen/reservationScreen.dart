@@ -42,14 +42,16 @@ class ReservationScreenState extends State<ReservationScreen> {
 
   Future<void> getbookingDetails() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.243:8099/manageBooking/bookingsCustomer?bookingCustomerId=${widget.userId}');
+        'http://192.168.0.41:8099/manageBooking/getBookingCustomer?bookingCustomerId=${widget.userId}');
     if (data != null && data.isNotEmpty) {
+      upcomingBookingList.clear();
+      bookingHistoryList.clear();
       setState(() {
         for (int i = 0; i < data.length; i++) {
           BookingModel booking = BookingModel.fromJson(data[i]);
           var bookingDateTime =
               DateTime.parse('${booking.bookingDate} ${booking.bookingTime}');
-          if (bookingDateTime.isAfter(DateTime.now())) {
+          if (bookingDateTime.isAfter(DateTime.now()) && booking.bookingStatus!.toLowerCase() != 'cancelled') {
             upcomingBookingList.add(booking);
           } else {
             bookingHistoryList.add(booking);
@@ -148,6 +150,11 @@ class ReservationScreenState extends State<ReservationScreen> {
                                           stationAddress: stationAddress,
                                           stationName: stationName,
                                         );
+                                      }).then((value){
+                                        setState(() {
+                                          getStationNameAndAddress('STN20230505105447818');
+                                          getbookingDetails();
+                                        });
                                       });
                                 },
                                 child: Card(

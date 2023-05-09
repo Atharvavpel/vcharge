@@ -60,7 +60,7 @@ class ReservePopUpState extends State<ReservePopUp> {
 
   Future<int> postBooking(body) async {
     var data = await PostMethod.postRequest(
-        'http://192.168.0.243:8099/manageBooking/booking', body);
+        'http://192.168.0.41:8099/manageBooking/addBooking', body);
     return data;
   }
 

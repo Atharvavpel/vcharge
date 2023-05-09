@@ -48,6 +48,7 @@ class CancellationDonePopUp extends StatelessWidget{
                       onTap: (){
                         Navigator.of(context).pop();
                         Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                       child: FaIcon(FontAwesomeIcons.x, color: Colors.white,size: Get.width * 0.045,)),
                   ),
