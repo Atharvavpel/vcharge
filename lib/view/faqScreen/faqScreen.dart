@@ -64,14 +64,14 @@ class FAQWidgetState extends State<FAQWidget> {
 
     var response = await GetMethod.getRequest(specificUrl);
     for(int i=0;i<response.length;i++){
-    faqType.add(response[i]['faqType']);
+    faqType.add(response[i]['faqCategory']);
     }
 
     setState(() {
       firstType = faqType.elementAt(0);
     secondType = faqType.elementAt(1);
     thirdType = faqType.elementAt(2);
-    fourthType = faqType.elementAt(3);
+    // fourthType = faqType.elementAt(3);
     });
 
   }

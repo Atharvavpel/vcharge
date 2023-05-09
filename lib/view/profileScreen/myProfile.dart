@@ -61,13 +61,16 @@ import 'package:redis/redis.dart' as redis;
 class MyProfilePage extends StatefulWidget {
   String? userId;
 
-  MyProfilePage({super.key, required this.userId});
+  MyProfilePage({required this.userId}) ;
+  //: super(key: GlobalKey)
 
   @override
   State<StatefulWidget> createState() => MyProfilePageState();
 }
 
 class MyProfilePageState extends State<MyProfilePage> {
+
+  final GlobalKey<MyProfilePageState> globalKey = GlobalKey();
 
 // variables for storing the REST API
 
