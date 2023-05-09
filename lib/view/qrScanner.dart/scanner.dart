@@ -115,6 +115,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Camera permission denied'),
+          duration: Duration(seconds: 1),
         ),
       );
     }
