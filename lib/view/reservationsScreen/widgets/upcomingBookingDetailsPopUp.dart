@@ -258,7 +258,7 @@ class UpcomingBookingDetailsPopUpState
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return CancleReservAlertPopUp();
+                          return CancleReservAlertPopUp(bookingModel: widget.bookingModel,);
                         });
                   },
                   child: Container(

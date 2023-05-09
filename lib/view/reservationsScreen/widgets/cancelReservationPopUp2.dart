@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../models/bookingModel.dart';
+import '../../../services/PutMethod.dart';
+import 'cancellationDonePopUp.dart';
 
 class CancelReservtionPopUp extends StatefulWidget {
-  CancelReservtionPopUp({super.key});
+
+  BookingModel bookingModel;
+  CancelReservtionPopUp({required this.bookingModel, super.key});
 
   @override
   State<CancelReservtionPopUp> createState() => CancelReservtionPopUpState();
@@ -23,34 +29,138 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
   ];
 
   var selectedReason;
-  
+
+  final formKeyReason = GlobalKey<FormState>();
+  final formKeyAddInfo = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bookingModel = widget.bookingModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         //"Booking Details" Heading text
-          Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 113, 174, 76),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
-            child: Center(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Cancel Reservation',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: Get.height * 0.025),
+        Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 113, 174, 76),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+          child: Center(
+              child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Cancel Reservation',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Get.height * 0.025),
+            ),
+          )),
+        ),
+
+        //select reason dropdown
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
+          child: Container(
+            child: Card(
+              elevation: 2,
+              margin: EdgeInsets.symmetric(
+                  horizontal: Get.width * 0.05, vertical: Get.height * 0.01),
+              child: Form(
+                key: formKeyReason,
+                child: DropdownButtonFormField(
+                  hint: const Text('Select a Reason'),
+                  value: selectedReason,
+                  decoration: const InputDecoration(
+                      label: Text("Select Reason"),
+                      border: OutlineInputBorder()),
+                  isExpanded: true,
+                  items: cancelReasonsList
+                      .map<DropdownMenuItem<String>>(
+                        (String value) => DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedReason = newValue!;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a reason';
+                    }
+                  },
+                ),
               ),
-            )),
+            ),
           ),
+        ),
+
+        // Addition info text field
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
+          child: Card(
+            elevation: 3,
+            margin: EdgeInsets.symmetric(
+                horizontal: Get.width * 0.05, vertical: Get.height * 0.01),
+            child: Form(
+              key: formKeyAddInfo,
+              child: TextFormField(
+                controller: additionInfo,
+                maxLength: 150,
+                maxLines: 5,
+                keyboardType: TextInputType.streetAddress,
+                decoration: const InputDecoration(
+                  hintText: 'Additional Info',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please give some additional info";
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ),
+        ),
+
+        //Submiy button
+        ElevatedButton(
+            onPressed: () async {
+              if (formKeyReason.currentState!.validate() &&
+                  formKeyAddInfo.currentState!.validate()) {
+                var response = await PutMethod.putRequest(
+                    'http://192.168.0.41:8099/manageBooking/cancelledBooking?bookingId=',
+                    bookingModel!.bookingId!,
+                    jsonEncode({
+                      "bookingCancellationReason":
+                          "$selectedReason ${additionInfo.text.toString()}}",
+                      "bookingStatus": "cancelled"
+                    }));
+                if (response == 200) {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return CancellationDonePopUp();
+                      });
+                }
+              }
+            },
+            child: const Text('Submit')),
       ],
     );
   }
-  
 }

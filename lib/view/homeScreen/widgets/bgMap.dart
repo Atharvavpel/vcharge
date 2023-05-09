@@ -265,12 +265,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
             });
             // BgMapState.userLocation = mapController.center;
           },
-          onPositionChanged: (mapPosition, boolValue) {
-            // setState(() {
-            //   getLocation();
-            //   // print('${mapPosition.center!.longitude} ${mapPosition.center!.latitude} ${getDistance(mapPosition.bounds!.northEast!, mapPosition.bounds!.southWest!)*1000}');
-            // });
-          }),
+        ),
       children: [
         //tile layer
         TileLayer(

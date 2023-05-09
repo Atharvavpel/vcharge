@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../../models/bookingModel.dart';
 import 'cancelReservationPopUp2.dart';
 
 class CancleReservAlertPopUp extends StatelessWidget {
+  BookingModel bookingModel;
+  CancleReservAlertPopUp({required this.bookingModel, super.key});
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -41,7 +45,7 @@ class CancleReservAlertPopUp extends StatelessWidget {
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
               ),
               builder: (context){
-              return SafeArea(child: CancelReservtionPopUp());
+              return SafeArea(child: CancelReservtionPopUp(bookingModel: bookingModel,));
             });
           },
           child: Container(
