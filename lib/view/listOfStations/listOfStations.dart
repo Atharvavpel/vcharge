@@ -125,6 +125,12 @@ class ListOfStationsState extends State<ListOfStations> {
 
   //this function sort the stations on the basis of distance and store the result in sortedStationList
   Future<void> sortStationList() async {
+    stationsList.clear();
+    userToStationDistanceList.clear();
+    sortedStationDistanceList.clear();
+    sortedStationList.clear();
+    sortedDistanceList.clear();
+    
     await getDistanceList();
 
     // Combine the station and distance lists into a list of Map objects
