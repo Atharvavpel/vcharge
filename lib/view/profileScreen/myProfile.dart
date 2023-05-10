@@ -106,24 +106,30 @@ dynamic cmd;
 Future<void> getUserData() async {
 
   client = redis.RedisConnection();
-  final response = await GetMethod.getRequest(specificUserIdUrl);
-
+  dynamic response;
+  
+  try {
+    response = await GetMethod.getRequest(specificUserIdUrl);
+  
   profilePhoto = response['userProfilePhoto'];
+  print(profilePhoto);
   firstName = response['userFirstName'];
   lastName = response['userLastName'];
   contactNo = response['userContactNo'];
   emailId = response['userEmail'];
 
-
     cmd = await client.connect('192.168.0.206', 6379);
+
+
     await cmd.send_object(['SET','profilePhoto', profilePhoto]);
     await cmd.send_object(['SET','firstName', firstName]);
     await cmd.send_object(['SET','lastName', lastName]);
     await cmd.send_object(['SET','emailId', emailId]);
     await cmd.send_object(['SET','contactNo', contactNo]);
     client.close();
-
-  // UserProfile userProfile = UserProfile(firstName: firstName, lastName: lastName, emailId: emailId);
+  } catch (e) {
+    print("the error at the redis connection in profile widget is: $e");
+  }
 
   setState(() {
     
@@ -321,7 +327,14 @@ void updateUserProfile(){
 
 // function for the profile avtar
   Widget profileAvtarWidget() {
-    return Padding(
+
+    Widget widget;
+
+    if(profilePhoto != null && profilePhoto.isNotEmpty){
+      final profileImg = NetworkImage(profilePhoto);
+    final decorationImg = DecorationImage(image: profileImg, fit: BoxFit.cover);
+
+    widget = Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: Align(
         alignment: Alignment.bottomCenter,
@@ -383,13 +396,105 @@ void updateUserProfile(){
                         spreadRadius: 0.0,
                       ), //BoxShadow
                     ],
-                        image: DecorationImage(
-                            image: NetworkImage(profilePhoto), fit: BoxFit.cover),
+                        image: decorationImg,
                         shape: BoxShape.rectangle,
                         color: const Color(0xffD6D6D6)),
                   )),
       ),
     );
+    }
+    else{
+      print("The profile photo is empty");
+      widget = Container(
+                        width: MediaQuery.of(context).size.width* 0.45,
+                        height: MediaQuery.of(context).size.height* 0.2,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        decoration: const BoxDecoration(
+        color: Colors.amber,
+                            shape: BoxShape.rectangle, ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.camera_alt_outlined,
+                            size: 40,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+    }
+
+    return widget;
+
+    // final profileImg = NetworkImage(profilePhoto);
+    // final decorationImg = DecorationImage(image: profileImg, fit: BoxFit.cover);
+
+    // return Padding(
+    //   padding: const EdgeInsets.only(top: 20.0),
+    //   child: Align(
+    //     alignment: Alignment.bottomCenter,
+    //     child: InkWell(
+
+
+    //       // funtions for handling the edit profile photo widget
+    //         onTap: () {
+    //           showModalBottomSheet(
+    //               context: context, builder: ((builder) => bottomSheet()));
+    //         },
+    //         child: profilePhoto == " "
+    //             ? selectedImage == null
+    //                 ? Container(
+    //                     width: MediaQuery.of(context).size.width* 0.45,
+    //                     height: MediaQuery.of(context).size.height* 0.2,
+    //                     margin: const EdgeInsets.only(bottom: 20),
+    //                     decoration: const BoxDecoration(
+    //                         shape: BoxShape.rectangle, color: Color(0xffD6D6D6)),
+    //                     child: const Center(
+    //                       child: Icon(
+    //                         Icons.camera_alt_outlined,
+    //                         size: 40,
+    //                         color: Colors.white,
+    //                       ),
+    //                     ),
+    //                   )
+    //                 : Container(
+    //                     width: MediaQuery.of(context).size.width* 0.45,
+    //                     height: MediaQuery.of(context).size.height* 0.2,
+    //                     margin: const EdgeInsets.only(bottom: 20),
+    //                     decoration: BoxDecoration(
+    //                         image: DecorationImage(
+    //                             image: FileImage(File(selectedImage!.path)),
+    //                             fit: BoxFit.cover),
+    //                         shape: BoxShape.rectangle,
+    //                         color: const Color(0xffD6D6D6)),
+    //                   )
+    //             : Container(
+    //                 width: MediaQuery.of(context).size.width* 0.45,
+    //                 height: MediaQuery.of(context).size.height* 0.2,
+    //                 margin: const EdgeInsets.only(bottom: 20),
+    //                 decoration: BoxDecoration(
+    //                     borderRadius: BorderRadius.circular(20),
+    //                     boxShadow: const [
+    //                   BoxShadow(
+    //                     color: Colors.grey,
+    //                     offset:  Offset(
+    //                       5.0,
+    //                       5.0,
+    //                     ),
+    //                     blurRadius: 10.0,
+    //                     spreadRadius: 2.0,
+    //                   ), //BoxShadow
+    //                   BoxShadow(
+    //                     color: Colors.white,
+    //                     offset: Offset(0.0, 0.0),
+    //                     blurRadius: 0.0,
+    //                     spreadRadius: 0.0,
+    //                   ), //BoxShadow
+    //                 ],
+    //                     image: decorationImg,
+    //                     shape: BoxShape.rectangle,
+    //                     color: const Color(0xffD6D6D6)),
+    //               )),
+    //   ),
+    // );
   }
 
 // function for overlaying the edit icon over the profile avtar

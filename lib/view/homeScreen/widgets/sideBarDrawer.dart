@@ -289,7 +289,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                           Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => FAQWidget()))
+                                      builder: (context) => FaqScreen()))
                               .then((value) {
                             Future.delayed(const Duration(milliseconds: 250),
                                 () {
