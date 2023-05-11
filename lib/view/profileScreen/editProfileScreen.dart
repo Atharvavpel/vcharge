@@ -101,7 +101,8 @@ dynamic selectedState;
 
 // function for fetching specific user data
   Future<void> getUserData() async {
-    var data = await GetMethod.getRequest(specificUrl);
+    try {
+      var data = await GetMethod.getRequest(specificUrl);
 
     if (data != null) {
       setState(() {
@@ -117,6 +118,9 @@ dynamic selectedState;
 
 
       });
+    }
+    } catch (e) {
+      print("the error is: $e");
     }
   }
 
@@ -143,7 +147,8 @@ dynamic selectedState;
 // function for updating the specific user data
   Future updateUserDetails() async {
 
-    var response = await PutMethod.putRequest(
+    try {
+      var response = await PutMethod.putRequest(
         "http://192.168.0.243:8097/manageUser/updateUser?userId=","USR20230420100343328",
         jsonEncode({
           'userFirstName': firstNameController.text,
@@ -188,6 +193,9 @@ dynamic selectedState;
     RedisConnection.set('lastName', lastNameController.text);
     RedisConnection.set('emailId', emailController.text);
 
+    } catch (e) {
+      print("the error is: $e");
+    }
 
   }
 

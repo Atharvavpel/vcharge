@@ -3,10 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/passwordScreen/changePasswordScreen.dart';
 import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
-import 'package:vcharge/view/profileScreen/userProfile.dart';
 
 class SettingPage extends StatefulWidget {
-
 
   String userId;
   String? firstNameEdited;
@@ -30,7 +28,7 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
 
   // variable for tracking dark mode status
-  bool isDarkModeEnabled = false;
+  static bool isDarkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {

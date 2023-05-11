@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Builder(builder: (BuildContext context) {
         final themeChanger = Provider.of<DarkThemeProvider>(context);
-        return MaterialApp(
+        return GetMaterialApp(
         title: 'VCharge',
         debugShowCheckedModeBanner: false,
         themeMode: themeChanger.themeMode,
