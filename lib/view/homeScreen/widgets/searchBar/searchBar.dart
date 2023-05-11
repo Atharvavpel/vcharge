@@ -85,6 +85,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                   // main textfield for storing the different widgets
                   child: Semantics(
                     label: "searchTextField",
+                    value: "searchTextField",
                     child: TextField(
                       key: const Key('searchBar'),
                       focusNode: searchFocus,
@@ -125,6 +126,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                               // notification icon button
                               Semantics(
                                 label: "notificationButton",
+                                value: "notificationButton",
                                 child: IconButton(
                                   key: const Key('notificationButton'),
                                   onPressed: () {},
@@ -139,6 +141,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                               // profile icon button
                               Semantics(
                                 label: "profileButton",
+                                value: 'profileButton',
                                 child: IconButton(
                                   key: const Key('profileButton'),
                                   onPressed: () {

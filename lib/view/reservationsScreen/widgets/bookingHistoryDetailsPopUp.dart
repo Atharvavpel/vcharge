@@ -9,7 +9,8 @@ class BookingHistoryDetailsPopUp extends StatefulWidget {
   String stationName;
   BookingModel bookingModel;
 
-  BookingHistoryDetailsPopUp({required this.bookingModel, required this.stationName,super.key});
+  BookingHistoryDetailsPopUp(
+      {required this.bookingModel, required this.stationName, super.key});
 
   @override
   State<StatefulWidget> createState() => BookingHistoryDetailsPopUpState();
@@ -20,11 +21,10 @@ class BookingHistoryDetailsPopUpState
   @override
   Widget build(BuildContext context) {
     return Dialog(
-
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: SizedBox(
-        height: Get.height * 0.5,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             //Container for heading Text
             Stack(
@@ -56,15 +56,17 @@ class BookingHistoryDetailsPopUpState
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: FaIcon(
-                        FontAwesomeIcons.x,
-                        color: Colors.white,
-                        size: Get.width * 0.045,
+                      child: Container(
+                        child: FaIcon(
+                          FontAwesomeIcons.x,
+                          color: Colors.white,
+                          size: Get.width * 0.045,
+                        ),
                       )),
                 ),
               ],
             ),
-      
+
             //Row for Booking Id
             Padding(
               padding: EdgeInsets.symmetric(
@@ -87,7 +89,7 @@ class BookingHistoryDetailsPopUpState
                 ],
               ),
             ),
-      
+
             //Row for Booking Date and Time
             Padding(
               padding: EdgeInsets.symmetric(
@@ -104,10 +106,11 @@ class BookingHistoryDetailsPopUpState
                   )),
                   Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        DateFormat("dd MMM, yyyy").format(DateTime.parse(widget.bookingModel.bookingDate!)),
+                        DateFormat("dd MMM, yyyy").format(
+                            DateTime.parse(widget.bookingModel.bookingDate!)),
                         textAlign: TextAlign.left,
                       ),
                       Text(
@@ -119,7 +122,7 @@ class BookingHistoryDetailsPopUpState
                 ],
               ),
             ),
-          
+
             //Row for Booked for
             Padding(
               padding: EdgeInsets.symmetric(
@@ -141,7 +144,7 @@ class BookingHistoryDetailsPopUpState
                 ],
               ),
             ),
-      
+
             //Row for Charged for
             Padding(
               padding: EdgeInsets.symmetric(
@@ -157,13 +160,13 @@ class BookingHistoryDetailsPopUpState
                   )),
                   Expanded(
                       child: Text(
-                     '1hr',
+                    '1hr',
                     textAlign: TextAlign.left,
                   ))
                 ],
               ),
             ),
-      
+
             //Row for Charger
             Padding(
               padding: EdgeInsets.symmetric(
@@ -180,13 +183,13 @@ class BookingHistoryDetailsPopUpState
                   )),
                   Expanded(
                       child: Text(
-                     widget.stationName,
+                    widget.stationName,
                     textAlign: TextAlign.left,
                   ))
                 ],
               ),
             ),
-      
+
             //Row for Socket Type
             Padding(
               padding: EdgeInsets.symmetric(
@@ -203,13 +206,13 @@ class BookingHistoryDetailsPopUpState
                   )),
                   Expanded(
                       child: Text(
-                     widget.bookingModel.bookingSocket!,
+                    widget.bookingModel.bookingSocket!,
                     textAlign: TextAlign.left,
                   ))
                 ],
               ),
             ),
-      
+
             //Row for Energy Consumed
             Padding(
               padding: EdgeInsets.symmetric(
@@ -226,30 +229,223 @@ class BookingHistoryDetailsPopUpState
                   )),
                   Expanded(
                       child: Text(
-                     '13 kWh',
+                    '13 kWh',
                     textAlign: TextAlign.left,
                   ))
                 ],
               ),
             ),
-      
+
+            //pricing details 
+            Container(
+              margin: EdgeInsets.all(Get.width * 0.025),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 230, 250, 255),
+                borderRadius: BorderRadius.circular(10)
+              ),
+              width: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.all(Get.width * 0.008),
+                child: Column(
+                  children: [
+                    //pricing details heading
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Text(
+                        'Pricing Details',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: Get.width * 0.045),
+                      ),
+                    ),
+
+                    //Row for Price Per Unit
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'Price Per Unit',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rs. 15/kWh',
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                    ),
+
+                    //Row for Subtotal
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'Subtotal',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rs. 0.00',
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                    ),
+
+                    //Row for GST
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'GST',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rs. 0.00',
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                    ),
+
+                    //Row for Parking Charges
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'Parking Charges',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rs. 0.00',
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                    ),
+
+                    //Row for Service Charging
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'Sercice Charging',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rs. 0.00',
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                    ),
+
+                    //Row for GST on Service Charge
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'GST on Service Charge',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rs. 0.00',
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                    ),
+
+                    //Divider
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: const Divider(
+                        color: Colors.grey,
+                        thickness: 1,
+                        height: 1,
+                      ),
+                    ),
+
+                    //Row for Total Price
+                    Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            'Total Price',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rs. 0.00',
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             //Payment made using wallet card
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.04, vertical: Get.height * 0.01),
-              child: Card(
-                elevation: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: const [
-                      Expanded(flex: 2,child: Icon(Icons.wallet, color: Colors.green,)),
-                      Expanded(flex: 11,child: Text('Payment Made Using Wallet', style: TextStyle(fontWeight: FontWeight.bold),))
-                    ],
+                padding: EdgeInsets.symmetric(
+                    horizontal: Get.width * 0.04, vertical: Get.height * 0.01),
+                child: Card(
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: const [
+                        Expanded(
+                            flex: 2,
+                            child: Icon(
+                              Icons.wallet,
+                              color: Colors.green,
+                            )),
+                        Expanded(
+                            flex: 11,
+                            child: Text(
+                              'Payment Made Using Wallet',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ))
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ),
+                )),
           ],
         ),
       ),

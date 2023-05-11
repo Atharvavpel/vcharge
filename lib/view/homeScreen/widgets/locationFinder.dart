@@ -27,9 +27,12 @@ class LocationFinderState extends State<LocationFinder>
       var userLong = await RedisConnection.get('userLongitude');
       BgMapState.userLocation =
           LatLng(double.parse(userLat), double.parse(userLong));
-
-      if (mounted) {
         // Call the animatedMapMove method only if the widget is still mounted
+        animatedMapMove(BgMapState.userLocation!, 15.0);
+      
+      LatLng currLocation = await GetLiveLocation.getUserLiveLocation();
+      if(currLocation.latitude!=BgMapState.userLocation!.latitude || currLocation.longitude!=BgMapState.userLocation!.longitude){
+        BgMapState.userLocation = currLocation;
         animatedMapMove(BgMapState.userLocation!, 15.0);
       }
     } catch (e) {

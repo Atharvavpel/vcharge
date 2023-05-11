@@ -40,9 +40,15 @@ class ReservationScreenState extends State<ReservationScreen> {
         '${data['stationAddressLineOne']}, ${data['stationAddressLineTwo']}, ${data['stationCity']}';
   }
 
+  Future<String> getStationName(String stationId) async {
+    var data = await GetMethod.getRequest(
+        'http://192.168.0.243:8096/manageStation/getStation?stationId=$stationId');
+    return data['stationName'];
+  }
+
   Future<void> getbookingDetails() async {
     var data = await GetMethod.getRequest(
-        'http://192.168.0.41:8099/manageBooking/getBookingCustomer?bookingCustomerId=${widget.userId}');
+        'http://192.168.0.243:8099/manageBooking/getBookingCustomer?bookingCustomerId=${widget.userId}');
     if (data != null && data.isNotEmpty) {
       upcomingBookingList.clear();
       bookingHistoryList.clear();
