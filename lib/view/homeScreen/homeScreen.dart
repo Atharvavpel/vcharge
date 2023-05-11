@@ -60,16 +60,21 @@ this is screen with onclose function
     List<dynamic> screens = [
       Semantics(
           label: "listOfStationPage",
+          value: 'listOfStationPage',
           child: ListOfStations(
             userId: userId,
           )),
       Semantics(
         label: "homePage",
+        value: "homePage",
         child: ExistingHomeScreen(
           userId: userId,
         ),
       ),
-      Semantics(label: "scannerPage", child: const QRScannerWidget()),
+      Semantics(
+          label: "scannerPage",
+          value: "scannerPage",
+          child: const QRScannerWidget()),
       // ScannerQr.qrScanner(),
       //     FutureBuilder<dynamic>(
       //   future: ScannerQr.qrScanner(),

@@ -207,7 +207,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
             // container - favourites
             Semantics(
-              label: "favouriteButton",
+              label: "reservationButton",
               child: GestureDetector(
                 key: const Key('favouriteButton'),
                 onTap: () {

@@ -25,6 +25,7 @@ class _MarkerHintsState extends State<MarkerHints> {
   Widget build(BuildContext context) {
     return Semantics(
       label: "markerHintButton",
+      value: 'markerHintButton',
       child: GestureDetector(
         key: const Key('markersHintButton'),
         onTap: () {

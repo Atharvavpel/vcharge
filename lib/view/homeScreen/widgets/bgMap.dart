@@ -247,12 +247,18 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
       options: MapOptions(
         minZoom: 3,
         maxZoom: 17.0,
-        center: BgMapState.userLocation,
+        center: BgMapState.userLocation ?? LatLng(18.52545104572047, 73.85416186008594),
         zoom: 15.0,
         //by this command, the map will not be able to rotate
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         onMapReady: () async {
           await getLocation();
+          if(mounted){
+             setState(() {
+             getStationData(
+                  'http://192.168.0.243:8096/manageStation/getStationsLocation?longitude=${BgMapState.userLocation!.longitude}&latitude=${BgMapState.userLocation!.latitude}&maxDistance=5000');
+          });
+          }
           subscription =
               mapController.mapEventStream.listen((MapEvent mapEvent) {
             if (mapEvent is MapEventMoveEnd) {

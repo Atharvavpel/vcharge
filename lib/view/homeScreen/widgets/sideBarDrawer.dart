@@ -35,6 +35,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
       width: MediaQuery.of(context).size.width * 0.75,
       child: Semantics(
         label: "drawerButton",
+        value: 'drawerButton',
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
