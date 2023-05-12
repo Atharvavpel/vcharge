@@ -1,3 +1,5 @@
+// this is the model for vehicle services
+
 class VehicleModel {
   String? vehicleId;
   String? vehicleBrandName;

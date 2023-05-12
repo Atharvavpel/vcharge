@@ -1,3 +1,5 @@
+// this is the model for the transaction services 
+
 class TransactionModel {
   String? initiateTransactionDate;
   String? initiateTransactionTime;

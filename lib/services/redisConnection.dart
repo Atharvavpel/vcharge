@@ -1,9 +1,16 @@
+// this is the service for setting up the redis connection
+
 import 'package:redis/redis.dart' as redis;
 
+
+// this is the class of redis connection
 class RedisConnection {
-  static String serverIp = "192.168.0.206";
+
+  // variable for storing the serverIp and serverPort (6379)
+  static String serverIp = "192.168.0.241";
   static int serverPort = 6379;
 
+  // function for setting up the redis connection and sending the GET request
   static Future<dynamic> get(String key) async {
       var redisClient = redis.RedisConnection();
     try {
@@ -16,6 +23,8 @@ class RedisConnection {
     }
   }
 
+
+  // function for setting up the redis connection and also sending the SET request
   static Future<void> set(String key, dynamic value) async {
     try {
       var redisClient = redis.RedisConnection();

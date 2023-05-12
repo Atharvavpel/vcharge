@@ -1,3 +1,5 @@
+// this is the model class for the connector services
+
 class ConnectorModel {
   String? connectorType;
   String? connectorSocket;

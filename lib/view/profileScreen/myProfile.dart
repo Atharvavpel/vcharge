@@ -119,6 +119,7 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
 // Command variable for redis connection
   dynamic cmd;
 
+// function for setting up the redis connection and fetching the user data and setting up in the redis
   Future<void> getUserData() async {
     client = redis.RedisConnection();
     dynamic response;
@@ -133,7 +134,7 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
       contactNo = response['userContactNo'];
       emailId = response['userEmail'];
 
-      cmd = await client.connect('192.168.0.206', 6379);
+      cmd = await client.connect('192.168.0.241', 6379);
 
       await cmd.send_object(['SET', 'profilePhoto', profilePhoto]);
       await cmd.send_object(['SET', 'firstName', firstName]);

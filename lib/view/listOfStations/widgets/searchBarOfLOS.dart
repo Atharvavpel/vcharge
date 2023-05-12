@@ -38,7 +38,7 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
         onTap: (){
           showSearch(
                     context: context, 
-                    delegate: losSearchingWidget()
+                    delegate: losSearchingWidget(widget.userId)
                   );
         },
         decoration: InputDecoration(
@@ -50,7 +50,7 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
                 onPressed: () {
                   showSearch(
                     context: context, 
-                    delegate: losSearchingWidget()
+                    delegate: losSearchingWidget(widget.userId)
                   );
                 },
                 icon: Icon(

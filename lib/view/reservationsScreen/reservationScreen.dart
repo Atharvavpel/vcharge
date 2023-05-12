@@ -52,18 +52,20 @@ class ReservationScreenState extends State<ReservationScreen> {
     if (data != null && data.isNotEmpty) {
       upcomingBookingList.clear();
       bookingHistoryList.clear();
-      setState(() {
-        for (int i = 0; i < data.length; i++) {
-          BookingModel booking = BookingModel.fromJson(data[i]);
-          var bookingDateTime =
-              DateTime.parse('${booking.bookingDate} ${booking.bookingTime}');
-          if (bookingDateTime.isAfter(DateTime.now()) && booking.bookingStatus!.toLowerCase() != 'cancelled') {
-            upcomingBookingList.add(booking);
-          } else {
-            bookingHistoryList.add(booking);
-          }
-        }
-      });
+      if (mounted) {
+  setState(() {
+    for (int i = 0; i < data.length; i++) {
+      BookingModel booking = BookingModel.fromJson(data[i]);
+      var bookingDateTime =
+          DateTime.parse('${booking.bookingDate} ${booking.bookingTime}');
+      if (bookingDateTime.isAfter(DateTime.now()) && booking.bookingStatus!.toLowerCase() != 'cancelled') {
+        upcomingBookingList.add(booking);
+      } else {
+        bookingHistoryList.add(booking);
+      }
+    }
+  });
+}
     }
   }
 

@@ -1,3 +1,5 @@
+// this is the model which is used for booking services
+
 class BookingModel {
   String? bookingId;
   String? bookingType;
