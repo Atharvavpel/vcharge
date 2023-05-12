@@ -1,3 +1,6 @@
+// this model is there for the charger service
+
+
 import 'package:vcharge/models/connectorModel.dart';
 
 class ChargerModel {

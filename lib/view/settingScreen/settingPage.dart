@@ -7,7 +7,6 @@ import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
 // ignore: must_be_immutable
 class SettingPage extends StatefulWidget {
 
-
   String userId;
   String? firstNameEdited;
   String? lastNameEdited;
@@ -30,7 +29,7 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
 
   // variable for tracking dark mode status
-  bool isDarkModeEnabled = false;
+  static bool isDarkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {

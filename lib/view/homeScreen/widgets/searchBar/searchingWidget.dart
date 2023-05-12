@@ -21,11 +21,16 @@ class SearchingWidget extends SearchDelegate {
 
   Future<List<dynamic>> fetchData(String keyword) async {
     if (keyword.length < 2) return [];
-
-    final url =
+    dynamic response;
+    try {
+      final url =
         "http://192.168.0.243:8096/manageStation/getStationsByKeyword?query=$keyword";
-    final response = await GetMethod.getRequest(url);
+     response = await GetMethod.getRequest(url);
+    } catch (e) {
+      print("the error is: $e");
+    }
     return response;
+    
   }
 
   //To calculate the distance between two points on the Earth's surface given their latitude and longitude coordinates, you can use the Haversine formula.

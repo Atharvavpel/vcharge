@@ -20,15 +20,16 @@ class FavouriteSceenState extends State<FavouriteSceen> {
 
   Future<void> getFavouriteList() async {
     try {
+      // var data = await GetMethod.getRequest(
+      //     'http://192.168.0.243:8097/manageUser/getFavorites?userId=${widget.userId}');
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8097/manageUser/getFavorites?userId=${widget.userId}');
+          'http://192.168.0.41:8097/manageUser/getFavorites?userId=USR20230420100343328');
       if (data != null && data.isNotEmpty) {
         favouriteList.clear();
         setState(() {
           for (int i = 0; i < data.length; i++) {
             favouriteList.add(FovouriteStationDetailsModel.fromJson(data[i]));
           }
-          // print(favouriteList);
         });
       }
     } catch (e) {

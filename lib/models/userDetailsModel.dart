@@ -1,3 +1,5 @@
+// this is the model for the userDetailsModel
+
 
 class UserDetailsModel {
   String? userId;

@@ -1,3 +1,5 @@
+// this is the model for the support service
+
 class SupportModel {
   String? supportCustomerId;
   String? supportHostId;

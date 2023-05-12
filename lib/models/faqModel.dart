@@ -1,3 +1,5 @@
+// this is the faq model
+
 class FaqModel {
   String? faqId;
   String? faqQuestion;

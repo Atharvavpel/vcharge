@@ -1,3 +1,5 @@
+// this is the model for the wallet services
+
 class WalletModel {
   String? walletAmount;
   String? walletCurrency;

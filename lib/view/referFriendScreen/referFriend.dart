@@ -12,6 +12,7 @@ class ReferFriend extends StatefulWidget {
 }
 
 class _ReferFriendState extends State<ReferFriend> {
+  
   // String variables for storing the instructions
   String firstInstruction = "Share your Referral link";
   String secondInstruction = "Your friend will recieve a referral link";

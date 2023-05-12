@@ -45,30 +45,37 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
 
 // method which handles the events for starting the scanner
   void startScanner() async {
-    if (controller != null) {
+    try {
+      if (controller != null) {
       await controller?.resumeCamera();
       setState(() {
         scanStarted = true;
       });
     }
+    } catch (e) {
+      print("The error at the scanner is: $e");
+    }
   }
 
 // method which handles the events for stopping the scanner
   void stopScanner() async {
-    if (controller != null) {
+    try {
+      if (controller != null) {
       await controller?.pauseCamera();
       setState(() {
         scanStarted = false;
       });
+    }
+    } catch (e) {
+      print(e);
     }
   }
 
   // method for storing bar code result
   void _onQRViewCreated(QRViewController controller) async {
 
-
-
-    this.controller = controller;
+    try {
+      this.controller = controller;
 
     // Check for camera permission
     var status = await Permission.camera.status;
@@ -119,6 +126,11 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
         ),
       );
     }
+    } catch (e) {
+      print("the error is: $e");
+    }
+
+    
   }
 
 // build method
