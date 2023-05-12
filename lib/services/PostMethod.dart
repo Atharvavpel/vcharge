@@ -12,10 +12,10 @@ class PostMethod{
       body: body
     );
     if(response.statusCode == 200){
-      print('Post Successful');
+      // print('Post Successful');
       return response.statusCode;
     }else{
-      print('Error: ${response.statusCode}');
+      // print('Error: ${response.statusCode}');
       return response.statusCode;
     }
   }

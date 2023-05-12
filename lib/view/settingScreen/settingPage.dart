@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/passwordScreen/changePasswordScreen.dart';
 import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
-import 'package:vcharge/view/profileScreen/userProfile.dart';
 
+// ignore: must_be_immutable
 class SettingPage extends StatefulWidget {
 
 

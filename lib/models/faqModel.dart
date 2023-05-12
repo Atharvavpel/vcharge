@@ -23,12 +23,12 @@ class FaqModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['faqId'] = this.faqId;
-    data['faqQuestion'] = this.faqQuestion;
-    data['faqAnswer'] = this.faqAnswer;
-    data['faqCategory'] = this.faqCategory;
-    data['faqType'] = this.faqType;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['faqId'] = faqId;
+    data['faqQuestion'] = faqQuestion;
+    data['faqAnswer'] = faqAnswer;
+    data['faqCategory'] = faqCategory;
+    data['faqType'] = faqType;
     return data;
   }
 }

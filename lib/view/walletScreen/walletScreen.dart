@@ -17,6 +17,7 @@ import 'package:vcharge/view/walletScreen/addMoneyScreen.dart';
 
 import '../../models/walletModel.dart';
 
+// ignore: must_be_immutable
 class WalletScreen extends StatefulWidget {
   String? userId;
 
@@ -43,28 +44,36 @@ class WalletScreenState extends State<WalletScreen> {
   }
 
   Future<void> getUserName() async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.243:8097/manageUser/getUser?userId=${widget.userId}');
-    if (data != null) {
-      setState(() {
-        userFirstName = data['userFirstName'];
-        userLastName = data['userLastName'];
-      });
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.243:8097/manageUser/getUser?userId=${widget.userId}');
+      if (data != null) {
+        setState(() {
+          userFirstName = data['userFirstName'];
+          userLastName = data['userLastName'];
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
   //fetch the wallet details according to userId and store it to walletDetail variable
   Future<void> getWalletDetails() async {
-    var data = await GetMethod.getRequest(
-        "http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}");
-        
-    // print(data);
-    setState(() {
-      walletDetail = WalletModel(
-          walletAmount: data['walletAmount'].toString(),
-          walletCurrency: data['walletCurrency'],
-          walletStatus: data['walletStatus']);
-    });
+    try {
+      var data = await GetMethod.getRequest(
+          "http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}");
+
+      // print(data);
+      setState(() {
+        walletDetail = WalletModel(
+            walletAmount: data['walletAmount'].toString(),
+            walletCurrency: data['walletCurrency'],
+            walletStatus: data['walletStatus']);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   //this function fetch the transaction details according to userId and store it to transactionData list
@@ -184,10 +193,10 @@ class WalletScreenState extends State<WalletScreen> {
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           walletDetail == null
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   children: [
-                                    Icon(Icons.currency_rupee_sharp),
+                                    const Icon(Icons.currency_rupee_sharp),
                                     Text('${walletDetail!.walletAmount}')
                                   ],
                                 )
@@ -223,7 +232,7 @@ class WalletScreenState extends State<WalletScreen> {
               decoration:
                   const BoxDecoration(color: Color.fromARGB(255, 130, 199, 85)),
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Center(
                     child: Text(
                   'Transactions',
@@ -259,7 +268,7 @@ class WalletScreenState extends State<WalletScreen> {
                               onTap: () {},
 
                               //leading for transaction status
-                              leading: Container(
+                              leading: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.1,
                                 child: Center(
                                   child: CircleAvatar(

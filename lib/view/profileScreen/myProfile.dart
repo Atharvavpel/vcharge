@@ -58,10 +58,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redis/redis.dart' as redis;
 
 
+// ignore: must_be_immutable
 class MyProfilePage extends StatefulWidget {
   String? userId;
 
-  MyProfilePage({required this.userId}) ;
+  MyProfilePage({super.key, required this.userId}) ;
   //: super(key: GlobalKey)
 
   @override
@@ -112,7 +113,7 @@ Future<void> getUserData() async {
     response = await GetMethod.getRequest(specificUserIdUrl);
   
   profilePhoto = response['userProfilePhoto'];
-  print(profilePhoto);
+  // print(profilePhoto);
   firstName = response['userFirstName'];
   lastName = response['userLastName'];
   contactNo = response['userContactNo'];
@@ -128,7 +129,7 @@ Future<void> getUserData() async {
     await cmd.send_object(['SET','contactNo', contactNo]);
     client.close();
   } catch (e) {
-    print("the error at the redis connection in profile widget is: $e");
+    // print("the error at the redis connection in profile widget is: $e");
   }
 
   setState(() {
@@ -138,7 +139,7 @@ Future<void> getUserData() async {
 
 void updateUserProfile(){
   setState(() {
-    print("inside the update profile function");
+    // print("inside the update profile function");
   });
 }
 
@@ -151,6 +152,7 @@ void updateUserProfile(){
 
 // function for gallery and camera permissions
   Future<void> requestPermissions() async {
+    // ignore: unused_local_variable
     Map<Permission, PermissionStatus> status = await [
       Permission.camera,
       Permission.storage,
@@ -175,6 +177,7 @@ void updateUserProfile(){
       }
     } else {
       // The user has not granted the necessary permissions, show an error message.
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please grant the necessary permissions.')),
       );
@@ -184,7 +187,7 @@ void updateUserProfile(){
 // function which returns the bottomsheet image
   Widget bottomSheet() {
     // print("inside the bottomsheet");
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.20,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -404,7 +407,7 @@ void updateUserProfile(){
     );
     }
     else{
-      print("The profile photo is empty");
+      // print("The profile photo is empty");
       widget = Container(
                         width: MediaQuery.of(context).size.width* 0.45,
                         height: MediaQuery.of(context).size.height* 0.2,
@@ -605,34 +608,32 @@ void updateUserProfile(){
 // function for sessions portal
   Widget userSessionsPortal() {
     return Expanded(
-      child: Container(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.08,
-          child: Column(
-            children: [
-              const Text(
-                "Sessions",
-                style: TextStyle(fontWeight: FontWeight.w400),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.08,
+        child: Column(
+          children: [
+            const Text(
+              "Sessions",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.height * 0.03,
+                  top: MediaQuery.of(context).size.height * 0.0047),
+              child: Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.event),
+                  ),
+                  Text(
+                    "02",
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  )
+                ],
               ),
-              Container(
-                margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.height * 0.03,
-                    top: MediaQuery.of(context).size.height * 0.0047),
-                child: Row(
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.event),
-                    ),
-                    Text(
-                      "02",
-                      style: TextStyle(fontWeight: FontWeight.w800),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -681,80 +682,78 @@ void updateUserProfile(){
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: Get.height * 0.3,
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: Get.height * 0.3,
 
 // main elements starts:
-                  child: Stack(
-                    children: [
+                child: Stack(
+                  children: [
 // semicircle container
-                      greenIntroWidgetWithoutLogos(),
+                    greenIntroWidgetWithoutLogos(),
 
 // icons container
-                      rowContainingNavBarIcons(),
-                      Stack(
-                        children: [
+                    rowContainingNavBarIcons(),
+                    Stack(
+                      children: [
 // profile avtar widget
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50.0),
-                            child: profileAvtarWidget(),
-                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: profileAvtarWidget(),
+                        ),
 
 // edit button over the profie avtar
-                          editIconOverProfileAvtar(),
-                        ],
-                      )
-                    ],
-                  ),
+                        editIconOverProfileAvtar(),
+                      ],
+                    )
+                  ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.02,
+              ),
 
 // display user details
-                displayUserDetails(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
+              displayUserDetails(),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
 
 // container for sessions, referrals, savings
-                IntrinsicHeight(
-                  child: Row(
-                    children: [
+              IntrinsicHeight(
+                child: Row(
+                  children: [
 
 // savings portal
-                      userSavingsPortal(),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                          child: const VerticalDivider()),
+                    userSavingsPortal(),
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        child: const VerticalDivider()),
 
 // sessions portal
-                      userSessionsPortal(),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                          child: const VerticalDivider()),
-                      userReferralsPortal(),
-                    ],
-                  ),
+                    userSessionsPortal(),
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        child: const VerticalDivider()),
+                    userReferralsPortal(),
+                  ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+              ),
 
 // logo section
-                Center(
-                  child: Container(
-                    child: const VirtuosoLogo(),
-                  ),
-                )
-              ],
-            ),
+              Center(
+                child: Container(
+                  child: const VirtuosoLogo(),
+                ),
+              )
+            ],
           ),
         ),
       ),

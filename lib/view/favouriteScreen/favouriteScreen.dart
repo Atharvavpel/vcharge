@@ -6,6 +6,7 @@ import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dar
 
 import '../../models/stationModel.dart';
 
+// ignore: must_be_immutable
 class FavouriteSceen extends StatefulWidget {
   String userId;
   FavouriteSceen({required this.userId, super.key});
@@ -71,7 +72,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                       margin: EdgeInsets.symmetric(
                           vertical: Get.width * 0.02,
                           horizontal: Get.width * 0.02),
-                      color: Color.fromARGB(255, 228, 249, 255),
+                      color: const Color.fromARGB(255, 228, 249, 255),
                       child: Padding(
                           padding: EdgeInsets.all(Get.width * 0.01),
                           child: Padding(
@@ -104,7 +105,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                                         child: Text(
                                           '${favouriteList[index].stationCity}, ${favouriteList[index].stationAddressLineOne}',
                                           maxLines: 2,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Color.fromARGB(
                                                   255, 132, 132, 132)),
                                         ),
@@ -137,7 +138,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: Get.height * 0.008),
-                                          child: Text(
+                                          child: const Text(
                                             'Chargers: 2/3',
                                             style: TextStyle(
                                                 color: Colors.grey,

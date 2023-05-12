@@ -45,7 +45,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
       required String number}) async {
     var whatsapp = number; 
     var whatsappURlAndroid =
-        "whatsapp://send?phone=" + whatsapp + "&text=$text";
+        "whatsapp://send?phone=$whatsapp&text=$text";
     var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
     if (Platform.isIOS) {
 
@@ -338,8 +338,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                                           // button for submiting the doubt or ticket
                                           ElevatedButton(
                                               onPressed: () {
-                                                print(
-                                                    "Data submitted succesfully");
+                                                // print(
+                                                //     "Data submitted succesfully");
                                                 Navigator.of(context).pop();
                                               },
                                               child: const Text("Submit"))
@@ -391,7 +391,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                       _makePhoneCall('tel: 7796386605');
                     });
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: Get.width * 0.7,
                     height: Get.height * 0.05,
                     child: Row(
@@ -404,7 +404,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                               fontWeight: FontWeight.w500),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Text(
                             "7796386605",
                             style: TextStyle(
@@ -426,7 +426,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                   onPressed: () {
                     sendEmail(email: "vcharge@gmail.com", subject: "");
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: Get.width * 0.7,
                     height: Get.height * 0.056,
                     child: Row(
@@ -440,7 +440,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                               fontWeight: FontWeight.w500),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Text(
                             "vcharge@gmail",
                             style: TextStyle(fontSize: Get.height * 0.02),
@@ -463,7 +463,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                             "Welcome to Vcharge support!",
                         number: "7796386605");
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: Get.width * 0.7,
                     height: Get.height * 0.05,
                     child: Row(
@@ -475,7 +475,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
 
                         // whtsapp text
                         Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Text(
                             "Whatsapp",
                             style: TextStyle(fontSize: Get.height * 0.02

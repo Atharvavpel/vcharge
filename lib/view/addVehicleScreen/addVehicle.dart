@@ -12,6 +12,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
   final formKey = GlobalKey<FormState>();
 
   var vehicleType = ['two', 'three', 'four'];
+  // ignore: prefer_typing_uninitialized_variables
   var selectedVehicleType ;
   var vehicleTypeSelectBool = [false, false, false];
 
@@ -139,8 +140,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       ),
 
                       // validation widget
-                      Visibility(
-                        child: const Text('Please select vehicle type'),
+                      const Visibility(
+                        child: Text('Please select vehicle type'),
                       )
                     ],
                   ),

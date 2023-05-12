@@ -55,7 +55,7 @@ class _ReferFriendState extends State<ReferFriend> {
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.width * 0.09),
-              child: Container(
+              child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.87,
                   child: Row(
                     // mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +83,7 @@ class _ReferFriendState extends State<ReferFriend> {
             // second instruction
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
-              child: Container(
+              child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.87,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +112,7 @@ class _ReferFriendState extends State<ReferFriend> {
             // third instruction
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
-              child: Container(
+              child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.87,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +140,7 @@ class _ReferFriendState extends State<ReferFriend> {
             //fourth Instruction
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
-              child: Container(
+              child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.87,
                   child: Row(
                     // crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,9 +172,9 @@ class _ReferFriendState extends State<ReferFriend> {
               child: ElevatedButton(
                   onPressed: () {
                     Share.share("https://virtuososofttech.com/");
-                    print("Shared successfully");
+                    // print("Shared successfully");
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: Get.width * 0.7,
                     height: Get.height * 0.05,
                     child: Row(

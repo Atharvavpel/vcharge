@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class FaqScreen extends StatefulWidget {
+  const FaqScreen({super.key});
+
   @override
   FaqScreenState createState() => FaqScreenState();
 }
@@ -47,7 +49,7 @@ class FaqScreenState extends State<FaqScreen> {
               children: [
                 ToggleButtons(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      selectedBorderColor: Color.fromARGB(255, 199, 171, 29),
+                      selectedBorderColor: const Color.fromARGB(255, 199, 171, 29),
                       selectedColor: Colors.black,
                       
                       fillColor: Colors.green,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:vcharge/services/GetMethod.dart';
 
 import '../../../models/bookingModel.dart';
 import 'cancelReservAlertPopUp.dart';
 
+// ignore: must_be_immutable
 class UpcomingBookingDetailsPopUp extends StatefulWidget {
   BookingModel bookingModel;
   String? stationName;
@@ -28,14 +28,13 @@ class UpcomingBookingDetailsPopUpState
 
   @override
   void initState() {
-    // TODO: implement initState
     bookingModel = widget.bookingModel;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: Get.height * 0.55,
       child: Column(children: [
         //"Booking Details" Heading text

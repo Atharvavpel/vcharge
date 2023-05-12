@@ -1,10 +1,10 @@
 class BookingModel {
   String? bookingId;
   String? bookingType;
-  String? bookingHostId;
-  String? bookingCustomerId;
-  String? bookingVendorId;
-  String? bookingStationId;
+  String? hostId;
+  String? customerId;
+  String? vendorId;
+  String? stationId;
   String? bookingDate;
   String? bookingTime;
   String? bookingCancellationReason;
@@ -12,17 +12,17 @@ class BookingModel {
   String? bookingReqDate;
   String? bookingCancellationReqDate;
   String? bookingSocket;
-  String? bookingStationName;
-  String? bookingStationAddress;
+  String? chargerId;
+  String? connectorId;
   double? bookingAmount;
 
   BookingModel(
       {this.bookingId,
       this.bookingType,
-      this.bookingHostId,
-      this.bookingCustomerId,
-      this.bookingVendorId,
-      this.bookingStationId,
+      this.hostId,
+      this.customerId,
+      this.vendorId,
+      this.stationId,
       this.bookingDate,
       this.bookingTime,
       this.bookingCancellationReason,
@@ -30,17 +30,17 @@ class BookingModel {
       this.bookingReqDate,
       this.bookingCancellationReqDate,
       this.bookingSocket,
-      this.bookingStationName,
-      this.bookingStationAddress,
+      this.chargerId,
+      this.connectorId,
       this.bookingAmount});
 
   BookingModel.fromJson(Map<String, dynamic> json) {
     bookingId = json['bookingId'];
     bookingType = json['bookingType'];
-    bookingHostId = json['bookingHostId'];
-    bookingCustomerId = json['bookingCustomerId'];
-    bookingVendorId = json['bookingVendorId'];
-    bookingStationId = json['bookingStationId'];
+    hostId = json['hostId'];
+    customerId = json['customerId'];
+    vendorId = json['vendorId'];
+    stationId = json['stationId'];
     bookingDate = json['bookingDate'];
     bookingTime = json['bookingTime'];
     bookingCancellationReason = json['bookingCancellationReason'];
@@ -48,8 +48,8 @@ class BookingModel {
     bookingReqDate = json['bookingReqDate'];
     bookingCancellationReqDate = json['bookingCancellationReqDate'];
     bookingSocket = json['bookingSocket'];
-    bookingStationName = json['bookingStationName'];
-    bookingStationAddress = json['bookingStationAddress'];
+    chargerId = json['chargerId'];
+    connectorId = json['connectorId'];
     bookingAmount = json['bookingAmount'];
   }
 
@@ -57,10 +57,10 @@ class BookingModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['bookingId'] = bookingId;
     data['bookingType'] = bookingType;
-    data['bookingHostId'] = bookingHostId;
-    data['bookingCustomerId'] = bookingCustomerId;
-    data['bookingVendorId'] = bookingVendorId;
-    data['bookingStationId'] = bookingStationId;
+    data['hostId'] = hostId;
+    data['customerId'] = customerId;
+    data['vendorId'] = vendorId;
+    data['stationId'] = stationId;
     data['bookingDate'] = bookingDate;
     data['bookingTime'] = bookingTime;
     data['bookingCancellationReason'] = bookingCancellationReason;
@@ -68,8 +68,8 @@ class BookingModel {
     data['bookingReqDate'] = bookingReqDate;
     data['bookingCancellationReqDate'] = bookingCancellationReqDate;
     data['bookingSocket'] = bookingSocket;
-    data['bookingStationName'] = bookingStationName;
-    data['bookingStationAddress'] = bookingStationAddress;
+    data['chargerId'] = chargerId;
+    data['connectorId'] = connectorId;
     data['bookingAmount'] = bookingAmount;
     return data;
   }

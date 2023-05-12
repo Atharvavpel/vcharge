@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 
+// ignore: must_be_immutable
 class AddMoneyStatusPopUp extends StatefulWidget {
   String? addedAmount;
   String? userId;
@@ -17,6 +18,7 @@ class AddMoneyStatusPopUp extends StatefulWidget {
 
 class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
   //variable to store the wallet amount
+  // ignore: prefer_typing_uninitialized_variables
   var walletAmount;
 
   @override
@@ -27,12 +29,16 @@ class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
 
   //The following function get the wallet amount store it in walletAmount variable
   Future<void> getWalletAmount() async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}');
-    if (data != null) {
-      setState(() {
-        walletAmount = data['walletAmount'].toString();
-      });
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}');
+      if (data != null) {
+        setState(() {
+          walletAmount = data['walletAmount'].toString();
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -53,7 +59,7 @@ class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
       child: Wrap(
         children: [
           //container for the top icon
-          Container(
+          SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.1,
               //this stack consist of a container with a color and a icon in center
@@ -88,11 +94,15 @@ class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
                     top: 10,
                     right: 10,
                     child: InkWell(
-                      onTap: (){
-                        Navigator.of(context).pop();
-                        Navigator.pop(context);
-                      },
-                      child: FaIcon(FontAwesomeIcons.x, color: Colors.white,size: Get.width * 0.045,)),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.pop(context);
+                        },
+                        child: FaIcon(
+                          FontAwesomeIcons.x,
+                          color: Colors.white,
+                          size: Get.width * 0.045,
+                        )),
                   ),
                 ],
               )),
@@ -104,7 +114,10 @@ class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.currency_rupee_rounded, size: MediaQuery.of(context).size.width * 0.08,),
+                  Icon(
+                    Icons.currency_rupee_rounded,
+                    size: MediaQuery.of(context).size.width * 0.08,
+                  ),
                   Text(
                     widget.addedAmount!,
                     style: TextStyle(
@@ -143,17 +156,25 @@ class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-              Text(
-                'Wallet Balance: ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * 0.055),
-              ),
-              Icon(Icons.currency_rupee_rounded, size: MediaQuery.of(context).size.width * 0.055,),
-              walletAmount == null
-                  ? const CircularProgressIndicator()
-                  : Text(
-                      walletAmount,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * 0.055),
-                    ),
+                  Text(
+                    'Wallet Balance: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.width * 0.055),
+                  ),
+                  Icon(
+                    Icons.currency_rupee_rounded,
+                    size: MediaQuery.of(context).size.width * 0.055,
+                  ),
+                  walletAmount == null
+                      ? const CircularProgressIndicator()
+                      : Text(
+                          walletAmount,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.055),
+                        ),
                 ],
               )),
         ],

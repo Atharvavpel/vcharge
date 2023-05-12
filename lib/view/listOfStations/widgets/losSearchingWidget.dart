@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vcharge/services/getMethod.dart';
 
+// ignore: camel_case_types
 class losSearchingWidget extends SearchDelegate{
 
 
@@ -115,7 +116,7 @@ class losSearchingWidget extends SearchDelegate{
                     //           item['stationLongitude'],
                     //         )), 17);
 
-                    print("the listtile on tap function is called");
+                    // print("the listtile on tap function is called");
 
                     showResults(context);
 
@@ -144,7 +145,7 @@ class losSearchingWidget extends SearchDelegate{
                     //         ));
                     // showResults(context);
 
-                    print("outside the on tap of listtile");
+                    // print("outside the on tap of listtile");
 
                     //               return Marker(
                     //   // width: 20.0,

@@ -57,24 +57,24 @@ class VehicleModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['vehicleId'] = this.vehicleId;
-    data['vehicleBrandName'] = this.vehicleBrandName;
-    data['vehicleModelName'] = this.vehicleModelName;
-    data['vehicleClass'] = this.vehicleClass;
-    data['vehicleColour'] = this.vehicleColour;
-    data['vehicleBatteryType'] = this.vehicleBatteryType;
-    data['vehicleBatteryCapacity'] = this.vehicleBatteryCapacity;
-    data['vehicleAdaptorType'] = this.vehicleAdaptorType;
-    data['vehicleTimeToChargeRegular'] = this.vehicleTimeToChargeRegular;
-    data['vehicleTimeToChargeFast'] = this.vehicleTimeToChargeFast;
-    data['vehicleChargingStandard'] = this.vehicleChargingStandard;
-    data['vehicleRange'] = this.vehicleRange;
-    data['vehicleMotorType'] = this.vehicleMotorType;
-    data['vehicleMotorPower'] = this.vehicleMotorPower;
-    data['vehicleMotorTorque'] = this.vehicleMotorTorque;
-    data['vehicleDriveModes'] = this.vehicleDriveModes;
-    data['vehicleDimentions'] = this.vehicleDimentions;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['vehicleId'] = vehicleId;
+    data['vehicleBrandName'] = vehicleBrandName;
+    data['vehicleModelName'] = vehicleModelName;
+    data['vehicleClass'] = vehicleClass;
+    data['vehicleColour'] = vehicleColour;
+    data['vehicleBatteryType'] = vehicleBatteryType;
+    data['vehicleBatteryCapacity'] = vehicleBatteryCapacity;
+    data['vehicleAdaptorType'] = vehicleAdaptorType;
+    data['vehicleTimeToChargeRegular'] = vehicleTimeToChargeRegular;
+    data['vehicleTimeToChargeFast'] = vehicleTimeToChargeFast;
+    data['vehicleChargingStandard'] = vehicleChargingStandard;
+    data['vehicleRange'] = vehicleRange;
+    data['vehicleMotorType'] = vehicleMotorType;
+    data['vehicleMotorPower'] = vehicleMotorPower;
+    data['vehicleMotorTorque'] = vehicleMotorTorque;
+    data['vehicleDriveModes'] = vehicleDriveModes;
+    data['vehicleDimentions'] = vehicleDimentions;
     return data;
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 
 import '../../../services/getLiveLocation.dart';
@@ -10,7 +9,7 @@ import '../../../services/redisConnection.dart';
 class LocationFinder extends StatefulWidget {
   //getting mapController as parameter
   final VoidCallback updateState;
-  LocationFinder({required this.updateState, super.key});
+  const LocationFinder({required this.updateState, super.key});
 
   @override
   State<LocationFinder> createState() => LocationFinderState();

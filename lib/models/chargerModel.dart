@@ -1,6 +1,7 @@
 import 'package:vcharge/models/connectorModel.dart';
 
 class ChargerModel {
+  String? chargerId;
   String? chargerName;
   int? chargerNumber;
   String? chargerInputVoltage;
@@ -26,7 +27,9 @@ class ChargerModel {
   List<ConnectorModel>? connectors;
 
   ChargerModel(
-      {this.chargerName,
+      {
+      this.chargerId,
+      this.chargerName,
       this.chargerNumber,
       this.chargerInputVoltage,
       this.chargerOutputVoltage,
@@ -51,6 +54,7 @@ class ChargerModel {
       this.connectors});
 
   ChargerModel.fromJson(Map<String, dynamic> json) {
+    chargerId = json['chargerId'];
     chargerName = json['chargerName'];
     chargerNumber = json['chargerNumber'];
     chargerInputVoltage = json['chargerInputVoltage'];
@@ -83,6 +87,7 @@ class ChargerModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['chargerId'] = chargerId;
     data['chargerName'] = chargerName;
     data['chargerNumber'] = chargerNumber;
     data['chargerInputVoltage'] = chargerInputVoltage;

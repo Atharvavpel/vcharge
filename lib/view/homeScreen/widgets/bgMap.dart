@@ -12,11 +12,11 @@ import 'package:vcharge/services/getLiveLocation.dart';
 import 'package:vcharge/services/getMethod.dart';
 import 'package:vcharge/services/redisConnection.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/availabilityColorFunction.dart';
 import '../homeScreen.dart';
 
+// ignore: must_be_immutable
 class BgMap extends StatefulWidget {
   String userId;
 
@@ -32,6 +32,7 @@ class BgMap extends StatefulWidget {
 }
 
 class BgMapState extends State<BgMap> with TickerProviderStateMixin {
+  // ignore: non_constant_identifier_names
   String url_temp = 'http://192.168.0.243:8096/manageStation/stations';
 
   // the user's live location data
@@ -53,14 +54,15 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // initializeFlutterMapTileCaching();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     // redisTest();
   }
 
-  // void redisTest() async{
-  //   await RedisConnection.set('any', 'thing');
-  //   print(await RedisConnection.get('any'));
+  //function to initialize FlutterMapTileCaching
+  // void initializeFlutterMapTileCaching() async{
+  //   await FlutterMapTileCaching.initialise();
   // }
 
   @override
@@ -75,19 +77,19 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
     try {
       var data = await GetMethod.getRequest(url);
       if (data.isNotEmpty) {
-        print('Data Not Empty');
+        // print('Data Not Empty');
         stationsData.clear();
         for (int i = 0; i < data.length; i++) {
           stationsData.add(RequiredStationDetailsModel.fromJson(data[i]));
         }
-        print(stationsData);
+        // print(stationsData);
         if (mounted) {
           setState(() {
             BgMapState.getMarkersDetails(context, stationsData);
           });
         }
       } else {
-        print("Empty Data");
+        // print("Empty Data");
       }
     } catch (e) {
       print(e);
@@ -134,34 +136,38 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
 
   //This function get the live location of the user using GetLiveLocation class
   Future<void> getLocation() async {
-    var userLat = await RedisConnection.get('userLatitude');
-    var userLong = await RedisConnection.get('userLongitude');
+    try {
+      var userLat = await RedisConnection.get('userLatitude');
+      var userLong = await RedisConnection.get('userLongitude');
 
-    if (userLat != null && userLong != null) {
-      BgMapState.userLocation =
-          LatLng(double.parse(userLat), double.parse(userLong));
-      var currentLocation = await GetLiveLocation.getUserLiveLocation();
-      if (currentLocation.latitude != userLat &&
-          currentLocation.longitude != userLong) {
-        if (mounted) {
-          setState(() {
-            BgMapState.userLocation = currentLocation;
-          });
+      if (userLat != null && userLong != null) {
+        BgMapState.userLocation =
+            LatLng(double.parse(userLat), double.parse(userLong));
+        var currentLocation = await GetLiveLocation.getUserLiveLocation();
+        if (currentLocation.latitude != userLat &&
+            currentLocation.longitude != userLong) {
+          if (mounted) {
+            setState(() {
+              BgMapState.userLocation = currentLocation;
+            });
+          }
         }
+      } else {
+        BgMapState.userLocation = await GetLiveLocation.getUserLiveLocation();
+
+        //store current location of user in local Storage such that we can fetch it
+        await RedisConnection.set(
+            'userLatitude', BgMapState.userLocation!.latitude.toString());
+        await RedisConnection.set(
+            'userLongitude', BgMapState.userLocation!.longitude.toString());
       }
-    } else {
-      BgMapState.userLocation = await GetLiveLocation.getUserLiveLocation();
 
-      //store current location of user in local Storage such that we can fetch it
-      await RedisConnection.set(
-          'userLatitude', BgMapState.userLocation!.latitude.toString());
-      await RedisConnection.set(
-          'userLongitude', BgMapState.userLocation!.longitude.toString());
-    }
-
-    if (mounted) {
-      // Call the animatedMapMove method only if the widget is still mounted
-      animatedMapMove(BgMapState.userLocation!, 15.0);
+      if (mounted) {
+        // Call the animatedMapMove method only if the widget is still mounted
+        animatedMapMove(BgMapState.userLocation!, 15.0);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -247,17 +253,18 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
       options: MapOptions(
         minZoom: 3,
         maxZoom: 17.0,
-        center: BgMapState.userLocation ?? LatLng(18.52545104572047, 73.85416186008594),
+        center: BgMapState.userLocation ??
+            LatLng(18.52545104572047, 73.85416186008594),
         zoom: 15.0,
         //by this command, the map will not be able to rotate
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         onMapReady: () async {
           await getLocation();
-          if(mounted){
-             setState(() {
-             getStationData(
+          if (mounted) {
+            setState(() {
+              getStationData(
                   'http://192.168.0.243:8096/manageStation/getStationsLocation?longitude=${BgMapState.userLocation!.longitude}&latitude=${BgMapState.userLocation!.latitude}&maxDistance=5000');
-          });
+            });
           }
           subscription =
               mapController.mapEventStream.listen((MapEvent mapEvent) {
@@ -280,6 +287,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
       children: [
         //tile layer
         TileLayer(
+          // tileProvider: FMTC.instance('storeName').getTileProvider(),
           urlTemplate:
               'https://api.mapbox.com/styles/v1/atharva70/clf990hij00ck01pg9fcgv02h/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXRoYXJ2YTcwIiwiYSI6ImNsZjk3cTUxZDJjc2czems3N2F3d2Y2aWUifQ._j3hKxoBC_Gnh4-qddn8lg',
           additionalOptions: const {

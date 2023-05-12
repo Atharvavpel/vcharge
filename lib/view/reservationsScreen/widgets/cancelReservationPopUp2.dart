@@ -7,8 +7,8 @@ import '../../../models/bookingModel.dart';
 import '../../../services/PutMethod.dart';
 import 'cancellationDonePopUp.dart';
 
+// ignore: must_be_immutable
 class CancelReservtionPopUp extends StatefulWidget {
-
   BookingModel bookingModel;
   CancelReservtionPopUp({required this.bookingModel, super.key});
 
@@ -28,6 +28,7 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
     'Other'
   ];
 
+  // ignore: prefer_typing_uninitialized_variables
   var selectedReason;
 
   final formKeyReason = GlobalKey<FormState>();
@@ -35,7 +36,6 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     bookingModel = widget.bookingModel;
   }
@@ -67,39 +67,36 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
         //select reason dropdown
         Padding(
           padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
-          child: Container(
-            child: Card(
-              elevation: 2,
-              margin: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.05, vertical: Get.height * 0.01),
-              child: Form(
-                key: formKeyReason,
-                child: DropdownButtonFormField(
-                  hint: const Text('Select a Reason'),
-                  value: selectedReason,
-                  decoration: const InputDecoration(
-                      label: Text("Select Reason"),
-                      border: OutlineInputBorder()),
-                  isExpanded: true,
-                  items: cancelReasonsList
-                      .map<DropdownMenuItem<String>>(
-                        (String value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedReason = newValue!;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select a reason';
-                    }
-                  },
-                ),
+          child: Card(
+            elevation: 2,
+            margin: EdgeInsets.symmetric(
+                horizontal: Get.width * 0.05, vertical: Get.height * 0.01),
+            child: Form(
+              key: formKeyReason,
+              child: DropdownButtonFormField(
+                hint: const Text('Select a Reason'),
+                value: selectedReason,
+                decoration: const InputDecoration(
+                    label: Text("Select Reason"), border: OutlineInputBorder()),
+                isExpanded: true,
+                items: cancelReasonsList
+                    .map<DropdownMenuItem<String>>(
+                      (String value) => DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedReason = newValue!;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a reason';
+                  }
+                },
               ),
             ),
           ),
@@ -141,21 +138,26 @@ class CancelReservtionPopUpState extends State<CancelReservtionPopUp> {
             onPressed: () async {
               if (formKeyReason.currentState!.validate() &&
                   formKeyAddInfo.currentState!.validate()) {
-                var response = await PutMethod.putRequest(
-                    'http://192.168.0.41:8099/manageBooking/cancelledBooking?bookingId=',
-                    bookingModel!.bookingId!,
-                    jsonEncode({
-                      "bookingCancellationReason":
-                          "$selectedReason ${additionInfo.text.toString()}}",
-                      "bookingStatus": "cancelled"
-                    }));
-                if (response == 200) {
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return CancellationDonePopUp();
-                      });
+                try {
+                  var response = await PutMethod.putRequest(
+                      'http://192.168.0.41:8099/manageBooking/cancelledBooking?bookingId=',
+                      bookingModel!.bookingId!,
+                      jsonEncode({
+                        "bookingCancellationReason":
+                            "$selectedReason ${additionInfo.text.toString()}}",
+                        "bookingStatus": "cancelled"
+                      }));
+                  if (response == 200) {
+                    // ignore: use_build_context_synchronously
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return const CancellationDonePopUp();
+                        });
+                  }
+                } catch (e) {
+                  print(e);
                 }
               }
             },

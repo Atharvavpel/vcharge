@@ -70,23 +70,17 @@ class _ConfirmationSuccessPopUpState extends State<ConfirmationSuccessPopUp> {
             children: [
               
               // title
-              Container(
-                child: const Text("Check your mail", style: TextStyle(
-                  fontWeight: FontWeight.bold
-                ),),
-              ),
+              const Text("Check your mail", style: TextStyle(
+                fontWeight: FontWeight.bold
+              ),),
 
               // instruction 1
-              Container(
-                child: Text(instructionOne),
-              ),
+              Text(instructionOne),
 
               // email logo
-              Container(
-                child: Icon(
-                  Icons.email,
-                  size: Get.height* 0.02,
-                ),
+              Icon(
+                Icons.email,
+                size: Get.height* 0.02,
               ),            
 
 
@@ -99,11 +93,7 @@ class _ConfirmationSuccessPopUpState extends State<ConfirmationSuccessPopUp> {
                
 
               // instruction 2
-              Container(
-                child: Text(instructionTwo),
-              ),
-              
-
+              Text(instructionTwo),
             ],
           ),
         ),

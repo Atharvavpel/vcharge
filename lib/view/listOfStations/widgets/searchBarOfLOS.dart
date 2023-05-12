@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 import 'package:vcharge/view/listOfStations/widgets/losSearchingWidget.dart';
 
 
+// ignore: must_be_immutable
 class SearchBarofLOS extends StatefulWidget {
   String userId;
 

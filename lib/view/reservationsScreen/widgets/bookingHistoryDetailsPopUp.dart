@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../models/bookingModel.dart';
 
+// ignore: must_be_immutable
 class BookingHistoryDetailsPopUp extends StatefulWidget {
   String stationName;
   BookingModel bookingModel;
@@ -56,12 +57,10 @@ class BookingHistoryDetailsPopUpState
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: Container(
-                        child: FaIcon(
-                          FontAwesomeIcons.x,
-                          color: Colors.white,
-                          size: Get.width * 0.045,
-                        ),
+                      child: FaIcon(
+                        FontAwesomeIcons.x,
+                        color: Colors.white,
+                        size: Get.width * 0.045,
                       )),
                 ),
               ],
@@ -240,7 +239,7 @@ class BookingHistoryDetailsPopUpState
             Container(
               margin: EdgeInsets.all(Get.width * 0.025),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 230, 250, 255),
+                color: const Color.fromARGB(255, 230, 250, 255),
                 borderRadius: BorderRadius.circular(10)
               ),
               width: double.infinity,

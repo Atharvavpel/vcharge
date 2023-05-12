@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/PostMethod.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservationDonePopup.dart';
@@ -11,6 +10,7 @@ import '../../../models/chargerModel.dart';
 import 'package:intl/intl.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 
+// ignore: must_be_immutable
 class ReservePopUp extends StatefulWidget {
   String stationId;
   String stationName;
@@ -18,6 +18,7 @@ class ReservePopUp extends StatefulWidget {
   String stationVendorId;
   String stationLocation;
   ChargerModel chargerModel;
+  String connecterId;
   String connectorSocket;
   String userId;
 
@@ -29,6 +30,7 @@ class ReservePopUp extends StatefulWidget {
       required this.stationVendorId,
       required this.stationLocation,
       required this.chargerModel,
+      required this.connecterId,
       required this.connectorSocket,
       super.key});
 
@@ -98,90 +100,76 @@ class ReservePopUpState extends State<ReservePopUp> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-      child: Container(
+      child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.75,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //this container contains a wrap, which consist 2 text -> stationName and chargerName
-            Container(
-              // margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
-              child: Wrap(
-                direction: Axis.vertical,
-                children: [
-                  //Station Heading text
-                  Container(
-                    child: Text(
-                      stationName!,
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.05,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  //Station Heading text
-                  Container(
-                    child: Text(chargerModel!.chargerSerialNumber!),
-                  ),
-                ],
-              ),
+            Wrap(
+              direction: Axis.vertical,
+              children: [
+                //Station Heading text
+                Text(
+                  stationName!,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.bold),
+                ),
+                //Station Heading text
+                Text(chargerModel!.chargerSerialNumber!),
+              ],
             ),
 
             //container for station location
-            Container(
-              child: Row(
-                children: [
-                  const Icon(Icons.location_on_rounded),
-                  Text(
-                    stationLocation!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
+            Row(
+              children: [
+                const Icon(Icons.location_on_rounded),
+                Text(
+                  stationLocation!,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
             ),
 
             //Container for socket and avaliblity
-            Container(
-                child: Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //container for charger socket
-                Container(
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Socket: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '${chargerModel!.chargerMountType}',
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    const Text(
+                      'Socket: ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${chargerModel!.chargerMountType}',
+                    ),
+                  ],
                 ),
 
                 //container for charger availiblity
-                Container(
-                  child: Row(
-                    children: const [
-                      Text(
-                        'Availability: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Available',
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: const [
+                    Text(
+                      'Availability: ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Available',
+                    ),
+                  ],
                 ),
               ],
-            )),
+            ),
 
             //Column for date picker
             Column(
               children: [
                 //container for date text
-                Container(
+                SizedBox(
                   width: double.maxFinite,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -332,33 +320,41 @@ class ReservePopUpState extends State<ReservePopUp> {
               alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () async {
-                  var response = await postBooking(jsonEncode({
-                    "bookingType": "Reservation",
-                    "bookingHostId": widget.stationHostId,
-                    "bookingCustomerId": widget.userId,
-                    "bookingStationId": widget.stationId,
-                    "bookingDate":
-                        DateFormat("yyyy-MM-dd").format(selectedDate),
-                    "bookingTime":
-                        DateFormat("HH:mm:ss").format(selectedTimeSlot),
-                    "bookingSocket": widget.connectorSocket,
-                    "bookingStatus": "confirmed",
-                  }));
-                  if (response == 200) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ReservationDonePopUp(
-                            stationName: widget.stationName,
-                            chargerSerialNumber:
-                                chargerModel!.chargerSerialNumber!,
-                            stationLocation: widget.stationLocation,
-                            bookingId: 'BKG0012324',
-                            bookginStatus: 'Confirmed',
-                            bookingDate: selectedDate,
-                            bookingTime: selectedTimeSlot,
-                          );
-                        });
+                  try {
+                    var response = await postBooking(jsonEncode({
+                      "bookingType": "Reservation",
+                      "hostId": widget.stationHostId,
+                      "customerId": widget.userId,
+                      "stationId": widget.stationId,
+                      "bookingDate":
+                          DateFormat("yyyy-MM-dd").format(selectedDate),
+                      "bookingTime":
+                          DateFormat("HH:mm:ss").format(selectedTimeSlot),
+                      "bookingSocket": widget.connectorSocket,
+                      "bookingStatus": "confirmed",
+                      "stationName": widget.stationName,
+                      "chargerId": widget.chargerModel.chargerId,
+                      "connectorId": widget.connecterId,
+                    }));
+                    if (response == 200) {
+                      // ignore: use_build_context_synchronously
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ReservationDonePopUp(
+                              stationName: widget.stationName,
+                              chargerSerialNumber:
+                                  chargerModel!.chargerSerialNumber!,
+                              stationLocation: widget.stationLocation,
+                              bookingId: 'BKG0012324',
+                              bookginStatus: 'Confirmed',
+                              bookingDate: selectedDate,
+                              bookingTime: selectedTimeSlot,
+                            );
+                          });
+                    }
+                  } catch (e) {
+                    print(e);
                   }
                 },
                 child: const Text(

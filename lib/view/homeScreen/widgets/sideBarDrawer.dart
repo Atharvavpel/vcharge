@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
 import 'package:vcharge/view/faqScreen/faqScreen.dart';
 import 'package:vcharge/view/helpSupportScreen/helpSupportScreen.dart';
@@ -10,6 +9,7 @@ import '../../favouriteScreen/favouriteScreen.dart';
 import '../../referFriendScreen/referFriend.dart';
 import '../../reservationsScreen/reservationScreen.dart';
 
+// ignore: must_be_immutable
 class SideBarDrawer extends StatefulWidget {
   String userId;
 
@@ -176,7 +176,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                                   context); // Close the drawer smoothly
                             });
                           });
-                          ;
+                          
                         },
                       ),
                     ),
@@ -217,7 +217,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                               Navigator.pop(
                                   context); // Close the drawer smoothly
                             });
-                          });;
+                          });
                         },
                       ),
                     ),
@@ -290,7 +290,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                           Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => FaqScreen()))
+                                      builder: (context) => const FaqScreen()))
                               .then((value) {
                             Future.delayed(const Duration(milliseconds: 250),
                                 () {

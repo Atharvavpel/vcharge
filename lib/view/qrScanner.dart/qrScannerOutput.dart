@@ -1,8 +1,6 @@
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class QrScannerOutput extends StatelessWidget {
 
   String output;
@@ -21,10 +19,7 @@ class QrScannerOutput extends StatelessWidget {
         title: const Text("QR Scanner output"),
       ),
       body: Center(
-        child: Container(
-          
-          child: Text("Output is : $output "),
-        ),
+        child: Text("Output is : $output "),
       ),
     );
   }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:vcharge/view/favouriteScreen/favouriteScreen.dart';
 import 'package:vcharge/view/reservationsScreen/reservationScreen.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
 
+// ignore: must_be_immutable
 class HorizontalSideBar extends StatefulWidget {
   String userId;
 

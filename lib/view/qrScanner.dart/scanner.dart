@@ -173,19 +173,17 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                     color: const Color.fromARGB(255, 195, 227, 196), width: 3.0),
               ),
               child: (scanResult == "Failed to scan")
-                  ? Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.qr_code_scanner,
-                              color: Colors.white, size: 60.0),
-                          SizedBox(height: 16.0),
-                          Text("Failed to scan, please enter the station Id",
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 16.0)),
-                        ],
-                      ),
-                    )
+                  ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.qr_code_scanner,
+                          color: Colors.white, size: 60.0),
+                      SizedBox(height: 16.0),
+                      Text("Failed to scan, please enter the station Id",
+                          style: TextStyle(
+                              color: Colors.white, fontSize: 16.0)),
+                    ],
+                  )
                   : QRView(
                       key: qrKey,
                       cameraFacing: CameraFacing.back,
@@ -205,12 +203,10 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           Positioned(
               top: MediaQuery.of(context).size.height * 0.5 + 120,
               left: MediaQuery.of(context).size.width * 0.27,
-              child: Container(
-                child: const Text(
-                  "------------ OR ------------",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ),
+              child: const Text(
+                "------------ OR ------------",
+                style: TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold),
               )),
 
 // widget for Station code textfield              
@@ -219,15 +215,13 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
             left: MediaQuery.of(context).size.width * 0.156,
             child: Column(
               children: [
-                Container(
-                  child: const Text(
-                    "Please enter the station code as seen on the box",
-                    style: TextStyle(fontSize: 10),
-                  ),
+                const Text(
+                  "Please enter the station code as seen on the box",
+                  style: TextStyle(fontSize: 10),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
+                  child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.06,
                     width: MediaQuery.of(context).size.width * 0.7,
                     child: TextFormField(

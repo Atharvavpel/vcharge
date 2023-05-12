@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vcharge/view/walletScreen/widgets/addMoneyStatusPopUp.dart';
 
+// ignore: must_be_immutable
 class AddMoneyScreen extends StatefulWidget {
   String? userId;
   
@@ -176,7 +177,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
                     }
                   );
                 },
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.94,
                   child: Card(
                       color: const Color.fromARGB(255, 130, 199, 85),

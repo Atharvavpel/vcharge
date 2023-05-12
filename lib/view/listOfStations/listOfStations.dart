@@ -10,6 +10,7 @@ import 'dart:math' as Math;
 import 'package:vcharge/view/listOfStations/widgets/searchBarOfLOS.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
+// ignore: must_be_immutable
 class ListOfStations extends StatefulWidget {
   String userId;
 
@@ -23,7 +24,7 @@ class ListOfStationsState extends State<ListOfStations> {
   //stores current location of user
   LatLng? userPosition;
 
-  String getStationUrl = 'http://192.168.0.243:8096/manageStation/getStations';
+  String getStationUrl = 'http://192.168.0.243:8096/manageStation/getStationInterface';
 
   @override
   void initState() {
@@ -57,19 +58,23 @@ class ListOfStationsState extends State<ListOfStations> {
 
   //get current location of the user
   Future<void> getLocationOfUser() async {
-    var position = await GetLiveLocation.getUserLiveLocation();
-    if (mounted) {
-      setState(() {
-        userPosition = LatLng(position.latitude, position.longitude);
-      });
-    }
+    try {
+  var position = await GetLiveLocation.getUserLiveLocation();
+  if (mounted) {
+    setState(() {
+      userPosition = LatLng(position.latitude, position.longitude);
+    });
+  }
+} catch (e) {
+  print(e);
+}
   }
 
   Future<void> getStationList(String url) async {
     try {
       var data = await GetMethod.getRequest(url);
       if (data.isNotEmpty) {
-        print('Data Not Empty');
+        // print('Data Not Empty');
         stationsList.clear();
         for (int i = 0; i < data.length; i++) {
           stationsList.add(RequiredStationDetailsModel.fromJson(data[i]));
@@ -153,7 +158,7 @@ class ListOfStationsState extends State<ListOfStations> {
       sortedStationList.add(sortedStationDistanceList[i]['station']);
       sortedDistanceList.add(sortedStationDistanceList[i]['distance']);
     }
-    print(sortedStationList);
+    // print(sortedStationList);
   });
 }
   }

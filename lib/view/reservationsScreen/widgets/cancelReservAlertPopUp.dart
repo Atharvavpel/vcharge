@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../models/bookingModel.dart';
 import 'cancelReservationPopUp2.dart';
 
+// ignore: must_be_immutable
 class CancleReservAlertPopUp extends StatelessWidget {
   BookingModel bookingModel;
   CancleReservAlertPopUp({required this.bookingModel, super.key});

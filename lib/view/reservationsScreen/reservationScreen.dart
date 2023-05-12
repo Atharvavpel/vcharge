@@ -6,6 +6,7 @@ import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/reservationsScreen/widgets/bookingHistoryDetailsPopUp.dart';
 import 'package:vcharge/view/reservationsScreen/widgets/upcomingBookingDetailsPopUp.dart';
 
+// ignore: must_be_immutable
 class ReservationScreen extends StatefulWidget {
   String userId;
 
@@ -33,37 +34,46 @@ class ReservationScreenState extends State<ReservationScreen> {
   }
 
   Future<void> getStationNameAndAddress(String stationId) async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.243:8096/manageStation/getStation?stationId=$stationId');
-    stationName = data['stationName'];
-    stationAddress =
-        '${data['stationAddressLineOne']}, ${data['stationAddressLineTwo']}, ${data['stationCity']}';
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.243:8096/manageStation/getStation?stationId=$stationId');
+      stationName = data['stationName'];
+      stationAddress =
+          '${data['stationAddressLineOne']}, ${data['stationAddressLineTwo']}, ${data['stationCity']}';
+    } catch (e) {
+      print(e);
+    }
   }
 
-  Future<String> getStationName(String stationId) async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.243:8096/manageStation/getStation?stationId=$stationId');
-    return data['stationName'];
-  }
+  // Future<String> getStationName(String stationId) async {
+  //   var data = await GetMethod.getRequest(
+  //       'http://192.168.0.243:8096/manageStation/getStation?stationId=$stationId');
+  //   return data['stationName'];
+  // }
 
   Future<void> getbookingDetails() async {
-    var data = await GetMethod.getRequest(
-        'http://192.168.0.243:8099/manageBooking/getBookingCustomer?bookingCustomerId=${widget.userId}');
-    if (data != null && data.isNotEmpty) {
-      upcomingBookingList.clear();
-      bookingHistoryList.clear();
-      setState(() {
-        for (int i = 0; i < data.length; i++) {
-          BookingModel booking = BookingModel.fromJson(data[i]);
-          var bookingDateTime =
-              DateTime.parse('${booking.bookingDate} ${booking.bookingTime}');
-          if (bookingDateTime.isAfter(DateTime.now()) && booking.bookingStatus!.toLowerCase() != 'cancelled') {
-            upcomingBookingList.add(booking);
-          } else {
-            bookingHistoryList.add(booking);
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.243:8099/manageBooking/getBookingCustomer?bookingCustomerId=${widget.userId}');
+      if (data != null && data.isNotEmpty) {
+        upcomingBookingList.clear();
+        bookingHistoryList.clear();
+        setState(() {
+          for (int i = 0; i < data.length; i++) {
+            BookingModel booking = BookingModel.fromJson(data[i]);
+            var bookingDateTime =
+                DateTime.parse('${booking.bookingDate} ${booking.bookingTime}');
+            if (bookingDateTime.isAfter(DateTime.now()) &&
+                booking.bookingStatus!.toLowerCase() != 'cancelled') {
+              upcomingBookingList.add(booking);
+            } else {
+              bookingHistoryList.add(booking);
+            }
           }
-        }
-      });
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -156,19 +166,21 @@ class ReservationScreenState extends State<ReservationScreen> {
                                           stationAddress: stationAddress,
                                           stationName: stationName,
                                         );
-                                      }).then((value){
-                                        setState(() {
-                                          getStationNameAndAddress('STN20230505105447818');
-                                          getbookingDetails();
-                                        });
-                                      });
+                                      }).then((value) {
+                                    setState(() {
+                                      getStationNameAndAddress(
+                                          'STN20230505105447818');
+                                      getbookingDetails();
+                                    });
+                                  });
                                 },
                                 child: Card(
                                     elevation: 3,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    color: const Color.fromARGB(255, 235, 255, 254),
+                                    color: const Color.fromARGB(
+                                        255, 235, 255, 254),
                                     margin: EdgeInsets.symmetric(
                                         horizontal: Get.width * 0.02,
                                         vertical: Get.height * 0.01),
@@ -196,7 +208,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                               children: [
                                                 //Column Booking ID
                                                 Expanded(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     height: Get.height * 0.07,
                                                     child: Column(
                                                       mainAxisAlignment:
@@ -215,12 +227,12 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         ),
                                                         Card(
                                                             elevation: 0,
-                                                            color:
-                                                                const Color.fromARGB(
-                                                                    255,
-                                                                    203,
-                                                                    255,
-                                                                    204),
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                203,
+                                                                255,
+                                                                204),
                                                             child: Padding(
                                                               padding: EdgeInsets.symmetric(
                                                                   vertical:
@@ -250,7 +262,7 @@ class ReservationScreenState extends State<ReservationScreen> {
 
                                                 //Column Socket Type
                                                 Expanded(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     height: Get.height * 0.07,
                                                     child: Column(
                                                       mainAxisAlignment:
@@ -269,12 +281,12 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         ),
                                                         Card(
                                                             elevation: 0,
-                                                            color:
-                                                                const Color.fromARGB(
-                                                                    255,
-                                                                    203,
-                                                                    255,
-                                                                    204),
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                203,
+                                                                255,
+                                                                204),
                                                             child: Padding(
                                                               padding: EdgeInsets.symmetric(
                                                                   vertical:
@@ -300,7 +312,7 @@ class ReservationScreenState extends State<ReservationScreen> {
 
                                                 //Column booking status
                                                 Expanded(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     height: Get.height * 0.07,
                                                     child: Column(
                                                       mainAxisAlignment:
@@ -380,17 +392,22 @@ class ReservationScreenState extends State<ReservationScreen> {
                               return InkWell(
                                 onTap: () {
                                   showDialog(
-                                    context: context,
-                                    builder: (context){
-                                    return BookingHistoryDetailsPopUp(bookingModel: bookingHistoryList[index], stationName: stationName!,);
-                                  });
+                                      context: context,
+                                      builder: (context) {
+                                        return BookingHistoryDetailsPopUp(
+                                          bookingModel:
+                                              bookingHistoryList[index],
+                                          stationName: stationName!,
+                                        );
+                                      });
                                 },
                                 child: Card(
                                     elevation: 3,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    color: const Color.fromARGB(255, 235, 255, 254),
+                                    color: const Color.fromARGB(
+                                        255, 235, 255, 254),
                                     margin: EdgeInsets.symmetric(
                                         horizontal: Get.width * 0.02,
                                         vertical: Get.height * 0.01),
@@ -418,7 +435,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                               children: [
                                                 //Column Booking ID
                                                 Expanded(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     height: Get.height * 0.07,
                                                     child: Column(
                                                       mainAxisAlignment:
@@ -437,12 +454,12 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         ),
                                                         Card(
                                                             elevation: 0,
-                                                            color:
-                                                                const Color.fromARGB(
-                                                                    255,
-                                                                    203,
-                                                                    255,
-                                                                    204),
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                203,
+                                                                255,
+                                                                204),
                                                             child: Padding(
                                                               padding: EdgeInsets.symmetric(
                                                                   vertical:
@@ -472,7 +489,7 @@ class ReservationScreenState extends State<ReservationScreen> {
 
                                                 //Column Socket Type
                                                 Expanded(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     height: Get.height * 0.07,
                                                     child: Column(
                                                       mainAxisAlignment:
@@ -491,12 +508,12 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                         ),
                                                         Card(
                                                             elevation: 0,
-                                                            color:
-                                                                const Color.fromARGB(
-                                                                    255,
-                                                                    203,
-                                                                    255,
-                                                                    204),
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                203,
+                                                                255,
+                                                                204),
                                                             child: Padding(
                                                               padding: EdgeInsets.symmetric(
                                                                   vertical:
@@ -522,7 +539,7 @@ class ReservationScreenState extends State<ReservationScreen> {
 
                                                 //Column booking status
                                                 Expanded(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     height: Get.height * 0.07,
                                                     child: Column(
                                                       mainAxisAlignment:
@@ -609,7 +626,8 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                     ),
                                                     Card(
                                                         elevation: 0,
-                                                        color: const Color.fromARGB(
+                                                        color: const Color
+                                                                .fromARGB(
                                                             255, 203, 255, 204),
                                                         child: Padding(
                                                           padding: EdgeInsets

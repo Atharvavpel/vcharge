@@ -5,6 +5,7 @@ import 'package:vcharge/view/myVehicleScreen/widgets/showVehilcleDetailsPopup.da
 
 import '../../models/vehicleModel.dart';
 
+// ignore: must_be_immutable
 class MyVehicleScreen extends StatefulWidget {
   String userId;
   MyVehicleScreen({required this.userId, super.key});
@@ -49,7 +50,7 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
         title: const Text('My Vehicle'),
       ),
       body: vehicleList.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: vehicleList.length,
               itemBuilder: (context, index) {

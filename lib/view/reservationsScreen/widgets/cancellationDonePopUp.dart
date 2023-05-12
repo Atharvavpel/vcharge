@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class CancellationDonePopUp extends StatelessWidget{
+  const CancellationDonePopUp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -10,7 +12,7 @@ class CancellationDonePopUp extends StatelessWidget{
       child: Wrap(
         children: [
           //container for the top icon
-          Container(
+          SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.1,
               //this stack consist of a container with a color and a icon in center

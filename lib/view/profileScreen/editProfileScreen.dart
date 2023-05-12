@@ -8,10 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/putMethod.dart';
 import 'package:vcharge/services/redisConnection.dart';
-import 'package:vcharge/view/profileScreen/myProfile.dart';
 
+// ignore: must_be_immutable
 class EditProfileScreen extends StatefulWidget {
-
 
   String userId;
 

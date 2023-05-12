@@ -16,6 +16,7 @@ class SearchingWidget extends SearchDelegate {
 
   LatLng? userPosition = BgMapState.userLocation;
 
+  // ignore: prefer_typing_uninitialized_variables
   final userId;
 
   Future<List<dynamic>> fetchData(String keyword) async {
@@ -161,7 +162,12 @@ class SearchingWidget extends SearchDelegate {
                                             userId: userId,
                                           )));
                             },
-                            leading: const Icon(Icons.ev_station),
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.ev_station, size: Get.height * 0.05,color: Colors.green,),
+                              ],
+                            ),
                             title: Text(
                               sortedData[index]['station']['stationName'],
                               style: TextStyle(
@@ -258,7 +264,12 @@ class SearchingWidget extends SearchDelegate {
                 return ListTile(
                   title: Text(item["stationName"]),
                   subtitle: Text(item["stationArea"]),
-                  leading: const Icon(Icons.ev_station),
+                  leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.ev_station, size: Get.height * 0.05,color: Colors.green,),
+                              ],
+                            ),
                   onTap: () {
                     Navigator.pushReplacement(
                         context,

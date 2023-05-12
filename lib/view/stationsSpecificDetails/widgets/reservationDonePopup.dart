@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class ReservationDonePopUp extends StatefulWidget {
 
   String stationName;
@@ -34,7 +35,7 @@ class ReservationDonePopUpState extends State<ReservationDonePopUp> {
       child: Wrap(
         children: [
           //Container for the top icon
-          Container(
+          SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.1,
               //this stack consist of a container with a color and a icon in center
@@ -85,7 +86,7 @@ class ReservationDonePopUpState extends State<ReservationDonePopUp> {
             padding: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width * 0.05,
                 vertical: MediaQuery.of(context).size.width * 0.02),
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,37 +99,33 @@ class ReservationDonePopUpState extends State<ReservationDonePopUp> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //Container for station name
-                        Container(
-                          child: Text(
-                            widget.stationName,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.05),
-                          ),
+                        Text(
+                          widget.stationName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05),
                         ),
 
                         //Container for charger Serial number
-                        Container(
-                          child: Row(
-                            children: [
-                              Text(
-                                'ChargerId: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.035),
-                              ),
-                              Text(
-                                widget.chargerSerialNumber,
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.035),
-                              )
-                            ],
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              'ChargerId: ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width *
+                                          0.035),
+                            ),
+                            Text(
+                              widget.chargerSerialNumber,
+                              style: TextStyle(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width *
+                                          0.035),
+                            )
+                          ],
                         ),
                       ],
                     ),
@@ -137,13 +134,11 @@ class ReservationDonePopUpState extends State<ReservationDonePopUp> {
                   //Container for station location
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      child: Text(
-                        widget.stationLocation,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    child: Text(
+                      widget.stationLocation,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -151,113 +146,107 @@ class ReservationDonePopUpState extends State<ReservationDonePopUp> {
                   //Container for station booking Id and booking station
                   Expanded(
                     flex: 3,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //column for booking Id
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Booking Id',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(widget.bookingId)
-                            ],
-                          ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        //column for booking Id
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Booking Id',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(widget.bookingId)
+                          ],
+                        ),
 
-                          //column for booking Status
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text(
-                                'Booking Status',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.green.shade100,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4),
-                                    child: Text(widget.bookginStatus),
-                                  ))
-                            ],
-                          ),
-                        ],
-                      ),
+                        //column for booking Status
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text(
+                              'Booking Status',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.green.shade100,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(widget.bookginStatus),
+                                ))
+                          ],
+                        ),
+                      ],
                     ),
                   ),
 
                   // Container for booking date and time
                   Expanded(
                     flex: 3,
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Text(
-                            'Booking Date & Time',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(DateFormat('MMM dd, yyyy')
-                                  .format(widget.bookingDate)),
-                              Text(DateFormat('HH:MM a')
-                                  .format(widget.bookingTime)),
-                            ],
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text(
+                          'Booking Date & Time',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(DateFormat('MMM dd, yyyy')
+                                .format(widget.bookingDate)),
+                            Text(DateFormat('HH:MM a')
+                                .format(widget.bookingTime)),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
 
                   //Container for socket type and booking amount
                   Expanded(
                     flex: 3,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //column for socket type
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
-                              Text(
-                                'Socket Type',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text('Type 2')
-                            ],
-                          ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        //column for socket type
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: const [
+                            Text(
+                              'Socket Type',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text('Type 2')
+                          ],
+                        ),
 
-                          //column for booking amount
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text(
-                                'Booking Amount',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.currency_rupee,
-                                    size: MediaQuery.of(context).size.width *
-                                        0.04,
-                                  ),
-                                  const Text('198 Inc. Taxes'),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                        //column for booking amount
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text(
+                              'Booking Amount',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.currency_rupee,
+                                  size: MediaQuery.of(context).size.width *
+                                      0.04,
+                                ),
+                                const Text('198 Inc. Taxes'),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
