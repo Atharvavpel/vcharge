@@ -77,7 +77,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   }
 
   IconData getIconForAmenity(String amenity) {
-    if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms' || amenity.replaceAll(" ", "").toLowerCase() == 'restroom' ) {
+    if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms' ||
+        amenity.replaceAll(" ", "").toLowerCase() == 'restroom') {
       return Icons.hotel;
     } else if (amenity.toLowerCase().replaceAll(" ", "") == 'loungearea') {
       return Icons.local_cafe;
@@ -91,13 +92,13 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
       return Icons.restaurant;
     } else if (amenity.replaceAll(" ", "").toLowerCase() == 'telephone') {
       return Icons.call;
-    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'evaccessorystore' || amenity.replaceAll(" ", "").toLowerCase() == 'evaccessarystore' ) {
+    } else if (amenity.replaceAll(" ", "").toLowerCase() ==
+            'evaccessorystore' ||
+        amenity.replaceAll(" ", "").toLowerCase() == 'evaccessarystore') {
       return Icons.store;
     } else if (amenity.replaceAll(" ", "").toLowerCase() == 'garden') {
       return Icons.park_outlined;
-    }
-    
-    else {
+    } else {
       return Icons.abc;
     }
   }
@@ -107,6 +108,15 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
       await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> openGoogleMaps(String url) async {
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not open Google Maps';
     }
   }
 
@@ -177,9 +187,13 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           Row(
                             children: [
                               //container for location Icon
-                              const Expanded(
+                              Expanded(
                                 flex: 2,
-                                child: Icon(Icons.directions),
+                                child: IconButton(
+                                    onPressed: () {
+                                      openGoogleMaps(stationDetails!.stationLocationURL!);
+                                    },
+                                    icon: const Icon(Icons.directions)),
                               ),
                               //container for station address text
                               Expanded(
@@ -358,11 +372,11 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                   stationDetails!
                                                       .stationAmenity![index],
                                                   style: TextStyle(
-                                                      fontSize: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width *
-                                                          0.04),
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04),
                                                 )
                                               ],
                                             ),
@@ -388,8 +402,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                               children: [
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.all(
-                                                          8.0),
+                                                      const EdgeInsets.all(8.0),
                                                   child: CircleAvatar(
                                                     backgroundColor:
                                                         Colors.green.shade100,
@@ -428,9 +441,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                       .width *
                                                                   0.03),
                                                           maxLines: 2,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                         )
                                                       ],
                                                     ),
@@ -460,8 +472,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 151, 202, 96),
+                                    color:
+                                        const Color.fromARGB(255, 151, 202, 96),
                                     width: 2)),
                             width: double.maxFinite,
                             child: Padding(
@@ -469,8 +481,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                               child: Text(
                                 'Chargers',
                                 style: TextStyle(
-                                    color: const Color.fromARGB(
-                                        255, 151, 202, 96),
+                                    color:
+                                        const Color.fromARGB(255, 151, 202, 96),
                                     fontWeight: FontWeight.bold,
                                     fontSize:
                                         MediaQuery.of(context).size.width *
@@ -502,9 +514,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                     itemBuilder: (context, index) {
                                       return Card(
                                         margin: EdgeInsets.all(
-                                            MediaQuery.of(context)
-                                                    .size
-                                                    .width *
+                                            MediaQuery.of(context).size.width *
                                                 0.015),
                                         elevation: 4,
                                         shape: RoundedRectangleBorder(
@@ -514,15 +524,13 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             255, 239, 255, 255),
                                         child: Theme(
                                           data: Theme.of(context).copyWith(
-                                              dividerColor:
-                                                  Colors.transparent),
+                                              dividerColor: Colors.transparent),
                                           child: ExpansionTile(
                                             //title - name of charger
                                             title: Text(
                                               chargerList[index].chargerName!,
                                               style: const TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold),
+                                                  fontWeight: FontWeight.bold),
                                             ),
 
                                             //subtitle
@@ -539,8 +547,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: Get.width *
-                                                            0.047),
+                                                        fontSize:
+                                                            Get.width * 0.047),
                                                   ),
                                                   chargerList[index]
                                                                   .connectors ==
@@ -563,24 +571,20 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                       : ListView.separated(
                                                           shrinkWrap: true,
                                                           separatorBuilder:
-                                                              (context,
-                                                                  index) {
+                                                              (context, index) {
                                                             return Divider(
-                                                              color: Colors
-                                                                  .grey
+                                                              color: Colors.grey
                                                                   .shade100,
                                                               thickness: 1,
                                                               height: 1,
                                                             );
                                                           },
                                                           itemCount:
-                                                              chargerList[
-                                                                      index]
+                                                              chargerList[index]
                                                                   .connectors!
                                                                   .length,
-                                                          itemBuilder:
-                                                              (context,
-                                                                  connector) {
+                                                          itemBuilder: (context,
+                                                              connector) {
                                                             return ExpansionTile(
                                                               //Column for circle avatar
                                                               leading: Column(
@@ -594,8 +598,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                         .connectors![
                                                                             connector]
                                                                         .connectorStatus!),
-                                                                    radius:
-                                                                        10,
+                                                                    radius: 10,
                                                                   ),
                                                                 ],
                                                               ),
@@ -605,16 +608,19 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                   Text(
                                                                     '${chargerList[index].connectors![connector].connectorType!}, ',
                                                                     style: TextStyle(
-                                                                        fontWeight: FontWeight
-                                                                            .bold,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
                                                                         fontSize:
-                                                                            Get.width * 0.048),
+                                                                            Get.width *
+                                                                                0.048),
                                                                   ),
                                                                   Text(
                                                                     '${chargerList[index].connectors![connector].connectorSocket}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            Get.width * 0.048),
+                                                                            Get.width *
+                                                                                0.048),
                                                                   ),
                                                                 ],
                                                               ),
@@ -628,15 +634,17 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                       const Text(
                                                                         'Cost: ',
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
                                                                             color: Colors.grey),
                                                                       ),
                                                                       Text(
                                                                         chargerList[index]
                                                                             .connectors![connector]
                                                                             .connectorCharges!,
-                                                                        style:
-                                                                            const TextStyle(color: Colors.grey),
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                Colors.grey),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -648,13 +656,15 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                       const Text(
                                                                         'O/P Power: ',
                                                                         style: TextStyle(
-                                                                            fontWeight: FontWeight.bold,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
                                                                             color: Colors.grey),
                                                                       ),
                                                                       Text(
                                                                         '${chargerList[index].connectors![connector].connectorOutputPower}',
-                                                                        style:
-                                                                            const TextStyle(color: Colors.grey),
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                Colors.grey),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -673,12 +683,16 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                         onPressed:
                                                                             () {
                                                                           showModalBottomSheet(
-                                                                            shape: const RoundedRectangleBorder(
+                                                                            shape:
+                                                                                const RoundedRectangleBorder(
                                                                               borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
                                                                             ),
-                                                                            isScrollControlled: true,
-                                                                            context: context,
-                                                                            builder: (BuildContext context) => ReservePopUp(
+                                                                            isScrollControlled:
+                                                                                true,
+                                                                            context:
+                                                                                context,
+                                                                            builder: (BuildContext context) =>
+                                                                                ReservePopUp(
                                                                               stationName: stationDetails!.stationName!,
                                                                               stationLocation: stationDetails!.stationArea!,
                                                                               chargerModel: chargerList[index],
@@ -686,13 +700,13 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                               stationId: stationDetails!.stationId!,
                                                                               stationHostId: stationDetails!.stationHostId!,
                                                                               stationVendorId: stationDetails!.stationVendorId!,
-                                                                              connectorSocket: chargerList[index].connectors![connector].connectorSocket!, 
+                                                                              connectorSocket: chargerList[index].connectors![connector].connectorSocket!,
                                                                               connecterId: chargerList[index].connectors![connector].connectorId!,
                                                                             ),
                                                                           );
                                                                         },
-                                                                        child:
-                                                                            const Text('Reserve')),
+                                                                        child: const Text(
+                                                                            'Reserve')),
                                                                     //button for charge
                                                                     ElevatedButton(
                                                                       onPressed:
