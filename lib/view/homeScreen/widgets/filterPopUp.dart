@@ -272,11 +272,6 @@ class FilterPopUpState extends State<FilterPopUp> {
               ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const HomeScreen())
-                    //         );
                     Fluttertoast.showToast(
                       msg: "Filters Applied Successfully",
                       toastLength: Toast.LENGTH_SHORT,

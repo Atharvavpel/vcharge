@@ -5,9 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vcharge/view/qrScanner.dart/qrScannerOutput.dart';
+import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
 class QRScannerWidget extends StatefulWidget {
-  const QRScannerWidget({super.key});
+  String userId;
+  QRScannerWidget({required this.userId,super.key});
 
   @override
   _QRScannerWidgetState createState() => _QRScannerWidgetState();
@@ -103,10 +105,16 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   // );
 
           scanResult = scanData.code!;
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => QrScannerOutput(output: scanResult),
+          //   ),
+          // );
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => QrScannerOutput(output: scanResult),
+              builder: (context) => StationsSpecificDetails(userId: widget.userId, stationId: 'STN20230505105447818'),
             ),
           );
           await controller.resumeCamera();
@@ -265,7 +273,9 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       floatingActionButton: Container(
         padding: const EdgeInsets.only(bottom: 80),
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => StationsSpecificDetails(userId: widget.userId, stationId: 'STN20230505105447818')));
+          },
           label: const Text(
             "Proceed",
           ),

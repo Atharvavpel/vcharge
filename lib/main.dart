@@ -8,16 +8,19 @@ import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 void main() {
   runApp( 
-    const MyApp(),
+    MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DarkThemeProvider()),
@@ -27,6 +30,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
         title: 'VCharge',
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
         themeMode: themeChanger.themeMode,
         theme: ThemeData(
           brightness: Brightness.light,

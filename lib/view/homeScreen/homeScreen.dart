@@ -54,6 +54,8 @@ this is screen with onclose function
 // variables for index in bottom bar
   int selectedIndex = 1;
 
+  final GlobalKey<CurvedNavigationBarState> bottomNavBarKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
 // screens
@@ -74,7 +76,9 @@ this is screen with onclose function
       Semantics(
           label: "scannerPage",
           value: "scannerPage",
-          child: const QRScannerWidget()),
+          child: QRScannerWidget(
+            userId: userId,
+          )),
       // ScannerQr.qrScanner(),
       //     FutureBuilder<dynamic>(
       //   future: ScannerQr.qrScanner(),
@@ -168,6 +172,7 @@ this is screen with onclose function
 
           // this is bottom bar
           bottomNavigationBar: CurvedNavigationBar(
+              key: bottomNavBarKey,
               height: MediaQuery.of(context).size.height * 0.07,
               animationCurve: Curves.easeInOut,
               backgroundColor: Colors.transparent,
@@ -176,6 +181,9 @@ this is screen with onclose function
               items: items,
               index: selectedIndex,
               onTap: (index) {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
                 setState(() {
                   selectedIndex = index;
                 });

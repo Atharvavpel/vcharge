@@ -24,13 +24,16 @@ class ListOfStationsState extends State<ListOfStations> {
   //stores current location of user
   LatLng? userPosition;
 
-  String getStationUrl = 'http://192.168.0.243:8096/manageStation/getStationInterface';
+  String getStationUrl =
+      'http://192.168.0.243:8096/manageStation/getStationInterface';
 
   @override
   void initState() {
     super.initState();
     // getStationList();
-    userPosition = LatLng(BgMapState.userLocation!.latitude, BgMapState.userLocation!.longitude);
+    getLocationOfUser();
+    // userPosition = LatLng(
+    //     BgMapState.userLocation!.latitude, BgMapState.userLocation!.longitude);
     if (mounted) {
       sortStationList();
     }
@@ -59,15 +62,16 @@ class ListOfStationsState extends State<ListOfStations> {
   //get current location of the user
   Future<void> getLocationOfUser() async {
     try {
-  var position = await GetLiveLocation.getUserLiveLocation();
-  if (mounted) {
-    setState(() {
-      userPosition = LatLng(position.latitude, position.longitude);
-    });
-  }
-} catch (e) {
-  print(e);
-}
+      userPosition = LatLng(BgMapState.userLocation!.latitude,
+          BgMapState.userLocation!.longitude);
+    } catch (e) {
+      var position = await GetLiveLocation.getUserLiveLocation();
+      if (mounted) {
+        setState(() {
+          userPosition = LatLng(position.latitude, position.longitude);
+        });
+      }
+    }
   }
 
   Future<void> getStationList(String url) async {
@@ -135,7 +139,7 @@ class ListOfStationsState extends State<ListOfStations> {
     sortedStationDistanceList.clear();
     sortedStationList.clear();
     sortedDistanceList.clear();
-    
+
     await getDistanceList();
 
     // Combine the station and distance lists into a list of Map objects
@@ -148,19 +152,20 @@ class ListOfStationsState extends State<ListOfStations> {
     );
 
 // Sort the stationDistanceList based on the distance value in each Map object
-    sortedStationDistanceList.sort((a, b) => a['distance'].compareTo(b['distance']));
+    sortedStationDistanceList
+        .sort((a, b) => a['distance'].compareTo(b['distance']));
     // print(sortedStationDistanceList);
 
 // Extract the sorted station names into a new list
     if (mounted) {
-  setState(() {
-    for (int i = 0; i < sortedStationDistanceList.length; i++) {
-      sortedStationList.add(sortedStationDistanceList[i]['station']);
-      sortedDistanceList.add(sortedStationDistanceList[i]['distance']);
+      setState(() {
+        for (int i = 0; i < sortedStationDistanceList.length; i++) {
+          sortedStationList.add(sortedStationDistanceList[i]['station']);
+          sortedDistanceList.add(sortedStationDistanceList[i]['distance']);
+        }
+        // print(sortedStationList);
+      });
     }
-    // print(sortedStationList);
-  });
-}
   }
 
   @override
