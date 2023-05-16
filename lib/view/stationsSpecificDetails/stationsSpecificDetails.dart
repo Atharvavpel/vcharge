@@ -112,11 +112,14 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   }
 
   Future<void> openGoogleMaps(String url) async {
-
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not open Google Maps';
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not open Google Maps';
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -191,7 +194,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 flex: 2,
                                 child: IconButton(
                                     onPressed: () {
-                                      openGoogleMaps(stationDetails!.stationLocationURL!);
+                                      openGoogleMaps(
+                                          stationDetails!.stationLocationURL!);
                                     },
                                     icon: const Icon(Icons.directions)),
                               ),
