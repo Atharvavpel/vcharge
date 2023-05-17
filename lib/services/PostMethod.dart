@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 class PostMethod{
 
   // this method is used to add a new model
-  static Future<void> postRequest(String url, dynamic body) async{
+  static Future<int> postRequest(String url, dynamic body) async {
     var response = await http.post(
       Uri.parse(url),
       headers: {
@@ -12,9 +12,11 @@ class PostMethod{
       body: body
     );
     if(response.statusCode == 200){
-      print('Post Successful');
+      // print('Post Successful');
+      return response.statusCode;
     }else{
-      print('Error: ${response.statusCode}');
+      // print('Error: ${response.statusCode}');
+      return response.statusCode;
     }
   }
 }
