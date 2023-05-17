@@ -21,7 +21,7 @@ class FaqScreenState extends State<FaqScreen> {
   // function for fetching up all the faqs and storing it in the FAQ list
   Future<void> getFaqs() async {
     
-    var response = await http.get(Uri.parse('http://192.168.0.41:8098/manageFaq/faqs'));
+    var response = await http.get(Uri.parse('http://192.168.0.243:8098/manageFaq/faqs'));
 
     if (response.statusCode == 200) {
       setState(() {
