@@ -38,9 +38,9 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
           children: [
             // container - vehicle addition
             Semantics(
-              label: "myVehicleButton",
+              // label: "myVehicleButton",
               child: GestureDetector(
-                key: const Key('myVehicleButton'),
+                key: const Key('MyVehicle'),
                 onTap: () {
                   setState(() {
                     isVehicle = true;
@@ -97,9 +97,9 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
             // container - Route
             Semantics(
-              label: "routeButton",
+              // label: "routeButton",
               child: GestureDetector(
-                key: const Key('routeButton'),
+                key: const Key('Route'),
                 onTap: () {
                   setState(() {
                     isMapRoute = true;
@@ -151,9 +151,9 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
             // container - my wallet
             Semantics(
-              label: "myWalletButton",
+              // label: "myWalletButton",
               child: GestureDetector(
-                key: const Key('myWalletButton'),
+                key: const Key('myWallet'),
                 onTap: () {
                   setState(() {
                     isWallet = true;
@@ -207,9 +207,9 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
             // container - favourites
             Semantics(
-              label: "reservationButton",
+              // label: "favouriteButton",
               child: GestureDetector(
-                key: const Key('favouriteButton'),
+                key: const Key('Favourite'),
                 onTap: () {
                   Navigator.push(
                       context,
@@ -254,9 +254,9 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
             // container - reservations
             Semantics(
-              label: "reservationButton",
+              // label: "reservationButton",
               child: GestureDetector(
-                key: const Key('reservationButton'),
+                key: const Key('Reservation'),
                 onTap: () {
                   Navigator.push(
                       context,
@@ -300,9 +300,9 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
             // container - more optionsPage
             Semantics(
-              label: "moreOptionButton",
+              // label: "moreOptionButton",
               child: GestureDetector(
-                key: const Key('moreOptionButton'),
+                key: const Key('moreOptions'),
                 onTap: () {
                   setState(() {
                     isMore = true;
