@@ -96,7 +96,7 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.243:8097/manageUser/getUser?userId=USR20230420100343328";
+      "http://192.168.0.243:8097/manageUser/getUser?userId=USR20230517060841379";
 
 // initstate function calling the getuserData method
   @override
@@ -537,32 +537,7 @@ child: profilePhoto == " "
                         image: decorationImg,
                         shape: BoxShape.rectangle,
                         color: const Color(0xffD6D6D6)),
-<<<<<<< HEAD
-                  )),
-      ),
-    );
-    }
-    else{
-      // print("The profile photo is empty");
-      widget = Container(
-                        width: MediaQuery.of(context).size.width* 0.45,
-                        height: MediaQuery.of(context).size.height* 0.2,
-                        margin: const EdgeInsets.only(bottom: 20),
-                        decoration: const BoxDecoration(
-        color: Colors.amber,
-                            shape: BoxShape.rectangle, ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-    }
-=======
                   )
->>>>>>> 4f802f9b48e37923cf3caebc2b322bbe5da638aa
 
 */
 
