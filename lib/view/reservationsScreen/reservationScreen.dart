@@ -29,7 +29,7 @@ class ReservationScreenState extends State<ReservationScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getbookingDetails();
+    getbookingDetails('USR20230517060841379');
     getStationNameAndAddress('STN20230505105447818');
   }
 
@@ -51,10 +51,10 @@ class ReservationScreenState extends State<ReservationScreen> {
   //   return data['stationName'];
   // }
 
-  Future<void> getbookingDetails() async {
+  Future<void> getbookingDetails(String userId) async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8099/manageBooking/getBookingCustomer?bookingCustomerId=${widget.userId}');
+          'http://192.168.0.243:8099/manageBooking/getBookingByCustomer?customerId=$userId');
       if (data != null && data.isNotEmpty) {
         upcomingBookingList.clear();
         bookingHistoryList.clear();
@@ -170,7 +170,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                     setState(() {
                                       getStationNameAndAddress(
                                           'STN20230505105447818');
-                                      getbookingDetails();
+                                      getbookingDetails('USR20230517060841379');
                                     });
                                   });
                                 },

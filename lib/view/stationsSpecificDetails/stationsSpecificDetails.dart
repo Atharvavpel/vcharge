@@ -7,6 +7,9 @@ import 'package:vcharge/view/scanToCharge/scanToCharge.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
 
+
+
+
 // ignore: must_be_immutable
 class StationsSpecificDetails extends StatefulWidget {
   String stationId;
@@ -123,6 +126,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -187,56 +191,58 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           //Container for station address
-                          Row(
-                            children: [
-                              //container for location Icon
-                              Expanded(
-                                flex: 2,
-                                child: IconButton(
-                                    onPressed: () {
+                          InkWell(
+                            onTap: () {
                                       openGoogleMaps(
-                                          stationDetails!.stationLocationURL!);
+                                          stationDetails!.stationLocationURL.toString()
+                                          );
                                     },
-                                    icon: const Icon(Icons.directions)),
-                              ),
-                              //container for station address text
-                              Expanded(
-                                flex: 14,
-                                child: Text(
-                                  stationDetails!.stationArea!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                            child: Row(
+                              children: [
+                                //container for location Icon
+                                const Expanded(
+                                  flex: 2,
+                                  child: Icon(Icons.directions),
+                                ),
+                                //container for station address text
+                                Expanded(
+                                  flex: 14,
+                                  child: Text(
+                                    stationDetails!.stationArea!,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
 
                           //Container for station phone number
-                          Row(
-                            children: [
-                              //container for call Icon
-                              Expanded(
-                                flex: 2,
-                                child: InkWell(
-                                  onTap: () {
+                          InkWell(
+                            onTap: () {
                                     _makePhoneCall(
                                         'tel: ${stationDetails!.stationContactNumber}');
                                   },
-                                  child: const Icon(Icons.call),
+                            child: Row(
+                              children: [
+                                //container for call Icon
+                                const Expanded(
+                                  flex: 2,
+                                  child: Icon(Icons.call)
                                 ),
-                              ),
-                              //conteiner for station contact number text
-                              Expanded(
-                                flex: 14,
-                                child: Text(
-                                  stationDetails!.stationContactNumber!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                //conteiner for station contact number text
+                                Expanded(
+                                  flex: 14,
+                                  child: Text(
+                                    stationDetails!.stationContactNumber!,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
 
                           //Container for add to favorite

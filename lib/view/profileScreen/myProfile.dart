@@ -50,7 +50,7 @@ import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:redis/redis.dart' as redis;
-import 'package:dio/dio.dart' as dio;
+// import 'package:dio/dio.dart' as dio;
 
 // ignore: must_be_immutable
 class MyProfilePage extends StatefulWidget {
@@ -68,28 +68,28 @@ class MyProfilePageState extends State<MyProfilePage> {
 
 
 
-final dio.Dio dioClient = dio.Dio();
+// final dio.Dio dioClient = dio.Dio();
 
-Future<String> uploadImageAndGetUrl(String imagePath) async {
-  try {
-    dio.FormData formData = dio.FormData.fromMap({
-      "file": await dio.MultipartFile.fromFile(imagePath),
-      "upload_preset": "your_cloudinary_upload_preset",
-    });
+// Future<String> uploadImageAndGetUrl(String imagePath) async {
+//   try {
+//     dio.FormData formData = dio.FormData.fromMap({
+//       "file": await dio.MultipartFile.fromFile(imagePath),
+//       "upload_preset": "your_cloudinary_upload_preset",
+//     });
 
-    final response = await dioClient.post(
-      "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
-      data: formData,
-    );
+//     final response = await dioClient.post(
+//       "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
+//       data: formData,
+//     );
 
-    final imageUrl = response.data['secure_url'];
-    print(imageUrl);
-    return imageUrl;
-  } catch (e) {
-    print(e);
-    return ' ';
-  }
-}
+//     final imageUrl = response.data['secure_url'];
+//     print(imageUrl);
+//     return imageUrl;
+//   } catch (e) {
+//     print(e);
+//     return ' ';
+//   }
+// }
 
 
 // variables for storing the REST API
@@ -122,32 +122,53 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
 
 // function for setting up the redis connection and fetching the user data and setting up in the redis
   Future<void> getUserData() async {
-    client = redis.RedisConnection();
-    dynamic response;
+    // client = redis.RedisConnection();
+    // dynamic response;
 
-    try {
-      response = await GetMethod.getRequest(specificUserIdUrl);
+    // try {
+    //   response = await GetMethod.getRequest(specificUserIdUrl);
 
-      profilePhoto = response['userProfilePhoto'];
-      print("The profile photo is: $profilePhoto");
-      firstName = response['userFirstName'];
-      lastName = response['userLastName'];
-      contactNo = response['userContactNo'];
-      emailId = response['userEmail'];
+    //   profilePhoto = response['userProfilePhoto'];
+    //   print("The profile photo is: $profilePhoto");
+    //   firstName = response['userFirstName'];
+    //   lastName = response['userLastName'];
+    //   contactNo = response['userContactNo'];
+    //   emailId = response['userEmail'];
 
-      cmd = await client.connect('192.168.0.241', 6379);
+    //   cmd = await client.connect('192.168.0.241', 6379);
 
-      await cmd.send_object(['SET', 'profilePhoto', profilePhoto]);
-      await cmd.send_object(['SET', 'firstName', firstName]);
-      await cmd.send_object(['SET', 'lastName', lastName]);
-      await cmd.send_object(['SET', 'emailId', emailId]);
-      await cmd.send_object(['SET', 'contactNo', contactNo]);
-      client.close();
-    } catch (e) {
-      print("the error at the redis connection in profile widget is: $e");
-    }
+    //   await cmd.send_object(['SET', 'profilePhoto', profilePhoto]);
+    //   await cmd.send_object(['SET', 'firstName', firstName]);
+    //   await cmd.send_object(['SET', 'lastName', lastName]);
+    //   await cmd.send_object(['SET', 'emailId', emailId]);
+    //   await cmd.send_object(['SET', 'contactNo', contactNo]);
+    //   client.close();
+    // } catch (e) {
+    //   print("the error at the redis connection in profile widget is: $e");
+    // }
 
-    setState(() {});
+    var data = await GetMethod.getRequest(specificUserIdUrl);
+
+    profilePhoto = data['userProfilePhoto'] ?? '';
+        firstName = data['userFirstName'] ?? '';
+        lastName = data['userLastName'] ?? '';
+        emailId = data['userEmail'] ?? '';
+        contactNo = data['userContactNo'] ?? '';
+
+        setState(() {
+          
+        });
+
+    // try {
+    //   var data = await GetMethod.getRequest(specificUserIdUrl);
+
+    // if (data != null) {
+        
+    // }
+    // } catch (e) {
+    //   print("the error is: $e");
+    // }
+
   }
 
 // variable for picking the image from the gallery or camera
