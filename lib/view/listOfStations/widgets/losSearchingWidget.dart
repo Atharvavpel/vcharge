@@ -123,122 +123,125 @@ var userId;
 
 
 // this method is used when we tap the search button
-  @override
-  Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-      future: fetchData(query),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasData) {
-          final data = snapshot.data!;
-          final sortedData = getSortStationList(data);
-          if (sortedData.isNotEmpty) {
-            return SizedBox(
-              child: data.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.separated(
-                      separatorBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric( horizontal: Get.width * 0.01),
-                          child: const Divider(
-                            height: 1,
-                            thickness: 0.2,
-                          ),
-                        );
-                      },
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          StationsSpecificDetails(
-                                            stationId: sortedData[index]
-                                                ['station']['stationId'],
-                                            userId: userId,
-                                          )));
-                            },
-                            leading: const Icon(Icons.ev_station),
-                            title: Text(
-                              sortedData[index]['station']['stationName'],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width *
-                                          0.04),
-                            ),
-                            subtitle: //container for station address
-                                Text(
-                              sortedData[index]['station']['stationArea'],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: //column for 'distance from user' and connector type
-                                Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Wrap(
-                                  spacing:
-                                      MediaQuery.of(context).size.width *
-                                          0.02,
-                                  children: [
-                                    //text for distance
-                                    data[index] == null
-                                        ? const CircularProgressIndicator()
-                                        : Text(
-                                            '${sortedData[index]['distance'].toStringAsFixed(2)} KM',
-                                            style: const TextStyle(
-                                                fontWeight:
-                                                    FontWeight.bold),
-                                          ),
+  // @override
+  // Widget buildResults(BuildContext context) {
+  //   return FutureBuilder<List<dynamic>>(
+  //     future: fetchData(query),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return const Center(child: CircularProgressIndicator());
+  //       }
+  //       if (snapshot.hasData) {
+  //         final data = snapshot.data!;
+  //         final sortedData = getSortStationList(data);
+  //         if (sortedData.isNotEmpty) {
+  //           return SizedBox(
+  //             child: data.isEmpty
+  //                 ? const Center(child: CircularProgressIndicator())
+  //                 : ListView.separated(
+  //                     separatorBuilder: (context, index) {
+  //                       return Padding(
+  //                         padding: EdgeInsets.symmetric( horizontal: Get.width * 0.01),
+  //                         child: const Divider(
+  //                           height: 1,
+  //                           thickness: 0.2,
+  //                         ),
+  //                       );
+  //                     },
+  //                     itemCount: data.length,
+  //                     itemBuilder: (context, index) {
+  //                       return ListTile(
+  //                           onTap: () {
+  //                             Navigator.pushReplacement(
+  //                                 context,
+  //                                 MaterialPageRoute(
+  //                                     builder: (context) =>
+  //                                         StationsSpecificDetails(
+  //                                           stationId: sortedData[index]
+  //                                               ['station']['stationId'],
+  //                                           userId: userId,
+  //                                         )));
+  //                           },
+  //                           leading: const Icon(Icons.ev_station),
+  //                           title: Text(
+  //                             sortedData[index]['station']['stationName'],
+  //                             style: TextStyle(
+  //                                 fontWeight: FontWeight.bold,
+  //                                 fontSize:
+  //                                     MediaQuery.of(context).size.width *
+  //                                         0.04),
+  //                           ),
+  //                           subtitle: //container for station address
+  //                               Text(
+  //                             sortedData[index]['station']['stationArea'],
+  //                             maxLines: 1,
+  //                             overflow: TextOverflow.ellipsis,
+  //                           ),
+  //                           trailing: //column for 'distance from user' and connector type
+  //                               Column(
+  //                             mainAxisAlignment:
+  //                                 MainAxisAlignment.spaceEvenly,
+  //                             children: [
+  //                               Wrap(
+  //                                 spacing:
+  //                                     MediaQuery.of(context).size.width *
+  //                                         0.02,
+  //                                 children: [
+  //                                   //text for distance
+  //                                   data[index] == null
+  //                                       ? const CircularProgressIndicator()
+  //                                       : Text(
+  //                                           '${sortedData[index]['distance'].toStringAsFixed(2)} KM',
+  //                                           style: const TextStyle(
+  //                                               fontWeight:
+  //                                                   FontWeight.bold),
+  //                                         ),
 
-                                    //CircleAvater to show avaliblity
-                                    CircleAvatar(
-                                      radius: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                          0.02,
-                                      backgroundColor: AvaliblityColor
-                                          .getAvailablityColor(
-                                              sortedData[index]['station']
-                                                  ['stationStatus']!),
-                                    ),
-                                  ],
-                                ),
+  //                                   //CircleAvater to show avaliblity
+  //                                   CircleAvatar(
+  //                                     radius: MediaQuery.of(context)
+  //                                             .size
+  //                                             .width *
+  //                                         0.02,
+  //                                     backgroundColor: AvaliblityColor
+  //                                         .getAvailablityColor(
+  //                                             sortedData[index]['station']
+  //                                                 ['stationStatus']!),
+  //                                   ),
+  //                                 ],
+  //                               ),
 
-                                //Container for connector type
-                                // Text(
-                                //   sortedStationList[index]
-                                //       .stationPowerStandard!,
-                                //   style: const TextStyle(
-                                //     color: Colors.grey,
-                                //     fontWeight: FontWeight.bold,
-                                //   ),
-                                // )
-                              ],
-                            ));
-                      }),
-            );
-          } else if (query.length < 2) {
-            return const Center(
-              child: Text("Search Results..."),
-            );
-          } else {
-            return const Center(child: Text("No results"));
-          }
-        } else if (snapshot.hasError) {
-          return const Center(child: Text("Error fetching results."));
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-    );
-  }
+  //                               //Container for connector type
+  //                               // Text(
+  //                               //   sortedStationList[index]
+  //                               //       .stationPowerStandard!,
+  //                               //   style: const TextStyle(
+  //                               //     color: Colors.grey,
+  //                               //     fontWeight: FontWeight.bold,
+  //                               //   ),
+  //                               // )
+  //                             ],
+  //                           ));
+  //                     }),
+  //           );
+  //         } else if (query.length < 2) {
+  //           return const Center(
+  //             child: Text("Search Results..."),
+  //           );
+  //         } else {
+  //           return const Center(child: Text("No results"));
+  //         }
+  //       } else if (snapshot.hasError) {
+  //         return const Center(child: Text("Error fetching results."));
+  //       } else {
+  //         return const SizedBox.shrink();
+  //       }
+  //     },
+  //   );
+  // }
+
+
+  
 
 
   
@@ -268,6 +271,81 @@ var userId;
                         MaterialPageRoute(
                             builder: (context) => StationsSpecificDetails(
                                 userId: userId, stationId: item['stationId'])));
+                  },
+                );
+              },
+            );
+          } else if (query.length < 2) {
+            return const Center(
+              child: Text("Search Results..."),
+            );
+          } else {
+            return const Center(child: Text("No results"));
+          }
+        } else if (snapshot.hasError) {
+          return const Center(child: Text("Error fetching results."));
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+  
+  // to be debugged ->
+  @override
+  Widget buildResults(BuildContext context) {
+    return FutureBuilder<List<dynamic>>(
+      future: fetchData(query),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasData) {
+          final data = snapshot.data!;
+          if (data.isNotEmpty) {
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final item = data[index];
+                return ListTile(
+                  title: Text(item["stationName"]),
+                  subtitle: Text(item["stationArea"]),
+                  leading: const Icon(Icons.ev_station_outlined),
+                  onTap: () {
+                    
+                    // method to show markers
+
+                    /*
+
+                    Marker(
+          // width: 20.0,
+          // height: 20.0,
+          anchorPos:
+              AnchorPos.align(AnchorAlign.center), //change center to bottom
+          point: LatLng(idx.stationLatitude!, idx.stationLongitude!),
+          builder: (ctx) => Semantics(
+            label: "StationMarker",
+            hint: "Redirect you to sspecific details of that station",
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StationsSpecificDetails(
+                              stationId: idx.stationId!,
+                              userId: HomeScreenState.userId,
+                            )));
+              },
+              child: FaIcon(
+                FontAwesomeIcons.locationDot,
+                size: 30,
+                color: AvaliblityColor.getAvailablityColor(idx.stationStatus!),
+              ),
+            ),
+          ),
+        );
+
+*/
                   },
                 );
               },
