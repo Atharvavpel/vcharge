@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:vcharge/models/vehicleModel.dart';
+import 'package:vcharge/services/PostMethod.dart';
 
 class AddVehicleScreen extends StatefulWidget {
   const AddVehicleScreen({super.key});
@@ -39,6 +44,86 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
 
 // variable for the nick-name input field
   var nickNameController = TextEditingController();
+
+
+
+
+
+// --------------- to be debugged: ------------------ //
+
+
+
+
+  Future<void> addVehicle() async {
+
+
+  // Fetch the data from the form input fields
+  String brandName = selectedManufacturer;
+  String modelName = selectedCarModel;
+  String vehicleType = selectedVehicleType;
+  String vehicleRegistrationNo = regNoController.text;
+  String vehicleNickName = nickNameController.text;
+
+  // Create a new VehicleModel object with the fetched data
+  VehicleModel newVehicle = VehicleModel(
+    vehicleType: vehicleType,
+    vehicleBrandName: brandName,
+    vehicleModelName: modelName,
+    vehicleRegistrationNo: vehicleRegistrationNo,
+    vehicleNickName: vehicleNickName,
+    
+  );
+
+  
+  try {
+
+  // Convert the newVehicle object to JSON
+  Map<String, dynamic> vehicleJson = newVehicle.toJson();
+
+  // Send the JSON data as a POST request
+  String url = 'http://192.168.0.243:8097/manageUser/addVehicles';
+
+  final response = await PostMethod.postRequest(url, vehicleJson);
+
+  (response == 200 ) ? 
+
+    Fluttertoast.showToast(
+          msg: " vechicle added successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0) : 
+
+    Fluttertoast.showToast(
+          msg: "Failed to add",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+    
+  } catch (e) {
+    print("Error in vehicle addition: $e");
+  }
+
+
+}
+
+
+
+
+
+// ------------------------------------------------------------- //
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -432,8 +517,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
 
             }
             else if (formKey.currentState!.validate()) {
-              // Do something with the form data
+              addVehicle;
               print("Success");
+              Navigator.pop(context);
             }
           },
           label: const Text(
@@ -442,4 +528,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
           ),
         ));
   }
+
+
 }
