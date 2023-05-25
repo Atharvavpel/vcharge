@@ -6,6 +6,8 @@ import 'package:vcharge/view/reservationsScreen/reservationScreen.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
 
+import '../../listOfStations/listOfStations.dart';
+
 // ignore: must_be_immutable
 class HorizontalSideBar extends StatefulWidget {
   String userId;
@@ -303,16 +305,8 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
               // label: "moreOptionButton",
               child: GestureDetector(
                 key: const Key('moreOptions'),
-                onTap: () {
-                  setState(() {
-                    isMore = true;
-                  });
-
-                  Future.delayed(const Duration(seconds: 1)).then((_) {
-                    setState(() {
-                      isMore = false;
-                    });
-                  });
+                onTapDown: (TapDownDetails details) {
+                  showPopupMenu(context, details.globalPosition);
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
@@ -353,4 +347,93 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
       ),
     );
   }
+
+  //function to pop more options
+  void showPopupMenu(BuildContext context, Offset position) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+
+    final selectedMenuItem = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        overlay.size.width - position.dx,
+        overlay.size.height - position.dy,
+      ),
+      items: <PopupMenuEntry>[
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Blogs & Videos'),
+              Icon(Icons.video_collection)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Help & Support'),
+              Icon(Icons.contact_support)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('User Manual'),
+              Icon(Icons.library_books)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Legal Policy'),
+              Icon(Icons.policy_rounded)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Log Out'),
+              Icon(Icons.logout_rounded)
+            ],
+          ),
+        ),
+      ],
+      elevation: 12.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    );
+
+    // Handle the selected menu item
+    if (selectedMenuItem != null) {
+      switch (selectedMenuItem) {
+        case 1:
+          // Handle menu item 1
+          break;
+        case 2:
+          // Handle menu item 2
+          break;
+        case 3:
+          // Handle menu item 3
+          break;
+      }
+    }
+  }
 }
+
+
+
