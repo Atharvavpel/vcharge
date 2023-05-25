@@ -1,21 +1,37 @@
+// get all support :      http://192.168.0.41:8091/manageSupport/getSupports
+// support id:      STP20230517153110554
+// add support:      http://192.168.0.41:8091/manageSupport/addSupport
+
+
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vcharge/models/supportModel.dart';
+import 'package:vcharge/services/PostMethod.dart';
+import 'package:vcharge/view/helpSupportScreen/ticketsHistory.dart';
 
 class HelpSupportScreen extends StatefulWidget {
-  const HelpSupportScreen({super.key});
+
+  String userId;
+
+  HelpSupportScreen({super.key, required this.userId});
 
   @override
   State<HelpSupportScreen> createState() => _HelpSupportScreenState();
 }
 
 class _HelpSupportScreenState extends State<HelpSupportScreen> {
+  
 
- // var for officeLocation 
+  // var for officeLocation
   String officeLocationAddress =
       "Pride Icon, 108-109, Thite Vasti, Thite Nagar, Kharadi, Pune, Maharashtra, 411014";
 
@@ -43,12 +59,10 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
       {required BuildContext context,
       required String text,
       required String number}) async {
-    var whatsapp = number; 
-    var whatsappURlAndroid =
-        "whatsapp://send?phone=$whatsapp&text=$text";
+    var whatsapp = number;
+    var whatsappURlAndroid = "whatsapp://send?phone=$whatsapp&text=$text";
     var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
     if (Platform.isIOS) {
-
       // for iOS phone only
       if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
         await launchUrl(Uri.parse(
@@ -58,11 +72,10 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Whatsapp not installed")));
       }
-    } 
-    
+    }
+
     // for android phones as well as for web also
     else {
-      
       if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
         await launchUrl(Uri.parse(whatsappURlAndroid));
       } else {
@@ -145,15 +158,117 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
   dynamic selectedCategory;
   dynamic selectedSubCategory;
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController uploadPhotoController = TextEditingController();
+  // var for storing the selected image
+  File? selectedImage;
 
 // list for selecting category and subcategory
   List<String> categoryList = ['Technical', 'Financial'];
-  List<String> subCategoryList1 = ['Stations', 'Chargers', 'Connectors'];
-  List<String> subCategoryList2 = ['Booking', 'Transactions', 'Wallet'];
+  List<String> subCategoryTechnical = ['Stations', 'Chargers', 'Connectors'];
+  List<String> subCategoryFinancial = ['Booking', 'Transactions', 'Wallet'];
 
 // bool variable indicating that by default subcategory dropdown will be enabled
   bool isSubCategoryEnabled = true;
+
+
+  // function for gallery permissions
+  Future<void> requestPermissions() async {
+    Map<Permission, PermissionStatus> status = await [
+      Permission.storage,
+    ].request();
+    // print(statuses);
+  }
+
+  // variable for picking the image from the gallery or camera
+  final ImagePicker picker = ImagePicker();
+
+
+// function for fetching the image from the device
+  Future getImage(ImageSource source) async {
+    PermissionStatus storageStatus = await Permission.storage.status;
+    if (storageStatus.isGranted) {
+      try {
+        // temp var used to store the image once picked
+        final pickedFile = await picker.pickImage(source: source);
+        if (pickedFile == null) return;
+        setState(() {
+          selectedImage = File(pickedFile.path);
+        });
+      } catch (error) {
+        // print("error: $error");
+      }
+    } else {
+      // The user has not granted the necessary permissions, show an error message.
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please grant the necessary permissions.')),
+      );
+    }
+  }
+
+  // url for raising the ticket
+  String addTicketUrl = "http://192.168.0.41:8091/manageSupport/addSupport";
+
+
+  // post request
+  Future<void> raiseTicket() async {
+
+    try {
+      
+      
+    dynamic screenShot;
+    if(selectedImage != null ){
+      screenShot = selectedImage?.path;
+    }
+    else{
+      screenShot = null;
+    }
+
+    print("the selected image is: $selectedImage");
+    print("the screenshot is: $screenShot");
+
+    Map<String, dynamic> requestBody = SupportModel(
+
+        supportCustomerId: widget.userId,
+        supportSubject: titleController.text,
+        supportCategory: selectedCategory,
+        subSupportCategory: selectedSubCategory,
+        supportDescription: descriptionController.text,
+        supportImageLink: screenShot,
+).toJson();
+
+
+  final response = await PostMethod.postRequest(addTicketUrl, requestBody);
+  
+if (response == 200) {
+  Fluttertoast.showToast(
+          msg: " vechicle added successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+} else {
+  Fluttertoast.showToast(
+          msg: " vechicle added successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+}
+
+
+
+    } catch (e) {
+      print("the error in support page is: $e");
+    }
+
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -166,13 +281,232 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
             // buttons
             Padding(
               padding: EdgeInsets.only(top: Get.height * 0.02),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+// ----------------------------- to be debugged -------------------------------------
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Wrap(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      topRight: Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // used to handle the onFocus() activities
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 20),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            // container for title section
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: TextFormField(
+                                                cursorColor: Colors.green,
+                                                textAlign: TextAlign.center,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  label: Text("Title"),
+                                                  border: OutlineInputBorder(),
+                                                  prefixIcon: Icon(Icons.title),
+                                                ),
+                                                controller: titleController,
+                                              ),
+                                            ),
+
+                                            // categories and respective subcategories
+                                            Container(
+                                                child: Row(
+                                              children: [
+                                                // section for categroy dropdown
+                                                Expanded(
+                                                  child:
+                                                      DropdownButtonFormField(
+                                                    value: selectedCategory,
+                                                    items:
+                                                        categoryList.map((e) {
+                                                      return DropdownMenuItem(
+                                                          value: e,
+                                                          child: Text(e));
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedCategory =
+                                                            value as String;
+                                                        selectedSubCategory =
+                                                            null;
+                                                        isSubCategoryEnabled =
+                                                            true;
+                                                      });
+                                                    },
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: 'Category',
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                // section for subcategory
+                                                Expanded(
+                                                  child:
+                                                      DropdownButtonFormField(
+                                                    value: selectedSubCategory,
+                                                    items: isSubCategoryEnabled
+                                                        ? (selectedCategory ==
+                                                                    'financial'
+                                                                ? subCategoryFinancial
+                                                                : subCategoryTechnical)
+                                                            .map((e) {
+                                                            return DropdownMenuItem(
+                                                                value: e,
+                                                                child: Text(e));
+                                                          }).toList()
+                                                        : null,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedSubCategory =
+                                                            value as String;
+                                                      });
+                                                    },
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      labelText: 'Sub Category',
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )),
+
+                                            // container for Description section
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: TextFormField(
+                                                minLines: 1,
+                                                maxLines: 10,
+                                                cursorColor: Colors.green,
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                    prefixIcon: Padding(
+                                                      padding: EdgeInsets.all(
+                                                          Get.width * 0.03),
+                                                      child: const FaIcon(
+                                                          FontAwesomeIcons
+                                                              .addressBook),
+                                                    ),
+                                                    label: const Text(
+                                                        "Description"),
+                                                    border:
+                                                        const OutlineInputBorder()),
+                                                controller:
+                                                    descriptionController,
+                                              ),
+                                            ),
+
+// ----------------------------------------- to be debugged -------------------
+
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: ElevatedButton.icon(
+                                                onPressed: () {
+                                                  requestPermissions();
+                                                  getImage(ImageSource.gallery);
+                                                },
+                                                icon: const Icon(Icons.image),
+                                                label: const Text("Upload Screenshot"),
+                                              ),
+                                            ),
+
+/*
+                                            // container for upload Photo section
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: TextFormField(
+                                                minLines: 1,
+                                                maxLines: 10,
+                                                cursorColor: Colors.green,
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                    prefixIcon: Padding(
+                                                      padding: EdgeInsets.all(
+                                                          Get.width * 0.03),
+                                                      child: const FaIcon(
+                                                          FontAwesomeIcons
+                                                              .addressBook),
+                                                    ),
+                                                    label: const Text(
+                                                        "Upload Photo"),
+                                                    border:
+                                                        const OutlineInputBorder()),
+                                                controller:
+                                                    uploadPhotoController,
+                                              ),
+                                            ),
+*/
+                                            // button for submiting the doubt or ticket
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  raiseTicket();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Submit"))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: const Text(
+                      'Raise a ticket',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+
+// ------------------------------------------------- //
+
+/*
 
 
     // button for raising a ticket
@@ -359,12 +693,21 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                               color: Colors.black))),
 
 
- // button for ticket history                             
+                      */
+
+                  // button for ticket history
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Set the button color
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      TicketHistoryScreen(userId: widget.userId)));
+                        },
                       child: const Text(
                         "Ticket's history",
                         style: TextStyle(
@@ -459,8 +802,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                   onPressed: () {
                     openWhatsapp(
                         context: context,
-                        text:
-                            "Welcome to Vcharge support!",
+                        text: "Welcome to Vcharge support!",
                         number: "7796386605");
                   },
                   child: SizedBox(
@@ -469,7 +811,6 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-
                         // whatsapp icon
                         const FaIcon(FontAwesomeIcons.whatsapp),
 
@@ -497,7 +838,6 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  
                   // facebook icon
                   Container(
                     width: Get.width * 0.07,

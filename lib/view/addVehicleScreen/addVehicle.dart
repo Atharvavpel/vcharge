@@ -519,7 +519,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
             else if (formKey.currentState!.validate()) {
               addVehicle;
               print("Success");
-              Navigator.pop(context);
+              Navigator.of(context).pop();
             }
           },
           label: const Text(

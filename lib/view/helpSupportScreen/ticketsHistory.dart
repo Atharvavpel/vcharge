@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class TicketHistoryScreen extends StatefulWidget {
-  const TicketHistoryScreen({super.key});
+  String userId;
+
+  TicketHistoryScreen({super.key, required this.userId});
 
   @override
   State<TicketHistoryScreen> createState() => _TicketHistoryScreenState();

@@ -331,7 +331,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const HelpSupportScreen())).then((value) {
+                                      HelpSupportScreen(userId: widget.userId,))).then((value) {
                             Future.delayed(const Duration(milliseconds: 250),
                                 () {
                               Navigator.pop(
