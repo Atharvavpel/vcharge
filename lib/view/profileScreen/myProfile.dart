@@ -897,27 +897,18 @@ child: profilePhoto == " "
 
 */
 
-
-
-
-
-
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vcharge/services/GetMethod.dart'; 
+import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
 import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class MyProfilePage extends StatefulWidget {
-
-
   String userId;
 
   MyProfilePage({Key? key, required this.userId}) : super(key: key);
@@ -950,25 +941,24 @@ class MyProfilePageState extends State<MyProfilePage> {
 
 // function for fetching the user data
   Future<void> getUserData() async {
-
     // print("in the get method");
 
-    var response = await GetMethod.getRequest(specificUserIdUrl);
-    
-    setState(() {
-      firstName = response['userFirstName'] ?? '';
-      lastName = response['userLastName'] ?? '';
-      contactNo = response['userContactNo'] ?? '';
-      emailId = response['userEmail'] ?? '';
-      profilePhoto = response['userProfilePhoto'] ?? '';
-    });
+    try {
+      var response = await GetMethod.getRequest(specificUserIdUrl);
+
+      setState(() {
+        firstName = response['userFirstName'] ?? '';
+        lastName = response['userLastName'] ?? '';
+        contactNo = response['userContactNo'] ?? '';
+        emailId = response['userEmail'] ?? '';
+        profilePhoto = response['userProfilePhoto'] ?? '';
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
 
     // print(profilePhoto);
   }
-
-
-
-
 
 // Future<void> getUserData() async {
 
@@ -987,7 +977,6 @@ class MyProfilePageState extends State<MyProfilePage> {
 //     await cmd.set('userFirstName', response['userFirstName'] ?? '');
 //     await cmd.set('userLastName', response['userLastName'] ?? '');
 
-
 //     // Update the state of the widget with the retrieved data
 //     setState(() {
 //       firstName = response['userFirstName'] ?? '';
@@ -1001,14 +990,7 @@ class MyProfilePageState extends State<MyProfilePage> {
 //     await client.disconnect();
 //   }
 
-  
 // }
-
-
-
-
-
-
 
 // variable for picking the image from the gallery or camera
   final ImagePicker picker = ImagePicker();
@@ -1043,13 +1025,14 @@ class MyProfilePageState extends State<MyProfilePage> {
     } else {
       // The user has not granted the necessary permissions, show an error message.
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please grant the necessary permissions.')),
+        const SnackBar(
+            content: Text('Please grant the necessary permissions.')),
       );
     }
   }
 
 // function which returns the bottomsheet image
-Widget bottomSheet() {
+  Widget bottomSheet() {
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(50.0),
@@ -1187,7 +1170,11 @@ Widget bottomSheet() {
                                 lastNameEdited: lastName,
                                 contactNoEdited: contactNo,
                                 emailIdEdited: emailId,
-                              ))));
+                              )))).then((value) {
+                    setState(() {
+                      getUserData();
+                    });
+                  });
                 },
                 icon: const Icon(
                   Icons.settings,
@@ -1214,11 +1201,12 @@ Widget bottomSheet() {
             child: profilePhoto == ''
                 ? selectedImage == null
                     ? Container(
-                        width: MediaQuery.of(context).size.width* 0.45,
-                        height: MediaQuery.of(context).size.height* 0.2,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        height: MediaQuery.of(context).size.height * 0.2,
                         margin: const EdgeInsets.only(bottom: 20),
                         decoration: const BoxDecoration(
-                            shape: BoxShape.rectangle, color: Color(0xffD6D6D6)),
+                            shape: BoxShape.rectangle,
+                            color: Color(0xffD6D6D6)),
                         child: const Center(
                           child: Icon(
                             Icons.camera_alt_outlined,
@@ -1228,8 +1216,8 @@ Widget bottomSheet() {
                         ),
                       )
                     : Container(
-                        width: MediaQuery.of(context).size.width* 0.45,
-                        height: MediaQuery.of(context).size.height* 0.2,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        height: MediaQuery.of(context).size.height * 0.2,
                         margin: const EdgeInsets.only(bottom: 20),
                         decoration: BoxDecoration(
                             image: DecorationImage(
@@ -1239,30 +1227,31 @@ Widget bottomSheet() {
                             color: const Color(0xffD6D6D6)),
                       )
                 : Container(
-                    width: MediaQuery.of(context).size.width* 0.45,
-                    height: MediaQuery.of(context).size.height* 0.2,
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    height: MediaQuery.of(context).size.height * 0.2,
                     margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset:  Offset(
-                          5.0,
-                          5.0,
-                        ),
-                        blurRadius: 10.0,
-                        spreadRadius: 2.0,
-                      ), //BoxShadow
-                      BoxShadow(
-                        color: Colors.white,
-                        offset: Offset(0.0, 0.0),
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0,
-                      ), //BoxShadow
-                    ],
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(
+                              5.0,
+                              5.0,
+                            ),
+                            blurRadius: 10.0,
+                            spreadRadius: 2.0,
+                          ), //BoxShadow
+                          BoxShadow(
+                            color: Colors.white,
+                            offset: Offset(0.0, 0.0),
+                            blurRadius: 0.0,
+                            spreadRadius: 0.0,
+                          ), //BoxShadow
+                        ],
                         image: DecorationImage(
-                            image: NetworkImage(profilePhoto), fit: BoxFit.cover),
+                            image: NetworkImage(profilePhoto),
+                            fit: BoxFit.cover),
                         shape: BoxShape.rectangle,
                         color: Color(0xffD6D6D6)),
                   )),
@@ -1314,8 +1303,8 @@ Widget bottomSheet() {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            textContainer('Email id', Icons.card_travel, emailId,
-                (String? input) {}),
+            textContainer(
+                'Email id', Icons.card_travel, emailId, (String? input) {}),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
@@ -1525,4 +1514,3 @@ Widget bottomSheet() {
     );
   }
 }
-
