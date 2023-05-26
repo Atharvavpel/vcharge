@@ -6,6 +6,8 @@ import 'package:vcharge/view/reservationsScreen/reservationScreen.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
 
+import '../../listOfStations/listOfStations.dart';
+
 // ignore: must_be_immutable
 class HorizontalSideBar extends StatefulWidget {
   String userId;
@@ -37,286 +39,221 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
         child: Row(
           children: [
             // container - vehicle addition
-            Semantics(
-              // label: "myVehicleButton",
-              child: GestureDetector(
-                key: const Key('MyVehicle'),
-                onTap: () {
+            GestureDetector(
+              key: const Key('MyVehicle'),
+              onTap: () {
+                setState(() {
+                  isVehicle = true;
+                });
+                Future.delayed(const Duration(seconds: 1)).then((_) {
                   setState(() {
-                    isVehicle = true;
+                    isVehicle = false;
                   });
-                  Future.delayed(const Duration(seconds: 1)).then((_) {
-                    setState(() {
-                      isVehicle = false;
-                    });
-                  });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyVehicleScreen(
-                                userId: widget.userId,
-                              )));
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: const Offset(2, 2),
+                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyVehicleScreen(
+                              userId: widget.userId,
+                            )));
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: isVehicle
+                      ? const Color.fromARGB(255, 115, 204, 43)
+                      : Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: const [
+                      FaIcon(
+                        FontAwesomeIcons.car,
+                        size: 20,
+                        color: Color.fromARGB(255, 51, 50, 50),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'My vechicle',
+                        style: TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    color: isVehicle
-                        ? const Color.fromARGB(255, 115, 204, 43)
-                        : Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: const [
-                        FaIcon(
-                          FontAwesomeIcons.car,
-                          size: 20,
-                          color: Color.fromARGB(255, 51, 50, 50),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'My vechicle',
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
             ),
 
             // container - Route
-            Semantics(
-              // label: "routeButton",
-              child: GestureDetector(
-                key: const Key('Route'),
-                onTap: () {
+            GestureDetector(
+              key: const Key('Route'),
+              onTap: () {
+                setState(() {
+                  isMapRoute = true;
+                });
+                Future.delayed(const Duration(seconds: 1)).then((_) {
                   setState(() {
-                    isMapRoute = true;
+                    isMapRoute = false;
                   });
-                  Future.delayed(const Duration(seconds: 1)).then((_) {
-                    setState(() {
-                      isMapRoute = false;
-                    });
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-                  decoration: BoxDecoration(
-                    // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 2,
-                        blurRadius: 2,
-                        offset: const Offset(2, 2),
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+                decoration: BoxDecoration(
+                  // border: Border.all(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 2,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: isMapRoute
+                      ? const Color.fromARGB(255, 142, 181, 239)
+                      : Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: const [
+                      FaIcon(
+                        FontAwesomeIcons.route,
+                        size: 20,
+                        color: Color.fromARGB(255, 51, 50, 50),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Route',
+                        style: TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    color: isMapRoute
-                        ? const Color.fromARGB(255, 142, 181, 239)
-                        : Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: const [
-                        FaIcon(
-                          FontAwesomeIcons.route,
-                          size: 20,
-                          color: Color.fromARGB(255, 51, 50, 50),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Route',
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
             ),
 
             // container - my wallet
-            Semantics(
-              // label: "myWalletButton",
-              child: GestureDetector(
-                key: const Key('myWallet'),
-                onTap: () {
+            GestureDetector(
+              key: const Key('myWallet'),
+              onTap: () {
+                setState(() {
+                  isWallet = true;
+                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WalletScreen(
+                              userId: widget.userId,
+                            )));
+                Future.delayed(const Duration(seconds: 1)).then((_) {
                   setState(() {
-                    isWallet = true;
+                    isWallet = false;
                   });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WalletScreen(
-                                userId: widget.userId,
-                              )));
-                  Future.delayed(const Duration(seconds: 1)).then((_) {
-                    setState(() {
-                      isWallet = false;
-                    });
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-                  decoration: BoxDecoration(
-                    // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 2,
-                        blurRadius: 2,
-                        offset: const Offset(2, 2),
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+                decoration: BoxDecoration(
+                  // border: Border.all(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 2,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: isWallet
+                      ? const Color.fromARGB(255, 142, 181, 239)
+                      : Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.wallet, color: Colors.grey[700]),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'My Wallet',
+                        style: TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    color: isWallet
-                        ? const Color.fromARGB(255, 142, 181, 239)
-                        : Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.wallet, color: Colors.grey[700]),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'My Wallet',
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
             ),
 
             // container - favourites
-            Semantics(
-              // label: "favouriteButton",
-              child: GestureDetector(
-                key: const Key('Favourite'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              FavouriteSceen(userId: widget.userId)));
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-                  decoration: BoxDecoration(
-                    // border: Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 2,
-                        blurRadius: 2,
-                        offset: const Offset(2, 2),
+            GestureDetector(
+              key: const Key('Favourite'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            FavouriteSceen(userId: widget.userId)));
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+                decoration: BoxDecoration(
+                  // border: Border.all(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 2,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: isFavourite
+                      ? const Color.fromARGB(255, 142, 181, 239)
+                      : Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.favorite, color: Colors.grey[700]),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'Favourite',
+                        style: TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    color: isFavourite
-                        ? const Color.fromARGB(255, 142, 181, 239)
-                        : Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.favorite, color: Colors.grey[700]),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Favourite',
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
             ),
 
             // container - reservations
-            Semantics(
-              // label: "reservationButton",
-              child: GestureDetector(
-                key: const Key('Reservation'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ReservationScreen(userId: widget.userId,)));
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-                  decoration: BoxDecoration(
-                      // border: Border.all(),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 2,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20)),
-                      color: isReservation
-                          ? const Color.fromARGB(255, 142, 181, 239)
-                          : Colors.white),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.book_online, color: Colors.grey[700]),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Reservations',
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // container - more optionsPage
-            Semantics(
-              // label: "moreOptionButton",
-              child: GestureDetector(
-                key: const Key('moreOptions'),
-                onTap: () {
-                  setState(() {
-                    isMore = true;
-                  });
-
-                  Future.delayed(const Duration(seconds: 1)).then((_) {
-                    setState(() {
-                      isMore = false;
-                    });
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-                  decoration: BoxDecoration(
+            GestureDetector(
+              key: const Key('Reservation'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReservationScreen(userId: widget.userId,)));
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+                decoration: BoxDecoration(
                     // border: Border.all(),
                     boxShadow: [
                       BoxShadow(
@@ -326,24 +263,63 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                         offset: const Offset(2, 2),
                       ),
                     ],
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    color: isMore
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(20)),
+                    color: isReservation
                         ? const Color.fromARGB(255, 142, 181, 239)
-                        : Colors.white,
+                        : Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.book_online, color: Colors.grey[700]),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'Reservations',
+                        style: TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.more_horiz_sharp, color: Colors.grey[700]),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'More',
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                ),
+              ),
+            ),
+
+            // container - more optionsPage
+            GestureDetector(
+              key: const Key('moreOptions'),
+              onTapDown: (TapDownDetails details) {
+                showPopupMenu(context, details.globalPosition);
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+                decoration: BoxDecoration(
+                  // border: Border.all(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 2,
+                      offset: const Offset(2, 2),
                     ),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: isMore
+                      ? const Color.fromARGB(255, 142, 181, 239)
+                      : Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.more_horiz_sharp, color: Colors.grey[700]),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'More',
+                        style: TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -353,4 +329,93 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
       ),
     );
   }
+
+  //function to pop more options
+  void showPopupMenu(BuildContext context, Offset position) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+
+    final selectedMenuItem = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        overlay.size.width - position.dx,
+        overlay.size.height - position.dy,
+      ),
+      items: <PopupMenuEntry>[
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Blogs & Videos'),
+              Icon(Icons.video_collection)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Help & Support'),
+              Icon(Icons.contact_support)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('User Manual'),
+              Icon(Icons.library_books)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Legal Policy'),
+              Icon(Icons.policy_rounded)
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Log Out'),
+              Icon(Icons.logout_rounded)
+            ],
+          ),
+        ),
+      ],
+      elevation: 12.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    );
+
+    // Handle the selected menu item
+    if (selectedMenuItem != null) {
+      switch (selectedMenuItem) {
+        case 1:
+          // Handle menu item 1
+          break;
+        case 2:
+          // Handle menu item 2
+          break;
+        case 3:
+          // Handle menu item 3
+          break;
+      }
+    }
+  }
 }
+
+
+

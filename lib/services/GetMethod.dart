@@ -5,9 +5,9 @@ class GetMethod {
   // this method is used to fetch the details of the particular models
 
   static Future<dynamic> getRequest(String url) async {
-    var response = await http.get(Uri.parse(url));
     // print(url);
     try {
+      var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

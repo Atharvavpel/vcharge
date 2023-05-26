@@ -64,9 +64,11 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
               // filter icon - it is displayed at the right side
               suffixIcon: IconButton(
                   onPressed: () {
-                    showDialog(context: context, builder: (BuildContext context) {
-                      return FilterPopUp(userId: widget.userId);
-                    });
+                    showBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FilterPopUp(userId: widget.userId);
+                      });
                   },
                   icon: Icon(
                     Icons.filter_alt,
