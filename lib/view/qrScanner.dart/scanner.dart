@@ -114,7 +114,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => StationsSpecificDetails(userId: widget.userId, stationId: 'STN20230505105447818'),
+              builder: (context) => StationsSpecificDetails(userId: widget.userId, stationId: 'STN20230517060009052'),
             ),
           );
           await controller.resumeCamera();
