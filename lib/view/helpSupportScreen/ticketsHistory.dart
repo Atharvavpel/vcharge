@@ -1,50 +1,4 @@
-/*
 
-
-{
-
-   "supportCustomerId":"USR20230410143239876",
-
-    "supportHostId":"HST20230410143238848",
-
-    "supportStationId":"STN20230412173245778",
-
-    "supportVendorId":"VED20230412173245778",
-
-    "supportSubject":"charged the wrong amount",
-
-    "supportDescription":"On 30th I was charged with the wrong amount",
-
-    "supportStatus":"pending",
-
-    "supportAssignedTo":"snehal",
-
-    "supportPriority":"high",
-
-    "supportCategory":"financial",
-
-    "subSupportCategory":"booking",
-
-    "supportSideResponse":[
-
-        "Thank you for bringing this to our attention. Our technical team will investigate the issue and get back to you as soon as possible."
-
-    ],
-
-    "customerSideResponse":[
-
-        "Thank you for your prompt response. I appreciate your efforts to resolve the issue."
-
-    ],
-
-    "supportImageLink":"data:image/jpg;base64,/9j/",
-
-    "createdBy":"Admin"
-
-}
-
-
-*/
 
 
 import 'package:flutter/material.dart';
@@ -62,10 +16,10 @@ class TicketHistoryScreen extends StatefulWidget {
 
 class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
 
-  String supportUrl = "http://192.168.0.243:8091/manageSupport/getSupports";
+  String supportUrl = "http://192.168.0.243:8091/manageSupport/getSupportByCustomerId?supportCustomerId=USR20230517060841379";
 
   //this list store the list of stations
-  List<dynamic> raiseTicketList = [];
+  List<SupportModel> raiseTicketList = [];
 
   @override
   void initState() {
@@ -75,17 +29,20 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
   }
 
   Future<void> getAllSupport() async {
-
+    print("in get support function");
     try {
       var data = await GetMethod.getRequest(supportUrl);
-      if (data.isNotEmpty) {
-        raiseTicketList.clear();
-        for (int i = 0; i < data.length; i++) {
-          raiseTicketList.add(SupportModel.fromJson(data[i]));
-        }
-      } else {
-        print("Empty Data");
-      }
+      setState(() {
+  if (data.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      raiseTicketList.add(SupportModel.fromJson(data[i]));
+      print(SupportModel.fromJson(data[i]));
+      
+    }
+  } else {
+    print("Empty Data");
+  }
+});
     } catch (e) {
       print(e);
     }
@@ -102,13 +59,13 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: Text(supportSideResponse),
+              title: Text("OUR RESPONSE: $supportSideResponse"),
               // onTap: () {
               //   Navigator.of(context).pop();
               // },
             ),
             ListTile(
-              title: Text(customerSideResponse),
+              title: Text("YOUR RESPONSE: $customerSideResponse"),
               // onTap: () {
               //   Navigator.of(context).pop();
               // },
@@ -135,11 +92,11 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
                       : ListView.builder(
                           itemCount: raiseTicketList.length,
                           itemBuilder: (context, index) {
+                            var data = raiseTicketList[index];
+                            String supportSideResponse = data.supportSideResponse.toString();
+                            String customerSideResponse = data.customerSideResponse.toString();
 
-                            String supportSideResponse = raiseTicketList[index]['supportSideResponse'];
-                            String customerSideResponse = raiseTicketList[index]['customerSideResponse'];
-
-                            String status = raiseTicketList[index]['supportStatus'];
+                            String status = data.supportStatus.toString();
                             bool isCompleted = (status == 'completed');
 
 
@@ -156,7 +113,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
                                         showResponseDialog(context, supportSideResponse, customerSideResponse);
                                       },
                                       title: Text(
-                                        raiseTicketList[index]['supportSubject'],
+                                        data.supportSubject.toString(),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: MediaQuery.of(context)
@@ -166,13 +123,13 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
                                       ),
                                       subtitle: //container for station address
                                           Text(
-                                        raiseTicketList[index]['supportDescription'],
+                                        data.supportDescription.toString(),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       trailing: isCompleted ? const Icon(Icons.done) : const Icon(Icons.incomplete_circle),
                                       leading: //column for 'distance from user' and connector type
-                                        const Icon(Icons.support)
+                                        const Icon(Icons.call)
                                           )),
                             );
                           }),

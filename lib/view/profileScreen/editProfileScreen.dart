@@ -11,7 +11,6 @@ import 'package:vcharge/services/redisConnection.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatefulWidget {
-
   String userId;
 
   String? firstNameEdited;
@@ -19,22 +18,20 @@ class EditProfileScreen extends StatefulWidget {
   String? emailIdEdited;
   String? contactNoEdited;
 
-  EditProfileScreen({super.key, 
-  
-
-                    required this.userId, 
-                    required this.firstNameEdited,
-                    required this.lastNameEdited,
-                    required this.contactNoEdited,
-                    required this.emailIdEdited,
-                });
+  EditProfileScreen({
+    super.key,
+    required this.userId,
+    required this.firstNameEdited,
+    required this.lastNameEdited,
+    required this.contactNoEdited,
+    required this.emailIdEdited,
+  });
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-
 // variables for storing the values in the sections
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -45,46 +42,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController pincodeController = TextEditingController();
   TextEditingController cityController = TextEditingController();
 
-
   //variables for DropDown menu for vehicle selection
   List<String> genderList = ['male', 'female', 'other'];
   dynamic selectedGender;
 
 // list for states in India
   List<String> statesIndia = [
-  'Andhra Pradesh',
-  'Arunachal Pradesh',
-  'Assam',
-  'Bihar',
-  'Chhattisgarh',
-  'Goa',
-  'Gujarat',
-  'Haryana',
-  'Himachal Pradesh',
-  'Jharkhand',
-  'Karnataka',
-  'Kerala',
-  'Madhya Pradesh',
-  'Maharashtra',
-  'Manipur',
-  'Meghalaya',
-  'Mizoram',
-  'Nagaland',
-  'Odisha',
-  'Punjab',
-  'Rajasthan',
-  'Sikkim',
-  'Tamil Nadu',
-  'Telangana',
-  'Tripura',
-  'Uttar Pradesh',
-  'Uttarakhand',
-  'West Bengal',
-];
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+  ];
 
 // variable for storing the selected state
-dynamic selectedState;
-
+  dynamic selectedState;
 
 // init state function calling the getUserData
   @override
@@ -93,31 +88,30 @@ dynamic selectedState;
     getUserData();
   }
 
-  String specificUrl = "http://192.168.0.243:8097/manageUser/getUser?userId=USR20230517060841379";
-
-  
-
+  String specificUrl =
+      "http://192.168.0.243:8097/manageUser/getUserByUserId?userId=USR20230517060841379";
 
 // function for fetching specific user data
   Future<void> getUserData() async {
+
+    print("in the get user data");
     try {
       var data = await GetMethod.getRequest(specificUrl);
 
-    if (data != null) {
-      setState(() {
+      if (data != null) {
         firstNameController.text = data['userFirstName'] ?? '';
-        lastNameController.text = data['userLastName'] ?? '';
-        dateOfBirthController.text = data['userDateOfBirth'] ?? '';
-        emailController.text = data['userEmail'] ?? '';
-        addressController.text = data['userAddress'] ?? '';
-        pincodeController.text = data['userPincode'] ?? '';
-        cityController.text = data['userCity'] ?? '';
-        selectedGender = data['userGender'] ?? '';
-        selectedState = data['userState'] ?? '';
-
-
-      });
-    }
+          lastNameController.text = data['userLastName'] ?? '';
+          dateOfBirthController.text = data['userDateOfBirth'] ?? '';
+          emailController.text = data['userEmail'] ?? '';
+          addressController.text = data['userAddress'] ?? '';
+          pincodeController.text = data['userPincode'] ?? '';
+          cityController.text = data['userCity'] ?? '';
+          selectedGender = data['userGender'] ?? '';
+          selectedState = data['userState'] ?? '';
+        setState(() {
+          
+        });
+      }
     } catch (e) {
       print("the error is: $e");
     }
@@ -145,65 +139,53 @@ dynamic selectedState;
 
 // function for updating the specific user data
   Future updateUserDetails() async {
-
     try {
       var response = await PutMethod.putRequest(
-        "http://192.168.0.243:8097/manageUser/updateUser?userId=","USR20230517060841379",
-        jsonEncode({
-          'userFirstName': firstNameController.text,
-          'userLastName': lastNameController.text,
-          'userDateOfBirth': dateOfBirthController.text,
-          'userEmail': emailController.text,
-          'userAddress': addressController.text,
-          'userPincode': pincodeController.text,
-          'userCity': cityController.text,
-          'userGender': selectedGender,
-          'userState' : selectedState,
+          "http://192.168.0.243:8097/manageUser/updateUser?userId=",
+          "USR20230517060841379",
+          jsonEncode({
+            'userFirstName': firstNameController.text,
+            'userLastName': lastNameController.text,
+            'userDateOfBirth': dateOfBirthController.text,
+            'userEmail': emailController.text,
+            'userAddress': addressController.text,
+            'userPincode': pincodeController.text,
+            'userCity': cityController.text,
+            'userGender': selectedGender,
+            'userState': selectedState,
+          }));
 
-          
+      (response == 200)
+          ? Fluttertoast.showToast(
+              msg: " Data updated successfully",
+              // msg: "Successfully Created",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0)
+          : Fluttertoast.showToast(
+              msg: " Updation failed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
 
-          
-
-        })
-        );
-
-
-        (response==200)? 
-        Fluttertoast.showToast(
-          msg: " Data updated successfully",
-          // msg: "Successfully Created",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0) : 
-
-        Fluttertoast.showToast(
-          msg: " Updation failed",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-
-    RedisConnection.set('firstName', firstNameController.text);
-    RedisConnection.set('lastName', lastNameController.text);
-    RedisConnection.set('emailId', emailController.text);
-
+      RedisConnection.set('firstName', firstNameController.text);
+      RedisConnection.set('lastName', lastNameController.text);
+      RedisConnection.set('emailId', emailController.text);
     } catch (e) {
       print("the error is: $e");
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
-      onTap: (){
-
+      onTap: () {
         // used to handle the onFocus() activities
         FocusScope.of(context).unfocus();
       },
@@ -236,7 +218,7 @@ dynamic selectedState;
                         ),
                       ),
                     ),
-    
+
                     // container for last name
                     Expanded(
                       child: Padding(
@@ -254,7 +236,7 @@ dynamic selectedState;
                     )
                   ],
                 ),
-    
+
                 // contianer for dob and gender
                 Row(
                   children: [
@@ -274,31 +256,30 @@ dynamic selectedState;
                         ),
                       ),
                     ),
-    
+
                     // container for gender section
                     Expanded(
                       child: DropdownButtonFormField(
-                        value: selectedGender, // Set the currently selected value in the dropdown
-                        items: genderList.map((e) {
-                          return DropdownMenuItem(value: e, child: Text(e));
-                        }).toList(), // Set the list of items to display in the dropdown
+                        value: selectedGender,
+                        items: genderList
+                            .map((e) {
+                              return DropdownMenuItem(value: e, child: Text(e));
+                            })
+                            .toSet()
+                            .toList(), // Use toSet() to remove duplicate values and then convert back to a list
                         onChanged: (value) {
                           setState(() {
-                            selectedGender = value as String; // Update the currently selected value in the dropdown
-                                          
-                            // print(
-                            //     "the value of genderSelected is: $selectedGender");
+                            selectedGender = value as String;
                           });
                         },
                         decoration: const InputDecoration(
-                          label: Text("Gender"),
-                          border: OutlineInputBorder()
-                        ),
+                            label: Text("Gender"),
+                            border: OutlineInputBorder()),
                       ),
                     ),
                   ],
                 ),
-    
+
                 // container for Email section
                 Padding(
                   padding: const EdgeInsets.all(15.0),
@@ -306,14 +287,14 @@ dynamic selectedState;
                     cursorColor: Colors.green,
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
-                        label: Text("Email"), 
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.email),
+                      label: Text("Email"),
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.email),
                     ),
                     controller: emailController,
                   ),
                 ),
-    
+
                 // container for Address section
                 Padding(
                   padding: const EdgeInsets.all(15.0),
@@ -324,19 +305,18 @@ dynamic selectedState;
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                         prefixIcon: Padding(
-                          padding: EdgeInsets.all(Get.width* 0.03),
+                          padding: EdgeInsets.all(Get.width * 0.03),
                           child: const FaIcon(FontAwesomeIcons.addressBook),
                         ),
-                        label: const Text("Address"), border: const OutlineInputBorder()),
+                        label: const Text("Address"),
+                        border: const OutlineInputBorder()),
                     controller: addressController,
                   ),
                 ),
-    
-    
+
                 // contianer for pincode and city
                 Row(
                   children: [
-
                     // container for city
                     Expanded(
                       child: Padding(
@@ -346,10 +326,10 @@ dynamic selectedState;
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               prefixIcon: Padding(
-                                padding: EdgeInsets.all(Get.width* 0.03),
+                                padding: EdgeInsets.all(Get.width * 0.03),
                                 child: const FaIcon(FontAwesomeIcons.city),
                               ),
-                              label: const Text("City"), 
+                              label: const Text("City"),
                               border: const OutlineInputBorder()),
                           controller: cityController,
                         ),
@@ -364,8 +344,8 @@ dynamic selectedState;
                           cursorColor: Colors.green,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
-                            prefixIcon: Padding(
-                                padding: EdgeInsets.all(Get.width* 0.03),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.all(Get.width * 0.03),
                                 child: const Icon(Icons.numbers),
                               ),
                               label: const Text("Pincode"),
@@ -374,40 +354,35 @@ dynamic selectedState;
                         ),
                       ),
                     ),
-    
-                    
                   ],
                 ),
 
-
-
                 // container for state section
                 Padding(
-  padding: const EdgeInsets.all(15.0),
-  child: DropdownButtonFormField(
-    value: selectedState, // Set the currently selected value in the dropdown
-    items: statesIndia.map((e) {
-      return DropdownMenuItem(value: e, child: Text(e));
-    }).toList(), // Set the list of items to display in the dropdown
-    onChanged: (value) {
-      setState(() {
-        selectedState = value as String; // Update the currently selected value in the dropdown
-        cityController.text = ''; // Clear the city field when the state changes
-      });
-    },
-    decoration: const InputDecoration(
-      label: Text("State"),
-      border: OutlineInputBorder()
-    ),
-  ),
-),
-
-
+                  padding: const EdgeInsets.all(15.0),
+                  child: DropdownButtonFormField(
+                    value:
+                        selectedState, // Set the currently selected value in the dropdown
+                    items: statesIndia.map((e) {
+                      return DropdownMenuItem(value: e, child: Text(e));
+                    }).toList(), // Set the list of items to display in the dropdown
+                    onChanged: (value) {
+                      setState(() {
+                        selectedState = value
+                            as String; // Update the currently selected value in the dropdown
+                        cityController.text =
+                            ''; // Clear the city field when the state changes
+                      });
+                    },
+                    decoration: const InputDecoration(
+                        label: Text("State"), border: OutlineInputBorder()),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-    
+
         // update button
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
@@ -417,7 +392,7 @@ dynamic selectedState;
             Navigator.pop(context);
             // Navigator.popUntil(context, ModalRoute.withName('/MyProfilePage'));
             // Navigator.push(
-            //   context, 
+            //   context,
             //   MaterialPageRoute(builder: (context)=> MyProfilePage(userId: widget.userId))
             // );
           },
@@ -427,6 +402,3 @@ dynamic selectedState;
     );
   }
 }
-
-
-              
