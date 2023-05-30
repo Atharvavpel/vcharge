@@ -10,8 +10,8 @@ class SupportModel {
   String? supportPriority;
   String? supportCategory;
   String? subSupportCategory;
-  List<String>? supportSideResponse;
-  List<String>? customerSideResponse;
+  String? supportSideResponse;
+  String? customerSideResponse;
   String? supportImageLink;
   String? createdBy;
 
@@ -44,8 +44,8 @@ class SupportModel {
     supportPriority = json['supportPriority'];
     supportCategory = json['supportCategory'];
     subSupportCategory = json['subSupportCategory'];
-    supportSideResponse = json['supportSideResponse'].cast<String>();
-    customerSideResponse = json['customerSideResponse'].cast<String>();
+    supportSideResponse = json['supportSideResponse'];
+    customerSideResponse = json['customerSideResponse'];
     supportImageLink = json['supportImageLink'];
     createdBy = json['createdBy'];
   }

@@ -14,9 +14,10 @@ class TicketHistoryScreen extends StatefulWidget {
   State<TicketHistoryScreen> createState() => _TicketHistoryScreenState();
 }
 
+
 class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
 
-  String supportUrl = "http://192.168.0.243:8091/manageSupport/getSupportByCustomerId?supportCustomerId=USR20230517060841379";
+  String supportUrl = "http://192.168.0.41:8091/manageSupport/getSupportByCustomerId?supportCustomerId=USR20230517060841379";
 
   //this list store the list of stations
   List<SupportModel> raiseTicketList = [];
@@ -29,12 +30,13 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
   }
 
   Future<void> getAllSupport() async {
-    print("in get support function");
+    print("in get all support method");
     try {
       var data = await GetMethod.getRequest(supportUrl);
       setState(() {
   if (data.isNotEmpty) {
     for (int i = 0; i < data.length; i++) {
+
       raiseTicketList.add(SupportModel.fromJson(data[i]));
       print(SupportModel.fromJson(data[i]));
       
@@ -53,6 +55,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
   showDialog(
     context: context,
     builder: (BuildContext context) {
+
       return AlertDialog(
         title: const Text("Responses"),
         content: Column(
@@ -60,15 +63,9 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
           children: [
             ListTile(
               title: Text("OUR RESPONSE: $supportSideResponse"),
-              // onTap: () {
-              //   Navigator.of(context).pop();
-              // },
             ),
             ListTile(
               title: Text("YOUR RESPONSE: $customerSideResponse"),
-              // onTap: () {
-              //   Navigator.of(context).pop();
-              // },
             ),
           ],
         ),
@@ -100,7 +97,6 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
                             bool isCompleted = (status == 'completed');
 
 
-
                             return Opacity(
                               opacity: isCompleted ? 0.5 : 1.0, // Reduce opacity if completed
                               child: Card(
@@ -127,7 +123,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      trailing: isCompleted ? const Icon(Icons.done) : const Icon(Icons.incomplete_circle),
+                                      trailing: isCompleted ? const Icon(Icons.done_all) : const Icon(Icons.more),
                                       leading: //column for 'distance from user' and connector type
                                         const Icon(Icons.call)
                                           )),
