@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/putMethod.dart';
 import 'package:vcharge/services/redisConnection.dart';
+import 'package:vcharge/view/profileScreen/myProfile.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatefulWidget {
@@ -390,11 +391,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             updateUserDetails();
             Navigator.pop(context);
             Navigator.pop(context);
-            // Navigator.popUntil(context, ModalRoute.withName('/MyProfilePage'));
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context)=> MyProfilePage(userId: widget.userId))
-            // );
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context)=> MyProfilePage(userId: widget.userId))
+            );
           },
           label: const Text("Update"),
         ),

@@ -148,7 +148,9 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
       print("the error at the redis connection in profile widget is: $e");
     }
 
-    setState(() {});
+    if (mounted) {
+  setState(() {});
+}
   }
 
 // variable for picking the image from the gallery or camera
@@ -167,6 +169,14 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
   }
 
   dynamic selectedImageUrl = '';
+
+  // @override
+  // void didUpdateWidget(MyProfilePage oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   setState(() {
+  //     getUserData();
+  //   });
+  // }
 
 // function for fetching the image from the device
   Future getImage(ImageSource source) async {
@@ -339,8 +349,8 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
           CircleAvatar(
             backgroundColor: Colors.white,
             child: IconButton(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async{
+                  var editProfile = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: ((context) => SettingPage(
@@ -350,6 +360,11 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
                                 contactNoEdited: contactNo,
                                 emailIdEdited: emailId,
                               ))));
+                  if(editProfile == true) {
+                    await getUserData();
+                    setState(() {
+                    });
+                  }
                 },
                 icon: const Icon(
                   Icons.settings,

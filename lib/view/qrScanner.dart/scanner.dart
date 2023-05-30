@@ -5,7 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vcharge/view/qrScanner.dart/qrScannerOutput.dart';
+import 'package:vcharge/view/startChargingScreen/startChargingScreen.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
+
+import '../scanToCharge/scanToCharge.dart';
 
 class QRScannerWidget extends StatefulWidget {
   String userId;
@@ -89,7 +92,8 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     if (status.isGranted) {
       try {
         controller.scannedDataStream.listen((scanData) async {
-          controller.pauseCamera();
+          // controller.pauseCamera();
+          controller.stopCamera();
 
 
   //         // Decrypt the scanned data
@@ -114,7 +118,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => StationsSpecificDetails(userId: widget.userId, stationId: 'STN20230517060009052'),
+              builder: (context) => ScanToCharge(stationLocation: 'Kharadi, Pune', stationName: 'EV Charging station', userId: widget.userId,),
             ),
           );
           await controller.resumeCamera();
