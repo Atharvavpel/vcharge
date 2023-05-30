@@ -85,7 +85,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const AddVehicleScreen())).then((value) {
+                                    AddVehicleScreen(userId: widget.userId,))).then((value) {
                           Future.delayed(const Duration(milliseconds: 250),
                               () {
                             Navigator.pop(

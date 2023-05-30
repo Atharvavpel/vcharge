@@ -7,7 +7,9 @@ import 'package:vcharge/models/vehicleModel.dart';
 import 'package:vcharge/services/PostMethod.dart';
 
 class AddVehicleScreen extends StatefulWidget {
-  const AddVehicleScreen({super.key});
+  String userId;
+
+  AddVehicleScreen({required this.userId, super.key});
 
   @override
   State<StatefulWidget> createState() => AddVehicleScreenState();
@@ -16,9 +18,9 @@ class AddVehicleScreen extends StatefulWidget {
 class AddVehicleScreenState extends State<AddVehicleScreen> {
   final formKey = GlobalKey<FormState>();
 
-  var vehicleType = ['two', 'three', 'four'];
+  var vehicleTypeList = ['two', 'three', 'four'];
   // ignore: prefer_typing_uninitialized_variables
-  var selectedVehicleType ;
+  var selectedVehicleType;
   var vehicleTypeSelectBool = [false, false, false];
 
   // ignore: prefer_typing_uninitialized_variables
@@ -45,85 +47,81 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
 // variable for the nick-name input field
   var nickNameController = TextEditingController();
 
-
-
-
-
 // --------------- to be debugged: ------------------ //
 
-
-
-
   Future<void> addVehicle() async {
+    // Fetch the data from the form input fields
+    String brandName = selectedManufacturer;
+    String modelName = selectedCarModel;
+    String vehicleType = vehicleTypeList[selectedVehicleType];
+    String vehicleRegistrationNo = regNoController.text;
+    String vehicleNickName = nickNameController.text;
 
+    // Create a new VehicleModel object with the fetched data
+    VehicleModel newVehicle = VehicleModel(
+        vehicleType: vehicleType,
+        vehicleBrandName: brandName,
+        vehicleModelName: modelName,
+        vehicleRegistrationNo: vehicleRegistrationNo,
+        vehicleNickName: vehicleNickName,
+        vehicleBatteryType: "li-ion",
+        vehicleBatteryCapacity: "32.4kwh",
+        vehicleRange: "000",
+        vehicleMotorType: "magnet",
+        vehicleMotorPower: "129ps",
+        vehicleChargingStandard: "css2",
+        vehicleAdaptorType: "ccs2",
+        vehicleClass: "Suv");
 
-  // Fetch the data from the form input fields
-  String brandName = selectedManufacturer;
-  String modelName = selectedCarModel;
-  String vehicleType = selectedVehicleType;
-  String vehicleRegistrationNo = regNoController.text;
-  String vehicleNickName = nickNameController.text;
+    try {
+      // Convert the newVehicle object to JSON
+      Map<String, dynamic> vehicleJson = newVehicle.toJson();
 
-  // Create a new VehicleModel object with the fetched data
-  VehicleModel newVehicle = VehicleModel(
-    vehicleType: vehicleType,
-    vehicleBrandName: brandName,
-    vehicleModelName: modelName,
-    vehicleRegistrationNo: vehicleRegistrationNo,
-    vehicleNickName: vehicleNickName,
-    
-  );
+      // Send the JSON data as a POST request
+      String url =
+          'http://192.168.0.243:8097/manageUser/addVehicles?userId=${widget.userId}';
 
-  
-  try {
+      final response = await PostMethod.postRequest(
+          url,
+          jsonEncode({
+            "vehicleType": vehicleType,
+            "vehicleBrandName": brandName,
+            "vehicleModelName": modelName,
+            "vehicleRegistrationNo": vehicleRegistrationNo,
+            "vehicleNickName": vehicleNickName,
+            "vehicleBatteryType": "li-ion",
+            "vehicleBatteryCapacity": "32.4kwh",
+            "vehicleRange": "000",
+            "vehicleMotorType": "magnet",
+            "vehicleMotorPower": "129ps",
+            "vehicleChargingStandard": "css2",
+            "vehicleAdaptorType": "ccs2",
+            "vehicleClass": "Suv"
+          }));
 
-  // Convert the newVehicle object to JSON
-  Map<String, dynamic> vehicleJson = newVehicle.toJson();
-
-  // Send the JSON data as a POST request
-  String url = 'http://192.168.0.243:8097/manageUser/addVehicles';
-
-  final response = await PostMethod.postRequest(url, vehicleJson);
-
-  (response == 200 ) ? 
-
-    Fluttertoast.showToast(
-          msg: " vechicle added successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0) : 
-
-    Fluttertoast.showToast(
-          msg: "Failed to add",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-
-    
-  } catch (e) {
-    print("Error in vehicle addition: $e");
+      (response == 200)
+          ? Fluttertoast.showToast(
+              msg: " vechicle added successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0)
+          : Fluttertoast.showToast(
+              msg: "Failed to add",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
+    } catch (e) {
+      print("Error in vehicle addition: $e");
+    }
   }
 
-
-}
-
-
-
-
-
 // ------------------------------------------------------------- //
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +137,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   //Heading Text
                   const Center(
                     child: Text(
@@ -153,7 +150,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       // vehicle type heading
                       const Padding(
                         padding: EdgeInsets.only(left: 8, right: 8),
@@ -167,7 +163,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-
                           //check box for two wheeler
                           Row(
                             children: [
@@ -426,8 +421,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-
-
                           //row for vehicle name
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -452,7 +445,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                             ],
                           ),
 
-
                           //row for connector type
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -475,7 +467,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                               ))
                             ],
                           ),
-
 
                           //row for Battery Capacity
                           Row(
@@ -513,12 +504,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            if(selectedVehicleType == null){
-
-            }
-            else if (formKey.currentState!.validate()) {
-              addVehicle;
-              print("Success");
+            if (selectedVehicleType == null) {
+            } else if (formKey.currentState!.validate()) {
+              addVehicle();
               Navigator.of(context).pop();
             }
           },
@@ -528,6 +516,4 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
           ),
         ));
   }
-
-
 }
