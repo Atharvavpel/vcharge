@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vcharge/models/chargerModel.dart';
 import 'package:vcharge/services/GetMethod.dart';
-import 'package:vcharge/view/scanToCharge/scanToCharge.dart';
+import 'package:vcharge/view/chargingScreen/chargingScreen.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
 
@@ -724,10 +724,10 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                         Navigator.push(
                                                                             context,
                                                                             MaterialPageRoute(
-                                                                                builder: (context) => ScanToCharge(
+                                                                                builder: (context) => ChargingScreen(
                                                                                       stationLocation: stationDetails!.stationArea!,
                                                                                       stationName: stationDetails!.stationName!,
-                                                                                      userId: widget.userId,
+                                                                                      userId: widget.userId, chargerId: chargerList[index].chargerId!,
                                                                                     )));
                                                                       },
                                                                       child: const Text(

@@ -6,22 +6,24 @@ import '../startChargingScreen/startChargingScreen.dart';
 import '../walletScreen/addMoneyScreen.dart';
 
 // ignore: must_be_immutable
-class ScanToCharge extends StatefulWidget {
+class ChargingScreen extends StatefulWidget {
   String stationName;
   String stationLocation;
   String userId;
+  String chargerId;
 
-  ScanToCharge(
+  ChargingScreen(
       {required this.userId,
       required this.stationLocation,
       required this.stationName,
+      required this.chargerId,
       super.key});
 
   @override
-  State<StatefulWidget> createState() => ScanToChargeState();
+  State<StatefulWidget> createState() => ChargingScreenState();
 }
 
-class ScanToChargeState extends State<ScanToCharge> {
+class ChargingScreenState extends State<ChargingScreen> {
   //activeButton to track time, units and money aciveness
   //1 = time, 2 = units and 3 = money
   int activeButton = 1;
