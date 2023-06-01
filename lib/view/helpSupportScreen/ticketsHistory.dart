@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:vcharge/models/supportModel.dart';
 import 'package:vcharge/services/GetMethod.dart';
+import 'package:vcharge/view/helpSupportScreen/supportSpecificScreen.dart';
 
 class TicketHistoryScreen extends StatefulWidget {
   String userId;
@@ -51,29 +52,6 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
 
   }
 
-  void showResponseDialog(BuildContext context, String supportSideResponse, String customerSideResponse){
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-
-      return AlertDialog(
-        title: const Text("Responses"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              title: Text("OUR RESPONSE: $supportSideResponse"),
-            ),
-            ListTile(
-              title: Text("YOUR RESPONSE: $customerSideResponse"),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +61,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
         centerTitle: true,
       ),
       body: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.73,
+                  // height: MediaQuery.of(context).size.height * 0.73,
                   child: raiseTicketList.isEmpty
                       ? const Center(child: CircularProgressIndicator())
                       : ListView.builder(
@@ -103,10 +81,18 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
                                   elevation: 4,
                                   color: const Color.fromARGB(255, 243, 254, 255),
                                   margin: EdgeInsets.all(
-                                      MediaQuery.of(context).size.width * 0.02),
+                                      MediaQuery.of(context).size.width * 0.01),
                                   child: ListTile(
                                       onTap: () {
-                                        showResponseDialog(context, supportSideResponse, customerSideResponse);
+                                        Navigator.push(
+                                          context, 
+                                          MaterialPageRoute(builder: (context)=> SupportSpecificScreen(
+                                            customerId: data.supportCustomerId.toString(),
+                                            title: data.supportSubject.toString(),
+                                            description: data.supportDescription.toString(),
+                                            supportSideResponse: supportSideResponse,
+                                            customerSideResponse: customerSideResponse, ) )
+                                        );
                                       },
                                       title: Text(
                                         data.supportSubject.toString(),

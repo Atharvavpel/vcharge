@@ -47,9 +47,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
 // variable for the nick-name input field
   var nickNameController = TextEditingController();
 
-// --------------- to be debugged: ------------------ //
 
   Future<void> addVehicle() async {
+
     // Fetch the data from the form input fields
     String brandName = selectedManufacturer;
     String modelName = selectedCarModel;
@@ -121,7 +121,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
     }
   }
 
-// ------------------------------------------------------------- //
 
   @override
   Widget build(BuildContext context) {
