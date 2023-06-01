@@ -60,6 +60,7 @@ dependencies:
   redis: ^3.1.0
   dio: ^5.1.2
   flutter_inappwebview: ^5.7.2+3
+  grouped_list: ^4.2.0
   # dartis: ^0.4.0
   # encrypt: ^5.0.0
 
