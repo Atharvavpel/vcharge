@@ -424,8 +424,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           //row for vehicle name
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Expanded(
+                            children: const [
+                              Expanded(
                                 child: Text(
                                   'Vehicle Name',
                                   style: TextStyle(fontSize: 15),
@@ -435,9 +435,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                                   child: Card(
                                 elevation: 3,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
+                                  padding: EdgeInsets.all(2.0),
                                   child: Text(
-                                    '${selectedManufacturer ?? "-"} ${selectedCarModel ?? "-"}',
+                                    "--",
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -448,8 +448,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           //row for connector type
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Expanded(
+                            children: const [
+                              Expanded(
                                   child: Text(
                                 'Connector type',
                                 style: TextStyle(fontSize: 15),
@@ -458,9 +458,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                                   child: Card(
                                 elevation: 3,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
+                                  padding: EdgeInsets.all(2.0),
                                   child: Text(
-                                    '${selectedCarModel ?? "-"}',
+                                    '--',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
