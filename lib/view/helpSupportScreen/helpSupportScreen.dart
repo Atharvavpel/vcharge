@@ -1,9 +1,4 @@
-// get all support :      http://192.168.0.41:8091/manageSupport/getSupports
-// support id:      STP20230517153110554
-// add support:      http://192.168.0.41:8091/manageSupport/addSupport
-
-
-
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -19,7 +14,6 @@ import 'package:vcharge/services/PostMethod.dart';
 import 'package:vcharge/view/helpSupportScreen/ticketsHistory.dart';
 
 class HelpSupportScreen extends StatefulWidget {
-
   String userId;
 
   HelpSupportScreen({super.key, required this.userId});
@@ -29,8 +23,6 @@ class HelpSupportScreen extends StatefulWidget {
 }
 
 class _HelpSupportScreenState extends State<HelpSupportScreen> {
-  
-
   // var for officeLocation
   String officeLocationAddress =
       "Pride Icon, 108-109, Thite Vasti, Thite Nagar, Kharadi, Pune, Maharashtra, 411014";
@@ -161,14 +153,42 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
   // var for storing the selected image
   File? selectedImage;
 
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the controllers for title and description fields
+    titleController = TextEditingController();
+    descriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // Dispose the controllers when the widget is removed
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  // Function to reset the entered data
+  void resetData() {
+    setState(() {
+      selectedCategory = null;
+      selectedSubCategory = null;
+      titleController.text = '';
+      descriptionController.text = '';
+    });
+  }
+
+
+
 // list for selecting category and subcategory
   List<String> categoryList = ['Technical', 'Financial'];
   List<String> subCategoryTechnical = ['Stations', 'Chargers', 'Connectors'];
   List<String> subCategoryFinancial = ['Booking', 'Transactions', 'Wallet'];
 
 // bool variable indicating that by default subcategory dropdown will be enabled
-  bool isSubCategoryEnabled = true;
-
+  bool isSubCategoryEnabled = false;
 
   // function for gallery permissions
   Future<void> requestPermissions() async {
@@ -180,7 +200,6 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
 
   // variable for picking the image from the gallery or camera
   final ImagePicker picker = ImagePicker();
-
 
 // function for fetching the image from the device
   Future getImage(ImageSource source) async {
@@ -199,7 +218,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     } else {
       // The user has not granted the necessary permissions, show an error message.
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please grant the necessary permissions.')),
+        const SnackBar(
+            content: Text('Please grant the necessary permissions.')),
       );
     }
   }
@@ -207,68 +227,64 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
   // url for raising the ticket
   String addTicketUrl = "http://192.168.0.41:8091/manageSupport/addSupport";
 
-
   // post request
   Future<void> raiseTicket() async {
-
     try {
-      
-      
-    dynamic screenShot;
-    if(selectedImage != null ){
-      screenShot = selectedImage?.path;
-    }
-    else{
-      screenShot = null;
-    }
+      dynamic screenShot;
+      if (selectedImage != null) {
+        screenShot = selectedImage?.path;
+      } else {
+        screenShot = null;
+      }
 
-    print("the selected image is: $selectedImage");
-    print("the screenshot is: $screenShot");
+      print("the selected image is: $selectedImage");
+      print("the screenshot is: $screenShot");
 
-    Map<String, dynamic> requestBody = SupportModel(
-
+      Map<String, dynamic> requestData = SupportModel(
         supportCustomerId: widget.userId,
         supportSubject: titleController.text,
         supportCategory: selectedCategory,
         subSupportCategory: selectedSubCategory,
         supportDescription: descriptionController.text,
         supportImageLink: screenShot,
-).toJson();
+        supportPriority: 'high',
+      ).toJson();
 
+      final response = await PostMethod.postRequest(
+          addTicketUrl,
+          jsonEncode({
+            "supportCustomerId": widget.userId,
+            "supportSubject": titleController.text,
+            "supportDescription": descriptionController.text,
+            "supportCategory": selectedCategory,
+            "subSupportCategory": selectedSubCategory,
+            "supportPriority": 'high',
+            "supportImageLink": screenShot,
+          }));
 
-  final response = await PostMethod.postRequest(addTicketUrl, requestBody);
-  
-if (response == 200) {
-  Fluttertoast.showToast(
-          msg: " vechicle added successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-} else {
-  Fluttertoast.showToast(
-          msg: " vechicle added successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-}
-
-
-
+      if (response == 200) {
+        Fluttertoast.showToast(
+            msg: "Ticket raised successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Ticket wasn't rasied",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
     } catch (e) {
       print("the error in support page is: $e");
     }
-
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -287,213 +303,195 @@ if (response == 200) {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-// ----------------------------- to be debugged -------------------------------------
-
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                     ),
                     onPressed: () {
+
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
                           return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Wrap(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20.0),
-                                      topRight: Radius.circular(20.0),
-                                    ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Wrap(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20.0),
+                                    topRight: Radius.circular(20.0),
                                   ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // used to handle the onFocus() activities
-                                      FocusScope.of(context).unfocus();
-                                    },
-                                    child: SingleChildScrollView(
-                                      child: Container(
-                                        margin: const EdgeInsets.only(top: 20),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // used to handle the onFocus() activities
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 20),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        // container for title section
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.all(15.0),
+                                          child: TextFormField(
+                                            cursorColor: Colors.green,
+                                            textAlign: TextAlign.center,
+                                            decoration:
+                                                const InputDecoration(
+                                              label: Text("Title"),
+                                              border: OutlineInputBorder(),
+                                              prefixIcon: Icon(Icons.title),
+                                            ),
+                                            controller: titleController,
+                                          ),
+                                        ),
+                            
+                                        // categories and respective subcategories
+                                        Container(
+                                            child: Row(
                                           children: [
-                                            // container for title section
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(15.0),
-                                              child: TextFormField(
-                                                cursorColor: Colors.green,
-                                                textAlign: TextAlign.center,
+                                            // section for category
+                                            Expanded(
+                                              child:
+                                                  DropdownButtonFormField(
+                                                value: selectedCategory,
+                                                items:
+                                                    categoryList.map((e) {
+                                                  return DropdownMenuItem(
+                                                      value: e,
+                                                      child: Text(e));
+                                                }).toList(),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    selectedCategory =
+                                                        value as String;
+                                                    selectedSubCategory =
+                                                        null; // Reset selected subcategory when category changes
+                                                    isSubCategoryEnabled =
+                                                        true;
+                                                  });
+                                                },
                                                 decoration:
                                                     const InputDecoration(
-                                                  label: Text("Title"),
-                                                  border: OutlineInputBorder(),
-                                                  prefixIcon: Icon(Icons.title),
+                                                  labelText: 'Category',
+                                                  border:
+                                                      OutlineInputBorder(),
                                                 ),
-                                                controller: titleController,
                                               ),
                                             ),
-
-                                            // categories and respective subcategories
-                                            Container(
-                                                child: Row(
-                                              children: [
-                                                // section for categroy dropdown
-                                                Expanded(
-                                                  child:
-                                                      DropdownButtonFormField(
-                                                    value: selectedCategory,
-                                                    items:
-                                                        categoryList.map((e) {
-                                                      return DropdownMenuItem(
-                                                          value: e,
-                                                          child: Text(e));
-                                                    }).toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        selectedCategory =
-                                                            value as String;
-                                                        selectedSubCategory =
-                                                            null;
-                                                        isSubCategoryEnabled =
-                                                            true;
-                                                      });
-                                                    },
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText: 'Category',
-                                                      border:
-                                                          OutlineInputBorder(),
-                                                    ),
-                                                  ),
-                                                ),
-
-                                                // section for subcategory
-                                                Expanded(
-                                                  child:
-                                                      DropdownButtonFormField(
-                                                    value: selectedSubCategory,
-                                                    items: isSubCategoryEnabled
-                                                        ? (selectedCategory ==
-                                                                    'financial'
-                                                                ? subCategoryFinancial
-                                                                : subCategoryTechnical)
+                            
+                            // section for subcategory
+                                            Expanded(
+                                              child:
+                                                  DropdownButtonFormField(
+                                                value: selectedSubCategory,
+                                                items: isSubCategoryEnabled &&
+                                                        selectedCategory ==
+                                                            categoryList[1]
+                                                    ? subCategoryFinancial
+                                                        .map((e) {
+                                                        return DropdownMenuItem(
+                                                            value: e,
+                                                            child: Text(e));
+                                                      }).toList()
+                                                    : isSubCategoryEnabled &&
+                                                            selectedCategory ==
+                                                                categoryList[
+                                                                    0]
+                                                        ? subCategoryTechnical
                                                             .map((e) {
                                                             return DropdownMenuItem(
                                                                 value: e,
-                                                                child: Text(e));
+                                                                child: Text(
+                                                                    e));
                                                           }).toList()
                                                         : null,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        selectedSubCategory =
-                                                            value as String;
-                                                      });
-                                                    },
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      labelText: 'Sub Category',
-                                                      border:
-                                                          OutlineInputBorder(),
-                                                    ),
-                                                  ),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    selectedSubCategory =
+                                                        value as String;
+                                                  });
+                                                },
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Sub Category',
+                                                  border:
+                                                      OutlineInputBorder(),
                                                 ),
-                                              ],
-                                            )),
-
-                                            // container for Description section
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(15.0),
-                                              child: TextFormField(
-                                                minLines: 1,
-                                                maxLines: 10,
-                                                cursorColor: Colors.green,
-                                                textAlign: TextAlign.center,
-                                                decoration: InputDecoration(
-                                                    prefixIcon: Padding(
-                                                      padding: EdgeInsets.all(
-                                                          Get.width * 0.03),
-                                                      child: const FaIcon(
-                                                          FontAwesomeIcons
-                                                              .addressBook),
-                                                    ),
-                                                    label: const Text(
-                                                        "Description"),
-                                                    border:
-                                                        const OutlineInputBorder()),
-                                                controller:
-                                                    descriptionController,
                                               ),
                                             ),
-
-// ----------------------------------------- to be debugged -------------------
-
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(15.0),
-                                              child: ElevatedButton.icon(
-                                                onPressed: () {
-                                                  requestPermissions();
-                                                  getImage(ImageSource.gallery);
-                                                },
-                                                icon: const Icon(Icons.image),
-                                                label: const Text("Upload Screenshot"),
-                                              ),
-                                            ),
-
-/*
-                                            // container for upload Photo section
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(15.0),
-                                              child: TextFormField(
-                                                minLines: 1,
-                                                maxLines: 10,
-                                                cursorColor: Colors.green,
-                                                textAlign: TextAlign.center,
-                                                decoration: InputDecoration(
-                                                    prefixIcon: Padding(
-                                                      padding: EdgeInsets.all(
-                                                          Get.width * 0.03),
-                                                      child: const FaIcon(
-                                                          FontAwesomeIcons
-                                                              .addressBook),
-                                                    ),
-                                                    label: const Text(
-                                                        "Upload Photo"),
-                                                    border:
-                                                        const OutlineInputBorder()),
-                                                controller:
-                                                    uploadPhotoController,
-                                              ),
-                                            ),
-*/
-                                            // button for submiting the doubt or ticket
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  raiseTicket();
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text("Submit"))
                                           ],
+                                        )),
+                            
+                                        // container for Description section
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.all(15.0),
+                                          child: TextFormField(
+                                            minLines: 1,
+                                            maxLines: 10,
+                                            cursorColor: Colors.green,
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                                prefixIcon: Padding(
+                                                  padding: EdgeInsets.all(
+                                                      Get.width * 0.03),
+                                                  child: const FaIcon(
+                                                      FontAwesomeIcons
+                                                          .addressBook),
+                                                ),
+                                                label: const Text(
+                                                    "Description"),
+                                                border:
+                                                    const OutlineInputBorder()),
+                                            controller:
+                                                descriptionController,
+                                          ),
                                         ),
-                                      ),
+                            
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.all(15.0),
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              requestPermissions();
+                                              getImage(ImageSource.gallery);
+                                            },
+                                            icon: const Icon(Icons.image),
+                                            label: const Text(
+                                                "Upload Screenshot"),
+                                          ),
+                                        ),
+                            
+                            /*
+                            */
+                                        // button for submiting the doubt or ticket
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              raiseTicket();
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("Submit"))
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          );
+                              ),
+                            ],
+                          ),
+                            );
                         },
                       );
+                      
                     },
                     child: const Text(
                       'Raise a ticket',
@@ -504,210 +502,19 @@ if (response == 200) {
                     ),
                   ),
 
-// ------------------------------------------------- //
-
-/*
-
-
-    // button for raising a ticket
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-
-              // bottom sheet for raising a dount using controllers
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                child: GestureDetector(
-                                  onTap: () {
-
-                                    // used to handle the onFocus() activities
-                                    FocusScope.of(context).unfocus();
-                                  },
-
-                                  child: SingleChildScrollView(
-                                    child: Container(
-                                      margin: const EdgeInsets.only(top: 20),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-
-                                          // container for title section
-                                          Padding(
-                                            padding: const EdgeInsets.all(15.0),
-                                            child: TextFormField(
-                                              cursorColor: Colors.green,
-                                              textAlign: TextAlign.center,
-                                              decoration: const InputDecoration(
-                                                label: Text("Title"),
-                                                border: OutlineInputBorder(),
-                                                prefixIcon: Icon(Icons.title),
-                                              ),
-                                              controller: titleController,
-                                            ),
-                                          ),
-
-                                          // categories and respective subcategories
-                                          Container(
-                                              child: Row(
-                                            children: [
-
-                                              // section for categroy dropdown
-                                              Expanded(
-                                                child: DropdownButtonFormField(
-                                                  value: selectedCategory,
-                                                  items: categoryList.map((e) {
-                                                    return DropdownMenuItem(
-                                                        value: e,
-                                                        child: Text(e));
-                                                  }).toList(),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedCategory =
-                                                          value as String;
-                                                      isSubCategoryEnabled =
-                                                          true;
-                                                      selectedSubCategory =
-                                                          null;
-                                                    });
-                                                  },
-                                                  decoration: const InputDecoration(
-                                                    labelText: 'Category',
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                              ),
-
-                                              // section for subcategory
-                                              Expanded(
-                                                child: DropdownButtonFormField(
-                                                  value: selectedSubCategory,
-                                                  items: isSubCategoryEnabled
-                                                      ? (selectedCategory ==
-                                                                  'Technical'
-                                                              ? subCategoryList1
-                                                              : subCategoryList2)
-                                                          .map((e) {
-                                                          return DropdownMenuItem(
-                                                              value: e,
-                                                              child: Text(e));
-                                                        }).toList()
-                                                      : null,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedSubCategory =
-                                                          value as String;
-                                                    });
-                                                  },
-                                                  decoration: const InputDecoration(
-                                                    labelText: 'Sub Category',
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )),
-
-
-                                          // container for Description section
-                                          Padding(
-                                            padding: const EdgeInsets.all(15.0),
-                                            child: TextFormField(
-                                              minLines: 1,
-                                              maxLines: 10,
-                                              cursorColor: Colors.green,
-                                              textAlign: TextAlign.center,
-                                              decoration: InputDecoration(
-                                                  prefixIcon: Padding(
-                                                    padding: EdgeInsets.all(
-                                                        Get.width * 0.03),
-                                                    child: const FaIcon(
-                                                        FontAwesomeIcons
-                                                            .addressBook),
-                                                  ),
-                                                  label:
-                                                      const Text("Description"),
-                                                  border:
-                                                      const OutlineInputBorder()),
-                                              controller: uploadPhotoController,
-                                            ),
-                                          ),
-
-
-                                          // container for upload Photo section
-                                          Padding(
-                                            padding: const EdgeInsets.all(15.0),
-                                            child: TextFormField(
-                                              minLines: 1,
-                                              maxLines: 10,
-                                              cursorColor: Colors.green,
-                                              textAlign: TextAlign.center,
-                                              decoration: InputDecoration(
-                                                  prefixIcon: Padding(
-                                                    padding: EdgeInsets.all(
-                                                        Get.width * 0.03),
-                                                    child: const FaIcon(
-                                                        FontAwesomeIcons
-                                                            .addressBook),
-                                                  ),
-                                                  label: const Text(
-                                                      "Upload Photo"),
-                                                  border:
-                                                      const OutlineInputBorder()),
-                                              controller: uploadPhotoController,
-                                            ),
-                                          ),
-
-
-                                          // button for submiting the doubt or ticket
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                // print(
-                                                //     "Data submitted succesfully");
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("Submit"))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-
-                                  // update button
-                                ),
-                              );
-                            });
-                      },
-                      child: const Text('Raise a ticket',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black))),
-
-
-                      */
-
                   // button for ticket history
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Set the button color
                       ),
                       onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      TicketHistoryScreen(userId: widget.userId)));
-                        },
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TicketHistoryScreen(
+                                    userId: widget.userId)));
+                      },
                       child: const Text(
                         "Ticket's history",
                         style: TextStyle(

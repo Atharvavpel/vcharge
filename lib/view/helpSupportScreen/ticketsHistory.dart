@@ -61,7 +61,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
         centerTitle: true,
       ),
       body: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.73,
+                  // height: MediaQuery.of(context).size.height * 0.73,
                   child: raiseTicketList.isEmpty
                       ? const Center(child: CircularProgressIndicator())
                       : ListView.builder(
@@ -81,7 +81,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
                                   elevation: 4,
                                   color: const Color.fromARGB(255, 243, 254, 255),
                                   margin: EdgeInsets.all(
-                                      MediaQuery.of(context).size.width * 0.02),
+                                      MediaQuery.of(context).size.width * 0.01),
                                   child: ListTile(
                                       onTap: () {
                                         Navigator.push(

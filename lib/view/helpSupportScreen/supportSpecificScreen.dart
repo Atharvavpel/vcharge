@@ -50,96 +50,234 @@ class _SupportSpecificScreenState extends State<SupportSpecificScreen> {
 
   @override
   Widget build(BuildContext context){
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Support"),
-        centerTitle: true,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  appBar: AppBar(
+    title: const Text("Support"),
+    centerTitle: true,
+  ),
+  body: Column(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-
-          Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                widget.title,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Text(
+              widget.title,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-            ),
-            SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                widget.description,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
-          ),
-
-          Expanded(
-            flex: 2,
-            child: GroupedListView<Message,DateTime>(
-              padding: const EdgeInsets.all(8),
-              reverse: true,
-              order: GroupedListOrder.DESC,
-              useStickyGroupSeparators: true,
-              floatingHeader: true,
-              elements: messages,
-              groupBy: (message) => DateTime(
-                message.date.year,
-                message.date.month,
-                message.date.day
-              ),
-              groupHeaderBuilder: (Message message) => SizedBox(
-                // height: 40,
-                // child: Center(
-                //   child: Card(
-                //     color: Theme.of(context).primaryColor,
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(8),
-                //       child: Text(
-                
-                //         DateFormat.yMMMd().format(message.date),
-                //         style: const TextStyle(color: Colors.white),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ),
-              itemBuilder: (context, Message message) => Align(
-                alignment: message.isSentByMe ? Alignment.topRight : Alignment.topLeft,
-                child: Card(
-                  color: message.isSentByMe ? const Color.fromARGB(255, 231, 238, 223) : Colors.green,
-                  elevation: 8,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(message.text, style: const TextStyle(fontSize: 10),),
-                  ),
-                ),
-              )
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              child: TextField(  
-                textAlign: TextAlign.center,
-                controller: TextEditingController(text: "We will contact you soon...."),
-                readOnly: true,
-              )
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Text(
+              widget.description,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
             ),
-          )
+          ),
         ],
       ),
-    );
+      Expanded(
+        child: GroupedListView<Message, DateTime>(
+          padding: const EdgeInsets.all(8),
+          reverse: true,
+          order: GroupedListOrder.DESC,
+          useStickyGroupSeparators: true,
+          floatingHeader: true,
+          elements: messages,
+          groupBy: (message) => DateTime(
+            message.date.year,
+            message.date.month,
+            message.date.day,
+          ),
+          groupHeaderBuilder: (Message message) {
+            return SizedBox(
+            //   height: 40,
+            //   child: Center(
+            //     child: Card(
+            //       color: Theme.of(context).primaryColor,
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(8),
+            //         child: Text(
+            //           DateFormat.yMMMd().format(message.date),
+            //           style: const TextStyle(color: Colors.white),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            );
+          },
+          itemBuilder: (context, Message message) {
+          final isSentByMe = message.isSentByMe;
+          final alignment = isSentByMe ? Alignment.bottomLeft : Alignment.bottomRight;
+          final color = isSentByMe ? const Color.fromARGB(255, 231, 238, 223) : Colors.green;
+  
+  return Stack(
+    children: [
+      Align(
+        alignment: alignment,
+        child: Container(
+          constraints: BoxConstraints(
+            minWidth: Get.width* 0.2,
+            maxWidth: MediaQuery.of(context).size.width * 0.75, 
+          ),
+          child: Card(
+            color: color,
+            elevation: 8,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                message.text,
+                style: const TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        bottom: 0,
+        right: isSentByMe ? null : 0,
+        left: isSentByMe ? 0 : null,
+        child: Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: color,
+          ),
+        ),
+      ),
+    ],
+  );
+},
+
+          // itemBuilder: (context, Message message){
+          //   return Align(
+          //   alignment:
+          //       message.isSentByMe ? Alignment.bottomLeft : Alignment.bottomRight,
+          //   child: Card(
+          //     color: message.isSentByMe
+          //         ? const Color.fromARGB(255, 231, 238, 223)
+          //         : Colors.green,
+          //     elevation: 8,
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(20),
+          //       child: Text(
+          //         message.text,
+          //         style: const TextStyle(fontSize: 10),
+          //       ),
+          //     ),
+          //   ),
+          //           );
+          // }
+        ),
+      ),
+      Container(
+        child: TextField(
+          textAlign: TextAlign.center,
+          controller: TextEditingController(text: "We will contact you soon...."),
+          readOnly: true,
+        ),
+      ),
+    ],
+  ),
+);
+
+
+
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: const Text("Support"),
+    //     centerTitle: true,
+    //   ),
+    //   body: Column(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+
+    //       Column(
+    //       crossAxisAlignment: CrossAxisAlignment.stretch,
+    //       children: [
+    //         Padding(
+    //           padding: const EdgeInsets.all(15.0),
+    //           child: Text(
+    //             widget.title,
+    //             style: const TextStyle(
+    //               fontSize: 24,
+    //               fontWeight: FontWeight.bold,
+    //             ),
+    //           ),
+    //         ),
+    //         const SizedBox(height: 8),
+    //         Padding(
+    //           padding: const EdgeInsets.all(15.0),
+    //           child: Text(
+    //             widget.description,
+    //             style: const TextStyle(
+    //               fontSize: 16,
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //       ),
+
+    //       Expanded(
+    //         child: GroupedListView<Message,DateTime>(
+    //           padding: const EdgeInsets.all(8),
+    //           reverse: true,
+    //           order: GroupedListOrder.DESC,
+    //           useStickyGroupSeparators: true,
+    //           floatingHeader: true,
+    //           elements: messages,
+    //           groupBy: (message) => DateTime(
+    //             message.date.year,
+    //             message.date.month,
+    //             message.date.day
+    //           ),
+    //           groupHeaderBuilder: (Message message) => SizedBox(
+    //             // height: 40,
+    //             // child: Center(
+    //             //   child: Card(
+    //             //     color: Theme.of(context).primaryColor,
+    //             //     child: Padding(
+    //             //       padding: const EdgeInsets.all(8),
+    //             //       child: Text(
+                
+    //             //         DateFormat.yMMMd().format(message.date),
+    //             //         style: const TextStyle(color: Colors.white),
+    //             //       ),
+    //             //     ),
+    //             //   ),
+    //             // ),
+    //           ),
+    //           itemBuilder: (context, Message message) => Align(
+    //             alignment: message.isSentByMe ? Alignment.topRight : Alignment.topLeft,
+    //             child: Card(
+    //               color: message.isSentByMe ? const Color.fromARGB(255, 231, 238, 223) : Colors.green,
+    //               elevation: 8,
+    //               child: Padding(
+    //                 padding: const EdgeInsets.all(20),
+    //                 child: Text(message.text, style: const TextStyle(fontSize: 10),),
+    //               ),
+    //             ),
+    //           )
+    //         ),
+    //       ),
+    //       Container(
+    //         child: TextField(  
+    //           textAlign: TextAlign.center,
+    //           controller: TextEditingController(text: "We will contact you soon...."),
+    //           readOnly: true,
+    //         )
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 }
