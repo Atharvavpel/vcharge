@@ -192,7 +192,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                         children: [
                                           // //Station Name
                                           Text(
-                                            stationName!,
+                                            upcomingBookingList[index].stationName!,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: Get.width * 0.05),
@@ -419,7 +419,7 @@ class ReservationScreenState extends State<ReservationScreen> {
                                         children: [
                                           //Station Name
                                           Text(
-                                            stationName!,
+                                            bookingHistoryList[index].stationName!!,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: Get.width * 0.05),

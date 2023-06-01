@@ -8,7 +8,7 @@ import 'package:vcharge/view/qrScanner.dart/qrScannerOutput.dart';
 import 'package:vcharge/view/startChargingScreen/startChargingScreen.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
-import '../scanToCharge/scanToCharge.dart';
+import '../chargingScreen/chargingScreen.dart';
 
 class QRScannerWidget extends StatefulWidget {
   String userId;
@@ -118,7 +118,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ScanToCharge(stationLocation: 'Kharadi, Pune', stationName: 'EV Charging station', userId: widget.userId,),
+              builder: (context) => ChargingScreen(stationLocation: 'Kharadi, Pune', stationName: 'EV Charging station', userId: widget.userId, chargerId: scanResult,),
             ),
           );
           await controller.resumeCamera();
