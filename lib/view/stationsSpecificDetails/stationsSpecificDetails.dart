@@ -146,10 +146,6 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
             break;
           }
         }
-      } else {
-        setState(() {
-          isFavourite = true;
-        });
       }
     } catch (e) {
       print(e);
@@ -290,9 +286,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                       onPressed: () async {
                                         setState(() {
                                           if (isFavourite) {
-                                            isFavourite = false;
                                             DeleteMethod.deleteRequest(
                                                 'http://192.168.0.243:8097/manageUser/removeFavorite?userId=${widget.userId}&stationId=${widget.stationId}');
+                                            isFavourite = false;
                                           } else {
                                             PostMethod.postRequest(
                                                 'http://192.168.0.243:8097/manageUser/addFavorites?userId=${widget.userId}',
@@ -307,7 +303,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                       stationDetails!
                                                           .stationStatus
                                                 }));
-                                            checkFavourite();
+                                            isFavourite = true;
                                           }
                                         });
                                       },

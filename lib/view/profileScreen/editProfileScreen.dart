@@ -6,9 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vcharge/services/GetMethod.dart';
-import 'package:vcharge/services/putMethod.dart';
 import 'package:vcharge/services/redisConnection.dart';
 import 'package:vcharge/view/profileScreen/myProfile.dart';
+
+import '../../services/PutMethod.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatefulWidget {
@@ -42,6 +43,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController stateController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
   TextEditingController cityController = TextEditingController();
+
+  final formKeyFirstName = GlobalKey<FormState>();
+  final formKeyLastName = GlobalKey<FormState>();
+  final formKeyEmail = GlobalKey<FormState>();
 
   //variables for DropDown menu for vehicle selection
   List<String> genderList = ['male', 'female', 'other'];
@@ -94,24 +99,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 // function for fetching specific user data
   Future<void> getUserData() async {
-
-    print("in the get user data");
     try {
       var data = await GetMethod.getRequest(specificUrl);
 
       if (data != null) {
         firstNameController.text = data['userFirstName'] ?? '';
-          lastNameController.text = data['userLastName'] ?? '';
-          dateOfBirthController.text = data['userDateOfBirth'] ?? '';
-          emailController.text = data['userEmail'] ?? '';
-          addressController.text = data['userAddress'] ?? '';
-          pincodeController.text = data['userPincode'] ?? '';
-          cityController.text = data['userCity'] ?? '';
-          selectedGender = data['userGender'] ?? '';
-          selectedState = data['userState'] ?? '';
-        setState(() {
-          
-        });
+        lastNameController.text = data['userLastName'] ?? '';
+        dateOfBirthController.text = data['userDateOfBirth'] ?? '';
+        emailController.text = data['userEmail'] ?? '';
+        addressController.text = data['userAddress'] ?? '';
+        pincodeController.text = data['userPincode'] ?? '';
+        cityController.text = data['userCity'] ?? '';
+        selectedGender = data['userGender'] ?? '';
+        selectedState = data['userState'] ?? '';
+        setState(() {});
       }
     } catch (e) {
       print("the error is: $e");
@@ -141,7 +142,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 // function for updating the specific user data
   Future updateUserDetails() async {
     try {
-      var response = await PutMethod.putRequest(
+      var response = await PutMethod.putRequestMod(
           "http://192.168.0.243:8097/manageUser/updateUser?userId=",
           "USR20230517060841379",
           jsonEncode({
@@ -156,7 +157,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             'userState': selectedState,
           }));
 
-      (response == 200)
+      (response.statusCode == 200)
           ? Fluttertoast.showToast(
               msg: " Data updated successfully",
               // msg: "Successfully Created",
@@ -166,6 +167,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0)
+          // : errorMsgs =jsonEncode(response.body);
           : Fluttertoast.showToast(
               msg: " Updation failed",
               toastLength: Toast.LENGTH_SHORT,
@@ -209,6 +211,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: TextFormField(
+                          keyboardType: TextInputType.name,
                           cursorColor: Colors.green,
                           textAlign: TextAlign.center,
                           decoration: const InputDecoration(
@@ -225,6 +228,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: TextFormField(
+                          keyboardType: TextInputType.name,
                           cursorColor: Colors.green,
                           textAlign: TextAlign.center,
                           decoration: const InputDecoration(
@@ -285,6 +289,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     cursorColor: Colors.green,
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
@@ -393,9 +398,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context)=> MyProfilePage(userId: widget.userId))
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyProfilePage(userId: widget.userId)));
           },
           label: const Text("Update"),
         ),

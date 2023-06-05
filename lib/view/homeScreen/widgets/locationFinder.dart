@@ -30,7 +30,7 @@ class LocationFinderState extends State<LocationFinder>
         animatedMapMove(BgMapState.userLocation!, 15.0);
       
       LatLng currLocation = await GetLiveLocation.getUserLiveLocation();
-      if(currLocation.latitude!=BgMapState.userLocation!.latitude || currLocation.longitude!=BgMapState.userLocation!.longitude){
+      if(currLocation.latitude.toStringAsFixed(2)!=BgMapState.userLocation!.latitude.toStringAsFixed(2) || currLocation.longitude.toStringAsFixed(2)!=BgMapState.userLocation!.longitude.toStringAsFixed(2)){
         BgMapState.userLocation = currLocation;
         animatedMapMove(BgMapState.userLocation!, 15.0);
       }
