@@ -153,7 +153,6 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
   // var for storing the selected image
   File? selectedImage;
 
-
   @override
   void initState() {
     super.initState();
@@ -179,8 +178,6 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
       descriptionController.text = '';
     });
   }
-
-
 
 // list for selecting category and subcategory
   List<String> categoryList = ['Technical', 'Financial'];
@@ -225,7 +222,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
   }
 
   // url for raising the ticket
-  String addTicketUrl = "http://192.168.0.41:8091/manageSupport/addSupport";
+  String addTicketUrl = "http://192.168.0.243:8091/manageSupport/addSupport";
 
   // post request
   Future<void> raiseTicket() async {
@@ -308,190 +305,199 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                       backgroundColor: Colors.white,
                     ),
                     onPressed: () {
-
                       showModalBottomSheet(
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(30.0),
+                          ),
+                        ),
                         context: context,
                         builder: (BuildContext context) {
                           return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Wrap(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20.0),
-                                    topRight: Radius.circular(20.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Wrap(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      topRight: Radius.circular(20.0),
+                                    ),
                                   ),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // used to handle the onFocus() activities
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(top: 20),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        // container for title section
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.all(15.0),
-                                          child: TextFormField(
-                                            cursorColor: Colors.green,
-                                            textAlign: TextAlign.center,
-                                            decoration:
-                                                const InputDecoration(
-                                              label: Text("Title"),
-                                              border: OutlineInputBorder(),
-                                              prefixIcon: Icon(Icons.title),
-                                            ),
-                                            controller: titleController,
-                                          ),
-                                        ),
-                            
-                                        // categories and respective subcategories
-                                        Container(
-                                            child: Row(
-                                          children: [
-                                            // section for category
-                                            Expanded(
-                                              child:
-                                                  DropdownButtonFormField(
-                                                value: selectedCategory,
-                                                items:
-                                                    categoryList.map((e) {
-                                                  return DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(e));
-                                                }).toList(),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    selectedCategory =
-                                                        value as String;
-                                                    selectedSubCategory =
-                                                        null; // Reset selected subcategory when category changes
-                                                    isSubCategoryEnabled =
-                                                        true;
-                                                  });
-                                                },
-                                                decoration:
-                                                    const InputDecoration(
-                                                  labelText: 'Category',
-                                                  border:
-                                                      OutlineInputBorder(),
-                                                ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // used to handle the onFocus() activities
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 20),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          // container for title section
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: TextFormField(
+                                              cursorColor: Colors.green,
+                                              textAlign: TextAlign.center,
+                                              decoration: const InputDecoration(
+                                                label: Text("Title"),
+                                                border: OutlineInputBorder(),
+                                                prefixIcon: Icon(Icons.title),
                                               ),
+                                              controller: titleController,
                                             ),
-                            
-                            // section for subcategory
-                                            Expanded(
-                                              child:
-                                                  DropdownButtonFormField(
-                                                value: selectedSubCategory,
-                                                items: isSubCategoryEnabled &&
-                                                        selectedCategory ==
-                                                            categoryList[1]
-                                                    ? subCategoryFinancial
-                                                        .map((e) {
+                                          ),
+
+                                          // categories and respective subcategories
+                                          Container(
+                                              width: Get.width * 0.83,
+                                              child: Row(
+                                                children: [
+                                                  // section for category
+                                                  Expanded(
+                                                    child:
+                                                        DropdownButtonFormField(
+                                                      value: selectedCategory,
+                                                      items:
+                                                          categoryList.map((e) {
                                                         return DropdownMenuItem(
                                                             value: e,
                                                             child: Text(e));
-                                                      }).toList()
-                                                    : isSubCategoryEnabled &&
-                                                            selectedCategory ==
-                                                                categoryList[
-                                                                    0]
-                                                        ? subCategoryTechnical
-                                                            .map((e) {
-                                                            return DropdownMenuItem(
-                                                                value: e,
-                                                                child: Text(
-                                                                    e));
-                                                          }).toList()
-                                                        : null,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    selectedSubCategory =
-                                                        value as String;
-                                                  });
-                                                },
-                                                decoration:
-                                                    const InputDecoration(
-                                                  labelText: 'Sub Category',
+                                                      }).toList(),
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          selectedCategory =
+                                                              value as String;
+                                                          selectedSubCategory =
+                                                              null; // Reset selected subcategory when category changes
+                                                          isSubCategoryEnabled =
+                                                              true;
+                                                        });
+                                                      },
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        labelText: 'Category',
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  // section for subcategory
+                                                  Expanded(
+                                                    child:
+                                                        DropdownButtonFormField(
+                                                      value:
+                                                          selectedSubCategory,
+                                                      items: isSubCategoryEnabled &&
+                                                              selectedCategory ==
+                                                                  categoryList[
+                                                                      1]
+                                                          ? subCategoryFinancial
+                                                              .map((e) {
+                                                              return DropdownMenuItem(
+                                                                  value: e,
+                                                                  child:
+                                                                      Text(e));
+                                                            }).toList()
+                                                          : isSubCategoryEnabled &&
+                                                                  selectedCategory ==
+                                                                      categoryList[
+                                                                          0]
+                                                              ? subCategoryTechnical
+                                                                  .map((e) {
+                                                                  return DropdownMenuItem(
+                                                                      value: e,
+                                                                      child: Text(
+                                                                          e));
+                                                                }).toList()
+                                                              : null,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          selectedSubCategory =
+                                                              value as String;
+                                                        });
+                                                      },
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        labelText:
+                                                            'Sub Category',
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
+
+                                          // container for Description section
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: TextFormField(
+                                              minLines: 1,
+                                              maxLines: 10,
+                                              cursorColor: Colors.green,
+                                              textAlign: TextAlign.center,
+                                              decoration: InputDecoration(
+                                                  prefixIcon: Padding(
+                                                    padding: EdgeInsets.all(
+                                                        Get.width * 0.03),
+                                                    child: const FaIcon(
+                                                        FontAwesomeIcons
+                                                            .addressBook),
+                                                  ),
+                                                  label:
+                                                      const Text("Description"),
                                                   border:
-                                                      OutlineInputBorder(),
-                                                ),
-                                              ),
+                                                      const OutlineInputBorder()),
+                                              controller: descriptionController,
                                             ),
-                                          ],
-                                        )),
-                            
-                                        // container for Description section
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.all(15.0),
-                                          child: TextFormField(
-                                            minLines: 1,
-                                            maxLines: 10,
-                                            cursorColor: Colors.green,
-                                            textAlign: TextAlign.center,
-                                            decoration: InputDecoration(
-                                                prefixIcon: Padding(
-                                                  padding: EdgeInsets.all(
-                                                      Get.width * 0.03),
-                                                  child: const FaIcon(
-                                                      FontAwesomeIcons
-                                                          .addressBook),
-                                                ),
-                                                label: const Text(
-                                                    "Description"),
-                                                border:
-                                                    const OutlineInputBorder()),
-                                            controller:
-                                                descriptionController,
                                           ),
-                                        ),
-                            
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.all(15.0),
-                                          child: ElevatedButton.icon(
-                                            onPressed: () {
-                                              requestPermissions();
-                                              getImage(ImageSource.gallery);
-                                            },
-                                            icon: const Icon(Icons.image),
-                                            label: const Text(
-                                                "Upload Screenshot"),
+
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: ElevatedButton.icon(
+                                              onPressed: () {
+                                                requestPermissions();
+                                                getImage(ImageSource.gallery);
+                                              },
+                                              icon: const Icon(Icons.image),
+                                              label: const Text(
+                                                  "Upload Screenshot"),
+                                            ),
                                           ),
-                                        ),
-                            
-                            /*
+
+                                          /*
                             */
-                                        // button for submiting the doubt or ticket
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              raiseTicket();
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text("Submit"))
-                                      ],
+                                          // button for submiting the doubt or ticket
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                raiseTicket();
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("Submit")),
+
+                                          // added so that when keyboard pops up, sheet should not hide behind
+                                          Padding(
+                                            padding: MediaQuery.of(context).viewInsets
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                            );
+                              ],
+                            ),
+                          );
                         },
                       );
-                      
                     },
                     child: const Text(
                       'Raise a ticket',

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:intl/intl.dart';
 import 'package:vcharge/view/helpSupportScreen/message.dart';
 
 class SupportSpecificScreen extends StatefulWidget {

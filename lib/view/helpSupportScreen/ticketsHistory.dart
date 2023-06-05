@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:vcharge/models/supportModel.dart';
 import 'package:vcharge/services/GetMethod.dart';
@@ -18,7 +15,7 @@ class TicketHistoryScreen extends StatefulWidget {
 
 class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
 
-  String supportUrl = "http://192.168.0.41:8091/manageSupport/getSupportByCustomerId?supportCustomerId=USR20230517060841379";
+  String supportUrl = "http://192.168.0.243:8091/manageSupport/getSupportByCustomerId?supportCustomerId=USR20230517060841379";
 
   //this list store the list of stations
   List<SupportModel> raiseTicketList = [];
