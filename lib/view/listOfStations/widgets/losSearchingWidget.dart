@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getMethod.dart';
 import 'package:vcharge/utils/availabilityColorFunction.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 import 'dart:math' as Math;
 
-// ignore: camel_case_types
-class losSearchingWidget extends SearchDelegate{
+class losSearchingWidget extends SearchDelegate {
 
-losSearchingWidget(this.userId);
+  losSearchingWidget(this.userId);
 
-List<dynamic> userToStationDistanceList = [];
+  List<dynamic> userToStationDistanceList = [];
 
   LatLng? userPosition = BgMapState.userLocation;
 
-var userId;
+  // ignore: prefer_typing_uninitialized_variables
+  final userId;
 
   Future<List<dynamic>> fetchData(String keyword) async {
-    if (keyword.length < 2) return [];
 
-    final url =
-        "http://192.168.0.243:8096/vst1/manageStation/search?query=$keyword";
-    final response = await GetMethod.getRequest(url);
+    if (keyword.isEmpty) return [];
+
+    dynamic response;
+    try {
+      final url =
+        "http://192.168.0.243:8096/manageStation/getStationsByKeyword?query=$keyword";
+     response = await GetMethod.getRequest(url);
+    } catch (e) {
+      print("the error is: $e");
+    }
     return response;
+    
   }
 
-
-//To calculate the distance between two points on the Earth's surface given their latitude and longitude coordinates, you can use the Haversine formula.
+  //To calculate the distance between two points on the Earth's surface given their latitude and longitude coordinates, you can use the Haversine formula.
   double getDistanceFromUser(LatLng latLng1, LatLng latLng2) {
     // convert decimal degrees to radians
     double lat1 = latLng1.latitude;
@@ -53,7 +60,6 @@ var userId;
     return deg * (Math.pi / 180);
   }
 
-
   //this function calculate distance from user to each station and store it in userToStationDistanceList
   List<dynamic> getDistanceList(stationList) {
     // await getLocationOfUser();
@@ -63,13 +69,14 @@ var userId;
     }).toList();
   }
 
+  var sortedStationDistanceList = [];
 
   //this function sort the stations on the basis of distance and store the result in sortedStationList
   List<dynamic> getSortStationList(stationList) {
     var userToStationDistanceList = getDistanceList(stationList);
 
     // Combine the station and distance lists into a list of Map objects
-    var sortedStationDistanceList = List.generate(
+    sortedStationDistanceList = List.generate(
       stationList.length,
       (index) => {
         'station': stationList[index],
@@ -93,158 +100,160 @@ var userId;
     // }
   }
 
-
-
-// storing the query entered by the user
+// variable for storing the keyword user entered
   String? selectedQuery;
 
-// storing the result after the seraching process
+// var for storing the result of searching
   dynamic result;
 
-// function for displaying the clear button in searchbar
+// list of stations came after the search results
+  List<RequiredStationDetailsModel> stationsData = [];
+
+// this method is used to display the right side of the search or say the clear button
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return[
+    return [
       IconButton(
-      onPressed: (){}, 
-      icon: const Icon(Icons.clear)
-    )
+          onPressed: () {
+            query = '';
+          },
+          icon: const Icon(Icons.clear))
     ];
   }
 
-// function for displaying the back button in searchbar
+// this method is used to display the left hand side widgets or say the arrow back method
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: (){}, 
-      icon: const Icon(Icons.arrow_back)
+        onPressed: () {
+          close(context, null);
+        },
+        icon: const Icon(Icons.arrow_back));
+  }
+
+// this method is used when we tap the search button
+  @override
+  Widget buildResults(BuildContext context) {
+    return FutureBuilder<List<dynamic>>(
+      future: fetchData(query),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasData) {
+          final data = snapshot.data!;
+          final sortedData = getSortStationList(data);
+          if (sortedData.isNotEmpty) {
+            return SizedBox(
+              child: data.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric( horizontal: Get.width * 0.01),
+                          child: const Divider(
+                            height: 1,
+                            thickness: 0.2,
+                          ),
+                        );
+                      },
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          StationsSpecificDetails(
+                                            stationId: sortedData[index]
+                                                ['station']['stationId'],
+                                            userId: userId,
+                                          )));
+                            },
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.ev_station, size: Get.height * 0.05,color: Colors.green,),
+                              ],
+                            ),
+                            title: Text(
+                              sortedData[index]['station']['stationName'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width *
+                                          0.04),
+                            ),
+                            subtitle: //container for station address
+                                Text(
+                              sortedData[index]['station']['stationArea'],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: //column for 'distance from user' and connector type
+                                Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Wrap(
+                                  spacing:
+                                      MediaQuery.of(context).size.width *
+                                          0.02,
+                                  children: [
+                                    //text for distance
+                                    data[index] == null
+                                        ? const CircularProgressIndicator()
+                                        : Text(
+                                            '${sortedData[index]['distance'].toStringAsFixed(2)} KM',
+                                            style: const TextStyle(
+                                                fontWeight:
+                                                    FontWeight.bold),
+                                          ),
+
+                                    //CircleAvater to show avaliblity
+                                    CircleAvatar(
+                                      radius: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          0.02,
+                                      backgroundColor: AvaliblityColor
+                                          .getAvailablityColor(
+                                              sortedData[index]['station']
+                                                  ['stationStatus']!),
+                                    ),
+                                  ],
+                                ),
+
+                                //Container for connector type
+                                // Text(
+                                //   sortedStationList[index]
+                                //       .stationPowerStandard!,
+                                //   style: const TextStyle(
+                                //     color: Colors.grey,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // )
+                              ],
+                            ));
+                      }),
+            );
+          } else if (query.length < 2) {
+            return const Center(
+              child: Text("Search Results..."),
+            );
+          } else {
+            return const Center(child: Text("No results"));
+          }
+        } else if (snapshot.hasError) {
+          return const Center(child: Text("Error fetching results."));
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 
-
-// this method is used when we tap the search button
-  // @override
-  // Widget buildResults(BuildContext context) {
-  //   return FutureBuilder<List<dynamic>>(
-  //     future: fetchData(query),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return const Center(child: CircularProgressIndicator());
-  //       }
-  //       if (snapshot.hasData) {
-  //         final data = snapshot.data!;
-  //         final sortedData = getSortStationList(data);
-  //         if (sortedData.isNotEmpty) {
-  //           return SizedBox(
-  //             child: data.isEmpty
-  //                 ? const Center(child: CircularProgressIndicator())
-  //                 : ListView.separated(
-  //                     separatorBuilder: (context, index) {
-  //                       return Padding(
-  //                         padding: EdgeInsets.symmetric( horizontal: Get.width * 0.01),
-  //                         child: const Divider(
-  //                           height: 1,
-  //                           thickness: 0.2,
-  //                         ),
-  //                       );
-  //                     },
-  //                     itemCount: data.length,
-  //                     itemBuilder: (context, index) {
-  //                       return ListTile(
-  //                           onTap: () {
-  //                             Navigator.pushReplacement(
-  //                                 context,
-  //                                 MaterialPageRoute(
-  //                                     builder: (context) =>
-  //                                         StationsSpecificDetails(
-  //                                           stationId: sortedData[index]
-  //                                               ['station']['stationId'],
-  //                                           userId: userId,
-  //                                         )));
-  //                           },
-  //                           leading: const Icon(Icons.ev_station),
-  //                           title: Text(
-  //                             sortedData[index]['station']['stationName'],
-  //                             style: TextStyle(
-  //                                 fontWeight: FontWeight.bold,
-  //                                 fontSize:
-  //                                     MediaQuery.of(context).size.width *
-  //                                         0.04),
-  //                           ),
-  //                           subtitle: //container for station address
-  //                               Text(
-  //                             sortedData[index]['station']['stationArea'],
-  //                             maxLines: 1,
-  //                             overflow: TextOverflow.ellipsis,
-  //                           ),
-  //                           trailing: //column for 'distance from user' and connector type
-  //                               Column(
-  //                             mainAxisAlignment:
-  //                                 MainAxisAlignment.spaceEvenly,
-  //                             children: [
-  //                               Wrap(
-  //                                 spacing:
-  //                                     MediaQuery.of(context).size.width *
-  //                                         0.02,
-  //                                 children: [
-  //                                   //text for distance
-  //                                   data[index] == null
-  //                                       ? const CircularProgressIndicator()
-  //                                       : Text(
-  //                                           '${sortedData[index]['distance'].toStringAsFixed(2)} KM',
-  //                                           style: const TextStyle(
-  //                                               fontWeight:
-  //                                                   FontWeight.bold),
-  //                                         ),
-
-  //                                   //CircleAvater to show avaliblity
-  //                                   CircleAvatar(
-  //                                     radius: MediaQuery.of(context)
-  //                                             .size
-  //                                             .width *
-  //                                         0.02,
-  //                                     backgroundColor: AvaliblityColor
-  //                                         .getAvailablityColor(
-  //                                             sortedData[index]['station']
-  //                                                 ['stationStatus']!),
-  //                                   ),
-  //                                 ],
-  //                               ),
-
-  //                               //Container for connector type
-  //                               // Text(
-  //                               //   sortedStationList[index]
-  //                               //       .stationPowerStandard!,
-  //                               //   style: const TextStyle(
-  //                               //     color: Colors.grey,
-  //                               //     fontWeight: FontWeight.bold,
-  //                               //   ),
-  //                               // )
-  //                             ],
-  //                           ));
-  //                     }),
-  //           );
-  //         } else if (query.length < 2) {
-  //           return const Center(
-  //             child: Text("Search Results..."),
-  //           );
-  //         } else {
-  //           return const Center(child: Text("No results"));
-  //         }
-  //       } else if (snapshot.hasError) {
-  //         return const Center(child: Text("Error fetching results."));
-  //       } else {
-  //         return const SizedBox.shrink();
-  //       }
-  //     },
-  //   );
-  // }
-
-
-  
-
-
-  
 // this button is used to display the suggestions
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -256,24 +265,101 @@ var userId;
         }
         if (snapshot.hasData) {
           final data = snapshot.data!;
-          if (data.isNotEmpty) {
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final item = data[index];
-                return ListTile(
-                  title: Text(item["stationName"]),
-                  subtitle: Text(item["stationArea"]),
-                  leading: const Icon(Icons.ev_station),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => StationsSpecificDetails(
-                                userId: userId, stationId: item['stationId'])));
-                  },
-                );
-              },
+          final sortedData = getSortStationList(data);
+          if (sortedData.isNotEmpty) {
+            return SizedBox(
+              child: data.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric( horizontal: Get.width * 0.01),
+                          child: const Divider(
+                            height: 1,
+                            thickness: 0.2,
+                          ),
+                        );
+                      },
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          StationsSpecificDetails(
+                                            stationId: sortedData[index]
+                                                ['station']['stationId'],
+                                            userId: userId,
+                                          )));
+                            },
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.ev_station, size: Get.height * 0.05,color: Colors.green,),
+                              ],
+                            ),
+                            title: Text(
+                              sortedData[index]['station']['stationName'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width *
+                                          0.04),
+                            ),
+                            subtitle: //container for station address
+                                Text(
+                              sortedData[index]['station']['stationArea'],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: //column for 'distance from user' and connector type
+                                Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Wrap(
+                                  spacing:
+                                      MediaQuery.of(context).size.width *
+                                          0.02,
+                                  children: [
+                                    //text for distance
+                                    data[index] == null
+                                        ? const CircularProgressIndicator()
+                                        : Text(
+                                            '${sortedData[index]['distance'].toStringAsFixed(2)} KM',
+                                            style: const TextStyle(
+                                                fontWeight:
+                                                    FontWeight.bold),
+                                          ),
+
+                                    //CircleAvater to show avaliblity
+                                    CircleAvatar(
+                                      radius: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          0.02,
+                                      backgroundColor: AvaliblityColor
+                                          .getAvailablityColor(
+                                              sortedData[index]['station']
+                                                  ['stationStatus']!),
+                                    ),
+                                  ],
+                                ),
+
+                                //Container for connector type
+                                // Text(
+                                //   sortedStationList[index]
+                                //       .stationPowerStandard!,
+                                //   style: const TextStyle(
+                                //     color: Colors.grey,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // )
+                              ],
+                            ));
+                      }),
             );
           } else if (query.length < 2) {
             return const Center(
@@ -282,82 +368,8 @@ var userId;
           } else {
             return const Center(child: Text("No results"));
           }
-        } else if (snapshot.hasError) {
-          return const Center(child: Text("Error fetching results."));
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-    );
-  }
-  
-  // to be debugged ->
-  @override
-  Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-      future: fetchData(query),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasData) {
-          final data = snapshot.data!;
-          if (data.isNotEmpty) {
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final item = data[index];
-                return ListTile(
-                  title: Text(item["stationName"]),
-                  subtitle: Text(item["stationArea"]),
-                  leading: const Icon(Icons.ev_station_outlined),
-                  onTap: () {
-                    
-                    // method to show markers
-
-                    /*
-
-                    Marker(
-          // width: 20.0,
-          // height: 20.0,
-          anchorPos:
-              AnchorPos.align(AnchorAlign.center), //change center to bottom
-          point: LatLng(idx.stationLatitude!, idx.stationLongitude!),
-          builder: (ctx) => Semantics(
-            label: "StationMarker",
-            hint: "Redirect you to sspecific details of that station",
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StationsSpecificDetails(
-                              stationId: idx.stationId!,
-                              userId: HomeScreenState.userId,
-                            )));
-              },
-              child: FaIcon(
-                FontAwesomeIcons.locationDot,
-                size: 30,
-                color: AvaliblityColor.getAvailablityColor(idx.stationStatus!),
-              ),
-            ),
-          ),
-        );
-
-*/
-                  },
-                );
-              },
-            );
-          } else if (query.length < 2) {
-            return const Center(
-              child: Text("Search Results..."),
-            );
-          } else {
-            return const Center(child: Text("No results"));
-          }
-        } else if (snapshot.hasError) {
+        } 
+        else if (snapshot.hasError) {
           return const Center(child: Text("Error fetching results."));
         } else {
           return const SizedBox.shrink();
@@ -366,5 +378,4 @@ var userId;
     );
   }
 
-  
 }

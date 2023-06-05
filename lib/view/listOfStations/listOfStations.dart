@@ -190,6 +190,7 @@ class ListOfStationsState extends State<ListOfStations> {
                     height: MediaQuery.of(context).size.height * 0.05,
                     child: SearchBarofLOS(
                       userId: widget.userId,
+                      
                     )),
 
                 //Container for List Of Station
