@@ -1,11 +1,21 @@
+// Decrypt the scanned data
+  // final key = encrypt.Key.fromUtf8('my32lengthsupersecretnooneknows1');
+  // final iv = IV.fromLength(16);
+  // final encrypter = Encrypter(AES(key));
+  // final decrypted = encrypter.decrypt64(scanData as String, iv: iv);
+
+  // // Navigate to the output page and pass the decrypted data as a parameter
+  // Navigator.push(
+  //   context,
+  //   MaterialPageRoute(builder: (context) => QrScannerOutput(output: decrypted)),
+  // );
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:vcharge/view/qrScanner.dart/qrScannerOutput.dart';
-import 'package:vcharge/view/startChargingScreen/startChargingScreen.dart';
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
 import '../chargingScreen/chargingScreen.dart';
@@ -39,6 +49,14 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   @override
   void initState() {
     super.initState();
+    showScanner();
+  }
+
+// function for setting the initial value of the scanner as true - so that the scannerwidget will always get displayed
+  void showScanner() {
+    setState(() {
+      showScannerWidget = true;
+    });
   }
 
 // dispose method which is used to handle the widgets which are not mounted
@@ -55,6 +73,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       await controller?.resumeCamera();
       setState(() {
         scanStarted = true;
+        isScanned = false;
       });
     }
     } catch (e) {
@@ -76,6 +95,9 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     }
   }
 
+  // for stopping scanner after first successful scanning:
+  bool isScanned = false;
+
   // method for storing bar code result
   void _onQRViewCreated(QRViewController controller) async {
 
@@ -93,34 +115,19 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       try {
         controller.scannedDataStream.listen((scanData) async {
           // controller.pauseCamera();
+          if(isScanned) return;
           controller.stopCamera();
 
-
-  //         // Decrypt the scanned data
-  // final key = encrypt.Key.fromUtf8('my32lengthsupersecretnooneknows1');
-  // final iv = IV.fromLength(16);
-  // final encrypter = Encrypter(AES(key));
-  // final decrypted = encrypter.decrypt64(scanData as String, iv: iv);
-
-  // // Navigate to the output page and pass the decrypted data as a parameter
-  // Navigator.push(
-  //   context,
-  //   MaterialPageRoute(builder: (context) => QrScannerOutput(output: decrypted)),
-  // );
-
           scanResult = scanData.code!;
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => QrScannerOutput(output: scanResult),
-          //   ),
-          // );
+          print(scanResult);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ChargingScreen(stationLocation: 'Kharadi, Pune', stationName: 'EV Charging station', userId: widget.userId, chargerId: scanResult,),
             ),
           );
+          Navigator.pop(context);
+          isScanned = true;
           await controller.resumeCamera();
         });
       } on PlatformException {
@@ -145,146 +152,222 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     
   }
 
+  // var for showing scanner widget
+  bool showScannerWidget = true;
+
 // build method
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(0, 78, 230, 164),
-        centerTitle: true,
-        title: const Text(
-          "Scan and Charge",
-          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: (){
+
+        // this is used for doing the unfocus activity, once the user clicks on the field other than the textfield
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(0, 78, 230, 164),
+          centerTitle: true,
+          title: const Text(
+            "Scan and Charge",
+            style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      extendBodyBehindAppBar: true,
-
-      // container for qr scanner
-      body: Stack(
-        children: [
-
-// background overlay effect
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withOpacity(0.9),
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.9),
-                  ],
-                  stops: const [0.0, 0.2, 0.8, 1.0],
-                ),
-              ),
-            ),
-          ),
-
-// qr scanner widget
-          Positioned(
-            top: 100,
-            left: (MediaQuery.of(context).size.width -
-                    MediaQuery.of(context).size.width * 0.8) /
-                2,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.5,
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: const Color.fromARGB(255, 195, 227, 196), width: 3.0),
-              ),
-              child: (scanResult == "Failed to scan")
-                  ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.qr_code_scanner,
-                          color: Colors.white, size: 60.0),
-                      SizedBox(height: 16.0),
-                      Text("Failed to scan, please enter the station Id",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 16.0)),
-                    ],
-                  )
-                  : QRView(
-                      key: qrKey,
-                      cameraFacing: CameraFacing.back,
-                      overlay: QrScannerOverlayShape(
-                        borderRadius: 16.0,
-                        borderColor: Colors.white,
-                        borderLength: 24.0,
-                        borderWidth: 4.0,
-                        cutOutSize: MediaQuery.of(context).size.width * 0.65,
-                      ),
-                      onQRViewCreated: _onQRViewCreated,
-                    ),
-            ),
-          ),
-
-// Text - "OR";
-          Positioned(
-              top: MediaQuery.of(context).size.height * 0.5 + 120,
-              left: MediaQuery.of(context).size.width * 0.27,
-              child: const Text(
-                "------------ OR ------------",
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold),
-              )),
-
-// widget for Station code textfield              
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.5 + 160,
-            left: MediaQuery.of(context).size.width * 0.156,
-            child: Column(
-              children: [
-                const Text(
-                  "Please enter the station code as seen on the box",
-                  style: TextStyle(fontSize: 10),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.06,
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.gasPump,
-                            size: 20,
-                            color: Color.fromARGB(255, 51, 50, 50),
-                          ),
-                        ),
-                        border: OutlineInputBorder(),
-                        label: Text("Station Code"),
-                      ),
-                      controller: stationCodeController,
+        extendBodyBehindAppBar: true,
+    
+        // container for qr scanner
+        body: Stack(
+          children: [
+    
+    // background overlay effect
+            Visibility(
+              visible: showScannerWidget,
+              child: Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.9),
+                        Colors.transparent,
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.9),
+                      ],
+                      stops: const [0.0, 0.2, 0.8, 1.0],
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          )
-        ],
-      ),
+    
+    // qr scanner widget
+            Visibility(
+              visible: showScannerWidget,
 
-// submit button      
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        padding: const EdgeInsets.only(bottom: 80),
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => StationsSpecificDetails(userId: widget.userId, stationId: 'STN20230505105447818')));
-          },
-          label: const Text(
-            "Proceed",
+              // replacement for textfield
+              replacement: Center(
+                child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Please enter the station code as seen on the box",
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.06,
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: TextFormField(
+                              onTap: (){
+                                showScannerWidget = false;
+                              },
+                              decoration: const InputDecoration(
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(9.0),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.gasPump,
+                                    size: 20,
+                                    color: Color.fromARGB(255, 51, 50, 50),
+                                  ),
+                                ),
+                                border: OutlineInputBorder(),
+                                label: Text("Station Code"),
+                              ),
+                              controller: stationCodeController,
+                            ),
+                          ),
+                        ),
+                              
+                        
+                      ],
+                    ),
+              ),
+                
+              child: Positioned(
+                top: 100,
+                left: (MediaQuery.of(context).size.width -
+                        MediaQuery.of(context).size.width * 0.8) /
+                    2,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 195, 227, 196), width: 3.0),
+                  ),
+                  child: (scanResult == "Failed to scan")
+                      ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.qr_code_scanner,
+                              color: Colors.white, size: 60.0),
+                          SizedBox(height: 16.0),
+                          Text("Failed to scan, please enter the station Id",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 16.0)),
+                        ],
+                      )
+                      : QRView(
+                          key: qrKey,
+                          cameraFacing: CameraFacing.back,
+                          overlay: QrScannerOverlayShape(
+                            borderRadius: 16.0,
+                            borderColor: Colors.white,
+                            borderLength: 24.0,
+                            borderWidth: 4.0,
+                            cutOutSize: MediaQuery.of(context).size.width * 0.65,
+                          ),
+                          onQRViewCreated: _onQRViewCreated,
+                        ),
+                ),
+              ),
+            ),
+    
+    // Text - "OR";
+            Visibility(
+              visible: showScannerWidget,
+              child: Positioned(
+                top: MediaQuery.of(context).size.height * 0.5 + 120,
+                left: MediaQuery.of(context).size.width * 0.27,
+                child: const Text(
+                  "------------ OR ------------",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+    
+    
+    // widget for Station code textfield              
+              Visibility(
+                visible: showScannerWidget,
+                child: Positioned(
+                top: MediaQuery.of(context).size.height * 0.5 + 160,
+                left: MediaQuery.of(context).size.width * 0.156,
+                child: Column(
+                  children: [
+                    const Text(
+                      "Please enter the station code as seen on the box",
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: TextFormField(
+                          onTap: (){
+                            showScannerWidget = false;
+                          },
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(9.0),
+                              child: FaIcon(
+                                FontAwesomeIcons.gasPump,
+                                size: 20,
+                                color: Color.fromARGB(255, 51, 50, 50),
+                              ),
+                            ),
+                            border: OutlineInputBorder(),
+                            label: Text("Station Code"),
+                          ),
+                          controller: stationCodeController,
+                        ),
+                      ),
+                    ),
+                          
+                    
+                  ],
+                ),
+                          ),
+              ),
+
+            
+          ],
+        ),
+    
+    // submit button      
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Container(
+          padding: const EdgeInsets.only(bottom: 80),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => StationsSpecificDetails(userId: widget.userId, stationId: 'STN20230505105447818')));
+            },
+            label: const Text(
+              "Proceed",
+            ),
           ),
         ),
       ),
     );
   }
 }
+
+
