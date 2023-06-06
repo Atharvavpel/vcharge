@@ -48,6 +48,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final formKeyLastName = GlobalKey<FormState>();
   final formKeyEmail = GlobalKey<FormState>();
 
+  String firstNameError = '';
+  String lastNameError = '';
+  String emailError = '';
+
   //variables for DropDown menu for vehicle selection
   List<String> genderList = ['male', 'female', 'other'];
   dynamic selectedGender;
@@ -140,7 +144,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
 // function for updating the specific user data
-  Future updateUserDetails() async {
+  Future<bool> updateUserDetails() async {
     try {
       var response = await PutMethod.putRequestMod(
           "http://192.168.0.243:8097/manageUser/updateUser?userId=",
@@ -157,32 +161,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             'userState': selectedState,
           }));
 
-      (response.statusCode == 200)
-          ? Fluttertoast.showToast(
-              msg: " Data updated successfully",
-              // msg: "Successfully Created",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0)
-          // : errorMsgs =jsonEncode(response.body);
-          : Fluttertoast.showToast(
-              msg: " Updation failed",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: " Data updated successfully",
+            // msg: "Successfully Created",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        RedisConnection.set('firstName', firstNameController.text);
+        RedisConnection.set('lastName', lastNameController.text);
+        RedisConnection.set('emailId', emailController.text);
+        return true;
+      } if(response.statusCode==400){
+        // Update error variables based on API response
+        setState(() {
+          firstNameError = jsonDecode(response.body)['userFirstName'] ?? '';
+          lastNameError = jsonDecode(response.body)['userLastName'] ?? '';
+          emailError = jsonDecode(response.body)['userEmail'] ?? '';
+        });
 
-      RedisConnection.set('firstName', firstNameController.text);
-      RedisConnection.set('lastName', lastNameController.text);
-      RedisConnection.set('emailId', emailController.text);
+        return false;
+
+        // Fluttertoast.showToast(
+        //     msg: " Updation failed",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.green,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
+      }
     } catch (e) {
       print("the error is: $e");
+      // return false;
     }
+    return false;
   }
 
   @override
@@ -214,11 +230,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           keyboardType: TextInputType.name,
                           cursorColor: Colors.green,
                           textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.person),
-                              label: Text("First-Name"),
-                              border: OutlineInputBorder()),
+                          decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.person),
+                              label: const Text("First-Name"),
+                              errorText: firstNameError.isEmpty
+                                  ? null
+                                  : firstNameError,
+                              errorMaxLines: 2,
+                              border: const OutlineInputBorder()),
                           controller: firstNameController,
+                          onChanged: (value){
+                            setState(() {
+                              firstNameError = '';
+                            });
+                          },
                         ),
                       ),
                     ),
@@ -231,11 +256,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           keyboardType: TextInputType.name,
                           cursorColor: Colors.green,
                           textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.person),
-                              label: Text("Last-Name"),
-                              border: OutlineInputBorder()),
+                          decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.person),
+                              label: const Text("Last-Name"),
+                              errorText:
+                                  lastNameError.isEmpty ? null : lastNameError,
+                              errorMaxLines: 2,
+                              border: const OutlineInputBorder()),
                           controller: lastNameController,
+                          onChanged: (value){
+                            setState(() {
+                              lastNameError = '';
+                            });
+                          },
                         ),
                       ),
                     )
@@ -292,12 +325,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     keyboardType: TextInputType.emailAddress,
                     cursorColor: Colors.green,
                     textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                      label: Text("Email"),
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.email),
+                    decoration: InputDecoration(
+                      label: const Text("Email"),
+                      errorText: emailError.isEmpty ? null : emailError,
+                      errorMaxLines: 2,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                     controller: emailController,
+                    onChanged: (value) {
+                      setState(() {
+                        emailError = '';
+                      });
+                    },
                   ),
                 ),
 
@@ -392,16 +432,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         // update button
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            updateUserDetails();
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        MyProfilePage(userId: widget.userId)));
+          onPressed: () async {
+            if (await updateUserDetails()) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MyProfilePage(userId: widget.userId)));
+            } else {
+              Fluttertoast.showToast(
+                  msg: " Updation failed",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            }
           },
           label: const Text("Update"),
         ),
