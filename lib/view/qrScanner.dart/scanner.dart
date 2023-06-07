@@ -73,7 +73,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       await controller?.resumeCamera();
       setState(() {
         scanStarted = true;
-        isScanned = false;
+        // isScanned = false;
       });
     }
     } catch (e) {
@@ -99,7 +99,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
   bool isScanned = false;
 
   // method for storing bar code result
-  void _onQRViewCreated(QRViewController controller) async {
+  void onQRViewCreated(QRViewController controller) async {
 
     try {
       this.controller = controller;
@@ -119,16 +119,19 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           controller.stopCamera();
 
           scanResult = scanData.code!;
-          print(scanResult);
+
+          
+
+          print("the scanned result is: $scanResult");
+          
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ChargingScreen(stationLocation: 'Kharadi, Pune', stationName: 'EV Charging station', userId: widget.userId, chargerId: scanResult,),
             ),
           );
-          Navigator.pop(context);
-          isScanned = true;
-          await controller.resumeCamera();
+          // isScanned = true;
+          controller.resumeCamera();
         });
       } on PlatformException {
         setState(() {
@@ -280,7 +283,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                             borderWidth: 4.0,
                             cutOutSize: MediaQuery.of(context).size.width * 0.65,
                           ),
-                          onQRViewCreated: _onQRViewCreated,
+                          onQRViewCreated: onQRViewCreated,
                         ),
                 ),
               ),
