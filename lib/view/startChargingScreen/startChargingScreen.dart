@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 import 'widgets/stopChargingAlertPopup.dart';
 
@@ -11,6 +12,7 @@ class StartChargingScreen extends StatefulWidget {
 }
 
 class StartChargingScreenState extends State<StartChargingScreen> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -40,7 +42,7 @@ class StartChargingScreenState extends State<StartChargingScreen> {
                     )
                   ],
                 )),
-
+    
             //Container for charging indicator (circulat avatar)
             SizedBox(
               height: Get.height * 0.4,
@@ -69,7 +71,7 @@ class StartChargingScreenState extends State<StartChargingScreen> {
                 ),
               ),
             ),
-
+    
             //Container for estimated time and price
             SizedBox(
               height: Get.height * 0.15,
@@ -101,7 +103,7 @@ class StartChargingScreenState extends State<StartChargingScreen> {
                         ),
                       ),
                     ),
-
+    
                     //Column for estimated price
                     Expanded(
                       child: Padding(
@@ -135,7 +137,7 @@ class StartChargingScreenState extends State<StartChargingScreen> {
                 ),
               ),
             ),
-
+    
             //Container for stop button
             Container(
               width: Get.width * 0.3,

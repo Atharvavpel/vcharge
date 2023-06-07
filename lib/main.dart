@@ -6,8 +6,6 @@ import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:flutter/services.dart';
 
 
-
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // Initialize the binding
   // Set preferred orientations
