@@ -362,7 +362,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       controller: regNoController,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                          hintText: 'Enter Registration Number',
+                          hintText: 'Eg: MH12AE1234',
                           hintStyle: const TextStyle(color: Colors.grey),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 10.0),
@@ -370,7 +370,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           border: InputBorder.none),
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please enter some text';
+                          return 'Please enter vehicle registration number';
                         }
                         return null;
                       },

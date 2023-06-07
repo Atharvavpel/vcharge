@@ -67,10 +67,13 @@ class ExistingHomeScreenState extends State<ExistingHomeScreen> {
               bottom: Get.height * 0.14,
               right: 0,
               child: GestureDetector(
-                key: const Key('filterButton'),
                 onTap: () {
-                  showBottomSheet(
+                  showModalBottomSheet(
                       context: context,
+                      isScrollControlled:true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))
+                      ),
                       builder: (BuildContext context) {
                         return FilterPopUp(userId: widget.userId);
                       });

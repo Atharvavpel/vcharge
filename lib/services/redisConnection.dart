@@ -7,7 +7,7 @@ import 'package:redis/redis.dart' as redis;
 class RedisConnection {
 
   // variable for storing the serverIp and serverPort (6379)
-  static String serverIp = "192.168.0.92";
+  static String serverIp = "192.168.0.97";
   static int serverPort = 6379;
 
   // function for setting up the redis connection and sending the GET request
