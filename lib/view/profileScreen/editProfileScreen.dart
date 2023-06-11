@@ -44,9 +44,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController pincodeController = TextEditingController();
   TextEditingController cityController = TextEditingController();
 
-  final formKeyFirstName = GlobalKey<FormState>();
-  final formKeyLastName = GlobalKey<FormState>();
-  final formKeyEmail = GlobalKey<FormState>();
+  // final formKeyFirstName = GlobalKey<FormState>();
+  // final formKeyLastName = GlobalKey<FormState>();
+  // final formKeyEmail = GlobalKey<FormState>();
+  // final formKeyAddress = GlobalKey<FormState>();
+  // final formKeyCity = GlobalKey<FormState>();
+  // final formKeyPincode = GlobalKey<FormState>();
+
+  final formKey = GlobalKey<FormState>();
 
   String firstNameError = '';
   String lastNameError = '';
@@ -175,7 +180,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         RedisConnection.set('lastName', lastNameController.text);
         RedisConnection.set('emailId', emailController.text);
         return true;
-      } if(response.statusCode==400){
+      }
+      if (response.statusCode == 400) {
         // Update error variables based on API response
         setState(() {
           firstNameError = jsonDecode(response.body)['userFirstName'] ?? '';
@@ -216,215 +222,256 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         body: SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.only(top: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // container for name section
-                Row(
-                  children: [
-                    // container for first name
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.name,
-                          cursorColor: Colors.green,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.person),
-                              label: const Text("First-Name"),
-                              errorText: firstNameError.isEmpty
-                                  ? null
-                                  : firstNameError,
-                              errorMaxLines: 2,
-                              border: const OutlineInputBorder()),
-                          controller: firstNameController,
-                          onChanged: (value){
-                            setState(() {
-                              firstNameError = '';
-                            });
-                          },
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // container for name section
+                  Row(
+                    children: [
+                      // container for first name
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.name,
+                            cursorColor: Colors.green,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.person),
+                                label: const Text("First-Name"),
+                                errorText: firstNameError.isEmpty
+                                    ? null
+                                    : firstNameError,
+                                errorMaxLines: 2,
+                                border: const OutlineInputBorder()),
+                            controller: firstNameController,
+                            onChanged: (value) {
+                              setState(() {
+                                firstNameError = '';
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter first name';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                       ),
-                    ),
 
-                    // container for last name
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.name,
-                          cursorColor: Colors.green,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.person),
-                              label: const Text("Last-Name"),
-                              errorText:
-                                  lastNameError.isEmpty ? null : lastNameError,
-                              errorMaxLines: 2,
-                              border: const OutlineInputBorder()),
-                          controller: lastNameController,
-                          onChanged: (value){
-                            setState(() {
-                              lastNameError = '';
-                            });
-                          },
+                      // container for last name
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.name,
+                            cursorColor: Colors.green,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.person),
+                                label: const Text("Last-Name"),
+                                errorText: lastNameError.isEmpty
+                                    ? null
+                                    : lastNameError,
+                                errorMaxLines: 2,
+                                border: const OutlineInputBorder()),
+                            controller: lastNameController,
+                            onChanged: (value) {
+                              setState(() {
+                                lastNameError = '';
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter last name';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+
+                  // contianer for dob and gender
+                  Row(
+                    children: [
+                      // container for date of birth
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            cursorColor: Colors.green,
+                            textAlign: TextAlign.center,
+                            onTap: () => selectDate(context),
+                            decoration: const InputDecoration(
+                                label: Text("Date of Birth"),
+                                prefixIcon: Icon(Icons.calendar_month),
+                                border: OutlineInputBorder()),
+                            controller: dateOfBirthController,
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                ),
 
-                // contianer for dob and gender
-                Row(
-                  children: [
-                    // container for date of birth
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          cursorColor: Colors.green,
-                          textAlign: TextAlign.center,
-                          onTap: () => selectDate(context),
+                      // container for gender section
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          value: selectedGender,
+                          items: genderList
+                              .map((e) {
+                                return DropdownMenuItem(
+                                    value: e, child: Text(e));
+                              })
+                              .toSet()
+                              .toList(), // Use toSet() to remove duplicate values and then convert back to a list
+                          onChanged: (value) {
+                            setState(() {
+                              selectedGender = value as String;
+                            });
+                          },
                           decoration: const InputDecoration(
-                              label: Text("Date of Birth"),
-                              prefixIcon: Icon(Icons.calendar_month),
+                              label: Text("Gender"),
                               border: OutlineInputBorder()),
-                          controller: dateOfBirthController,
                         ),
                       ),
-                    ),
-
-                    // container for gender section
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        value: selectedGender,
-                        items: genderList
-                            .map((e) {
-                              return DropdownMenuItem(value: e, child: Text(e));
-                            })
-                            .toSet()
-                            .toList(), // Use toSet() to remove duplicate values and then convert back to a list
-                        onChanged: (value) {
-                          setState(() {
-                            selectedGender = value as String;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                            label: Text("Gender"),
-                            border: OutlineInputBorder()),
-                      ),
-                    ),
-                  ],
-                ),
-
-                // container for Email section
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    cursorColor: Colors.green,
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                      label: const Text("Email"),
-                      errorText: emailError.isEmpty ? null : emailError,
-                      errorMaxLines: 2,
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.email),
-                    ),
-                    controller: emailController,
-                    onChanged: (value) {
-                      setState(() {
-                        emailError = '';
-                      });
-                    },
+                    ],
                   ),
-                ),
 
-                // container for Address section
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: TextFormField(
-                    minLines: 1,
-                    maxLines: 10,
-                    cursorColor: Colors.green,
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.all(Get.width * 0.03),
-                          child: const FaIcon(FontAwesomeIcons.addressBook),
-                        ),
-                        label: const Text("Address"),
-                        border: const OutlineInputBorder()),
-                    controller: addressController,
+                  // container for Email section
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      cursorColor: Colors.green,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        label: const Text("Email"),
+                        errorText: emailError.isEmpty ? null : emailError,
+                        errorMaxLines: 2,
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(Icons.email),
+                      ),
+                      controller: emailController,
+                      onChanged: (value) {
+                        setState(() {
+                          emailError = '';
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter email';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
 
-                // contianer for pincode and city
-                Row(
-                  children: [
-                    // container for city
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          cursorColor: Colors.green,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.all(Get.width * 0.03),
-                                child: const FaIcon(FontAwesomeIcons.city),
-                              ),
-                              label: const Text("City"),
-                              border: const OutlineInputBorder()),
-                          controller: cityController,
+                  // container for Address section
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: TextFormField(
+                      minLines: 1,
+                      maxLines: 10,
+                      cursorColor: Colors.green,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.all(Get.width * 0.03),
+                            child: const FaIcon(FontAwesomeIcons.addressBook),
+                          ),
+                          label: const Text("Address"),
+                          border: const OutlineInputBorder()),
+                      controller: addressController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter address';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+
+                  // contianer for pincode and city
+                  Row(
+                    children: [
+                      // container for city
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            cursorColor: Colors.green,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(Get.width * 0.03),
+                                  child: const FaIcon(FontAwesomeIcons.city),
+                                ),
+                                label: const Text("City"),
+                                border: const OutlineInputBorder()),
+                            controller: cityController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter city';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                       ),
-                    ),
 
-                    // container for pincode
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          cursorColor: Colors.green,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.all(Get.width * 0.03),
-                                child: const Icon(Icons.numbers),
-                              ),
-                              label: const Text("Pincode"),
-                              border: const OutlineInputBorder()),
-                          controller: pincodeController,
+                      // container for pincode
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: TextFormField(
+                            cursorColor: Colors.green,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(Get.width * 0.03),
+                                  child: const Icon(Icons.numbers),
+                                ),
+                                label: const Text("Pincode"),
+                                border: const OutlineInputBorder()),
+                            controller: pincodeController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter pincode';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-
-                // container for state section
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: DropdownButtonFormField(
-                    value:
-                        selectedState, // Set the currently selected value in the dropdown
-                    items: statesIndia.map((e) {
-                      return DropdownMenuItem(value: e, child: Text(e));
-                    }).toList(), // Set the list of items to display in the dropdown
-                    onChanged: (value) {
-                      setState(() {
-                        selectedState = value
-                            as String; // Update the currently selected value in the dropdown
-                        cityController.text =
-                            ''; // Clear the city field when the state changes
-                      });
-                    },
-                    decoration: const InputDecoration(
-                        label: Text("State"), border: OutlineInputBorder()),
+                    ],
                   ),
-                ),
-              ],
+
+                  // container for state section
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: DropdownButtonFormField(
+                      value:
+                          selectedState, // Set the currently selected value in the dropdown
+                      items: statesIndia.map((e) {
+                        return DropdownMenuItem(value: e, child: Text(e));
+                      }).toList(), // Set the list of items to display in the dropdown
+                      onChanged: (value) {
+                        setState(() {
+                          selectedState = value
+                              as String; // Update the currently selected value in the dropdown
+                          cityController.text =
+                              ''; // Clear the city field when the state changes
+                        });
+                      },
+                      decoration: const InputDecoration(
+                          label: Text("State"), border: OutlineInputBorder()),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -433,24 +480,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            if (await updateUserDetails()) {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          MyProfilePage(userId: widget.userId)));
-            } else {
-              Fluttertoast.showToast(
-                  msg: " Updation failed",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.green,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
+            if (formKey.currentState!.validate()) {
+              if (await updateUserDetails()) {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MyProfilePage(userId: widget.userId)));
+              } else {
+                Fluttertoast.showToast(
+                    msg: " Updation failed",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              }
             }
           },
           label: const Text("Update"),
