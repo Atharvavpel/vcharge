@@ -131,7 +131,10 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
             ),
           );
           // isScanned = true;
+          
+          // this is used to stop the camera after single successful scan 
           controller.stopCamera();
+
         });
       } on PlatformException {
         setState(() {
