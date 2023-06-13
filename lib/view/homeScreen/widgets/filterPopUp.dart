@@ -248,6 +248,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                                 setState(() {
                                   selectedConnector[index] = value!;
                                 });
+                                
                               },
                             ),
                           ],

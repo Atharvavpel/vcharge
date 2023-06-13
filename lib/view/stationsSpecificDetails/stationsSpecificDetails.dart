@@ -289,6 +289,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             DeleteMethod.deleteRequest(
                                                 'http://192.168.0.243:8097/manageUser/removeFavorite?userId=${widget.userId}&stationId=${widget.stationId}');
                                             isFavourite = false;
+                                            
                                           } else {
                                             PostMethod.postRequest(
                                                 'http://192.168.0.243:8097/manageUser/addFavorites?userId=${widget.userId}',
