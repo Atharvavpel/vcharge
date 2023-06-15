@@ -254,7 +254,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter first name';
+                                return '';
                               }
                               return null;
                             },
@@ -286,7 +286,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter last name';
+                                return '';
                               }
                               return null;
                             },
@@ -362,7 +362,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter email';
+                          return '';
                         }
                         return null;
                       },
@@ -387,7 +387,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: addressController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter address';
+                          return '';
                         }
                         return null;
                       },
@@ -414,7 +414,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             controller: cityController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter city';
+                                return '';
                               }
                               return null;
                             },
@@ -439,7 +439,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             controller: pincodeController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter pincode';
+                                return '';
                               }
                               return null;
                             },
@@ -492,14 +492,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             MyProfilePage(userId: widget.userId)));
               } else {
                 Fluttertoast.showToast(
-                    msg: " Updation failed",
+                    msg: " Updation failed!",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.red,
                     textColor: Colors.white,
                     fontSize: 16.0);
               }
+            } else {
+              Fluttertoast.showToast(
+                  msg: " Please fill the required fields!",
+                  // msg: "Successfully Created",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.TOP,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
             }
           },
           label: const Text("Update"),
