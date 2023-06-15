@@ -109,7 +109,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     if (!status.isGranted) {
       await Permission.camera.request();
       status = await Permission.camera.status;
-    }
+    } 
 
     if (status.isGranted) {
       try {
@@ -131,7 +131,10 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
             ),
           );
           // isScanned = true;
-          controller.resumeCamera();
+          
+          // this is used to stop the camera after single successful scan 
+          controller.stopCamera();
+
         });
       } on PlatformException {
         setState(() {

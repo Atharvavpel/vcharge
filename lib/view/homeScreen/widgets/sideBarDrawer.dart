@@ -226,7 +226,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                           //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
                           // ],
                           ),
-                      child: const Icon(Icons.child_friendly),
+                      child: const Icon(Icons.share),
                     ),
                   ),
                   Expanded(

@@ -136,7 +136,7 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
       contactNo = response['userContactNo'];
       emailId = response['userEmail'];
 
-      cmd = await client.connect('192.168.0.97', 6379);
+      cmd = await client.connect('192.168.0.241', 6379);
 
       await cmd.send_object(['SET', 'profilePhoto', profilePhoto]);
       await cmd.send_object(['SET', 'firstName', firstName]);

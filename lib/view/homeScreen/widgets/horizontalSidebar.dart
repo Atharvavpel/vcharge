@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vcharge/view/favouriteScreen/favouriteScreen.dart';
+import 'package:vcharge/view/helpSupportScreen/helpSupportScreen.dart';
 import 'package:vcharge/view/reservationsScreen/reservationScreen.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 import 'package:vcharge/view/myVehicleScreen/myVehicleScreen.dart';
@@ -342,6 +344,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
         overlay.size.width - position.dx,
         overlay.size.height - position.dy,
       ),
+      
       items: <PopupMenuEntry>[
         PopupMenuItem(
           value: 1,
@@ -354,7 +357,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
           ),
         ),
         PopupMenuItem(
-          value: 1,
+          value: 2,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
@@ -364,7 +367,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
           ),
         ),
         PopupMenuItem(
-          value: 1,
+          value: 3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
@@ -374,7 +377,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
           ),
         ),
         PopupMenuItem(
-          value: 2,
+          value: 4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
@@ -384,7 +387,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
           ),
         ),
         PopupMenuItem(
-          value: 3,
+          value: 5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
@@ -404,10 +407,19 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
     if (selectedMenuItem != null) {
       switch (selectedMenuItem) {
         case 1:
-          // Handle menu item 1
+          const websiteUrl = 'https://virtuososofttech.com/our-blogs/';
+    if (await canLaunchUrl(Uri.parse(websiteUrl))) {
+      await launchUrl(Uri.parse(websiteUrl));
+    } else {
+      throw 'Could not launch $websiteUrl';
+    }
           break;
         case 2:
-          // Handle menu item 2
+          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      HelpSupportScreen(userId: widget.userId,)));
           break;
         case 3:
           // Handle menu item 3
