@@ -8,10 +8,14 @@ class AvaliblityColor{
     if (availiblityStatus.toLowerCase().replaceAll(' ', '') == 'available') {
       return Colors.green;
     } else if (availiblityStatus.toLowerCase().replaceAll(' ', '') ==
-        'unavailable') {
-      return Colors.red;
-    } else {
+        'busy') {
       return Colors.orange;
+    }else if (availiblityStatus.toLowerCase().replaceAll(' ', '') ==
+        'occupied') {
+      return Colors.orange;
+    } 
+    else {
+      return Colors.red;
     }
   }
 }
