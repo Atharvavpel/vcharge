@@ -9,6 +9,7 @@ import 'package:vcharge/services/DeleteMethod.dart';
 import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/services/PostMethod.dart';
 import 'package:vcharge/view/chargingScreen/chargingScreen.dart';
+import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
 
@@ -36,6 +37,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   //this variable is used to track, if the current station is in favourite or not
   bool isFavourite = false;
 
+  //list to track which expansion tile is open
+  List<bool> isOpenList = [];
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +47,18 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     getStationDetails();
     getChargerList();
     checkFavourite();
+  }
+
+  void toggleExpansionTile(int index) {
+    setState(() {
+      for (int i = 0; i < isOpenList.length; i++) {
+        if (i == index) {
+          isOpenList[i] = !isOpenList[i]; // Toggle the selected tile
+        } else {
+          isOpenList[i] = false; // Close all other tiles
+        }
+      }
+    });
   }
 
   Future<void> getStationDetails() async {
@@ -67,6 +83,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
           for (int i = 0; i < data.length; i++) {
             chargerList.add(ChargerModel.fromJson(data[i]));
           }
+          isOpenList.clear();
+          isOpenList = List.generate(data.length, (index) => false);
         });
       }
     } catch (e) {
@@ -152,6 +170,25 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     }
   }
 
+  //function to launch map with the direction
+  void launchMapsDirections(
+      double destinationLatitude,
+      double destinationLongitude,
+      double userLatitude,
+      double userLongitude) async {
+    // Generate the Google Maps URL
+    String mapsUrl = 'https://www.google.com/maps/dir/?api=1';
+    mapsUrl += '&origin=$userLatitude,$userLongitude';
+    mapsUrl += '&destination=$destinationLatitude,$destinationLongitude';
+
+    // Launch the URL in the Maps application
+    if (await canLaunch(mapsUrl)) {
+      await launch(mapsUrl);
+    } else {
+      throw 'Could not launch $mapsUrl';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -222,9 +259,11 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                openGoogleMaps(stationDetails!
-                                    .stationLocationURL
-                                    .toString());
+                                launchMapsDirections(
+                                    stationDetails!.stationLatitude!,
+                                    stationDetails!.stationLongitude!,
+                                    BgMapState.userLocation!.latitude,
+                                    BgMapState.userLocation!.longitude);
                               },
                               child: Row(
                                 children: [
@@ -289,7 +328,6 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             DeleteMethod.deleteRequest(
                                                 'http://192.168.0.243:8097/manageUser/removeFavorite?userId=${widget.userId}&stationId=${widget.stationId}');
                                             isFavourite = false;
-                                            
                                           } else {
                                             PostMethod.postRequest(
                                                 'http://192.168.0.243:8097/manageUser/addFavorites?userId=${widget.userId}',
@@ -342,7 +380,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 Expanded(
                                   flex: 14,
                                   child: Text(
-                                    stationDetails!.stationWorkingTime!,
+                                    // stationDetails!.stationWorkingTime!,
+                                    '${stationDetails!.stationOpeningTime} ${stationDetails!.stationClosingTime}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -601,6 +640,11 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                           data: Theme.of(context).copyWith(
                                               dividerColor: Colors.transparent),
                                           child: ExpansionTile(
+                                            onExpansionChanged: (isExpanded) {
+                                              toggleExpansionTile(index);
+                                            },
+                                            initiallyExpanded:
+                                                isOpenList[index],
                                             //title - name of charger
                                             title: Text(
                                               chargerList[index].chargerName!,

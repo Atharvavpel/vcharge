@@ -86,7 +86,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        'My vechicle',
+                        'My vehicle',
                         style: TextStyle(fontSize: 14),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -190,7 +190,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                       Icon(Icons.wallet, color: Colors.grey[700]),
                       const SizedBox(width: 10),
                       const Text(
-                        'My Wallet',
+                        'Wallet',
                         style: TextStyle(fontSize: 14),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -202,7 +202,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
             // container - favourites
             GestureDetector(
-              key: const Key('Favourite'),
+              key: const Key('Favourites'),
               onTap: () {
                 Navigator.push(
                     context,

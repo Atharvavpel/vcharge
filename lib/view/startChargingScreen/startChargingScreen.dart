@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vcharge/view/homeScreen/homeScreen.dart';
+// import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 import 'widgets/stopChargingAlertPopup.dart';
 
@@ -34,7 +34,7 @@ class StartChargingScreenState extends State<StartChargingScreen> {
                             fontWeight: FontWeight.bold,
                             fontSize: Get.width * 0.05)),
                     Text(
-                      'Your Bike is being charged',
+                      'Your Vehicle is being charged',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: Get.width * 0.06,

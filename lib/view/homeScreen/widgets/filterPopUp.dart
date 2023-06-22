@@ -25,7 +25,7 @@ class FilterPopUpState extends State<FilterPopUp> {
   bool privateToggleButton = false;
 
   // Variable for Connector Type
-  var connectors = ["CSS 2", "Type 2", "Type 1", "GBT"];
+  var connectors = ["CCS 2", "Type 2", "Type 1", "GB/T", "CHAdeMO"];
   late List<bool> selectedConnector;
 
   @override
@@ -248,7 +248,6 @@ class FilterPopUpState extends State<FilterPopUp> {
                                 setState(() {
                                   selectedConnector[index] = value!;
                                 });
-                                
                               },
                             ),
                           ],
@@ -283,10 +282,12 @@ class FilterPopUpState extends State<FilterPopUp> {
                   child: const Text('Apply')),
               ElevatedButton(
                   onPressed: () {
-                    vehicleSelected = null;
-                    availableToggleButton = false;
-                    privateToggleButton = false;
-                    selectedConnector = List.filled(connectors.length, false);
+                    setState(() {
+                      vehicleSelected = null;
+                      availableToggleButton = false;
+                      privateToggleButton = false;
+                      selectedConnector = List.filled(connectors.length, false);
+                    });
                   },
                   child: const Text('Reset')),
             ],

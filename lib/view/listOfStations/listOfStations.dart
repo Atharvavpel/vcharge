@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vcharge/models/stationModel.dart';
 import 'package:vcharge/services/getLiveLocation.dart';
 import 'package:vcharge/services/getMethod.dart';
@@ -32,8 +33,6 @@ class ListOfStationsState extends State<ListOfStations> {
     super.initState();
     // getStationList();
     getLocationOfUser();
-    // userPosition = LatLng(
-    //     BgMapState.userLocation!.latitude, BgMapState.userLocation!.longitude);
     if (mounted) {
       sortStationList();
     }
@@ -190,7 +189,6 @@ class ListOfStationsState extends State<ListOfStations> {
                     height: MediaQuery.of(context).size.height * 0.05,
                     child: SearchBarofLOS(
                       userId: widget.userId,
-                      
                     )),
 
                 //Container for List Of Station

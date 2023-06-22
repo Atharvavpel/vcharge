@@ -323,6 +323,39 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                 ],
               ),
 
+              //Container - settings page
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(13.0),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          // border: Border.all(),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                          // ],
+                          ),
+                      child: const Icon(Icons.settings),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListTile(
+                      title: const Text('Settings'),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HelpSupportScreen(userId: widget.userId,)));
+                                //     Navigator.pop(
+                                // context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
               // container - logout
               Row(
                 children: [
