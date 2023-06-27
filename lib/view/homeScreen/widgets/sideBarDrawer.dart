@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vcharge/view/addVehicleScreen/addVehicle.dart';
 import 'package:vcharge/view/faqScreen/faqScreen.dart';
 import 'package:vcharge/view/helpSupportScreen/helpSupportScreen.dart';
+import 'package:vcharge/view/settingScreen/settingPage.dart';
 import 'package:vcharge/view/walletScreen/walletScreen.dart';
 
 import '../../favouriteScreen/favouriteScreen.dart';
@@ -346,8 +347,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    HelpSupportScreen(userId: widget.userId,)));
+                                builder: (context) => SettingPage(userId: widget.userId,)));
                                 //     Navigator.pop(
                                 // context);
                       },

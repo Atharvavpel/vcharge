@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vcharge/services/GetMethod.dart';
@@ -57,6 +59,31 @@ class ChargingScreenState extends State<ChargingScreen> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> startCharge() async {
+    var getResponse = await GetMethod.getRequestMod(
+        'http://192.168.0.44:8080/remoteStartTransaction');
+    print('$getResponse');
+    if (jsonDecode(getResponse.body)) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const StartChargingScreen()));
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const Text('Something went wrong'),
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'))
+              ],
+            );
+          });
     }
   }
 
@@ -766,11 +793,12 @@ class ChargingScreenState extends State<ChargingScreen> {
                                               BorderRadius.circular(100)),
                                       child: InkWell(
                                         onTap: () {
+                                          // await startCharge();
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      StartChargingScreen()));
+                                                      const StartChargingScreen()));
                                         },
                                         child: CircleAvatar(
                                           backgroundColor: const Color.fromARGB(
@@ -964,10 +992,12 @@ class ChargingScreenState extends State<ChargingScreen> {
                         backgroundColor:
                             const Color.fromARGB(255, 146, 204, 81)),
                     onPressed: () {
+                      // await startCharge();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StartChargingScreen()));
+                              builder: (context) =>
+                                  const StartChargingScreen()));
                     },
                     child: const Text('Start Charging')),
               ),

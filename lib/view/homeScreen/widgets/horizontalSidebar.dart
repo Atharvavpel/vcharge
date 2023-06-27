@@ -123,7 +123,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isMapRoute
-                      ? const Color.fromARGB(255, 142, 181, 239)
+                      ? const Color.fromARGB(255, 115, 204, 43)
                       : Colors.white,
                 ),
                 child: Padding(
@@ -180,7 +180,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isWallet
-                      ? const Color.fromARGB(255, 142, 181, 239)
+                      ? const Color.fromARGB(255, 115, 204, 43)
                       : Colors.white,
                 ),
                 child: Padding(
@@ -224,7 +224,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isFavourite
-                      ? const Color.fromARGB(255, 142, 181, 239)
+                      ? const Color.fromARGB(255, 115, 204, 43)
                       : Colors.white,
                 ),
                 child: Padding(
@@ -268,7 +268,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                     borderRadius:
                         const BorderRadius.all(Radius.circular(20)),
                     color: isReservation
-                        ? const Color.fromARGB(255, 142, 181, 239)
+                        ? const Color.fromARGB(255, 115, 204, 43)
                         : Colors.white),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -307,7 +307,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   color: isMore
-                      ? const Color.fromARGB(255, 142, 181, 239)
+                      ? const Color.fromARGB(255, 115, 204, 43)
                       : Colors.white,
                 ),
                 child: Padding(
@@ -427,6 +427,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
       }
     }
   }
+
 }
 
 

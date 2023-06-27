@@ -115,7 +115,7 @@ class WalletScreenState extends State<WalletScreen> {
 
   //this function returns a color based on given status
   MaterialColor getStatusColor(String status) {
-    if (status.trim().toLowerCase() == 'complete') {
+    if (status.trim().toLowerCase() == 'completed') {
       return Colors.green;
     } else if (status.trim().toLowerCase() == 'pending') {
       return Colors.orange;

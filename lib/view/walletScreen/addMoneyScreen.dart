@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vcharge/view/walletScreen/widgets/addMoneyStatusPopUp.dart';
+import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class AddMoneyScreen extends StatefulWidget {
   String? userId;
-  
+
   AddMoneyScreen({required this.userId, super.key});
 
   @override
@@ -24,7 +30,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
     super.initState();
   }
 
-  //this function add the amount to current amount of amountController to the, and if the amountController is empty, it initialize the value of amountController with the given amount 
+  //this function add the amount to current amount of amountController to the, and if the amountController is empty, it initialize the value of amountController with the given amount
   void addToAmountController(int amount) {
     setState(() {
       if (amountController.text.isNotEmpty) {
@@ -34,6 +40,87 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
         amountController.text = amount.toString();
       }
     });
+  }
+
+  void startTransaction(String amount) async {
+    Map<String, dynamic> body = {
+      'amount': amount,
+    };
+    var parts = [];
+    body.forEach((key, value) {
+      parts.add('${Uri.encodeQueryComponent(key)}='
+          '${Uri.encodeQueryComponent(value)}');
+    });
+    var formData = parts.join('&');
+    try {
+      var res = await http.post(
+          Uri.https(
+            '192.168.0.238',
+            "paytmPhp/initiate_transaction.php",
+          ),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: formData);
+
+      print(res.body);
+      print(res.statusCode);
+
+      if (res.statusCode == 200) {
+        var bodyJson = jsonDecode(res.body);
+
+        var response = AllInOneSdk.startTransaction(bodyJson['mid'],
+            bodyJson['orderId'], amount, bodyJson['txToken'], "", true, false);
+        response.then((value) {
+          print(value);
+          //on payment completion we will verigy transaction with transaction verify API
+          verifyTransaction(bodyJson['orderId']);
+          // setState(() {
+          //   result = value.toString();
+          // });
+        }).catchError((error, stackTrace) {
+          print("${error}");
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(error.message)));
+        });
+      }
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(
+          msg: "$e",
+          // msg: "Successfully Created",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  void verifyTransaction(String orderId) async {
+    Map<String, dynamic> body = {
+      'orderId': orderId,
+    };
+
+    var parts = [];
+    body.forEach((key, value) {
+      parts.add('${Uri.encodeQueryComponent(key)}='
+          '${Uri.encodeQueryComponent(value)}');
+    });
+    var formData = parts.join('&');
+    var res = await http.post(
+        Uri.http('192.168.0.238', 'paytmPhp/transaction_status.php'),
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: formData);
+
+    print(res.body);
+    print(res.statusCode);
+
+    var verifyJson = jsonDecode(res.body);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(verifyJson['body']['resultInfo']['resultMsg'])));
   }
 
   @override
@@ -119,7 +206,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
                           children: [
                             //button for add 100
                             ElevatedButton(
-                              key: const Key('add100Button'),
+                                key: const Key('add100Button'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                 ),
@@ -133,7 +220,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
 
                             //button for add 500
                             ElevatedButton(
-                              key: const Key('add500Button'),
+                                key: const Key('add500Button'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                 ),
@@ -147,7 +234,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
 
                             //button for add 1000
                             ElevatedButton(
-                              key: const Key('add1000Button'),
+                                key: const Key('add1000Button'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                 ),
@@ -170,12 +257,14 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
               GestureDetector(
                 key: const Key('proceedToAddButton'),
                 onTap: () {
-                  showDialog(
-                    context: context, 
-                    builder: (BuildContext context){
-                      return AddMoneyStatusPopUp(addedAmount: amountController.text, userId: widget.userId);
-                    }
-                  );
+                  startTransaction(amountController.text);
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (BuildContext context) {
+                  //       return AddMoneyStatusPopUp(
+                  //           addedAmount: amountController.text,
+                  //           userId: widget.userId);
+                  //     });
                 },
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.94,
@@ -187,8 +276,10 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
                             child: Text(
                           'Proceed to Add',
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.048,
-                              fontWeight: FontWeight.bold, color: Colors.white),
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.048,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         )),
                       )),
                 ),

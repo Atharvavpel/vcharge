@@ -352,7 +352,7 @@ class BookingHistoryDetailsPopUpState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
                           Text(
-                            'Sercice Charging',
+                            'Service Charging',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: Colors.black,

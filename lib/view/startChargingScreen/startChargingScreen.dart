@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vcharge/services/GetMethod.dart';
 // import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 import 'widgets/stopChargingAlertPopup.dart';

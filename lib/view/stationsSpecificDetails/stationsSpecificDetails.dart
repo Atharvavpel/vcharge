@@ -654,7 +654,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
                                             //subtitle
                                             subtitle: Text(
-                                                "Number of Guns: ${chargerList[index].chargerNumberOfConnector}"),
+                                                "Connectors: ${chargerList[index].chargerNumberOfConnector}"),
 
                                             //children
                                             children: [

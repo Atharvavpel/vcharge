@@ -19,4 +19,17 @@ class GetMethod {
       print(e);
     }
   }
+
+  //this method directly returns response
+  static Future<http.Response> getRequestMod(String url) async {
+    // print(url);
+    var response;
+    try {
+      response = await http.get(Uri.parse(url));
+      // return response;
+    } catch (e) {
+      print(e);
+    }
+    return response;
+  }
 }

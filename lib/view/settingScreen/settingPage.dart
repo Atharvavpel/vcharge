@@ -1,39 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vcharge/services/GetMethod.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/passwordScreen/changePasswordScreen.dart';
 import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
 
 // ignore: must_be_immutable
 class SettingPage extends StatefulWidget {
-
   String userId;
-  String? firstNameEdited;
-  String? lastNameEdited;
-  String? emailIdEdited;
-  String? contactNoEdited;
+  // String? firstNameEdited;
+  // String? lastNameEdited;
+  // String? emailIdEdited;
+  // String? contactNoEdited;
 
-  SettingPage({super.key, 
-  
-                    required this.userId,
-                    required this.firstNameEdited,
-                    required this.lastNameEdited,
-                    required this.contactNoEdited,
-                    required this.emailIdEdited,
-                    });
+  SettingPage({
+    super.key,
+    required this.userId,
+    // required this.firstNameEdited,
+    // required this.lastNameEdited,
+    // required this.contactNoEdited,
+    // required this.emailIdEdited,
+  });
 
   @override
   State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   // variable for tracking dark mode status
   static bool isDarkModeEnabled = false;
 
+  String? firstNameEdited;
+  String? lastNameEdited;
+  String? emailIdEdited;
+  String? contactNoEdited;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
+
+  Future<void> getUserDetails() async {
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.243:8097/manageUser/getUserByUserId?userId=${widget.userId}');
+      setState(() {
+        firstNameEdited = data['userFirstName'];
+        lastNameEdited = data['userLastName'];
+        emailIdEdited = data['userEmail'];
+        contactNoEdited = data['userContactNo'];
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     // var for updating the dark and light mode upon certain condition
     final themeChanger = Provider.of<DarkThemeProvider>(context);
 
@@ -43,8 +67,6 @@ class _SettingPageState extends State<SettingPage> {
           title: const Text("Settings"),
         ),
         body: Column(children: [
-
-
 // profile section
           Container(
             width: double.infinity,
@@ -71,26 +93,26 @@ class _SettingPageState extends State<SettingPage> {
                 onTap: () {
                   setState(() {
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => EditProfileScreen(userId: widget.userId.toString(),
-                          firstNameEdited: widget.firstNameEdited.toString(),
-                          lastNameEdited: widget.lastNameEdited.toString(),
-                          emailIdEdited: widget.emailIdEdited.toString(),
-                          contactNoEdited: widget.contactNoEdited.toString(),
-                        ))),
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => EditProfileScreen(
+                                userId: widget.userId.toString(),
+                                firstNameEdited: firstNameEdited.toString(),
+                                lastNameEdited: lastNameEdited.toString(),
+                                emailIdEdited: emailIdEdited.toString(),
+                                contactNoEdited: contactNoEdited.toString(),
+                              ))),
+                    );
                   });
-                  
                 },
                 title: const Text(
                   "Edit Profile",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
-                leading: const Icon(Icons.edit,),
+                leading: const Icon(
+                  Icons.edit,
+                ),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
                   size: MediaQuery.of(context).size.width * 0.07,
@@ -107,18 +129,16 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.only(left: 5, right: 5),
               child: ListTile(
                 onTap: () {
-                  Navigator.push(context, 
-                    MaterialPageRoute(builder: (context)=> ChangePasswordScreen(
-                      emailId: widget.emailIdEdited.toString()
-                    ) )
-                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangePasswordScreen(
+                              emailId: emailIdEdited.toString())));
                 },
                 title: const Text(
                   "Change Password",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 leading: const Icon(Icons.lock_open),
                 trailing: Icon(
@@ -155,9 +175,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: const Text(
                   "Notifications Preferences",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 leading: const Icon(Icons.notification_important),
                 trailing: Icon(
@@ -194,9 +212,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: const Text(
                   "Languages",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 leading: const Icon(Icons.language),
                 trailing: Icon(
@@ -222,7 +238,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
           ),
-          
+
 // Delete container
           Container(
             decoration: const BoxDecoration(
@@ -234,9 +250,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: const Text(
                   "Delete my Account",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 leading: const Icon(Icons.delete),
                 trailing: Icon(
@@ -258,9 +272,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: const Text(
                   "Logout",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 leading: const Icon(Icons.logout),
                 trailing: Icon(
@@ -282,9 +294,7 @@ class _SettingPageState extends State<SettingPage> {
                   title: const Text(
                     "Dark Mode",
                     textAlign: TextAlign.start,
-                    style: TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
+                    style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                   leading: const Icon(Icons.dark_mode),
                   trailing: Switch(

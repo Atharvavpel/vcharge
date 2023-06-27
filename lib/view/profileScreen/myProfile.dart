@@ -355,10 +355,10 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
                       MaterialPageRoute(
                           builder: ((context) => SettingPage(
                                 userId: widget.userId.toString(),
-                                firstNameEdited: firstName,
-                                lastNameEdited: lastName,
-                                contactNoEdited: contactNo,
-                                emailIdEdited: emailId,
+                                // firstNameEdited: firstName,
+                                // lastNameEdited: lastName,
+                                // contactNoEdited: contactNo,
+                                // emailIdEdited: emailId,
                               ))));
                   if(editProfile == true) {
                     await getUserData();
