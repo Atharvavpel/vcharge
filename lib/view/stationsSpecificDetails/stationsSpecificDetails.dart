@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vcharge/models/chargerModel.dart';
+import 'package:vcharge/services/DeleteMethod.dart';
 import 'package:vcharge/services/GetMethod.dart';
-import 'package:vcharge/view/scanToCharge/scanToCharge.dart';
+import 'package:vcharge/services/PostMethod.dart';
+import 'package:vcharge/view/chargingScreen/chargingScreen.dart';
+import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
 
@@ -28,12 +34,31 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   //true indicates Amenity button is selected and false indicated Review button
   bool selectedButton = true;
 
+  //this variable is used to track, if the current station is in favourite or not
+  bool isFavourite = false;
+
+  //list to track which expansion tile is open
+  List<bool> isOpenList = [];
+
   @override
   void initState() {
     super.initState();
     stationId = widget.stationId;
     getStationDetails();
     getChargerList();
+    checkFavourite();
+  }
+
+  void toggleExpansionTile(int index) {
+    setState(() {
+      for (int i = 0; i < isOpenList.length; i++) {
+        if (i == index) {
+          isOpenList[i] = !isOpenList[i]; // Toggle the selected tile
+        } else {
+          isOpenList[i] = false; // Close all other tiles
+        }
+      }
+    });
   }
 
   Future<void> getStationDetails() async {
@@ -58,6 +83,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
           for (int i = 0; i < data.length; i++) {
             chargerList.add(ChargerModel.fromJson(data[i]));
           }
+          isOpenList.clear();
+          isOpenList = List.generate(data.length, (index) => false);
         });
       }
     } catch (e) {
@@ -123,6 +150,45 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     }
   }
 
+  //this function get the favourite stations details and compare with current station, if it is in the favourite or not
+  Future<void> checkFavourite() async {
+    try {
+      var data = await GetMethod.getRequest(
+          'http://192.168.0.243:8097/manageUser/getFavorites?userId=${widget.userId}');
+      if (data != null) {
+        for (int i = 0; i < data.length; i++) {
+          if (widget.stationId == data[i]['stationId']) {
+            setState(() {
+              isFavourite = true;
+            });
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //function to launch map with the direction
+  void launchMapsDirections(
+      double destinationLatitude,
+      double destinationLongitude,
+      double userLatitude,
+      double userLongitude) async {
+    // Generate the Google Maps URL
+    String mapsUrl = 'https://www.google.com/maps/dir/?api=1';
+    mapsUrl += '&origin=$userLatitude,$userLongitude';
+    mapsUrl += '&destination=$destinationLatitude,$destinationLongitude';
+
+    // Launch the URL in the Maps application
+    if (await canLaunch(mapsUrl)) {
+      await launch(mapsUrl);
+    } else {
+      throw 'Could not launch $mapsUrl';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -140,7 +206,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                 children: [
                   //Container for station heading and share button
                   Expanded(
-                    flex: 10,
+                    flex: 7,
                     child: Container(
                       margin: EdgeInsets.symmetric(
                         horizontal: MediaQuery.of(context).size.width * 0.06,
@@ -165,7 +231,10 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           Expanded(
                               flex: 1,
                               child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Share.share(
+                                        'Check out this EV charging station');
+                                  },
                                   icon: Icon(
                                     Icons.share,
                                     size: MediaQuery.of(context).size.width *
@@ -187,98 +256,139 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           //Container for station address
-                          Row(
-                            children: [
-                              //container for location Icon
-                              Expanded(
-                                flex: 2,
-                                child: IconButton(
-                                    onPressed: () {
-                                      openGoogleMaps(
-                                          stationDetails!.stationLocationURL!);
-                                    },
-                                    icon: const Icon(Icons.directions)),
-                              ),
-                              //container for station address text
-                              Expanded(
-                                flex: 14,
-                                child: Text(
-                                  stationDetails!.stationArea!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                launchMapsDirections(
+                                    stationDetails!.stationLatitude!,
+                                    stationDetails!.stationLongitude!,
+                                    BgMapState.userLocation!.latitude,
+                                    BgMapState.userLocation!.longitude);
+                              },
+                              child: Row(
+                                children: [
+                                  //container for location Icon
+                                  const Expanded(
+                                    flex: 2,
+                                    child: Icon(Icons.directions),
                                   ),
-                                ),
+                                  //container for station address text
+                                  Expanded(
+                                    flex: 14,
+                                    child: Text(
+                                      stationDetails!.stationArea!,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
 
                           //Container for station phone number
-                          Row(
-                            children: [
-                              //container for call Icon
-                              Expanded(
-                                flex: 2,
-                                child: InkWell(
-                                  onTap: () {
-                                    _makePhoneCall(
-                                        'tel: ${stationDetails!.stationContactNumber}');
-                                  },
-                                  child: const Icon(Icons.call),
-                                ),
-                              ),
-                              //conteiner for station contact number text
-                              Expanded(
-                                flex: 14,
-                                child: Text(
-                                  stationDetails!.stationContactNumber!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                _makePhoneCall(
+                                    'tel: ${stationDetails!.stationContactNumber}');
+                              },
+                              child: Row(
+                                children: [
+                                  //container for call Icon
+                                  const Expanded(
+                                      flex: 2, child: Icon(Icons.call)),
+                                  //conteiner for station contact number text
+                                  Expanded(
+                                    flex: 14,
+                                    child: Text(
+                                      stationDetails!.stationContactNumber!,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
 
                           //Container for add to favorite
-                          Row(
-                            children: const [
-                              //container for favorite Icon
-                              Expanded(
-                                flex: 2,
-                                child: Icon(Icons.favorite),
-                              ),
-                              //container for add to favorite text
-                              Expanded(
-                                flex: 14,
-                                child: Text(
-                                  'Add to Favorite',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Row(
+                              children: [
+                                //container for favorite Icon
+                                Expanded(
+                                  flex: 2,
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        setState(() {
+                                          if (isFavourite) {
+                                            DeleteMethod.deleteRequest(
+                                                'http://192.168.0.243:8097/manageUser/removeFavorite?userId=${widget.userId}&stationId=${widget.stationId}');
+                                            isFavourite = false;
+                                          } else {
+                                            PostMethod.postRequest(
+                                                'http://192.168.0.243:8097/manageUser/addFavorites?userId=${widget.userId}',
+                                                jsonEncode({
+                                                  "stationId":
+                                                      stationDetails!.stationId,
+                                                  "stationName": stationDetails!
+                                                      .stationName,
+                                                  "stationCity": stationDetails!
+                                                      .stationCity,
+                                                  "stationStatus":
+                                                      stationDetails!
+                                                          .stationStatus
+                                                }));
+                                            isFavourite = true;
+                                          }
+                                        });
+                                      },
+                                      icon: Icon(
+                                        Icons.favorite,
+                                        color: isFavourite
+                                            ? Colors.red
+                                            : Colors.black,
+                                      )),
+                                ),
+                                //container for add to favorite text
+                                const Expanded(
+                                  flex: 14,
+                                  child: Text(
+                                    'Add to Favorite',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
 
                           //Container for station active time
-                          Row(
-                            children: [
-                              //container for watch icon
-                              const Expanded(
-                                flex: 2,
-                                child: Icon(Icons.watch_later),
-                              ),
-                              //container for station active time text
-                              Expanded(
-                                flex: 14,
-                                child: Text(
-                                  stationDetails!.stationWorkingTime!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Row(
+                              children: [
+                                //container for watch icon
+                                const Expanded(
+                                  flex: 2,
+                                  child: Icon(Icons.watch_later),
+                                ),
+                                //container for station active time text
+                                Expanded(
+                                  flex: 14,
+                                  child: Text(
+                                    // stationDetails!.stationWorkingTime!,
+                                    '${stationDetails!.stationOpeningTime} ${stationDetails!.stationClosingTime}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -530,6 +640,11 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                           data: Theme.of(context).copyWith(
                                               dividerColor: Colors.transparent),
                                           child: ExpansionTile(
+                                            onExpansionChanged: (isExpanded) {
+                                              toggleExpansionTile(index);
+                                            },
+                                            initiallyExpanded:
+                                                isOpenList[index],
                                             //title - name of charger
                                             title: Text(
                                               chargerList[index].chargerName!,
@@ -539,7 +654,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
                                             //subtitle
                                             subtitle: Text(
-                                                "Number of Guns: ${chargerList[index].chargerNumberOfConnector}"),
+                                                "Connectors: ${chargerList[index].chargerNumberOfConnector}"),
 
                                             //children
                                             children: [
@@ -718,10 +833,11 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                         Navigator.push(
                                                                             context,
                                                                             MaterialPageRoute(
-                                                                                builder: (context) => ScanToCharge(
+                                                                                builder: (context) => ChargingScreen(
                                                                                       stationLocation: stationDetails!.stationArea!,
                                                                                       stationName: stationDetails!.stationName!,
                                                                                       userId: widget.userId,
+                                                                                      chargerId: chargerList[index].chargerId!,
                                                                                     )));
                                                                       },
                                                                       child: const Text(

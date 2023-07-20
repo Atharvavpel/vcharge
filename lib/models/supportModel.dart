@@ -1,5 +1,3 @@
-// this is the model for the support service
-
 class SupportModel {
   String? supportCustomerId;
   String? supportHostId;
@@ -8,14 +6,14 @@ class SupportModel {
   String? supportSubject;
   String? supportDescription;
   String? supportStatus;
-  String? supportCreatedAt;
-  Null? supportUpdatedAt;
-  Null? supportResolvedAt;
   String? supportAssignedTo;
   String? supportPriority;
   String? supportCategory;
-  List<String>? supportSideResponse;
-  List<String>? customerSideResponse;
+  String? subSupportCategory;
+  String? supportSideResponse;
+  String? customerSideResponse;
+  String? supportImageLink;
+  String? createdBy;
 
   SupportModel(
       {this.supportCustomerId,
@@ -25,14 +23,14 @@ class SupportModel {
       this.supportSubject,
       this.supportDescription,
       this.supportStatus,
-      this.supportCreatedAt,
-      this.supportUpdatedAt,
-      this.supportResolvedAt,
       this.supportAssignedTo,
       this.supportPriority,
       this.supportCategory,
+      this.subSupportCategory,
       this.supportSideResponse,
-      this.customerSideResponse});
+      this.customerSideResponse,
+      this.supportImageLink,
+      this.createdBy});
 
   SupportModel.fromJson(Map<String, dynamic> json) {
     supportCustomerId = json['supportCustomerId'];
@@ -42,14 +40,14 @@ class SupportModel {
     supportSubject = json['supportSubject'];
     supportDescription = json['supportDescription'];
     supportStatus = json['supportStatus'];
-    supportCreatedAt = json['supportCreatedAt'];
-    supportUpdatedAt = json['supportUpdatedAt'];
-    supportResolvedAt = json['supportResolvedAt'];
     supportAssignedTo = json['supportAssignedTo'];
     supportPriority = json['supportPriority'];
     supportCategory = json['supportCategory'];
-    supportSideResponse = json['supportSideResponse'].cast<String>();
-    customerSideResponse = json['customerSideResponse'].cast<String>();
+    subSupportCategory = json['subSupportCategory'];
+    supportSideResponse = json['supportSideResponse'];
+    customerSideResponse = json['customerSideResponse'];
+    supportImageLink = json['supportImageLink'];
+    createdBy = json['createdBy'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,15 +59,14 @@ class SupportModel {
     data['supportSubject'] = supportSubject;
     data['supportDescription'] = supportDescription;
     data['supportStatus'] = supportStatus;
-    data['supportCreatedAt'] = supportCreatedAt;
-    data['supportUpdatedAt'] = supportUpdatedAt;
-    data['supportResolvedAt'] = supportResolvedAt;
     data['supportAssignedTo'] = supportAssignedTo;
     data['supportPriority'] = supportPriority;
     data['supportCategory'] = supportCategory;
+    data['subSupportCategory'] = subSupportCategory;
     data['supportSideResponse'] = supportSideResponse;
     data['customerSideResponse'] = customerSideResponse;
+    data['supportImageLink'] = supportImageLink;
+    data['createdBy'] = createdBy;
     return data;
   }
 }
-

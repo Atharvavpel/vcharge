@@ -23,7 +23,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
       // var data = await GetMethod.getRequest(
       //     'http://192.168.0.243:8097/manageUser/getFavorites?userId=${widget.userId}');
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8097/manageUser/getFavorites?userId=USR20230420100343328');
+          'http://192.168.0.243:8097/manageUser/getFavorites?userId=USR20230517060841379');
       if (data != null && data.isNotEmpty) {
         favouriteList.clear();
         setState(() {
@@ -64,7 +64,8 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                           MaterialPageRoute(
                               builder: (context) => StationsSpecificDetails(
                                   userId: widget.userId,
-                                  stationId: favouriteList[index].stationId!)));
+                                  stationId: favouriteList[index]
+                                      .stationId!)));
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(

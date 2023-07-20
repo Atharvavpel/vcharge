@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -27,7 +29,8 @@ class GetLiveLocation {
 
 // If the user has permanently denied the location permission, then print a message indicating that to the console
     if (permission == LocationPermission.deniedForever) {
-      print('Location permissions are permanently denied.');
+      print(
+          'Location permissions are permanently denied.');
     }
 
 // This variable stores the current position of the user

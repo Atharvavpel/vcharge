@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vcharge/services/GetMethod.dart';
@@ -6,22 +8,24 @@ import '../startChargingScreen/startChargingScreen.dart';
 import '../walletScreen/addMoneyScreen.dart';
 
 // ignore: must_be_immutable
-class ScanToCharge extends StatefulWidget {
+class ChargingScreen extends StatefulWidget {
   String stationName;
   String stationLocation;
   String userId;
+  String chargerId;
 
-  ScanToCharge(
+  ChargingScreen(
       {required this.userId,
       required this.stationLocation,
       required this.stationName,
+      required this.chargerId,
       super.key});
 
   @override
-  State<StatefulWidget> createState() => ScanToChargeState();
+  State<StatefulWidget> createState() => ChargingScreenState();
 }
 
-class ScanToChargeState extends State<ScanToCharge> {
+class ChargingScreenState extends State<ChargingScreen> {
   //activeButton to track time, units and money aciveness
   //1 = time, 2 = units and 3 = money
   int activeButton = 1;
@@ -55,6 +59,31 @@ class ScanToChargeState extends State<ScanToCharge> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> startCharge() async {
+    var getResponse = await GetMethod.getRequestMod(
+        'http://192.168.0.44:8080/remoteStartTransaction');
+    print('$getResponse');
+    if (jsonDecode(getResponse.body)) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const StartChargingScreen()));
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const Text('Something went wrong'),
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'))
+              ],
+            );
+          });
     }
   }
 
@@ -764,11 +793,12 @@ class ScanToChargeState extends State<ScanToCharge> {
                                               BorderRadius.circular(100)),
                                       child: InkWell(
                                         onTap: () {
+                                          // await startCharge();
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      StartChargingScreen()));
+                                                      const StartChargingScreen()));
                                         },
                                         child: CircleAvatar(
                                           backgroundColor: const Color.fromARGB(
@@ -962,10 +992,12 @@ class ScanToChargeState extends State<ScanToCharge> {
                         backgroundColor:
                             const Color.fromARGB(255, 146, 204, 81)),
                     onPressed: () {
+                      // await startCharge();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StartChargingScreen()));
+                              builder: (context) =>
+                                  const StartChargingScreen()));
                     },
                     child: const Text('Start Charging')),
               ),

@@ -1,3 +1,7 @@
+
+
+
+
 /*
 
 ----------------- SAMPLE REDIS CONNECTION CODE ------------------
@@ -40,6 +44,7 @@ Future<void> getUserData() async {
 
 */
 
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -52,11 +57,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:redis/redis.dart' as redis;
 import 'package:dio/dio.dart' as dio;
 
-// ignore: must_be_immutable
 class MyProfilePage extends StatefulWidget {
   String? userId;
 
-  MyProfilePage({super.key, required this.userId}) ;
+  MyProfilePage({required this.userId});
   //: super(key: GlobalKey)
 
   @override
@@ -96,7 +100,7 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
 
   // String specificUserIdUrl = '';
   String specificUserIdUrl =
-      "http://192.168.0.243:8097/manageUser/getUser?userId=USR20230420100343328";
+      "http://192.168.0.243:8097/manageUser/getUserByUserId?userId=USR20230517060841379";
 
 // initstate function calling the getuserData method
   @override
@@ -123,13 +127,10 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
 // function for setting up the redis connection and fetching the user data and setting up in the redis
   Future<void> getUserData() async {
     client = redis.RedisConnection();
-    dynamic response;
-
     try {
-      response = await GetMethod.getRequest(specificUserIdUrl);
+      var response = await GetMethod.getRequest(specificUserIdUrl);
 
       profilePhoto = response['userProfilePhoto'];
-      print("The profile photo is: $profilePhoto");
       firstName = response['userFirstName'];
       lastName = response['userLastName'];
       contactNo = response['userContactNo'];
@@ -147,7 +148,9 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
       print("the error at the redis connection in profile widget is: $e");
     }
 
-    setState(() {});
+    if (mounted) {
+  setState(() {});
+}
   }
 
 // variable for picking the image from the gallery or camera
@@ -158,7 +161,6 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
 
 // function for gallery and camera permissions
   Future<void> requestPermissions() async {
-    // ignore: unused_local_variable
     Map<Permission, PermissionStatus> status = await [
       Permission.camera,
       Permission.storage,
@@ -167,6 +169,14 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
   }
 
   dynamic selectedImageUrl = '';
+
+  // @override
+  // void didUpdateWidget(MyProfilePage oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   setState(() {
+  //     getUserData();
+  //   });
+  // }
 
 // function for fetching the image from the device
   Future getImage(ImageSource source) async {
@@ -201,7 +211,6 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
       // }
     } else {
       // The user has not granted the necessary permissions, show an error message.
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please grant the necessary permissions.'),
@@ -340,17 +349,22 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
           CircleAvatar(
             backgroundColor: Colors.white,
             child: IconButton(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async{
+                  var editProfile = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: ((context) => SettingPage(
                                 userId: widget.userId.toString(),
-                                firstNameEdited: firstName,
-                                lastNameEdited: lastName,
-                                contactNoEdited: contactNo,
-                                emailIdEdited: emailId,
+                                // firstNameEdited: firstName,
+                                // lastNameEdited: lastName,
+                                // contactNoEdited: contactNo,
+                                // emailIdEdited: emailId,
                               ))));
+                  if(editProfile == true) {
+                    await getUserData();
+                    setState(() {
+                    });
+                  }
                 },
                 icon: const Icon(
                   Icons.settings,
@@ -478,161 +492,6 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
         ),
       ),
     );
-
-/*
-
-child: profilePhoto == " "
-                ? selectedImage == null
-                    ? Container(
-                        width: MediaQuery.of(context).size.width* 0.45,
-                        height: MediaQuery.of(context).size.height* 0.2,
-                        margin: const EdgeInsets.only(bottom: 20),
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.rectangle, color: Color(0xffD6D6D6)),
-                        child: const Center(
-                          child: Icon(
-                            Icons.upload_file,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-
-                    : Container(
-                        width: MediaQuery.of(context).size.width* 0.45,
-                        height: MediaQuery.of(context).size.height* 0.2,
-                        margin: const EdgeInsets.only(bottom: 20),
-                        // child: Image.file(selectedImage!),
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: FileImage(File(selectedImage!.path)),
-                                fit: BoxFit.cover),
-                            shape: BoxShape.rectangle,
-                            color: const Color(0xffD6D6D6)),
-                      )
-                : Container(
-                    width: MediaQuery.of(context).size.width* 0.45,
-                    height: MediaQuery.of(context).size.height* 0.2,
-                    margin: const EdgeInsets.only(bottom: 20),
-                    // child: Image.network(profilePhoto),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset:  Offset(
-                          5.0,
-                          5.0,
-                        ),
-                        blurRadius: 10.0,
-                        spreadRadius: 2.0,
-                      ), //BoxShadow
-                      BoxShadow(
-                        color: Colors.white,
-                        offset: Offset(0.0, 0.0),
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0,
-                      ), //BoxShadow
-                    ],
-                        image: decorationImg,
-                        shape: BoxShape.rectangle,
-                        color: const Color(0xffD6D6D6)),
-<<<<<<< HEAD
-                  )),
-      ),
-    );
-    }
-    else{
-      // print("The profile photo is empty");
-      widget = Container(
-                        width: MediaQuery.of(context).size.width* 0.45,
-                        height: MediaQuery.of(context).size.height* 0.2,
-                        margin: const EdgeInsets.only(bottom: 20),
-                        decoration: const BoxDecoration(
-        color: Colors.amber,
-                            shape: BoxShape.rectangle, ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-    }
-=======
-                  )
->>>>>>> 4f802f9b48e37923cf3caebc2b322bbe5da638aa
-
-*/
-
-    // return Padding(
-    //   padding: const EdgeInsets.only(top: 20.0),
-    //   child: Align(
-    //     alignment: Alignment.bottomCenter,
-    //     child: InkWell(
-
-    //       // funtions for handling the edit profile photo widget
-    //         onTap: () {
-    //           showModalBottomSheet(
-    //               context: context, builder: ((builder) => bottomSheet()));
-    //         },
-    //         child: profilePhoto == " "
-    //             ? selectedImage == null
-    //                 ? Container(
-    //                     width: MediaQuery.of(context).size.width* 0.45,
-    //                     height: MediaQuery.of(context).size.height* 0.2,
-    //                     margin: const EdgeInsets.only(bottom: 20),
-    //                     decoration: const BoxDecoration(
-    //                         shape: BoxShape.rectangle, color: Color(0xffD6D6D6)),
-    //                     child: const Center(
-    //                       child: Icon(
-    //                         Icons.camera_alt_outlined,
-    //                         size: 40,
-    //                         color: Colors.white,
-    //                       ),
-    //                     ),
-    //                   )
-    //                 : Container(
-    //                     width: MediaQuery.of(context).size.width* 0.45,
-    //                     height: MediaQuery.of(context).size.height* 0.2,
-    //                     margin: const EdgeInsets.only(bottom: 20),
-    //                     decoration: BoxDecoration(
-    //                         image: DecorationImage(
-    //                             image: FileImage(File(selectedImage!.path)),
-    //                             fit: BoxFit.cover),
-    //                         shape: BoxShape.rectangle,
-    //                         color: const Color(0xffD6D6D6)),
-    //                   )
-    //             : Container(
-    //                 width: MediaQuery.of(context).size.width* 0.45,
-    //                 height: MediaQuery.of(context).size.height* 0.2,
-    //                 margin: const EdgeInsets.only(bottom: 20),
-    //                 decoration: BoxDecoration(
-    //                     borderRadius: BorderRadius.circular(20),
-    //                     boxShadow: const [
-    //                   BoxShadow(
-    //                     color: Colors.grey,
-    //                     offset:  Offset(
-    //                       5.0,
-    //                       5.0,
-    //                     ),
-    //                     blurRadius: 10.0,
-    //                     spreadRadius: 2.0,
-    //                   ), //BoxShadow
-    //                   BoxShadow(
-    //                     color: Colors.white,
-    //                     offset: Offset(0.0, 0.0),
-    //                     blurRadius: 0.0,
-    //                     spreadRadius: 0.0,
-    //                   ), //BoxShadow
-    //                 ],
-    //                     image: decorationImg,
-    //                     shape: BoxShape.rectangle,
-    //                     color: const Color(0xffD6D6D6)),
-    //               )),
-    //   ),
-    // );
   }
 
 // function for overlaying the edit icon over the profile avtar
@@ -741,32 +600,34 @@ child: profilePhoto == " "
 // function for sessions portal
   Widget userSessionsPortal() {
     return Expanded(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.08,
-        child: Column(
-          children: [
-            const Text(
-              "Sessions",
-              style: TextStyle(fontWeight: FontWeight.w400),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height * 0.03,
-                  top: MediaQuery.of(context).size.height * 0.0047),
-              child: Row(
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.event),
-                  ),
-                  Text(
-                    "02",
-                    style: TextStyle(fontWeight: FontWeight.w800),
-                  )
-                ],
+      child: Container(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.08,
+          child: Column(
+            children: [
+              const Text(
+                "Sessions",
+                style: TextStyle(fontWeight: FontWeight.w400),
               ),
-            )
-          ],
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.height * 0.03,
+                    top: MediaQuery.of(context).size.height * 0.0047),
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.event),
+                    ),
+                    Text(
+                      "02",
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -815,13 +676,14 @@ child: profilePhoto == " "
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: Get.height * 0.3,
+        body: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: Get.height * 0.3,
 
                   // main elements starts:
                   child: Stack(
@@ -878,6 +740,7 @@ child: profilePhoto == " "
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.1,
                 ),
+
                 // logo section
                 Center(
                   child: Container(
@@ -888,6 +751,7 @@ child: profilePhoto == " "
             ),
           ),
         ),
+      ),
     );
   }
 }

@@ -18,6 +18,10 @@ class VehicleModel {
   String? vehicleMotorTorque;
   String? vehicleDriveModes;
   String? vehicleDimentions;
+  String? vehicleType;
+  String? vehicleRegistrationNo;
+  String? vehicleNickName;
+
 
   VehicleModel(
       {this.vehicleId,
@@ -36,7 +40,13 @@ class VehicleModel {
       this.vehicleMotorPower,
       this.vehicleMotorTorque,
       this.vehicleDriveModes,
-      this.vehicleDimentions});
+      this.vehicleDimentions,
+      this.vehicleType,
+      this.vehicleRegistrationNo,
+      this.vehicleNickName, 
+
+      
+      });
 
   VehicleModel.fromJson(Map<String, dynamic> json) {
     vehicleId = json['vehicleId'];
@@ -56,6 +66,9 @@ class VehicleModel {
     vehicleMotorTorque = json['vehicleMotorTorque'];
     vehicleDriveModes = json['vehicleDriveModes'];
     vehicleDimentions = json['vehicleDimentions'];
+    vehicleType = json['vehicleType'];
+    vehicleRegistrationNo = json['vehicleRegistrationNo'];
+    vehicleNickName = json['vehicleNickName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -77,6 +90,11 @@ class VehicleModel {
     data['vehicleMotorTorque'] = vehicleMotorTorque;
     data['vehicleDriveModes'] = vehicleDriveModes;
     data['vehicleDimentions'] = vehicleDimentions;
+    data['vehicleType'] = vehicleType;
+    data['vehicleRegistrationNo'] = vehicleRegistrationNo;
+    data['vehicleNickName'] = vehicleNickName;
+
+
     return data;
   }
 }

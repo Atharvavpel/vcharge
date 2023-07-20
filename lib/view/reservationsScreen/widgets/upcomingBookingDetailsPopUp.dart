@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:vcharge/services/GetMethod.dart';
 
 import '../../../models/bookingModel.dart';
 import 'cancelReservAlertPopUp.dart';
@@ -25,11 +26,20 @@ class UpcomingBookingDetailsPopUp extends StatefulWidget {
 class UpcomingBookingDetailsPopUpState
     extends State<UpcomingBookingDetailsPopUp> {
   BookingModel? bookingModel;
+  String? stationAddress;
 
   @override
   void initState() {
     bookingModel = widget.bookingModel;
+    getStationAddress();
     super.initState();
+  }
+
+  void getStationAddress() async{
+    var data = await GetMethod.getRequest('http://192.168.0.243:8096/manageStation/getStationAddress?stationId=${widget.bookingModel.stationId}');
+    setState(() {
+      stationAddress = "${data['stationAddressLineOne']} ${data['stationAddressLineTwo']}, ${data['stationArea']}, ${data['stationCity']}" ;
+    });
   }
 
   @override
@@ -68,8 +78,8 @@ class UpcomingBookingDetailsPopUpState
                 widget.stationName!,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: Get.width * 0.05),
               ),
-              subtitle: Text(
-                widget.stationAddress!,
+              subtitle: stationAddress==null ? const Text("...") : Text(
+                stationAddress!,
                 maxLines: 3,
               ),
               trailing: IconButton(

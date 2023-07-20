@@ -44,7 +44,7 @@ class FaqScreenState extends State<FaqScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
   appBar: AppBar(
-    title: const Text("FAQ's"),
+    title: const Text("FAQ"),
     centerTitle: true,
   ),
 

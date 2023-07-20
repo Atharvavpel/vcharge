@@ -16,7 +16,8 @@ class StationModel {
   String? stationZipCode;
   String? stationParkingArea;
   String? stationContactNumber;
-  String? stationWorkingTime;
+  String? stationOpeningTime;
+  String? stationClosingTime;
   int? chargerNumber;
   String? stationParkingType;
   List<String>? stationAmenity;
@@ -40,7 +41,8 @@ class StationModel {
       this.stationZipCode,
       this.stationParkingArea,
       this.stationContactNumber,
-      this.stationWorkingTime,
+      this.stationOpeningTime,
+      this.stationClosingTime,
       this.chargerNumber,
       this.stationParkingType,
       this.stationAmenity,
@@ -64,7 +66,8 @@ class StationModel {
     stationZipCode = json['stationZipCode'];
     stationParkingArea = json['stationParkingArea'];
     stationContactNumber = json['stationContactNumber'];
-    stationWorkingTime = json['stationWorkingTime'];
+    stationOpeningTime = json['stationOpeningTime'];
+    stationClosingTime = json['stationClosingTime'];
     chargerNumber = json['chargerNumber'];
     stationParkingType = json['stationParkingType'];
     stationAmenity = json['stationAmenity'].cast<String>();
@@ -95,7 +98,8 @@ class StationModel {
     data['stationZipCode'] = stationZipCode;
     data['stationParkingArea'] = stationParkingArea;
     data['stationContactNumber'] = stationContactNumber;
-    data['stationWorkingTime'] = stationWorkingTime;
+    data['stationOpeningTime'] = stationOpeningTime;
+    data['stationClosingTime'] = stationClosingTime;
     data['chargerNumber'] = chargerNumber;
     data['stationParkingType'] = stationParkingType;
     data['stationAmenity'] = stationAmenity ;

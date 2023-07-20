@@ -25,7 +25,7 @@ class FilterPopUpState extends State<FilterPopUp> {
   bool privateToggleButton = false;
 
   // Variable for Connector Type
-  var connectors = ["CSS 2", "Type 2", "Type 1", "GBT"];
+  var connectors = ["CCS 2", "Type 2", "Type 1", "GB/T", "CHAdeMO"];
   late List<bool> selectedConnector;
 
   @override
@@ -108,8 +108,8 @@ class FilterPopUpState extends State<FilterPopUp> {
                     padding: EdgeInsets.all(6),
                     child: Text(
                       'Vehicle',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 15),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                       textAlign: TextAlign.center,
                     ),
                   )),
@@ -168,8 +168,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                         },
                         activeTrackColor:
                             const Color.fromARGB(255, 144, 228, 66),
-                        activeColor:
-                            const Color.fromARGB(255, 244, 244, 244),
+                        activeColor: const Color.fromARGB(255, 244, 244, 244),
                       )
                     ]),
               ),
@@ -200,8 +199,7 @@ class FilterPopUpState extends State<FilterPopUp> {
                           },
                           activeTrackColor:
                               const Color.fromARGB(255, 144, 228, 66),
-                          activeColor:
-                              const Color.fromARGB(255, 244, 244, 244),
+                          activeColor: const Color.fromARGB(255, 244, 244, 244),
                         )
                       ]),
                 ),
@@ -215,8 +213,8 @@ class FilterPopUpState extends State<FilterPopUp> {
                     padding: EdgeInsets.all(6),
                     child: Text(
                       'Connector Type',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 15),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                       textAlign: TextAlign.center,
                     ),
                   )),
@@ -282,7 +280,16 @@ class FilterPopUpState extends State<FilterPopUp> {
                     );
                   },
                   child: const Text('Apply')),
-              ElevatedButton(onPressed: () {}, child: const Text('Reset')),
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      vehicleSelected = null;
+                      availableToggleButton = false;
+                      privateToggleButton = false;
+                      selectedConnector = List.filled(connectors.length, false);
+                    });
+                  },
+                  child: const Text('Reset')),
             ],
           ),
         ),

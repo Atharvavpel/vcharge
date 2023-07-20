@@ -51,16 +51,19 @@ class BookingHistoryDetailsPopUpState
                 ),
                 //Cross button
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 0,
+                  right: 0,
                   child: InkWell(
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: FaIcon(
-                        FontAwesomeIcons.x,
-                        color: Colors.white,
-                        size: Get.width * 0.045,
+                      child: Container(
+                        margin: EdgeInsets.all(Get.width * 0.03),
+                        child: FaIcon(
+                          FontAwesomeIcons.x,
+                          color: Colors.white,
+                          size: Get.width * 0.045,
+                        ),
                       )),
                 ),
               ],
@@ -349,7 +352,7 @@ class BookingHistoryDetailsPopUpState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
                           Text(
-                            'Sercice Charging',
+                            'Service Charging',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: Colors.black,

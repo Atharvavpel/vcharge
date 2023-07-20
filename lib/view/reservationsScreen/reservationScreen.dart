@@ -19,7 +19,7 @@ class ReservationScreenState extends State<ReservationScreen> {
   bool upcomingButton = true;
   bool historyButton = false;
 
-  String? stationName;
+  // String? stationName;
   String? stationAddress;
 
   List<BookingModel> upcomingBookingList = [];
@@ -29,32 +29,28 @@ class ReservationScreenState extends State<ReservationScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getbookingDetails();
-    getStationNameAndAddress('STN20230505105447818');
+    getbookingDetails('USR20230517060841379');
+    getStationAddress('STN20230505105447818');
   }
 
-  Future<void> getStationNameAndAddress(String stationId) async {
+  Future<void> getStationAddress(String stationId) async {
     try {
       var data = await GetMethod.getRequest(
           'http://192.168.0.243:8096/manageStation/getStation?stationId=$stationId');
-      stationName = data['stationName'];
-      stationAddress =
-          '${data['stationAddressLineOne']}, ${data['stationAddressLineTwo']}, ${data['stationCity']}';
+      // stationName = data['stationName'];
+      setState(() {
+        stationAddress =
+            '${data['stationAddressLineOne']}, ${data['stationAddressLineTwo']}, ${data['stationCity']}';
+      });
     } catch (e) {
       print(e);
     }
   }
 
-  // Future<String> getStationName(String stationId) async {
-  //   var data = await GetMethod.getRequest(
-  //       'http://192.168.0.243:8096/manageStation/getStation?stationId=$stationId');
-  //   return data['stationName'];
-  // }
-
-  Future<void> getbookingDetails() async {
+  Future<void> getbookingDetails(String userId) async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8099/manageBooking/getBookingCustomer?bookingCustomerId=${widget.userId}');
+          'http://192.168.0.243:8099/manageBooking/getBookingByCustomer?customerId=$userId');
       if (data != null && data.isNotEmpty) {
         upcomingBookingList.clear();
         bookingHistoryList.clear();
@@ -64,7 +60,8 @@ class ReservationScreenState extends State<ReservationScreen> {
             var bookingDateTime =
                 DateTime.parse('${booking.bookingDate} ${booking.bookingTime}');
             if (bookingDateTime.isAfter(DateTime.now()) &&
-                booking.bookingStatus!.toLowerCase() != 'cancelled') {
+                booking.bookingStatus!.toLowerCase() != 'cancelled' &&
+                booking.bookingStatus!.toLowerCase() != 'completed') {
               upcomingBookingList.add(booking);
             } else {
               bookingHistoryList.add(booking);
@@ -160,17 +157,23 @@ class ReservationScreenState extends State<ReservationScreen> {
                                             topRight: Radius.circular(20)),
                                       ),
                                       builder: (context) {
-                                        return UpcomingBookingDetailsPopUp(
-                                          bookingModel:
-                                              upcomingBookingList[index],
-                                          stationAddress: stationAddress,
-                                          stationName: stationName,
-                                        );
+                                        return stationAddress == null
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              )
+                                            : UpcomingBookingDetailsPopUp(
+                                                bookingModel:
+                                                    upcomingBookingList[index],
+                                                stationAddress: stationAddress,
+                                                stationName:
+                                                    upcomingBookingList[index]
+                                                        .stationName,
+                                              );
                                       }).then((value) {
                                     setState(() {
-                                      getStationNameAndAddress(
-                                          'STN20230505105447818');
-                                      getbookingDetails();
+                                      getStationAddress('STN20230505105447818');
+                                      getbookingDetails('USR20230517060841379');
                                     });
                                   });
                                 },
@@ -192,7 +195,8 @@ class ReservationScreenState extends State<ReservationScreen> {
                                         children: [
                                           // //Station Name
                                           Text(
-                                            stationName!,
+                                            upcomingBookingList[index]
+                                                .stationName!,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: Get.width * 0.05),
@@ -397,7 +401,8 @@ class ReservationScreenState extends State<ReservationScreen> {
                                         return BookingHistoryDetailsPopUp(
                                           bookingModel:
                                               bookingHistoryList[index],
-                                          stationName: stationName!,
+                                          stationName: bookingHistoryList[index]
+                                              .stationName!,
                                         );
                                       });
                                 },
@@ -419,7 +424,8 @@ class ReservationScreenState extends State<ReservationScreen> {
                                         children: [
                                           //Station Name
                                           Text(
-                                            stationName!,
+                                            bookingHistoryList[index]
+                                                .stationName!,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: Get.width * 0.05),

@@ -16,6 +16,7 @@ class BookingModel {
   String? bookingSocket;
   String? chargerId;
   String? connectorId;
+  String? stationName;
   double? bookingAmount;
 
   BookingModel(
@@ -34,6 +35,7 @@ class BookingModel {
       this.bookingSocket,
       this.chargerId,
       this.connectorId,
+      this.stationName,
       this.bookingAmount});
 
   BookingModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,7 @@ class BookingModel {
     bookingSocket = json['bookingSocket'];
     chargerId = json['chargerId'];
     connectorId = json['connectorId'];
+    stationName = json['stationName'];
     bookingAmount = json['bookingAmount'];
   }
 
@@ -72,6 +75,7 @@ class BookingModel {
     data['bookingSocket'] = bookingSocket;
     data['chargerId'] = chargerId;
     data['connectorId'] = connectorId;
+    data['stationName'] = stationName;
     data['bookingAmount'] = bookingAmount;
     return data;
   }

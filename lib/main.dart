@@ -3,10 +3,16 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
-
+import 'package:flutter/services.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // Initialize the binding
+  // Set preferred orientations
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp( 
     MyApp(),
   );

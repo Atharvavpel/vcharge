@@ -66,28 +66,28 @@ class ExistingHomeScreenState extends State<ExistingHomeScreen> {
             Positioned(
               bottom: Get.height * 0.14,
               right: 0,
-              child: Semantics(
-                label: "filterButton",
-                child: GestureDetector(
-                  key: const Key('filterButton'),
-                  onTap: () {
-                    showBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return FilterPopUp(userId: widget.userId);
-                        });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(boxShadow: const [
-                      BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
-                    ], borderRadius: BorderRadius.circular(30)),
-                    margin: const EdgeInsets.only(right: 13, bottom: 10),
-                    child: const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.filter_alt_sharp,
-                        color: Colors.black,
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled:true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))
                       ),
+                      builder: (BuildContext context) {
+                        return FilterPopUp(userId: widget.userId);
+                      });
+                },
+                child: Container(
+                  decoration: BoxDecoration(boxShadow: const [
+                    BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
+                  ], borderRadius: BorderRadius.circular(30)),
+                  margin: const EdgeInsets.only(right: 13, bottom: 10),
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.filter_alt_sharp,
+                      color: Colors.black,
                     ),
                   ),
                 ),
