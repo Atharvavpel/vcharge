@@ -33,7 +33,6 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
           'http://192.168.0.243:8097/manageUser/getVehicle?userId=${widget.userId}');
       setState(() {
         if (data != null) {
-          vehicleList.clear();
           for (int i = 0; i < data.length; i++) {
             vehicleList.add(VehicleModel.fromJson(data[i]));
           }
@@ -99,16 +98,16 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // text car nick name
-                                // Container(
-                                //   margin:
-                                //       const EdgeInsets.only(top: 3, bottom: 5),
-                                //   child: const Text(
-                                //     'Car Nick Name',
-                                //     style: TextStyle(
-                                //         fontSize: 18,
-                                //         fontWeight: FontWeight.w700),
-                                //   ),
-                                // ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.only(top: 3, bottom: 5),
+                                  child: const Text(
+                                    'Car Nick Name',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
 
                                 //Container for car model name
                                 Container(
@@ -116,9 +115,9 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
                                       const EdgeInsets.only(top: 3, bottom: 3),
                                   child: Text(
                                     '${vehicleList[index].vehicleBrandName} ${vehicleList[index].vehicleModelName}',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
 
@@ -126,8 +125,8 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
                                 Container(
                                   margin:
                                       const EdgeInsets.only(top: 3, bottom: 3),
-                                  child: Text(
-                                    '${vehicleList[index].vehicleRegistrationNo}',
+                                  child: const Text(
+                                    'MH12AB9999',
                                     style: TextStyle(
                                       fontSize: 14,
                                     ),
@@ -167,26 +166,21 @@ class MyVehicleScreenState extends State<MyVehicleScreen> {
                 );
               }),
 
+      // ...
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddVehicleScreen(userId: widget.userId,))).then((value){
-                    setState(() {
-                      getVehicleData();
-                    });
-                  });
+            context,
+            MaterialPageRoute(
+                builder: (context) => AddVehicleScreen(
+                      userId: widget.userId,
+                    )),
+          );
         },
-        child: const Text(
+        label: const Text(
           'Add Vehicle',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
 

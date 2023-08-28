@@ -60,7 +60,8 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                             )));
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+                margin: EdgeInsets.only(
+                    left: Get.width * 0.03, right: Get.width * 0.01),
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -122,9 +123,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                     ),
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: isMapRoute
-                      ? const Color.fromARGB(255, 115, 204, 43)
-                      : Colors.white,
+                  color: isMapRoute ? Colors.white : Colors.white,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -179,9 +178,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                     ),
                   ],
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: isWallet
-                      ? const Color.fromARGB(255, 115, 204, 43)
-                      : Colors.white,
+                  color: isWallet ? Colors.white : Colors.white,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -200,50 +197,6 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
               ),
             ),
 
-            // container - favourites
-            GestureDetector(
-              key: const Key('Favourites'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            FavouriteSceen(userId: widget.userId)));
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-                decoration: BoxDecoration(
-                  // border: Border.all(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 2,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: isFavourite
-                      ? const Color.fromARGB(255, 115, 204, 43)
-                      : Colors.white,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.favorite, color: Colors.grey[700]),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Favourite',
-                        style: TextStyle(fontSize: 14),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
             // container - reservations
             GestureDetector(
               key: const Key('Reservation'),
@@ -251,7 +204,9 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ReservationScreen(userId: widget.userId,)));
+                        builder: (context) => ReservationScreen(
+                              userId: widget.userId,
+                            )));
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
@@ -265,8 +220,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
                         offset: const Offset(2, 2),
                       ),
                     ],
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(20)),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                     color: isReservation
                         ? const Color.fromARGB(255, 115, 204, 43)
                         : Colors.white),
@@ -334,7 +288,8 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
 
   //function to pop more options
   void showPopupMenu(BuildContext context, Offset position) async {
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
 
     final selectedMenuItem = await showMenu(
       context: context,
@@ -344,7 +299,6 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
         overlay.size.width - position.dx,
         overlay.size.height - position.dy,
       ),
-      
       items: <PopupMenuEntry>[
         PopupMenuItem(
           value: 1,
@@ -370,30 +324,21 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
           value: 3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('User Manual'),
-              Icon(Icons.library_books)
-            ],
+            children: const [Text('User Manual'), Icon(Icons.library_books)],
           ),
         ),
         PopupMenuItem(
           value: 4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Legal Policy'),
-              Icon(Icons.policy_rounded)
-            ],
+            children: const [Text('Legal Policy'), Icon(Icons.policy_rounded)],
           ),
         ),
         PopupMenuItem(
           value: 5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Log Out'),
-              Icon(Icons.logout_rounded)
-            ],
+            children: const [Text('Log Out'), Icon(Icons.logout_rounded)],
           ),
         ),
       ],
@@ -408,18 +353,19 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
       switch (selectedMenuItem) {
         case 1:
           const websiteUrl = 'https://virtuososofttech.com/our-blogs/';
-    if (await canLaunchUrl(Uri.parse(websiteUrl))) {
-      await launchUrl(Uri.parse(websiteUrl));
-    } else {
-      throw 'Could not launch $websiteUrl';
-    }
+          if (await canLaunchUrl(Uri.parse(websiteUrl))) {
+            await launchUrl(Uri.parse(websiteUrl));
+          } else {
+            throw 'Could not launch $websiteUrl';
+          }
           break;
         case 2:
           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      HelpSupportScreen(userId: widget.userId,)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HelpSupportScreen(
+                        userId: widget.userId,
+                      )));
           break;
         case 3:
           // Handle menu item 3
@@ -427,8 +373,4 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
       }
     }
   }
-
 }
-
-
-

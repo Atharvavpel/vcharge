@@ -119,30 +119,37 @@ class FilterPopUpState extends State<FilterPopUp> {
                     borderRadius: BorderRadius.circular(10),
                     color: const Color.fromARGB(255, 255, 255, 255)),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButton(
-                    value:
-                        vehicleSelected, // Set the currently selected value in the dropdown
-                    items: vehicleList.map((e) {
-                      return DropdownMenuItem(value: e, child: Text(e));
-                    }).toList(), // Set the list of items to display in the dropdown
-                    hint: const Text(
-                        "No vehicle selected"), // Set the hint text to display when no value is selected
-                    onChanged: (value) {
-                      setState(() {
-                        vehicleSelected =
-                            value; // Update the currently selected value in the dropdown
-                      });
-                    },
-                    style: const TextStyle(
+                    padding: const EdgeInsets.all(8.0),
+                    child: // Updated code with modified style
+                        DropdownButton(
+                      value: vehicleSelected,
+                      items: vehicleList.map((e) {
+                        return DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e,
+                            style: TextStyle(
+                              fontWeight: vehicleSelected == e
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      hint: const Text("No vehicle selected"),
+                      onChanged: (value) {
+                        setState(() {
+                          vehicleSelected = value;
+                        });
+                      },
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                    isExpanded:
-                        true, // expand the dropdown button to full width
-                    isDense: true, // reduces the height of the button
-                  ),
-                ),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      isExpanded: true,
+                      isDense: true,
+                    )),
               ),
 
               //Container for "show available chargers only" section
@@ -166,8 +173,6 @@ class FilterPopUpState extends State<FilterPopUp> {
                             availableToggleButton = newValue;
                           });
                         },
-                        activeTrackColor:
-                            const Color.fromARGB(255, 144, 228, 66),
                         activeColor: const Color.fromARGB(255, 244, 244, 244),
                       )
                     ]),

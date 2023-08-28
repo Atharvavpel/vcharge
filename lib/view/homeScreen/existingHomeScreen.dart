@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vcharge/view/favouriteScreen/favouriteScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 import 'package:vcharge/view/homeScreen/widgets/locationFinder.dart';
@@ -7,7 +8,6 @@ import 'package:vcharge/view/homeScreen/widgets/markerHints.dart';
 import 'package:vcharge/view/homeScreen/widgets/searchBar/searchBar.dart';
 import 'package:vcharge/view/homeScreen/widgets/sideBarDrawer.dart';
 import 'package:vcharge/view/homeScreen/widgets/virtuosoLogo.dart';
-
 
 class ExistingHomeScreen extends StatefulWidget {
   String userId;
@@ -62,25 +62,64 @@ class ExistingHomeScreenState extends State<ExistingHomeScreen> {
               child: const MarkerHints(),
             ),
 
+            Positioned(
+              bottom: Get.height * 0.15,
+              right: 0,
+              child: Semantics(
+                label: "favriteButton",
+                child: GestureDetector(
+                  key: const Key('favriteButton'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FavouriteSceen(userId: widget.userId),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: const [
+                        BoxShadow(
+                            blurRadius: 5, color: Colors.grey, spreadRadius: 1),
+                      ],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    margin: const EdgeInsets.only(right: 13),
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.favorite,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             // filter
             Positioned(
-              bottom: Get.height * 0.14,
+              bottom: Get.height * 0.21,
               right: 0,
               child: GestureDetector(
                 onTap: () {
                   showModalBottomSheet(
                       context: context,
-                      isScrollControlled:true,
+                      isScrollControlled: true,
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))
-                      ),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
                       builder: (BuildContext context) {
                         return FilterPopUp(userId: widget.userId);
                       });
                 },
                 child: Container(
                   decoration: BoxDecoration(boxShadow: const [
-                    BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
+                    BoxShadow(
+                        blurRadius: 5, color: Colors.grey, spreadRadius: 1)
                   ], borderRadius: BorderRadius.circular(30)),
                   margin: const EdgeInsets.only(right: 13, bottom: 10),
                   child: const CircleAvatar(

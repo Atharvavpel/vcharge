@@ -34,8 +34,6 @@ class _MarkerHintsState extends State<MarkerHints> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   content: Wrap(children: [
-    
-                    
                     //Row For Available
                     Row(
                       children: const [
@@ -55,13 +53,12 @@ class _MarkerHintsState extends State<MarkerHints> {
                             )),
                       ],
                     ),
-    
+
                     const SizedBox(
                       width: 1,
                       height: 5,
                     ),
-    
-    
+
                     //Row For Busy
                     Row(
                       children: const [
@@ -81,13 +78,12 @@ class _MarkerHintsState extends State<MarkerHints> {
                             )),
                       ],
                     ),
-    
+
                     const SizedBox(
                       width: 1,
                       height: 5,
                     ),
-    
-    
+
                     //Row For Not Available
                     Row(
                       children: const [
@@ -128,4 +124,3 @@ class _MarkerHintsState extends State<MarkerHints> {
     );
   }
 }
-

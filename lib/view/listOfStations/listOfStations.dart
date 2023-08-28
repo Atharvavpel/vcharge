@@ -201,9 +201,9 @@ class ListOfStationsState extends State<ListOfStations> {
                           itemBuilder: (context, index) {
                             return Card(
                                 elevation: 4,
-                                color: const Color.fromARGB(255, 243, 254, 255),
+                                color: const Color.fromARGB(255, 246, 249, 252),
                                 margin: EdgeInsets.all(
-                                    MediaQuery.of(context).size.width * 0.02),
+                                    MediaQuery.of(context).size.width * 0.03),
                                 child: ListTile(
                                     onTap: () {
                                       Navigator.push(

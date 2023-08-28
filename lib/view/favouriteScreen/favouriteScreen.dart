@@ -64,8 +64,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                           MaterialPageRoute(
                               builder: (context) => StationsSpecificDetails(
                                   userId: widget.userId,
-                                  stationId: favouriteList[index]
-                                      .stationId!)));
+                                  stationId: favouriteList[index].stationId!)));
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(

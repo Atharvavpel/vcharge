@@ -62,7 +62,7 @@ class WalletScreenState extends State<WalletScreen> {
   Future<void> getWalletDetails() async {
     try {
       var data = await GetMethod.getRequest(
-          "http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}");
+          "http://192.168.0.243:8097/manageUser/getWalletByUserId?userId=${widget.userId}");
 
       // print(data);
       setState(() {
@@ -80,7 +80,7 @@ class WalletScreenState extends State<WalletScreen> {
   Future<void> getTransactionDetails() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8097/manageUser/getTransaction?userId=${widget.userId}');
+          'http://192.168.0.243:8097/manageUser/getTransactionByUserId?userId=${widget.userId}');
       setState(() {
         if (data != null) {
           for (int i = 0; i < data.length; i++) {
@@ -169,7 +169,7 @@ class WalletScreenState extends State<WalletScreen> {
             Container(
               margin: const EdgeInsets.all(15),
               child: Card(
-                color: const Color.fromARGB(255, 246, 255, 255),
+                color: const Color.fromARGB(255, 246, 249, 252),
                 elevation: 5,
                 child: Padding(
                   padding: const EdgeInsets.only(

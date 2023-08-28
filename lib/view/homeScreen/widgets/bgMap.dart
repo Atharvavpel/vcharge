@@ -33,7 +33,8 @@ class BgMap extends StatefulWidget {
 
 class BgMapState extends State<BgMap> with TickerProviderStateMixin {
   // ignore: non_constant_identifier_names
-  String url_temp = 'http://192.168.0.243:8096/manageStation/stations';
+  String url_temp =
+      'http://192.168.0.243:8096/manageStation/getStationInterface';
 
   // the user's live location data
   static LatLng? userLocation;
@@ -263,7 +264,7 @@ class BgMapState extends State<BgMap> with TickerProviderStateMixin {
           if (mounted) {
             setState(() {
               getStationData(
-                  'http://192.168.0.243:8096/manageStation/getStationsLocation?longitude=${BgMapState.userLocation!.longitude}&latitude=${BgMapState.userLocation!.latitude}&maxDistance=5000');
+                  'http://192.168.0.243:8096/manageStation/getStationInterface?longitude=${BgMapState.userLocation!.longitude}&latitude=${BgMapState.userLocation!.latitude}&maxDistance=5000');
             });
           }
           subscription =

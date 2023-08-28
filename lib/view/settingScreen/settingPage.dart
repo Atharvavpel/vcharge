@@ -8,18 +8,18 @@ import 'package:vcharge/view/profileScreen/editProfileScreen.dart';
 // ignore: must_be_immutable
 class SettingPage extends StatefulWidget {
   String userId;
-  // String? firstNameEdited;
-  // String? lastNameEdited;
-  // String? emailIdEdited;
-  // String? contactNoEdited;
+  String? firstNameEdited;
+  String? lastNameEdited;
+  String? emailIdEdited;
+  String? contactNoEdited;
 
   SettingPage({
     super.key,
     required this.userId,
-    // required this.firstNameEdited,
-    // required this.lastNameEdited,
-    // required this.contactNoEdited,
-    // required this.emailIdEdited,
+    required this.firstNameEdited,
+    required this.lastNameEdited,
+    required this.contactNoEdited,
+    required this.emailIdEdited,
   });
 
   @override
@@ -70,7 +70,7 @@ class _SettingPageState extends State<SettingPage> {
 // profile section
           Container(
             width: double.infinity,
-            color: Colors.green.shade200,
+            color: Color(0xFFEBF8EA),
             child: Padding(
               padding: const EdgeInsets.only(top: 5, left: 15, bottom: 5),
               child: Text(
@@ -97,10 +97,13 @@ class _SettingPageState extends State<SettingPage> {
                       MaterialPageRoute(
                           builder: ((context) => EditProfileScreen(
                                 userId: widget.userId.toString(),
-                                firstNameEdited: firstNameEdited.toString(),
-                                lastNameEdited: lastNameEdited.toString(),
-                                emailIdEdited: emailIdEdited.toString(),
-                                contactNoEdited: contactNoEdited.toString(),
+                                firstNameEdited:
+                                    widget.firstNameEdited.toString(),
+                                lastNameEdited:
+                                    widget.lastNameEdited.toString(),
+                                emailIdEdited: widget.emailIdEdited.toString(),
+                                contactNoEdited:
+                                    widget.contactNoEdited.toString(),
                               ))),
                     );
                   });
@@ -120,7 +123,6 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
           ),
-
 // change password
           Container(
             decoration: const BoxDecoration(
@@ -133,7 +135,7 @@ class _SettingPageState extends State<SettingPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ChangePasswordScreen(
-                              emailId: emailIdEdited.toString())));
+                              emailId: widget.emailIdEdited.toString())));
                 },
                 title: const Text(
                   "Change Password",
@@ -148,11 +150,10 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
           ),
-
 // notifications section
           Container(
             width: double.infinity,
-            color: Colors.green.shade200,
+            color: Color(0xFFEBF8EA),
             child: Padding(
               padding: const EdgeInsets.only(top: 5, left: 15, bottom: 5),
               child: Text(
@@ -189,7 +190,7 @@ class _SettingPageState extends State<SettingPage> {
 // languages section
           Container(
             width: double.infinity,
-            color: Colors.green.shade200,
+            color: Color(0xFFEBF8EA),
             child: Padding(
               padding: const EdgeInsets.only(top: 5, left: 15, bottom: 5),
               child: Text(
@@ -226,7 +227,7 @@ class _SettingPageState extends State<SettingPage> {
 // actions section
           Container(
             width: double.infinity,
-            color: Colors.green.shade200,
+            color: Color(0xFFEBF8EA),
             child: Padding(
               padding: const EdgeInsets.only(top: 5, left: 15, bottom: 5),
               child: Text(
