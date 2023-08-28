@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vcharge/view/homeScreen/widgets/filterPopUp.dart';
 import 'package:vcharge/view/listOfStations/widgets/losSearchingWidget.dart';
 
-
 // ignore: must_be_immutable
 class SearchBarofLOS extends StatefulWidget {
   String userId;
@@ -14,15 +13,12 @@ class SearchBarofLOS extends StatefulWidget {
 }
 
 class SearchBarofLOSState extends State<SearchBarofLOS> {
-
-
   @override
   Widget build(BuildContext context) {
-
-    // material object - 
+    // material object -
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration( 
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
@@ -36,46 +32,46 @@ class SearchBarofLOSState extends State<SearchBarofLOS> {
         ),
         child: TextField(
           readOnly: true,
-    
+
           // function for opeing the searching widget
-          onTap: (){
+          onTap: () {
             showSearch(
-                      context: context, 
-                      delegate: losSearchingWidget(widget.userId)
-                    );
+                context: context, delegate: losSearchingWidget(widget.userId));
           },
           decoration: InputDecoration(
               border: InputBorder.none,
               hintText: "Search Stations",
-    
+
               // search icon - it also opens the searching widget
               prefixIcon: IconButton(
                   onPressed: () {
                     showSearch(
-                      context: context, 
-                      delegate: losSearchingWidget(widget.userId)
-                    );
+                        context: context,
+                        delegate: losSearchingWidget(widget.userId));
                   },
                   icon: Icon(
                     Icons.search_rounded,
                     size: MediaQuery.of(context).size.width * 0.07,
                   )),
-    
+
               // filter icon - it is displayed at the right side
               suffixIcon: IconButton(
+                  color: Colors.green,
                   onPressed: () {
                     showModalBottomSheet(
-                      context: context,
-                      isScrollControlled:true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))
-                      ),
-                      builder: (BuildContext context) {
-                        return FilterPopUp(userId: widget.userId);
-                      });
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15))),
+                        builder: (BuildContext context) {
+                          return FilterPopUp(userId: widget.userId);
+                        });
                   },
                   icon: Icon(
                     Icons.filter_alt,
+                    color: Colors.green,
                     size: MediaQuery.of(context).size.width * 0.07,
                   ))),
         ),

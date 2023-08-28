@@ -1,15 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:vcharge/models/vehicleModel.dart';
-import 'package:vcharge/services/PostMethod.dart';
 
 class AddVehicleScreen extends StatefulWidget {
-  String userId;
-
-  AddVehicleScreen({required this.userId, super.key});
+  const AddVehicleScreen({super.key, required String userId});
 
   @override
   State<StatefulWidget> createState() => AddVehicleScreenState();
@@ -18,7 +11,7 @@ class AddVehicleScreen extends StatefulWidget {
 class AddVehicleScreenState extends State<AddVehicleScreen> {
   final formKey = GlobalKey<FormState>();
 
-  var vehicleTypeList = ['two', 'three', 'four'];
+  var vehicleType = ['two', 'three', 'four'];
   // ignore: prefer_typing_uninitialized_variables
   var selectedVehicleType;
   var vehicleTypeSelectBool = [false, false, false];
@@ -28,12 +21,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
   // ignore: prefer_typing_uninitialized_variables
   var selectedCarModel;
 
-  bool vehicleTypeValidator = false;
-
 // this is the list for manufacturers
   var manufacturarList = ['Tata', 'Tesla', 'Hundai', 'Kia', "BMW"];
-
-  String regNoError = '';
 
 // this is the list for the car models
   var carModelList = [
@@ -50,86 +39,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
 
 // variable for the nick-name input field
   var nickNameController = TextEditingController();
-
-  Future<bool> addVehicle() async {
-    // Fetch the data from the form input fields
-    String brandName = selectedManufacturer;
-    String modelName = selectedCarModel;
-    String vehicleType = vehicleTypeList[selectedVehicleType];
-    String vehicleRegistrationNo = regNoController.text;
-    String vehicleNickName = nickNameController.text;
-
-    // Create a new VehicleModel object with the fetched data
-    VehicleModel newVehicle = VehicleModel(
-        vehicleType: vehicleType,
-        vehicleBrandName: brandName,
-        vehicleModelName: modelName,
-        vehicleRegistrationNo: vehicleRegistrationNo,
-        vehicleNickName: vehicleNickName,
-        vehicleBatteryType: "li-ion",
-        vehicleBatteryCapacity: "32.4kwh",
-        vehicleRange: "000",
-        vehicleMotorType: "magnet",
-        vehicleMotorPower: "129ps",
-        vehicleChargingStandard: "css2",
-        vehicleAdaptorType: "ccs2",
-        vehicleClass: "Suv");
-
-    try {
-      // Convert the newVehicle object to JSON
-      Map<String, dynamic> vehicleJson = newVehicle.toJson();
-
-      // Send the JSON data as a POST request
-      String url =
-          'http://192.168.0.243:8097/manageUser/addVehicles?userId=${widget.userId}';
-
-      final response = await PostMethod.postRequestMod(
-          url,
-          jsonEncode({
-            "vehicleType": vehicleType,
-            "vehicleBrandName": brandName,
-            "vehicleModelName": modelName,
-            "vehicleRegistrationNo": vehicleRegistrationNo,
-            "vehicleNickName": vehicleNickName,
-            "vehicleBatteryType": "li-ion",
-            "vehicleBatteryCapacity": "32.4kwh",
-            "vehicleRange": "000",
-            "vehicleMotorType": "magnet",
-            "vehicleMotorPower": "129ps",
-            "vehicleChargingStandard": "css2",
-            "vehicleAdaptorType": "ccs2",
-            "vehicleClass": "Suv"
-          }));
-
-      if (response.statusCode == 200) {
-        Fluttertoast.showToast(
-            msg: " vechicle added successfully",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return true;
-      }
-      if (response.statusCode == 400) {
-        setState(() {
-          regNoError = jsonDecode(response.body)['vehicleRegistrationNo'];
-        });
-        Fluttertoast.showToast(
-            msg: "Failed to add",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-    } catch (e) {
-      print("Error in vehicle addition: $e");
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +62,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
+                  const SizedBox(height: 20),
 
                   //select list for vehicle type
                   Column(
@@ -168,6 +78,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -215,7 +126,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                                   value: 2,
                                   onChanged: (value) {
                                     setState(() {
-                                      vehicleTypeValidator = false;
                                       selectedVehicleType = value;
                                     });
                                   }),
@@ -229,9 +139,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       ),
 
                       // validation widget
-                      Visibility(
-                        visible: vehicleTypeValidator,
-                        child: const Text('Please select vehicle type', style: TextStyle(color: Colors.red),),
+                      const Visibility(
+                        child: Text('Please select vehicle type'),
                       )
                     ],
                   ),
@@ -250,6 +159,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
+                  const SizedBox(height: 3),
 
                   const SizedBox(
                     width: 1,
@@ -259,7 +169,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   //Drop down menu to select manufacturer
                   Card(
                     elevation: 5.0,
-                    color: const Color.fromARGB(255, 243, 255, 255),
+                    color: const Color.fromARGB(255, 246, 249, 252),
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.width * 0.02),
@@ -294,11 +204,12 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 5),
 
                   //Drop down menu to select car model
                   Card(
                     elevation: 5,
-                    color: const Color.fromARGB(255, 243, 254, 255),
+                    color: const Color.fromARGB(255, 246, 249, 252),
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.width * 0.02),
@@ -333,6 +244,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20),
 
                   const SizedBox(
                     width: 1,
@@ -348,6 +260,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
+                  const SizedBox(height: 3),
 
                   const SizedBox(
                     width: 1,
@@ -357,25 +270,30 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   //Text Field for enter registration number
                   Card(
                     elevation: 5,
-                    color: const Color.fromARGB(255, 243, 254, 255),
+                    color: const Color.fromARGB(255, 246, 249, 252),
                     child: TextFormField(
                       controller: regNoController,
                       style: const TextStyle(fontSize: 16),
-                      decoration: InputDecoration(
-                          hintText: 'Eg: MH12AE1234',
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          contentPadding: const EdgeInsets.symmetric(
+                      decoration: const InputDecoration(
+                          hintText: 'Enter Registration Number',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 10.0),
-                          errorText: regNoError.isEmpty ? null : regNoError,
                           border: InputBorder.none),
+                      onChanged: (value) {
+                        regNoController.text = value.toUpperCase();
+                        regNoController.selection = TextSelection.fromPosition(
+                            TextPosition(offset: regNoController.text.length));
+                      },
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please enter vehicle registration number';
+                          return 'Please enter some text';
                         }
                         return null;
                       },
                     ),
                   ),
+                  const SizedBox(height: 20),
 
                   const SizedBox(
                     width: 1,
@@ -420,6 +338,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
+                  const SizedBox(height: 5),
 
                   //card for more details
                   Card(
@@ -427,7 +346,7 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    color: const Color.fromARGB(255, 243, 254, 255),
+                    color: const Color.fromARGB(255, 246, 249, 252),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -436,31 +355,32 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
+                              const Expanded(
                                 child: Text(
                                   'Vehicle Name',
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ),
                               Expanded(
-                                  child: Card(
-                                elevation: 3,
-                                child: Padding(
-                                  padding: EdgeInsets.all(2.0),
-                                  child: Text(
-                                    "${selectedManufacturer ?? '--'} ${selectedCarModel  ??'--'}",
-                                    textAlign: TextAlign.center,
+                                child: Card(
+                                  elevation: 3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      '${selectedManufacturer ?? "-"} ${selectedCarModel ?? "-"}',
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
-                              ))
+                              )
                             ],
                           ),
 
                           //row for connector type
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Expanded(
+                            children: [
+                              const Expanded(
                                   child: Text(
                                 'Connector type',
                                 style: TextStyle(fontSize: 15),
@@ -469,9 +389,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                                   child: Card(
                                 elevation: 3,
                                 child: Padding(
-                                  padding: EdgeInsets.all(2.0),
+                                  padding: const EdgeInsets.all(2.0),
                                   child: Text(
-                                    '--',
+                                    '${selectedCarModel ?? "-"}',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -482,8 +402,8 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                           //row for Battery Capacity
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Expanded(
+                            children: [
+                              const Expanded(
                                   child: Text(
                                 'Battery Capacity',
                                 style: TextStyle(fontSize: 15),
@@ -492,9 +412,9 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                                   child: Card(
                                 elevation: 3,
                                 child: Padding(
-                                  padding: EdgeInsets.all(2.0),
+                                  padding: const EdgeInsets.all(2.0),
                                   child: Text(
-                                    '--',
+                                    '${selectedCarModel ?? "-"}',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -514,20 +434,11 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
         // floating action button for adding vehicle
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            if(selectedVehicleType !=null){
-              setState(() {
-                vehicleTypeValidator = false;
-              });
-            }
+          onPressed: () {
             if (selectedVehicleType == null) {
-              setState(() {
-                vehicleTypeValidator = true;
-              });
             } else if (formKey.currentState!.validate()) {
-              if (await addVehicle()) {
-                Navigator.of(context).pop();
-              }
+              // Do something with the form data
+              print("Success");
             }
           },
           label: const Text(

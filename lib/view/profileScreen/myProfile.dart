@@ -1,7 +1,3 @@
-
-
-
-
 /*
 
 ----------------- SAMPLE REDIS CONNECTION CODE ------------------
@@ -44,7 +40,6 @@ Future<void> getUserData() async {
 
 */
 
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -60,7 +55,7 @@ import 'package:dio/dio.dart' as dio;
 class MyProfilePage extends StatefulWidget {
   String? userId;
 
-  MyProfilePage({required this.userId});
+  MyProfilePage({super.key, required this.userId});
   //: super(key: GlobalKey)
 
   @override
@@ -70,31 +65,28 @@ class MyProfilePage extends StatefulWidget {
 class MyProfilePageState extends State<MyProfilePage> {
   final GlobalKey<MyProfilePageState> globalKey = GlobalKey();
 
+  final dio.Dio dioClient = dio.Dio();
 
+  Future<String> uploadImageAndGetUrl(String imagePath) async {
+    try {
+      dio.FormData formData = dio.FormData.fromMap({
+        "file": await dio.MultipartFile.fromFile(imagePath),
+        "upload_preset": "your_cloudinary_upload_preset",
+      });
 
-final dio.Dio dioClient = dio.Dio();
+      final response = await dioClient.post(
+        "http://192.168.0.243:8097/manageUser/getUserByUserId?userId=USR20230517060841379",
+        data: formData,
+      );
 
-Future<String> uploadImageAndGetUrl(String imagePath) async {
-  try {
-    dio.FormData formData = dio.FormData.fromMap({
-      "file": await dio.MultipartFile.fromFile(imagePath),
-      "upload_preset": "your_cloudinary_upload_preset",
-    });
-
-    final response = await dioClient.post(
-      "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
-      data: formData,
-    );
-
-    final imageUrl = response.data['secure_url'];
-    print(imageUrl);
-    return imageUrl;
-  } catch (e) {
-    print(e);
-    return ' ';
+      final imageUrl = response.data['secure_url'];
+      print(imageUrl);
+      return imageUrl;
+    } catch (e) {
+      print(e);
+      return ' ';
+    }
   }
-}
-
 
 // variables for storing the REST API
 
@@ -149,8 +141,8 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
     }
 
     if (mounted) {
-  setState(() {});
-}
+      setState(() {});
+    }
   }
 
 // variable for picking the image from the gallery or camera
@@ -189,7 +181,7 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
         if (photo == null) return;
         final tempImage = File(photo.path);
         // selectedImageUrl = await uploadImageAndGetUrl(tempImage.path);
-        setState(()  {
+        setState(() {
           selectedImage = tempImage;
           print("seelected image is: $selectedImage");
           // print("The imageUrl is: $selectedImageUrl");
@@ -349,21 +341,20 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
           CircleAvatar(
             backgroundColor: Colors.white,
             child: IconButton(
-                onPressed: () async{
+                onPressed: () async {
                   var editProfile = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: ((context) => SettingPage(
                                 userId: widget.userId.toString(),
-                                // firstNameEdited: firstName,
-                                // lastNameEdited: lastName,
-                                // contactNoEdited: contactNo,
-                                // emailIdEdited: emailId,
+                                firstNameEdited: firstName,
+                                lastNameEdited: lastName,
+                                contactNoEdited: contactNo,
+                                emailIdEdited: emailId,
                               ))));
-                  if(editProfile == true) {
+                  if (editProfile == true) {
                     await getUserData();
-                    setState(() {
-                    });
+                    setState(() {});
                   }
                 },
                 icon: const Icon(
@@ -392,103 +383,99 @@ Future<String> uploadImageAndGetUrl(String imagePath) async {
                 context: context, builder: ((builder) => bottomSheet()));
           },
 
-          child: profilePhoto == ' ' ?
-          
-           selectedImage != null
-              ? Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  margin: const EdgeInsets.only(bottom: 20),
-                  // child: Image.file(selectedImage!),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset:  Offset(
-                      5.0,
-                      5.0,
-                    ),
-                    blurRadius: 10.0,
-                    spreadRadius: 2.0,
-                  ), //BoxShadow
-                  BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(0.0, 0.0),
-                    blurRadius: 0.0,
-                    spreadRadius: 0.0,
-                  ), //BoxShadow
-                ],
-                      image: DecorationImage(
-                        
-                          image: FileImage(selectedImage!),
-                          fit: BoxFit.cover),
-                      shape: BoxShape.rectangle,
-                      color: const Color(0xffD6D6D6)),
-                )
+          child: profilePhoto == ' '
+              ? selectedImage != null
+                  ? Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      // child: Image.file(selectedImage!),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(
+                                5.0,
+                                5.0,
+                              ),
+                              blurRadius: 10.0,
+                              spreadRadius: 2.0,
+                            ), //BoxShadow
+                            BoxShadow(
+                              color: Colors.white,
+                              offset: Offset(0.0, 0.0),
+                              blurRadius: 0.0,
+                              spreadRadius: 0.0,
+                            ), //BoxShadow
+                          ],
+                          image: DecorationImage(
+                              image: FileImage(selectedImage!),
+                              fit: BoxFit.cover),
+                          shape: BoxShape.rectangle,
+                          color: const Color(0xffD6D6D6)),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(
+                                5.0,
+                                5.0,
+                              ),
+                              blurRadius: 10.0,
+                              spreadRadius: 2.0,
+                            ), //BoxShadow
+                            BoxShadow(
+                              color: Colors.white,
+                              offset: Offset(0.0, 0.0),
+                              blurRadius: 0.0,
+                              spreadRadius: 0.0,
+                            ), //BoxShadow
+                          ],
+                          shape: BoxShape.rectangle,
+                          color: const Color(0xffD6D6D6)),
+                      child: const Center(
+                        child: Icon(
+                          Icons.upload_file,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
               : Container(
                   width: MediaQuery.of(context).size.width * 0.45,
                   height: MediaQuery.of(context).size.height * 0.2,
                   margin: const EdgeInsets.only(bottom: 20),
-                  decoration:  BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow:  const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset:  Offset(
-                      5.0,
-                      5.0,
-                    ),
-                    blurRadius: 10.0,
-                    spreadRadius: 2.0,
-                  ), //BoxShadow
-                  BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(0.0, 0.0),
-                    blurRadius: 0.0,
-                    spreadRadius: 0.0,
-                  ), //BoxShadow
-                ],
-                      shape: BoxShape.rectangle, color: const Color(0xffD6D6D6)),
-                  child: const Center(
-                    child: Icon(
-                      Icons.upload_file,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                ) :
-
-          Container(
-                width: MediaQuery.of(context).size.width* 0.45,
-                height: MediaQuery.of(context).size.height* 0.2,
-                margin: const EdgeInsets.only(bottom: 20),
-                // child: Image.network(profilePhoto),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset:  Offset(
-                      5.0,
-                      5.0,
-                    ),
-                    blurRadius: 10.0,
-                    spreadRadius: 2.0,
-                  ), //BoxShadow
-                  BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(0.0, 0.0),
-                    blurRadius: 0.0,
-                    spreadRadius: 0.0,
-                  ), //BoxShadow
-                ],
-                    image: decorationImg,
-                    shape: BoxShape.rectangle,
-                    color: const Color(0xffD6D6D6)),
-              )
-
-          ,
+                  // child: Image.network(profilePhoto),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(
+                            5.0,
+                            5.0,
+                          ),
+                          blurRadius: 10.0,
+                          spreadRadius: 2.0,
+                        ), //BoxShadow
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 0.0,
+                          spreadRadius: 0.0,
+                        ), //BoxShadow
+                      ],
+                      image: decorationImg,
+                      shape: BoxShape.rectangle,
+                      color: const Color(0xffD6D6D6)),
+                ),
         ),
       ),
     );

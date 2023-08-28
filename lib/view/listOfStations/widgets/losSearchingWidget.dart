@@ -9,7 +9,6 @@ import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dar
 import 'dart:math' as Math;
 
 class losSearchingWidget extends SearchDelegate {
-
   losSearchingWidget(this.userId);
 
   List<dynamic> userToStationDistanceList = [];
@@ -20,19 +19,17 @@ class losSearchingWidget extends SearchDelegate {
   final userId;
 
   Future<List<dynamic>> fetchData(String keyword) async {
-
     if (keyword.isEmpty) return [];
 
     dynamic response;
     try {
       final url =
-        "http://192.168.0.243:8096/manageStation/getStationsByKeyword?query=$keyword";
-     response = await GetMethod.getRequest(url);
+          "http://192.168.0.243:8096/manageStation/getStationsByKeyword?query=$keyword";
+      response = await GetMethod.getRequest(url);
     } catch (e) {
       print("the error is: $e");
     }
     return response;
-    
   }
 
   //To calculate the distance between two points on the Earth's surface given their latitude and longitude coordinates, you can use the Haversine formula.
@@ -150,7 +147,8 @@ class losSearchingWidget extends SearchDelegate {
                   : ListView.separated(
                       separatorBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.symmetric( horizontal: Get.width * 0.01),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.01),
                           child: const Divider(
                             height: 1,
                             thickness: 0.2,
@@ -174,7 +172,11 @@ class losSearchingWidget extends SearchDelegate {
                             leading: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.ev_station, size: Get.height * 0.05,color: Colors.green,),
+                                Icon(
+                                  Icons.ev_station,
+                                  size: Get.height * 0.05,
+                                  color: Colors.green,
+                                ),
                               ],
                             ),
                             title: Text(
@@ -182,8 +184,7 @@ class losSearchingWidget extends SearchDelegate {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize:
-                                      MediaQuery.of(context).size.width *
-                                          0.04),
+                                      MediaQuery.of(context).size.width * 0.04),
                             ),
                             subtitle: //container for station address
                                 Text(
@@ -193,13 +194,11 @@ class losSearchingWidget extends SearchDelegate {
                             ),
                             trailing: //column for 'distance from user' and connector type
                                 Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Wrap(
                                   spacing:
-                                      MediaQuery.of(context).size.width *
-                                          0.02,
+                                      MediaQuery.of(context).size.width * 0.02,
                                   children: [
                                     //text for distance
                                     data[index] == null
@@ -207,18 +206,16 @@ class losSearchingWidget extends SearchDelegate {
                                         : Text(
                                             '${sortedData[index]['distance'].toStringAsFixed(2)} KM',
                                             style: const TextStyle(
-                                                fontWeight:
-                                                    FontWeight.bold),
+                                                fontWeight: FontWeight.bold),
                                           ),
 
                                     //CircleAvater to show avaliblity
                                     CircleAvatar(
-                                      radius: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                          0.02,
-                                      backgroundColor: AvaliblityColor
-                                          .getAvailablityColor(
+                                      radius:
+                                          MediaQuery.of(context).size.width *
+                                              0.02,
+                                      backgroundColor:
+                                          AvaliblityColor.getAvailablityColor(
                                               sortedData[index]['station']
                                                   ['stationStatus']!),
                                     ),
@@ -273,7 +270,8 @@ class losSearchingWidget extends SearchDelegate {
                   : ListView.separated(
                       separatorBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.symmetric( horizontal: Get.width * 0.01),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.01),
                           child: const Divider(
                             height: 1,
                             thickness: 0.2,
@@ -297,7 +295,11 @@ class losSearchingWidget extends SearchDelegate {
                             leading: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.ev_station, size: Get.height * 0.05,color: Colors.green,),
+                                Icon(
+                                  Icons.ev_station,
+                                  size: Get.height * 0.05,
+                                  color: Colors.green,
+                                ),
                               ],
                             ),
                             title: Text(
@@ -305,8 +307,7 @@ class losSearchingWidget extends SearchDelegate {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize:
-                                      MediaQuery.of(context).size.width *
-                                          0.04),
+                                      MediaQuery.of(context).size.width * 0.04),
                             ),
                             subtitle: //container for station address
                                 Text(
@@ -316,13 +317,11 @@ class losSearchingWidget extends SearchDelegate {
                             ),
                             trailing: //column for 'distance from user' and connector type
                                 Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Wrap(
                                   spacing:
-                                      MediaQuery.of(context).size.width *
-                                          0.02,
+                                      MediaQuery.of(context).size.width * 0.02,
                                   children: [
                                     //text for distance
                                     data[index] == null
@@ -330,18 +329,16 @@ class losSearchingWidget extends SearchDelegate {
                                         : Text(
                                             '${sortedData[index]['distance'].toStringAsFixed(2)} KM',
                                             style: const TextStyle(
-                                                fontWeight:
-                                                    FontWeight.bold),
+                                                fontWeight: FontWeight.bold),
                                           ),
 
                                     //CircleAvater to show avaliblity
                                     CircleAvatar(
-                                      radius: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                          0.02,
-                                      backgroundColor: AvaliblityColor
-                                          .getAvailablityColor(
+                                      radius:
+                                          MediaQuery.of(context).size.width *
+                                              0.02,
+                                      backgroundColor:
+                                          AvaliblityColor.getAvailablityColor(
                                               sortedData[index]['station']
                                                   ['stationStatus']!),
                                     ),
@@ -368,8 +365,7 @@ class losSearchingWidget extends SearchDelegate {
           } else {
             return const Center(child: Text("No results"));
           }
-        } 
-        else if (snapshot.hasError) {
+        } else if (snapshot.hasError) {
           return const Center(child: Text("Error fetching results."));
         } else {
           return const SizedBox.shrink();
@@ -377,5 +373,4 @@ class losSearchingWidget extends SearchDelegate {
       },
     );
   }
-
 }

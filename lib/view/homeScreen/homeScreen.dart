@@ -97,8 +97,12 @@ this is screen with onclose function
 
 // bottom bar icons
     final items = <Widget>[
-      const Icon(Icons.list, size: 30),
-      const Icon(Icons.home, size: 30),
+      Icon(Icons.list,
+          size: 30, color: selectedIndex == 0 ? Colors.white : Colors.white),
+      Icon(Icons.home,
+          size: 30, color: selectedIndex == 1 ? Colors.white : Colors.white),
+      Icon(Icons.qr_code_scanner,
+          size: 30, color: selectedIndex == 2 ? Colors.white : Colors.white),
       //     IconButton(
       //       onPressed: () async {
       //   String barcodeResult = await ScannerQr().scanBarcode();
@@ -106,7 +110,7 @@ this is screen with onclose function
       //    // Do something with the barcode result, such as navigate to a new screen
       // },
       //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
-      const Icon(Icons.qr_code_scanner, size: 30),
+
       //     IconButton(
       //       onPressed: () async {
       //   String barcodeResult = await ScannerQr().scanBarcode();
@@ -172,11 +176,12 @@ this is screen with onclose function
 
           // this is bottom bar
           bottomNavigationBar: CurvedNavigationBar(
+              color: Colors.green,
               key: bottomNavBarKey,
               height: MediaQuery.of(context).size.height * 0.07,
               animationCurve: Curves.easeInOut,
               backgroundColor: Colors.transparent,
-              buttonBackgroundColor: Colors.white,
+              buttonBackgroundColor: Colors.green,
               animationDuration: const Duration(milliseconds: 300),
               items: items,
               index: selectedIndex,

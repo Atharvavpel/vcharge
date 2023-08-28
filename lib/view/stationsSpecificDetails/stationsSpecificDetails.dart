@@ -12,6 +12,8 @@ import 'package:vcharge/view/chargingScreen/chargingScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
+import 'package:vcharge/view/stationsSpecificDetails/widgets/review_form.dart'; // Import your review form widget
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class StationsSpecificDetails extends StatefulWidget {
@@ -28,6 +30,7 @@ class StationsSpecificDetails extends StatefulWidget {
 class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   List<ChargerModel> chargerList = [];
   String? stationId;
+  int userRating = 0;
 
   StationModel? stationDetails;
 
@@ -47,6 +50,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     getStationDetails();
     getChargerList();
     checkFavourite();
+    _loadUserRating();
   }
 
   void toggleExpansionTile(int index) {
@@ -92,6 +96,14 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     }
   }
 
+  Future<void> _loadUserRating() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int storedRating = prefs.getInt('userRating') ?? 0;
+    setState(() {
+      userRating = storedRating;
+    });
+  }
+
   //this function takes a parameter string as availiblityStatus, and returns a color based on availablity
   MaterialColor getAvailablityColor(String availiblityStatus) {
     if (availiblityStatus.toLowerCase() == 'available') {
@@ -107,15 +119,15 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms' ||
         amenity.replaceAll(" ", "").toLowerCase() == 'restroom') {
       return Icons.hotel;
-    } else if (amenity.toLowerCase().replaceAll(" ", "") == 'loungearea') {
+    } else if (amenity.toLowerCase().replaceAll(" ", "") == 'local_cafe') {
       return Icons.local_cafe;
-    } else if (amenity.toLowerCase().replaceAll(" ", "") == 'foodservice') {
+    } else if (amenity.toLowerCase().replaceAll(" ", "") == 'snackarea') {
       return Icons.restaurant;
     } else if (amenity.replaceAll(" ", "").toLowerCase() == 'shops') {
       return Icons.shopping_bag;
-    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'wifi') {
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'wi-fi') {
       return Icons.wifi;
-    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'restaurants') {
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'restaurant') {
       return Icons.restaurant;
     } else if (amenity.replaceAll(" ", "").toLowerCase() == 'telephone') {
       return Icons.call;
@@ -224,7 +236,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                     fontWeight: FontWeight.bold,
                                     fontSize:
                                         MediaQuery.of(context).size.width *
-                                            0.06),
+                                            0.05),
                               )),
 
                           //Expanded for share Icon
@@ -238,7 +250,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   icon: Icon(
                                     Icons.share,
                                     size: MediaQuery.of(context).size.width *
-                                        0.07,
+                                        0.05,
                                   )))
                         ],
                       ),
@@ -368,8 +380,10 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           ),
 
                           //Container for station active time
+                          //Container for station active time and star rating
                           Expanded(
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 //container for watch icon
                                 const Expanded(
@@ -380,13 +394,37 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 Expanded(
                                   flex: 14,
                                   child: Text(
-                                    // stationDetails!.stationWorkingTime!,
-                                    '${stationDetails!.stationOpeningTime} ${stationDetails!.stationClosingTime}',
+                                    '${stationDetails!.stationOpeningTime} - ${stationDetails!.stationClosingTime}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
+                                // Container for star rating
+                                Expanded(
+                                  flex: 4,
+                                  child: Row(
+                                    children: List.generate(5, (index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReviewForm()), // Replace with your actual ReviewForm screen
+                                          );
+                                        },
+                                        child: Icon(
+                                          size: 15,
+                                          Icons.star,
+                                          color: userRating >= index + 1
+                                              ? Colors.yellow
+                                              : Colors.grey,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -405,45 +443,58 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: selectedButton
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedButton = true;
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: selectedButton
                                       ? Colors.green
-                                      : Colors.white, // Set the button color
+                                      : Colors.transparent,
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    selectedButton = true;
-                                  });
-                                },
-                                child: Text('Amenities',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: selectedButton
-                                            ? Colors.white
-                                            : Colors.black))),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: selectedButton
-                                      ? Colors.white
-                                      : Colors.green, // Set the button color
+                                child: Text(
+                                  'Amenities',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: selectedButton
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    selectedButton = false;
-                                  });
-                                },
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedButton = false;
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: selectedButton
+                                      ? Colors.transparent
+                                      : Colors.green,
+                                ),
                                 child: Text(
                                   'Reviews',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: selectedButton
-                                          ? Colors.black
-                                          : Colors.white),
-                                )),
+                                    fontWeight: FontWeight.bold,
+                                    color: selectedButton
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-
                         //This container consist of 2 container for amenities and review
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.08,
@@ -455,6 +506,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 ?
                                 //Container for Amenities
                                 Container(
+                                    margin: const EdgeInsets.only(left: 10),
                                     alignment: Alignment.center,
                                     child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
@@ -582,7 +634,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                         Expanded(
                           flex: 3,
                           child: Container(
-                            margin: const EdgeInsets.only(left: 2, right: 2),
+                            margin: const EdgeInsets.only(left: 15, right: 15),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
@@ -610,6 +662,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                         Expanded(
                           flex: 23,
                           child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 10),
+
                             // height: MediaQuery.of(context).size.height * 0.4,
                             child: chargerList.isEmpty
                                 ? Center(
@@ -635,7 +689,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         color: const Color.fromARGB(
-                                            255, 239, 255, 255),
+                                            255, 246, 249, 252),
                                         child: Theme(
                                           data: Theme.of(context).copyWith(
                                               dividerColor: Colors.transparent),
@@ -705,22 +759,6 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                           itemBuilder: (context,
                                                               connector) {
                                                             return ExpansionTile(
-                                                              //Column for circle avatar
-                                                              leading: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  CircleAvatar(
-                                                                    backgroundColor: getAvailablityColor(chargerList[
-                                                                            index]
-                                                                        .connectors![
-                                                                            connector]
-                                                                        .connectorStatus!),
-                                                                    radius: 10,
-                                                                  ),
-                                                                ],
-                                                              ),
                                                               //Row for connector type and socket
                                                               title: Row(
                                                                 children: [
@@ -732,15 +770,64 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                                 .bold,
                                                                         fontSize:
                                                                             Get.width *
-                                                                                0.048),
+                                                                                0.042),
                                                                   ),
                                                                   Text(
                                                                     '${chargerList[index].connectors![connector].connectorSocket}',
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             Get.width *
-                                                                                0.048),
+                                                                                0.042),
                                                                   ),
+                                                                  Expanded(
+                                                                    child: Card(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      margin: const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              30,
+                                                                          right:
+                                                                              0.0),
+                                                                      elevation:
+                                                                          3,
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            EdgeInsets.all(8.0), // Adjust padding as needed
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            // Display "Available" or "Unavailable" based on CircleAvatar's background color
+                                                                            Text(
+                                                                              getAvailablityColor(chargerList[index].connectors![connector].connectorStatus!) == Colors.green ? "Available" : "Unavailable",
+                                                                              style: const TextStyle(
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize: 11, // Adjust the font size as needed
+                                                                              ),
+                                                                            ),
+                                                                            Spacer(), // Takes up the available space
+
+                                                                            CircleAvatar(
+                                                                              backgroundColor: getAvailablityColor(
+                                                                                chargerList[index].connectors![connector].connectorStatus!,
+                                                                              ),
+                                                                              radius: 5,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  )
                                                                 ],
                                                               ),
 
@@ -824,6 +911,11 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                             ),
                                                                           );
                                                                         },
+                                                                        style: ElevatedButton
+                                                                            .styleFrom(
+                                                                          backgroundColor:
+                                                                              Colors.orange, // Set the button color to orange
+                                                                        ),
                                                                         child: const Text(
                                                                             'Reserve')),
                                                                     //button for charge

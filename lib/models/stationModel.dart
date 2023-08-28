@@ -1,6 +1,5 @@
 import 'chargerModel.dart';
 
-//Following is a basic model for all the staion details
 class StationModel {
   String? stationId;
   String? stationName;
@@ -16,8 +15,7 @@ class StationModel {
   String? stationZipCode;
   String? stationParkingArea;
   String? stationContactNumber;
-  String? stationOpeningTime;
-  String? stationClosingTime;
+  String? stationWorkingTime;
   int? chargerNumber;
   String? stationParkingType;
   List<String>? stationAmenity;
@@ -41,8 +39,7 @@ class StationModel {
       this.stationZipCode,
       this.stationParkingArea,
       this.stationContactNumber,
-      this.stationOpeningTime,
-      this.stationClosingTime,
+      this.stationWorkingTime,
       this.chargerNumber,
       this.stationParkingType,
       this.stationAmenity,
@@ -66,8 +63,7 @@ class StationModel {
     stationZipCode = json['stationZipCode'];
     stationParkingArea = json['stationParkingArea'];
     stationContactNumber = json['stationContactNumber'];
-    stationOpeningTime = json['stationOpeningTime'];
-    stationClosingTime = json['stationClosingTime'];
+    stationWorkingTime = json['stationWorkingTime'];
     chargerNumber = json['chargerNumber'];
     stationParkingType = json['stationParkingType'];
     stationAmenity = json['stationAmenity'].cast<String>();
@@ -81,6 +77,10 @@ class StationModel {
     stationStatus = json['stationStatus'];
     stationPowerStandard = json['stationPowerStandard'];
   }
+
+  get stationClosingTime => null;
+
+  get stationOpeningTime => null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -98,11 +98,10 @@ class StationModel {
     data['stationZipCode'] = stationZipCode;
     data['stationParkingArea'] = stationParkingArea;
     data['stationContactNumber'] = stationContactNumber;
-    data['stationOpeningTime'] = stationOpeningTime;
-    data['stationClosingTime'] = stationClosingTime;
+    data['stationWorkingTime'] = stationWorkingTime;
     data['chargerNumber'] = chargerNumber;
     data['stationParkingType'] = stationParkingType;
-    data['stationAmenity'] = stationAmenity ;
+    data['stationAmenity'] = stationAmenity;
     if (chargers != null) {
       data['chargers'] = chargers!.map((v) => v.toJson()).toList();
     }
@@ -112,7 +111,6 @@ class StationModel {
     return data;
   }
 }
-
 
 //Following is the model for some specific details of station
 class RequiredStationDetailsModel {
@@ -156,7 +154,6 @@ class RequiredStationDetailsModel {
   }
 }
 
-
 //Following is the model for some specific details of station for favourite page
 class FovouriteStationDetailsModel {
   String? stationId;
@@ -166,13 +163,14 @@ class FovouriteStationDetailsModel {
   String? stationCity;
   String? stationStatus;
 
-  FovouriteStationDetailsModel(
-      {this.stationId,
-      this.stationName,
-      this.stationAddressLineOne,
-      this.stationAddressLineTwo,
-      this.stationCity,
-      this.stationStatus,});
+  FovouriteStationDetailsModel({
+    this.stationId,
+    this.stationName,
+    this.stationAddressLineOne,
+    this.stationAddressLineTwo,
+    this.stationCity,
+    this.stationStatus,
+  });
 
   FovouriteStationDetailsModel.fromJson(Map<String, dynamic> json) {
     stationId = json['stationId'];
@@ -194,5 +192,3 @@ class FovouriteStationDetailsModel {
     return data;
   }
 }
-
-

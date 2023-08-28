@@ -69,7 +69,7 @@ class ReservePopUpState extends State<ReservePopUp> {
   Future<void> getWalletAmount() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}');
+          'http://192.168.0.243:8097/manageUser/getWalletByUserId?userId=${widget.userId}');
       setState(() {
         walletAmount = data['walletAmount'];
       });
