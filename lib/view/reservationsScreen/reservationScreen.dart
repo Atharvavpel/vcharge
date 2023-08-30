@@ -50,7 +50,7 @@ class ReservationScreenState extends State<ReservationScreen> {
   Future<void> getbookingDetails(String userId) async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8099/manageBooking/getBookingByCustomer?customerId=$userId');
+          'http://192.168.0.243:8099/manageBooking/getBookingByCustomerId?customerId=$userId');
       if (data != null && data.isNotEmpty) {
         upcomingBookingList.clear();
         bookingHistoryList.clear();
