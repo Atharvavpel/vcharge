@@ -173,6 +173,8 @@ class FilterPopUpState extends State<FilterPopUp> {
                             availableToggleButton = newValue;
                           });
                         },
+                        activeTrackColor:
+                            const Color.fromARGB(255, 144, 228, 66),
                         activeColor: const Color.fromARGB(255, 244, 244, 244),
                       )
                     ]),

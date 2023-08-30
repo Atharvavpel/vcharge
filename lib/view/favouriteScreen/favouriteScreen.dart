@@ -23,7 +23,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
       // var data = await GetMethod.getRequest(
       //     'http://192.168.0.243:8097/manageUser/getFavorites?userId=${widget.userId}');
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8097/manageUser/getFavorites?userId=USR20230517060841379');
+          'http://192.168.0.41:8097/manageUser/getFavoritesByUserId?userId=USR20230517060841379');
       if (data != null && data.isNotEmpty) {
         favouriteList.clear();
         setState(() {
@@ -64,7 +64,8 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                           MaterialPageRoute(
                               builder: (context) => StationsSpecificDetails(
                                   userId: widget.userId,
-                                  stationId: favouriteList[index].stationId!)));
+                                  stationId:
+                                      favouriteList[index].stationId ?? "")));
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -92,7 +93,8 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: Get.height * 0.002),
                                         child: Text(
-                                          favouriteList[index].stationName!,
+                                          favouriteList[index].stationName ??
+                                              "",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: Get.width * 0.045),
@@ -104,7 +106,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: Get.height * 0.008),
                                         child: Text(
-                                          '${favouriteList[index].stationCity}, ${favouriteList[index].stationAddressLineOne}',
+                                          '${favouriteList[index].stationCity ?? ""}, ${favouriteList[index].stationAddressLineOne ?? ""}',
                                           maxLines: 2,
                                           style: const TextStyle(
                                               color: Color.fromARGB(
@@ -131,7 +133,8 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                                             backgroundColor: AvaliblityColor
                                                 .getAvailablityColor(
                                                     favouriteList[index]
-                                                        .stationStatus!),
+                                                            .stationStatus ??
+                                                        ""),
                                           ),
                                         ),
 
