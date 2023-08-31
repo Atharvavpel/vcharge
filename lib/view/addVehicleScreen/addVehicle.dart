@@ -246,11 +246,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  const SizedBox(
-                    width: 1,
-                    height: 15,
-                  ),
-
                   //Heading text of registration number
                   const Padding(
                     padding: EdgeInsets.only(left: 8, right: 8),
@@ -295,11 +290,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  const SizedBox(
-                    width: 1,
-                    height: 15,
-                  ),
-
                   // //heading of nick name
                   // const Padding(
                   //   padding: EdgeInsets.only(left: 8, right: 8),
@@ -323,11 +313,6 @@ class AddVehicleScreenState extends State<AddVehicleScreen> {
                   //         border: InputBorder.none),
                   //   ),
                   // ),
-
-                  const SizedBox(
-                    height: 15,
-                    width: 1,
-                  ),
 
                   //heading for more details
                   const Padding(

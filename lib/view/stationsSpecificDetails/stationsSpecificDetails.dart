@@ -383,7 +383,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                           //Container for station active time and star rating
                           Expanded(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 //container for watch icon
                                 const Expanded(
@@ -392,7 +392,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                 ),
                                 //container for station active time text
                                 Expanded(
-                                  flex: 14,
+                                  flex: 8,
                                   child: Text(
                                     '${stationDetails!.stationOpeningTime} - ${stationDetails!.stationClosingTime}',
                                     style: const TextStyle(
@@ -400,9 +400,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                     ),
                                   ),
                                 ),
-                                // Container for star rating
+
                                 Expanded(
-                                  flex: 4,
+                                  flex: 5,
                                   child: Row(
                                     children: List.generate(5, (index) {
                                       return GestureDetector(
@@ -411,11 +411,11 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ReviewForm()), // Replace with your actual ReviewForm screen
+                                                    ReviewForm()),
                                           );
                                         },
                                         child: Icon(
-                                          size: 15,
+                                          size: 20,
                                           Icons.star,
                                           color: userRating >= index + 1
                                               ? Colors.yellow
@@ -424,7 +424,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                       );
                                     }),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -786,7 +786,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                       margin: const EdgeInsets
                                                                               .only(
                                                                           left:
-                                                                              30,
+                                                                              40,
                                                                           right:
                                                                               0.0),
                                                                       elevation:

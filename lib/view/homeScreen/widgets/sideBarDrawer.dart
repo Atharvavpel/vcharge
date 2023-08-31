@@ -193,7 +193,6 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                     child: ListTile(
                       title: const Text('Favourites'),
                       onTap: () {
-                        Navigator.pop(context);
                         Navigator.push(
                                 context,
                                 MaterialPageRoute(
