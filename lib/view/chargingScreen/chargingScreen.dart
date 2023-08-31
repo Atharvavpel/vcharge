@@ -26,7 +26,7 @@ class ChargingScreen extends StatefulWidget {
 }
 
 class ChargingScreenState extends State<ChargingScreen> {
-  //activeButton to track time, units and money aciveness
+  //activeButton to track time, units and money activeness
   //1 = time, 2 = units and 3 = money
   int activeButton = 1;
   int timeSliderValue = 6;
@@ -51,7 +51,7 @@ class ChargingScreenState extends State<ChargingScreen> {
   Future<void> getWalletAmount() async {
     try {
       var data = await GetMethod.getRequest(
-          'http://192.168.0.243:8097/manageUser/getWallet?userId=${widget.userId}');
+          'http://192.168.0.243:8097/manageUser/getWalletByUserId?userId=${widget.userId}');
       if (data != null) {
         setState(() {
           walletAmount = data['walletAmount'].toString();

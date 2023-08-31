@@ -276,6 +276,16 @@ class FilterPopUpState extends State<FilterPopUp> {
             children: [
               ElevatedButton(
                   onPressed: () {
+                    setState(() {
+                      vehicleSelected = null;
+                      availableToggleButton = false;
+                      privateToggleButton = false;
+                      selectedConnector = List.filled(connectors.length, false);
+                    });
+                  },
+                  child: const Text('Reset')),
+              ElevatedButton(
+                  onPressed: () {
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
                       msg: "Filters Applied Successfully",
@@ -287,16 +297,6 @@ class FilterPopUpState extends State<FilterPopUp> {
                     );
                   },
                   child: const Text('Apply')),
-              ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      vehicleSelected = null;
-                      availableToggleButton = false;
-                      privateToggleButton = false;
-                      selectedConnector = List.filled(connectors.length, false);
-                    });
-                  },
-                  child: const Text('Reset')),
             ],
           ),
         ),
