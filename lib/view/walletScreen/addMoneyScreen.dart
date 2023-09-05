@@ -61,7 +61,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
         timeInSecForIosWeb: 4);
     _addTransactionHistoryItem(
       amountController.text,
-      "vCharge", // Replace with your app's name
+      "vCharge",
       "Adding Money to Wallet",
       true,
       response.paymentId!,
@@ -74,7 +74,7 @@ class AddMoneyScreenState extends State<AddMoneyScreen> {
         timeInSecForIosWeb: 4);
     _addTransactionHistoryItem(
       amountController.text,
-      "vCharge", // Replace with your app's name
+      "vCharge",
       "Adding Money to Wallet",
       false,
       null,

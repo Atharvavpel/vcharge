@@ -5,7 +5,6 @@ import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:flutter/services.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // Initialize the binding
   // Set preferred orientations
@@ -13,7 +12,7 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp( 
+  runApp(
     MyApp(),
   );
 }
@@ -26,45 +25,36 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => DarkThemeProvider()),
-      ],
-      child: Builder(builder: (BuildContext context) {
-        final themeChanger = Provider.of<DarkThemeProvider>(context);
-        return GetMaterialApp(
-        title: 'VCharge',
-        debugShowCheckedModeBanner: false,
-        navigatorKey: navigatorKey,
-        themeMode: themeChanger.themeMode,
-        theme: ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: Colors.green,
-          dividerColor: Colors.black,
-        ), 
-        darkTheme: ThemeData(
-          dividerColor: Colors.white,
-          brightness: Brightness.dark,
-          iconTheme: const IconThemeData(
-            color: Colors.green,
-          ),
-          
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: Colors.blue
-          ),
-          drawerTheme: const DrawerThemeData(
-            backgroundColor: Colors.amberAccent
-          ),
-          textTheme: Typography.whiteRedwoodCity,
-          appBarTheme: const AppBarTheme(
-            color: Colors.brown
-          )
-        ),
-        home: const HomeScreen(),
-      );
-      }
-    )
-    );
+        providers: [
+          ChangeNotifierProvider(create: (_) => DarkThemeProvider()),
+        ],
+        child: Builder(builder: (BuildContext context) {
+          final themeChanger = Provider.of<DarkThemeProvider>(context);
+          return GetMaterialApp(
+            title: 'VCharge',
+            debugShowCheckedModeBanner: false,
+            navigatorKey: navigatorKey,
+            themeMode: themeChanger.themeMode,
+            theme: ThemeData(
+              brightness: Brightness.light,
+              primarySwatch: Colors.green,
+              dividerColor: Colors.black,
+            ),
+            darkTheme: ThemeData(
+                dividerColor: Colors.white,
+                brightness: Brightness.dark,
+                iconTheme: const IconThemeData(
+                  color: Colors.green,
+                ),
+                floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                    backgroundColor: Colors.blue),
+                drawerTheme:
+                    const DrawerThemeData(backgroundColor: Colors.amberAccent),
+                textTheme: Typography.whiteRedwoodCity,
+                appBarTheme: const AppBarTheme(color: Colors.brown)),
+            home: const HomeScreen(),
+          );
+        }));
   }
 }

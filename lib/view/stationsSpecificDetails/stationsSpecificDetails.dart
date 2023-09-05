@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
@@ -152,8 +151,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   Future<void> openGoogleMaps(String url) async {
     try {
-      if (await canLaunch(url)) {
-        await launch(url);
+      if (await launchUrl(url as Uri)) {
+        await launchUrl(url as Uri);
       } else {
         throw 'Could not open Google Maps';
       }
@@ -162,7 +161,6 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     }
   }
 
-  //this function get the favourite stations details and compare with current station, if it is in the favourite or not
   Future<void> checkFavourite() async {
     try {
       var data = await GetMethod.getRequest(
