@@ -288,11 +288,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                     padding: const EdgeInsets.only(left: 50.0, right: 20.0),
                     child: Container(
                       decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
+                         
                           ),
                       child: const Icon(Icons.headphones),
                     ),
@@ -364,13 +360,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                   Padding(
                     padding: const EdgeInsets.only(left: 50.0, right: 20.0),
                     child: Container(
-                      decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
-                          ),
+                      decoration: const BoxDecoration(),
                       child: const Icon(Icons.logout),
                     ),
                   ),

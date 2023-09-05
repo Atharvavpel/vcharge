@@ -42,16 +42,6 @@ class AddMoneyStatusPopUpState extends State<AddMoneyStatusPopUp> {
     }
   }
 
-  //this function takes hour as input and return, AM or PM according to that hour
-  // String getAMorPM(var hour){
-  //   // int hours = int.parse(hour);
-  //   if(hour<12){
-  //     return 'AM';
-  //   }else{
-  //     return 'PM';
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
