@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
+import 'Security/RegistrationScreen.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -18,6 +20,28 @@ class _LoginScreenState extends State<LoginScreen> {
   final storage = FlutterSecureStorage();
   final client = http.Client();
   bool _passwordVisible = false;
+  bool _isNumericInput = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _contactNumberOrEmailController.addListener(() {
+      final text = _contactNumberOrEmailController.text;
+
+      setState(() {
+        _isNumericInput = isNumeric(text);
+      });
+    });
+  }
+
+  // Helper function to check if a string is numeric.
+  bool isNumeric(String str) {
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
 
   Future<void> loginUser(String contactNumber, String password) async {
     final requestBody = {
@@ -225,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const Text(
                         "Please Login to continue our App",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       const SizedBox(
                         height: 18,
@@ -250,8 +274,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(
                               child: TextFormField(
                                 controller: _contactNumberOrEmailController,
-                                decoration: const InputDecoration(
-                                    labelText: 'Contact Number'),
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Number or Email',
+                                  prefixText: _isNumericInput
+                                      ? '+91 '
+                                      : '', // Add "+91" prefix
+                                ),
                               ),
                             ),
                           ],
@@ -308,20 +336,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               "Forgot Password?",
-                              style: TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
                             ),
                             SizedBox(
-                              width: 130,
+                              width: 120,
                             ),
                             Row(
                               children: [
                                 Text(
                                   "Request ",
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
                                 ),
                                 Text(
                                   "OTP",
-                                  style: TextStyle(color: Colors.amber),
+                                  style: TextStyle(
+                                      color: Colors.amber, fontSize: 15),
                                 )
                               ],
                             )
@@ -331,46 +362,65 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          final input = _contactNumberOrEmailController.text;
-                          final password = _passwordController.text;
+                      SizedBox(
+                        width: 110,
+                        height: 45,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32.0)),
+                          ),
+                          onPressed: () {
+                            final input = _contactNumberOrEmailController.text;
+                            final password = _passwordController.text;
 
-                          if (input.contains('@')) {
-                            loginU(input, password);
-                          } else {
-                            loginUser(input, password);
-                          }
-                        },
-                        child: const Text('Login'),
+                            if (input.contains('@')) {
+                              loginU(input, password);
+                            } else {
+                              loginUser(input, password);
+                            }
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       Container(
-                          padding: const EdgeInsets.all(1.0),
                           child: Row(children: const <Widget>[
-                            Expanded(
-                                child: Divider(
-                              indent: 50,
-                              endIndent: 20,
-                              color: Colors.white,
-                              thickness: 1,
-                            )),
-                            Text(
-                              "OR",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Expanded(
-                                child: Divider(
-                              indent: 20,
-                              endIndent: 50,
-                              color: Colors.white,
-                              thickness: 1,
-                            )),
-                          ])),
+                        Expanded(
+                            child: Divider(
+                          indent: 50,
+                          endIndent: 20,
+                          color: Colors.white,
+                          thickness: 1,
+                        )),
+                        Text(
+                          "OR",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Expanded(
+                            child: Divider(
+                          indent: 20,
+                          endIndent: 50,
+                          color: Colors.white,
+                          thickness: 1,
+                        )),
+                      ])),
+                      SizedBox(height: 13),
+                      Text(
+                        "Continue With ",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
                       Container(
                         width: Get.width * 0.6,
                         height: Get.height * 0.05,
                         margin: EdgeInsets.only(
-                            top: Get.height * 0.04, left: Get.width * 0.06),
+                            top: Get.height * 0.02, left: Get.width * 0.06),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -412,15 +462,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             "Don't Have an Account? ",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontSize: 15),
                           ),
-                          Text(
-                            "Register !",
-                            style: TextStyle(color: Colors.amber),
-                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return RegistrationScreen();
+                                },
+                              ));
+                            },
+                            child: Text(
+                              "Register !",
+                              style: TextStyle(
+                                color: Colors.amber,
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          )
                         ],
                       ))
                     ],
