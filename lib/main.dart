@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:flutter/services.dart';
+import 'package:vcharge/view/LoginScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // Initialize the binding
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
                     const DrawerThemeData(backgroundColor: Colors.amberAccent),
                 textTheme: Typography.whiteRedwoodCity,
                 appBarTheme: const AppBarTheme(color: Colors.brown)),
-            home: const HomeScreen(),
+            home: LoginScreen(),
           );
         }));
   }
