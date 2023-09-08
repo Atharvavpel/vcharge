@@ -7,10 +7,18 @@ import 'package:vcharge/view/listOfStations/listOfStations.dart';
 import 'package:vcharge/view/qrScanner.dart/scanner.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Login login;
+  const HomeScreen({Key? key, required this.login}) : super(key: key);
 
   @override
   HomeScreenState createState() => HomeScreenState();
+}
+
+class Login {
+  final String username;
+  final String password;
+
+  Login(this.username, this.password);
 }
 
 class HomeScreenState extends State<HomeScreen> {
@@ -103,14 +111,6 @@ this is screen with onclose function
           size: 30, color: selectedIndex == 1 ? Colors.white : Colors.white),
       Icon(Icons.qr_code_scanner,
           size: 30, color: selectedIndex == 2 ? Colors.white : Colors.white),
-      //     IconButton(
-      //       onPressed: () async {
-      //   String barcodeResult = await ScannerQr().scanBarcode();
-      //   print(barcodeResult);
-      //    // Do something with the barcode result, such as navigate to a new screen
-      // },
-      //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
-
       //     IconButton(
       //       onPressed: () async {
       //   String barcodeResult = await ScannerQr().scanBarcode();
