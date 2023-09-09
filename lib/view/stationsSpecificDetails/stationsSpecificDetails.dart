@@ -11,7 +11,7 @@ import 'package:vcharge/view/chargingScreen/chargingScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
 import '../../models/stationModel.dart';
-import 'package:vcharge/view/stationsSpecificDetails/widgets/review_form.dart'; // Import your review form widget
+import 'package:vcharge/view/stationsSpecificDetails/widgets/review_form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -71,6 +71,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
       // print(widget.stationId);
       setState(() {
         stationDetails = StationModel.fromJson(data);
+        print(stationDetails);
       });
     } catch (e) {
       print(e);
