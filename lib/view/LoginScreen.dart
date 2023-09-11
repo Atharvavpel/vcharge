@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
     print('Request Body: $requestBodyJson');
 
     final response = await http.post(
-      Uri.parse('http://192.168.0.243:8090/auth/loginUser/ByEmailAndPassword'),
+      Uri.parse('http://192.168.0.41:8090/auth/loginUser/ByEmailAndPassword'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -206,285 +206,294 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.asset(
-          'assets/images/background.jpg', // Replace with your image asset path
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        ),
-        ImageFiltered(
-          imageFilter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-            child: Container(
-              color: Colors.black.withOpacity(0),
-            ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          Image.asset(
+            'assets/images/background.jpg', // Replace with your image asset path
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 300, right: 10, left: 10),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            color: Colors.black45,
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Welcome Back !",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "Please Login to continue our App",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    padding: EdgeInsets.only(
-                      left: 10,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          size: 24,
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _contactNumberOrEmailController,
-                            decoration: InputDecoration(
-                              labelText: 'Enter Number or Email',
-                              prefixText: _isNumericInput
-                                  ? '+91 '
-                                  : '', // Add "+91" prefix
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    padding: EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.lock,
-                          size: 24, // Adjust the size to your preferred value
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _passwordController,
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _passwordVisible = !_passwordVisible;
-                                  });
-                                },
-                                icon: Icon(
-                                  _passwordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                              ),
-                            ),
-                            obscureText: !_passwordVisible,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Text(
-                          "Forgot Password?",
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        ),
-                        SizedBox(
-                          width: 120,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Request ",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                            Text(
-                              "OTP",
-                              style:
-                                  TextStyle(color: Colors.amber, fontSize: 15),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: 110,
-                    height: 45,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32.0)),
-                      ),
-                      onPressed: () {
-                        final input = _contactNumberOrEmailController.text;
-                        final password = _passwordController.text;
-
-                        if (input.contains('@')) {
-                          loginU(input, password);
-                        } else {
-                          loginUser(input, password);
-                        }
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                      child: Row(children: const <Widget>[
-                    Expanded(
-                        child: Divider(
-                      indent: 50,
-                      endIndent: 20,
-                      color: Colors.white,
-                      thickness: 1,
-                    )),
-                    Text(
-                      "OR",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Expanded(
-                        child: Divider(
-                      indent: 20,
-                      endIndent: 50,
-                      color: Colors.white,
-                      thickness: 1,
-                    )),
-                  ])),
-                  SizedBox(height: 13),
-                  Text(
-                    "Continue With ",
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                  ),
-                  Container(
-                    width: Get.width * 0.6,
-                    height: Get.height * 0.05,
-                    margin: EdgeInsets.only(
-                        top: Get.height * 0.02, left: Get.width * 0.06),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // facebook icon
-                        Container(
-                          width: Get.width * 0.07,
-                          margin: EdgeInsets.only(right: Get.width * 0.04),
-                          child: GestureDetector(
-                              onTap: () {},
-                              child: Image.asset("assets/images/google.png")),
-                        ),
-
-                        Container(
-                          width: Get.width * 0.09,
-                          margin: EdgeInsets.only(right: Get.width * 0.04),
-                          child: GestureDetector(
-                              onTap: () {},
-                              child: Image.asset("assets/images/facebook.png")),
-                        ),
-
-                        // twitter icon
-                        Container(
-                          width: Get.width * 0.09,
-                          margin: EdgeInsets.only(right: Get.width * 0.04),
-                          child: GestureDetector(
-                              onTap: () {},
-                              child: Image.asset("assets/images/apple.png")),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                      child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't Have an Account? ",
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return RegistrationScreen();
-                            },
-                          ));
-                        },
-                        child: Text(
-                          "Register !",
-                          style: TextStyle(
-                            color: Colors.amber,
-                            fontSize: 18,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      )
-                    ],
-                  ))
-                ],
+          ImageFiltered(
+            imageFilter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+              child: Container(
+                color: Colors.black.withOpacity(0),
               ),
             ),
           ),
-        ),
-      ],
+          SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.only(top: 300, right: 10, left: 10),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: Colors.black45,
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Welcome Back !",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "Please Login to continue our App",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 18,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        padding: EdgeInsets.only(
+                          left: 10,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 24,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _contactNumberOrEmailController,
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Number or Email',
+                                  prefixText: _isNumericInput
+                                      ? '+91 '
+                                      : '', // Add "+91" prefix
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        padding: EdgeInsets.only(left: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.lock,
+                              size:
+                                  24, // Adjust the size to your preferred value
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _passwordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _passwordVisible = !_passwordVisible;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      _passwordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                  ),
+                                ),
+                                obscureText: !_passwordVisible,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(
+                              "Forgot Password?",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            ),
+                            SizedBox(
+                              width: 120,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Request ",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                ),
+                                Text(
+                                  "OTP",
+                                  style: TextStyle(
+                                      color: Colors.amber, fontSize: 15),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: 110,
+                        height: 45,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32.0)),
+                          ),
+                          onPressed: () {
+                            final input = _contactNumberOrEmailController.text;
+                            final password = _passwordController.text;
+
+                            if (input.contains('@')) {
+                              loginU(input, password);
+                            } else {
+                              loginUser(input, password);
+                            }
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                          child: Row(children: const <Widget>[
+                        Expanded(
+                            child: Divider(
+                          indent: 50,
+                          endIndent: 20,
+                          color: Colors.white,
+                          thickness: 1,
+                        )),
+                        Text(
+                          "OR",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Expanded(
+                            child: Divider(
+                          indent: 20,
+                          endIndent: 50,
+                          color: Colors.white,
+                          thickness: 1,
+                        )),
+                      ])),
+                      SizedBox(height: 13),
+                      Text(
+                        "Continue With ",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      Container(
+                        width: Get.width * 0.6,
+                        height: Get.height * 0.05,
+                        margin: EdgeInsets.only(
+                            top: Get.height * 0.02, left: Get.width * 0.06),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // facebook icon
+                            Container(
+                              width: Get.width * 0.07,
+                              margin: EdgeInsets.only(right: Get.width * 0.04),
+                              child: GestureDetector(
+                                  onTap: () {},
+                                  child:
+                                      Image.asset("assets/images/google.png")),
+                            ),
+
+                            Container(
+                              width: Get.width * 0.09,
+                              margin: EdgeInsets.only(right: Get.width * 0.04),
+                              child: GestureDetector(
+                                  onTap: () {},
+                                  child: Image.asset(
+                                      "assets/images/facebook.png")),
+                            ),
+
+                            // twitter icon
+                            Container(
+                              width: Get.width * 0.09,
+                              margin: EdgeInsets.only(right: Get.width * 0.04),
+                              child: GestureDetector(
+                                  onTap: () {},
+                                  child:
+                                      Image.asset("assets/images/apple.png")),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                          child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't Have an Account? ",
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return RegistrationScreen();
+                                },
+                              ));
+                            },
+                            child: Text(
+                              "Register !",
+                              style: TextStyle(
+                                color: Colors.amber,
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          )
+                        ],
+                      ))
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

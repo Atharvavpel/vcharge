@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -23,17 +24,52 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     if (response.statusCode == 200) {
-      // Navigate to the Verify OTP screen and pass the phoneNumber as an argument.
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => VerifyOtpScreen(
-              phoneNumber: phoneNumber), // Pass the phoneNumber.
-          settings: RouteSettings(arguments: phoneNumber),
-        ),
-      );
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+      String status = jsonResponse["status"];
+
+      if (status == "userExists") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("User with this phone number already exists."),
+          ),
+        );
+      } else if (status == "sent") {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => VerifyOtpScreen(
+              phoneNumber: phoneNumber,
+            ),
+            settings: RouteSettings(arguments: phoneNumber),
+          ),
+        );
+      } else if (status == "alreadySent") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "OTP has already been sent recently. Please check your messages."),
+          ),
+        );
+      } else if (status == "wait") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Please wait before requesting another OTP."),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("An unexpected error occurred."),
+          ),
+        );
+      }
     } else {
       // Handle the error if the request fails.
-      print("Request failed with status: ${response.statusCode}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Request failed with status: ${response.statusCode}"),
+        ),
+      );
     }
   }
 
