@@ -1,8 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../LoginScreen.dart';
+import 'AdditionalDetailsScreen.dart';
+import 'RegistrationScreen.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -13,7 +17,8 @@ class VerifyOtpScreen extends StatefulWidget {
 }
 
 class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
-  TextEditingController otpController = TextEditingController();
+  List<TextEditingController> otpControllers =
+      List.generate(4, (_) => TextEditingController());
 
   Future<String> verifyOtp(String phoneNumber, int otp) async {
     final response = await http.get(
@@ -29,11 +34,13 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     }
   }
 
-  void verifyOtpRequest() async {
+  Future<void> verifyOtpRequest() async {
     try {
       String phoneNumber = widget.phoneNumber;
-      int enteredOtp = int.parse(otpController.text);
-      String response = await verifyOtp(phoneNumber, enteredOtp);
+      String enteredOtp = otpControllers
+          .map((controller) => controller.text)
+          .join(); // Combine all OTP digit inputs
+      String response = await verifyOtp(phoneNumber, int.parse(enteredOtp));
 
       final status = jsonDecode(response)["status"];
 
@@ -57,7 +64,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     // Navigate to the Login screen (you need to create the LoginScreen widget).
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => LoginScreen(), // Create a LoginScreen widget.
+        builder: (context) =>
+            AdditionalDetailsScreen(), // Create a LoginScreen widget.
       ),
     );
   }
@@ -65,29 +73,171 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Verify OTP'),
+        body: Stack(children: [
+      Image.asset(
+        'assets/images/background.jpg', // Replace with your image asset path
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text('Enter OTP sent to ${widget.phoneNumber}'),
-            TextField(
-              controller: otpController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'OTP',
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: verifyOtpRequest,
-              child: Text('Verify OTP'),
-            ),
-          ],
+      ImageFiltered(
+        imageFilter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+          child: Container(
+            color: Colors.black.withOpacity(0),
+          ),
         ),
       ),
-    );
+      SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(top: 300, right: 10, left: 10),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            color: Colors.black45,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Enter the verification code",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Enter the Verification code we have send to ",
+                          style: TextStyle(color: Colors.amber, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "(+91) ${widget.phoneNumber}",
+                        style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: List.generate(
+                                4,
+                                (index) => SizedBox(
+                                  width: 40,
+                                  child: TextFormField(
+                                    controller: otpControllers[index],
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    maxLength: 1,
+                                    decoration: const InputDecoration(
+                                      counterText:
+                                          "", // Hide the character count
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.amber, width: 2),
+                                      ),
+                                    ),
+                                    onChanged: (value) {
+                                      // Automatically move focus to the next TextFormField when a digit is entered
+                                      if (value.isNotEmpty && index < 3) {
+                                        FocusScope.of(context).nextFocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: 110,
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
+                      ),
+                      onPressed: verifyOtpRequest,
+                      child: Text(
+                        'Next',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                      child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Didn't Receive Anything ? ",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return AdditionalDetailsScreen();
+                            },
+                          ));
+                        },
+                        child: Text(
+                          "Resend Code ",
+                          style: TextStyle(
+                            color: Colors.amber,
+                            fontSize: 16,
+                          ),
+                        ),
+                      )
+                    ],
+                  ))
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    ]));
   }
 }
