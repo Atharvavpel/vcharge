@@ -1,21 +1,19 @@
-// this is the model class for the connector services
-
 class ConnectorModel {
   String? connectorId;
   String? connectorType;
   String? connectorSocket;
   String? connectorStatus;
   String? connectorOutputPower;
-  String? connectorCharges;
+  double? connectorCharges; // Change the data type to double
 
-  ConnectorModel(
-      {
-      this.connectorId,
-      this.connectorType,
-      this.connectorSocket,
-      this.connectorStatus,
-      this.connectorOutputPower,
-      this.connectorCharges});
+  ConnectorModel({
+    this.connectorId,
+    this.connectorType,
+    this.connectorSocket,
+    this.connectorStatus,
+    this.connectorOutputPower,
+    this.connectorCharges,
+  });
 
   ConnectorModel.fromJson(Map<String, dynamic> json) {
     connectorId = json['connectorId'];
@@ -23,7 +21,11 @@ class ConnectorModel {
     connectorSocket = json['connectorSocket'];
     connectorStatus = json['connectorStatus'];
     connectorOutputPower = json['connectorOutputPower'];
-    connectorCharges = json['connectorCharges'];
+    connectorCharges = json['connectorCharges']
+            is int // Check if it's an integer (e.g., 100) in the response
+        ? (json['connectorCharges'] as int).toDouble() // Convert it to double
+        : json['connectorCharges']
+            ?.toDouble(); // Convert it to double, handling null values
   }
 
   Map<String, dynamic> toJson() {
@@ -33,7 +35,7 @@ class ConnectorModel {
     data['connectorSocket'] = connectorSocket;
     data['connectorStatus'] = connectorStatus;
     data['connectorOutputPower'] = connectorOutputPower;
-    data['connectorCharges'] = connectorCharges;
+    data['connectorCharges'] = connectorCharges; // Keep it as double
     return data;
   }
 }
