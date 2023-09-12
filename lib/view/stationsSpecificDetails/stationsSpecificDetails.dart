@@ -10,9 +10,11 @@ import 'package:vcharge/services/PostMethod.dart';
 import 'package:vcharge/view/chargingScreen/chargingScreen.dart';
 import 'package:vcharge/view/homeScreen/widgets/bgMap.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/reservePopup.dart';
+import '../../models/feedback_model.dart';
 import '../../models/stationModel.dart';
 import 'package:vcharge/view/stationsSpecificDetails/widgets/review_form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class StationsSpecificDetails extends StatefulWidget {
@@ -30,6 +32,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   List<ChargerModel> chargerList = [];
   String? stationId;
   int userRating = 0;
+  String? feedbackId;
+  List<FeedbackModel> feedbackList =
+      []; // Add this line to declare feedbackList
 
   StationModel? stationDetails;
 
@@ -64,11 +69,27 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     });
   }
 
+  Future<List<FeedbackModel>> fetchFeedback() async {
+    final apiUrl = Uri.parse(
+        'http://192.168.0.243:8094/manageFeedback/getFeedbackByStationId?feedbackStationId=STN20230905124347342');
+
+    final response = await http.get(apiUrl);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      final List<FeedbackModel> feedbackList =
+          jsonList.map((json) => FeedbackModel.fromJson(json)).toList();
+      return feedbackList;
+    } else {
+      throw Exception('Failed to load feedback');
+    }
+  }
+
   Future<void> getStationDetails() async {
     try {
       var data = await GetMethod.getRequest(
           'http://192.168.0.243:8096/manageStation/getStation?stationId=${widget.stationId}');
-      // print(widget.stationId);
+      print(widget.stationId);
       setState(() {
         stationDetails = StationModel.fromJson(data);
         print(stationDetails);
@@ -417,7 +438,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                           size: 20,
                                           Icons.star,
                                           color: userRating >= index + 1
-                                              ? Colors.yellow
+                                              ? Colors.orange
                                               : Colors.grey,
                                         ),
                                       );
@@ -468,9 +489,13 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
+                              onTap: () async {
+                                final feedbackList =
+                                    await fetchFeedback(); // Call the fetchFeedback function
                                 setState(() {
                                   selectedButton = false;
+                                  this.feedbackList =
+                                      feedbackList; // Store the fetched feedback data
                                 });
                               },
                               child: Container(
@@ -498,66 +523,72 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: AnimatedSwitcher(
-                            switchInCurve: Curves.easeInOut,
-                            switchOutCurve: Curves.easeInOut,
-                            duration: const Duration(milliseconds: 500),
-                            child: selectedButton
-                                ?
-                                //Container for Amenities
-                                Container(
-                                    margin: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.center,
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: stationDetails!
-                                            .stationAmenity!.length,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: EdgeInsets.all(
-                                                MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.01),
-                                            child: Column(
-                                              children: [
-                                                //Amenity icon
-                                                Icon(
-                                                  getIconForAmenity(
-                                                      stationDetails!
-                                                              .stationAmenity![
-                                                          index]),
-                                                  size: MediaQuery.of(context)
+                              switchInCurve: Curves.easeInOut,
+                              switchOutCurve: Curves.easeInOut,
+                              duration: const Duration(milliseconds: 500),
+                              child: selectedButton
+                                  ?
+                                  //Container for Amenities
+                                  Container(
+                                      margin: const EdgeInsets.only(left: 10),
+                                      alignment: Alignment.center,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: stationDetails!
+                                              .stationAmenity!.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: EdgeInsets.all(
+                                                  MediaQuery.of(context)
                                                           .size
-                                                          .width *
-                                                      0.06,
-                                                  color: Colors.green,
-                                                ),
-                                                //Amenity text
-                                                Text(
-                                                  stationDetails!
-                                                      .stationAmenity![index],
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.04),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        }),
-                                  )
-                                :
+                                                          .height *
+                                                      0.01),
+                                              child: Column(
+                                                children: [
+                                                  //Amenity icon
+                                                  Icon(
+                                                    getIconForAmenity(
+                                                        stationDetails!
+                                                                .stationAmenity![
+                                                            index]),
+                                                    size: MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.06,
+                                                    color: Colors.green,
+                                                  ),
+                                                  //Amenity text
+                                                  Text(
+                                                    stationDetails!
+                                                        .stationAmenity![index],
+                                                    style: TextStyle(
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.04),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                    )
+                                  :
 
-                                //Container for reviews
-                                Container(
-                                    alignment: Alignment.center,
-                                    child: ListView.builder(
+                                  //Container for reviews
+                                  Container(
+                                      alignment: Alignment.center,
+                                      child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: stationDetails!
-                                            .stationAmenity!.length,
+                                        itemCount: feedbackList.length,
                                         itemBuilder: (context, index) {
+                                          final feedback = feedbackList[index];
+                                          // Assuming feedbackRating is a String containing the user's rating as a number (e.g., '4')
+                                          final userRating = int.tryParse(
+                                                  feedback.feedbackRating ??
+                                                      '0') ??
+                                              0;
+
                                           return SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -590,21 +621,44 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                           MainAxisAlignment
                                                               .spaceEvenly,
                                                       children: [
-                                                        const Text(
-                                                          'Anyone name',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              feedback.createBy ??
+                                                                  'Unknown User',
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 10),
+                                                            for (int i = 1;
+                                                                i <= 5;
+                                                                i++)
+                                                              Icon(
+                                                                Icons.star,
+                                                                size: 15.0,
+                                                                color: i <=
+                                                                        userRating
+                                                                    ? Colors
+                                                                        .orange
+                                                                    : Colors
+                                                                        .grey,
+                                                              ),
+                                                          ],
                                                         ),
+                                                        // Display the review text
                                                         Text(
-                                                          'Dummy Text, for demo perpose, written for no reason. Please Ignore this',
+                                                          feedback.feedbackText ??
+                                                              'No feedback available',
                                                           style: TextStyle(
-                                                              fontSize: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.03),
+                                                            fontSize: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.03,
+                                                          ),
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -616,9 +670,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                               ],
                                             ),
                                           );
-                                        }),
-                                  ),
-                          ),
+                                        },
+                                      ),
+                                    )),
                         ),
                       ],
                     ),
@@ -785,7 +839,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                       margin: const EdgeInsets
                                                                               .only(
                                                                           left:
-                                                                              40,
+                                                                              30,
                                                                           right:
                                                                               0.0),
                                                                       elevation:
@@ -844,12 +898,15 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                             color: Colors.grey),
                                                                       ),
                                                                       Text(
-                                                                        chargerList[index]
-                                                                            .connectors![connector]
-                                                                            .connectorCharges!,
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                Colors.grey),
+                                                                        chargerList[index].connectors![connector].connectorCharges !=
+                                                                                null
+                                                                            ? chargerList[index].connectors![connector].connectorCharges!.toStringAsFixed(2) // Format as a string with 2 decimal places
+                                                                            : 'N/A', // Handle the case where connectorCharges is null
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
                                                                       ),
                                                                     ],
                                                                   ),
