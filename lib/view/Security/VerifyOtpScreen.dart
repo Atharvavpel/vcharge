@@ -1,12 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import '../LoginScreen.dart';
 import 'AdditionalDetailsScreen.dart';
-import 'RegistrationScreen.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -19,6 +14,20 @@ class VerifyOtpScreen extends StatefulWidget {
 class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   List<TextEditingController> otpControllers =
       List.generate(4, (_) => TextEditingController());
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // ... other initialization code
+  }
+
+  void showSnackbar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   Future<String> verifyOtp(String phoneNumber, int otp) async {
     final response = await http.get(
@@ -27,8 +36,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     );
 
     if (response.statusCode == 200) {
-      return response
-          .body; // Response from the API (e.g., {"status":"success"})
+      return response.body;
     } else {
       throw Exception("Failed to verify OTP");
     }
