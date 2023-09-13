@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
-import 'package:vcharge/view/LoginScreen.dart';
+import 'package:vcharge/view/Security/LoginScreen.dart';
 import 'package:vcharge/view/Security/VerifyOtpScreen.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       if (status == "userExists") {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text("User with this phone number already exists."),
           ),
         );

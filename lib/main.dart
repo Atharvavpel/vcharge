@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vcharge/utils/providers/darkThemeProvider.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 import 'package:flutter/services.dart';
-import 'package:vcharge/view/LoginScreen.dart';
+import 'package:vcharge/view/Security/LoginScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // Initialize the binding

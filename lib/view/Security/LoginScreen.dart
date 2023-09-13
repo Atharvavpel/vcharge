@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
-import 'Security/RegistrationScreen.dart';
+import 'RegistrationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final client = http.Client();
   bool _passwordVisible = false;
   bool _isNumericInput = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -33,6 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
         _isNumericInput = isNumeric(text);
       });
     });
+  }
+
+  void showSnackbar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   bool isNumeric(String str) {
@@ -65,60 +73,32 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Received status code: 200 (OK)');
 
       final Map<String, dynamic> data = json.decode(response.body);
-      final String token = data['token'];
-      print(token);
 
-      await storage.write(key: 'authToken', value: token);
+      if (data.containsKey('token')) {
+        final String token = data['token'];
+        print(token);
 
-      Login contactNumberLogin = Login(contactNumber, password);
+        await storage.write(key: 'authToken', value: token);
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) {
-          print("Successfully logged in with contact number");
-          return HomeScreen(
-            login: contactNumberLogin,
-          );
-        },
-      ));
-    } else if (response.statusCode == 401) {
-      print("Failed");
+        Login contactNumberLogin = Login(contactNumber, password);
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Login Failed'),
-            content:
-                const Text('Invalid username or password. Please try again.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) {
+            print("Successfully logged in with contact number");
+            return HomeScreen(
+              login: contactNumberLogin,
+            );
+          },
+        ));
+      } else if (data['status'] == 'userNotExists') {
+        showSnackbar('User does not exist. Please register.');
+      } else if (data['status'] == 'invalid') {
+        showSnackbar('Invalid username or password. Please try again.');
+      } else {
+        showSnackbar('An error occurred. Please try again later.');
+      }
     } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('An error occurred. Please try again later.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      showSnackbar('An error occurred. Please try again later.');
     }
   }
 
@@ -144,68 +124,39 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Received status code: 200 (OK)');
 
       final Map<String, dynamic> data = json.decode(response.body);
-      final String token = data['token'];
-      print(token);
 
-      await storage.write(key: 'authToken', value: token);
+      if (data.containsKey('token')) {
+        final String token = data['token'];
+        print(token);
 
-      Login emailLogin = Login(email, password);
+        await storage.write(key: 'authToken', value: token);
 
-      // Navigate to HomeScreen with emailLogin
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) {
-          print("Successfully logged in with email");
-          return HomeScreen(
-            login: emailLogin,
-          );
-        },
-      ));
-    } else if (response.statusCode == 401) {
-      print("Failed");
+        Login emailLogin = Login(email, password);
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Login Failed'),
-            content:
-                const Text('Invalid username or password. Please try again.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) {
+            print("Successfully logged in with email");
+            return HomeScreen(
+              login: emailLogin,
+            );
+          },
+        ));
+      } else if (data['status'] == 'userNotExists') {
+        showSnackbar('User does not exist. Please register.');
+      } else if (data['status'] == 'invalid') {
+        showSnackbar('Invalid username or password. Please try again.');
+      } else {
+        showSnackbar('An error occurred. Please try again later.');
+      }
     } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('An error occurred. Please try again later.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      showSnackbar('An error occurred. Please try again later.');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/background.jpg'), // Use AssetImage
             fit: BoxFit.cover,
@@ -218,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     end: Alignment.bottomCenter,
                     colors: [Colors.black12, Colors.transparent])),
             child: Scaffold(
+              key: _scaffoldKey,
               backgroundColor: Colors.transparent,
               body: SingleChildScrollView(
                 child: Container(

@@ -31,26 +31,24 @@ class StationsSpecificDetails extends StatefulWidget {
 class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   List<ChargerModel> chargerList = [];
   String? stationId;
+  String? feedbackStationId;
   int userRating = 0;
   String? feedbackId;
-  List<FeedbackModel> feedbackList =
-      []; // Add this line to declare feedbackList
+  List<FeedbackModel> feedbackList = [];
 
   StationModel? stationDetails;
 
-  //true indicates Amenity button is selected and false indicated Review button
   bool selectedButton = true;
 
-  //this variable is used to track, if the current station is in favourite or not
   bool isFavourite = false;
 
-  //list to track which expansion tile is open
   List<bool> isOpenList = [];
 
   @override
   void initState() {
     super.initState();
     stationId = widget.stationId;
+    feedbackStationId = widget.stationId;
     getStationDetails();
     getChargerList();
     checkFavourite();
@@ -61,9 +59,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
     setState(() {
       for (int i = 0; i < isOpenList.length; i++) {
         if (i == index) {
-          isOpenList[i] = !isOpenList[i]; // Toggle the selected tile
+          isOpenList[i] = !isOpenList[i];
         } else {
-          isOpenList[i] = false; // Close all other tiles
+          isOpenList[i] = false;
         }
       }
     });
@@ -71,7 +69,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
 
   Future<List<FeedbackModel>> fetchFeedback() async {
     final apiUrl = Uri.parse(
-        'http://192.168.0.243:8094/manageFeedback/getFeedbackByStationId?feedbackStationId=STN20230905124347342');
+        'http://192.168.0.243:8094/manageFeedback/getFeedbackByStationId?feedbackStationId=${widget.stationId}');
 
     final response = await http.get(apiUrl);
 
@@ -137,8 +135,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
   }
 
   IconData getIconForAmenity(String amenity) {
-    if (amenity.replaceAll(" ", "").toLowerCase() == 'restrooms' ||
-        amenity.replaceAll(" ", "").toLowerCase() == 'restroom') {
+    if (amenity.replaceAll(" ", "").toLowerCase() == 'restaurants' ||
+        amenity.replaceAll(" ", "").toLowerCase() == 'restaurants') {
       return Icons.hotel;
     } else if (amenity.toLowerCase().replaceAll(" ", "") == 'local_cafe') {
       return Icons.local_cafe;
@@ -146,7 +144,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
       return Icons.restaurant;
     } else if (amenity.replaceAll(" ", "").toLowerCase() == 'shops') {
       return Icons.shopping_bag;
-    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'wi-fi') {
+    } else if (amenity.replaceAll(" ", "").toLowerCase() == 'wifi') {
       return Icons.wifi;
     } else if (amenity.replaceAll(" ", "").toLowerCase() == 'restaurant') {
       return Icons.restaurant;
@@ -813,75 +811,79 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                               connector) {
                                                             return ExpansionTile(
                                                               //Row for connector type and socket
-                                                              title: Row(
-                                                                children: [
-                                                                  Text(
-                                                                    '${chargerList[index].connectors![connector].connectorType!}, ',
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            Get.width *
-                                                                                0.042),
-                                                                  ),
-                                                                  Text(
-                                                                    '${chargerList[index].connectors![connector].connectorSocket}',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            Get.width *
-                                                                                0.042),
-                                                                  ),
-                                                                  Expanded(
-                                                                    child: Card(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      margin: const EdgeInsets
-                                                                              .only(
-                                                                          left:
-                                                                              30,
-                                                                          right:
-                                                                              0.0),
-                                                                      elevation:
-                                                                          3,
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10.0),
-                                                                      ),
+                                                              title:
+                                                                  SingleChildScrollView(
+                                                                scrollDirection:
+                                                                    Axis.horizontal,
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      '${chargerList[index].connectors![connector].connectorType!}, ',
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                              Get.width * 0.042),
+                                                                    ),
+                                                                    Text(
+                                                                      '${chargerList[index].connectors![connector].connectorSocket}',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              Get.width * 0.042),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            50),
+                                                                    Container(
+                                                                      height:
+                                                                          40,
+                                                                      width:
+                                                                          100,
                                                                       child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            EdgeInsets.all(8.0), // Adjust padding as needed
+                                                                          Card(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        elevation:
+                                                                            3,
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10.0),
+                                                                        ),
                                                                         child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          children: [
-                                                                            // Display "Available" or "Unavailable" based on CircleAvatar's background color
-                                                                            Text(
-                                                                              getAvailablityColor(chargerList[index].connectors![connector].connectorStatus!) == Colors.green ? "Available" : "Unavailable",
-                                                                              style: const TextStyle(
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontSize: 11, // Adjust the font size as needed
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(8.0), // Adjust padding as needed
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.start,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: [
+                                                                              Text(
+                                                                                getAvailablityColor(chargerList[index].connectors![connector].connectorStatus!) == Colors.green ? "Available" : "Unavailable",
+                                                                                style: const TextStyle(
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontSize: 11,
+                                                                                ),
                                                                               ),
-                                                                            ),
-                                                                            Spacer(), // Takes up the available space
-
-                                                                            CircleAvatar(
-                                                                              backgroundColor: getAvailablityColor(
-                                                                                chargerList[index].connectors![connector].connectorStatus!,
+                                                                              const SizedBox(
+                                                                                width: 8,
                                                                               ),
-                                                                              radius: 5,
-                                                                            ),
-                                                                          ],
+                                                                              CircleAvatar(
+                                                                                backgroundColor: getAvailablityColor(
+                                                                                  chargerList[index].connectors![connector].connectorStatus!,
+                                                                                ),
+                                                                                radius: 5,
+                                                                              ),
+                                                                            ],
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  )
-                                                                ],
+                                                                  ],
+                                                                ),
                                                               ),
 
                                                               //Row for cost and o/p power
