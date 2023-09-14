@@ -287,9 +287,7 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                   Padding(
                     padding: const EdgeInsets.only(left: 50.0, right: 20.0),
                     child: Container(
-                      decoration: const BoxDecoration(
-                         
-                          ),
+                      decoration: const BoxDecoration(),
                       child: const Icon(Icons.headphones),
                     ),
                   ),
