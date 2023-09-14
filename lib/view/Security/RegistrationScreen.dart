@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:vcharge/view/Security/LoginScreen.dart';
 import 'package:vcharge/view/Security/VerifyOtpScreen.dart';
@@ -15,61 +14,66 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController phoneNumberController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   void sendOtpRequest() async {
-    String phoneNumber = phoneNumberController.text;
-    final response = await http.get(
-      Uri.parse(
-          "http://192.168.0.243:8090/auth/registerUser/sendOtp?phoneNumber=$phoneNumber"),
-    );
+    if (_formKey.currentState!.validate()) {
+      String phoneNumber = phoneNumberController.text;
+      final response = await http.get(
+        Uri.parse(
+          "http://192.168.0.243:8090/auth/registerUser/sendOtp?phoneNumber=$phoneNumber",
+        ),
+      );
 
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-      String status = jsonResponse["status"];
+        String status = jsonResponse["status"];
 
-      if (status == "userExists") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("User with this phone number already exists."),
-          ),
-        );
-      } else if (status == "sent") {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => VerifyOtpScreen(
-              phoneNumber: phoneNumber,
+        if (status == "userExists") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("User with this phone number already exists."),
             ),
-            settings: RouteSettings(arguments: phoneNumber),
-          ),
-        );
-      } else if (status == "alreadySent") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                "OTP has already been sent recently. Please check your messages."),
-          ),
-        );
-      } else if (status == "wait") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Please wait before requesting another OTP."),
-          ),
-        );
+          );
+        } else if (status == "sent") {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => VerifyOtpScreen(
+                phoneNumber: phoneNumber,
+              ),
+              settings: RouteSettings(arguments: phoneNumber),
+            ),
+          );
+        } else if (status == "alreadySent") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "OTP has already been sent recently. Please check your messages.",
+              ),
+            ),
+          );
+        } else if (status == "wait") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Please wait before requesting another OTP."),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("An unexpected error occurred."),
+            ),
+          );
+        }
       } else {
+        // Handle the error if the request fails.
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("An unexpected error occurred."),
+            content: Text("Request failed with status: ${response.statusCode}"),
           ),
         );
       }
-    } else {
-      // Handle the error if the request fails.
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Request failed with status: ${response.statusCode}"),
-        ),
-      );
     }
   }
 
@@ -78,16 +82,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/background.jpg'), // Use AssetImage
+            image: AssetImage('assets/images/background.jpg'),
             fit: BoxFit.cover,
           ),
         ),
         child: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.black12, Colors.transparent])),
+            gradient: LinearGradient(
+              begin: Alignment.center,
+              end: Alignment.bottomCenter,
+              colors: [Colors.black12, Colors.transparent],
+            ),
+          ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
@@ -106,9 +112,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         const Text(
                           "Let's Get Started !",
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          ),
                         ),
                         const SizedBox(
                           height: 10,
@@ -122,32 +129,49 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         const SizedBox(
                           height: 18,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          padding: EdgeInsets.only(
-                            left: 10,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.phone,
-                                size: 24,
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: phoneNumberController,
-                                  decoration: const InputDecoration(
-                                      prefixText: "+91",
-                                      labelText: 'Contact Number'),
+                        Form(
+                          key: _formKey,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            padding: EdgeInsets.only(
+                              left: 10,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.phone,
+                                  size: 24,
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: phoneNumberController,
+                                    decoration: const InputDecoration(
+                                      prefixText: "+91",
+                                      labelText: 'Contact Number',
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter a phone number';
+                                      } else if (value.length != 10 ||
+                                          !value
+                                              .trim()
+                                              .replaceAll(RegExp(r'\s+'), '')
+                                              .contains(RegExp(r'^[0-9]*$'))) {
+                                        return 'Please enter a valid 10-digit phone number';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(height: 20),
