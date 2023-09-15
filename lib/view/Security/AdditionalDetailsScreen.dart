@@ -26,7 +26,6 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
       "userLastName": lastName,
     };
 
-    // Convert the request body to JSON
     String requestBodyJson = json.encode(requestBody);
 
     try {
@@ -39,9 +38,6 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
       );
 
       if (response.statusCode == 200) {
-        // Handle the success response here
-        // You can navigate to the next screen or perform other actions
-        // For example, you might navigate to the EmailPasswordScreen
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => EmailPasswordScreen(
@@ -50,12 +46,9 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
           ),
         );
       } else {
-        // Handle the API call failure here
-        // You can show an error message to the user or take appropriate action
         print("API call failed with status code: ${response.statusCode}");
       }
     } catch (e) {
-      // Handle any exceptions that occur during the API call
       print("Error: $e");
     }
   }
@@ -63,7 +56,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/background.jpg'), // Use AssetImage
           fit: BoxFit.cover,
@@ -142,11 +135,9 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                 borderRadius: BorderRadius.circular(32.0)),
                           ),
                           onPressed: () {
-                            // Get the values from the text controllers
                             String firstName = firstNameController.text;
                             String lastName = lastNameController.text;
 
-                            // Call the API to update user details
                             updateUserDetails(firstName, lastName);
                           },
                           child: Text(

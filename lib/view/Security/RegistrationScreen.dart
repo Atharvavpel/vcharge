@@ -67,7 +67,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           );
         }
       } else {
-        // Handle the error if the request fails.
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Request failed with status: ${response.statusCode}"),
@@ -132,7 +131,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         Form(
                           key: _formKey,
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
@@ -260,7 +259,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              // facebook icon
                               Container(
                                 width: Get.width * 0.07,
                                 margin:
@@ -270,7 +268,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     child: Image.asset(
                                         "assets/images/google.png")),
                               ),
-
                               Container(
                                 width: Get.width * 0.09,
                                 margin:
@@ -280,8 +277,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     child: Image.asset(
                                         "assets/images/facebook.png")),
                               ),
-
-                              // twitter icon
                               Container(
                                 width: Get.width * 0.09,
                                 margin:

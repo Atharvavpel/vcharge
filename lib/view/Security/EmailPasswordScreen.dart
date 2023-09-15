@@ -17,17 +17,14 @@ class _EmailPasswordScreenState extends State<EmailPasswordScreen> {
   TextEditingController passwordController = TextEditingController();
 
   Future<void> updateEmailAndPassword(String email, String password) async {
-    // Prepare the request URL with the phone number
     String apiUrl =
         "http://192.168.0.243:8090/auth/registerUser/updateEmailAndPassword?userContactNo=${widget.phoneNumber}";
 
-    // Prepare the request body as JSON
     Map<String, dynamic> requestBody = {
       "userEmail": email,
       "password": password,
     };
 
-    // Convert the request body to JSON
     String requestBodyJson = json.encode(requestBody);
 
     try {
@@ -40,22 +37,15 @@ class _EmailPasswordScreenState extends State<EmailPasswordScreen> {
       );
 
       if (response.statusCode == 200) {
-        // Handle the success response here
-        // You can navigate to the next screen or perform other actions
-        // For example, you might navigate to a HomeScreen
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) =>
-                LoginScreen(), // Replace with your HomeScreen widget
+            builder: (context) => LoginScreen(),
           ),
         );
       } else {
-        // Handle the API call failure here
-        // You can show an error message to the user or take appropriate action
         print("API call failed with status code: ${response.statusCode}");
       }
     } catch (e) {
-      // Handle any exceptions that occur during the API call
       print("Error: $e");
     }
   }
@@ -142,14 +132,12 @@ class _EmailPasswordScreenState extends State<EmailPasswordScreen> {
                                 borderRadius: BorderRadius.circular(32.0)),
                           ),
                           onPressed: () {
-                            // Get the values from the text controllers
                             String email = emailController.text;
                             String password = passwordController.text;
 
-                            // Call the API to update email and password
                             updateEmailAndPassword(email, password);
                           },
-                          child: Text(
+                          child: const Text(
                             'Next',
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
