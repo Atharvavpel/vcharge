@@ -1,20 +1,24 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'AdditionalDetailsScreen.dart';
+import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
-class VerifyOtpScreen extends StatefulWidget {
+class LoginWithOTP extends StatefulWidget {
   final String phoneNumber;
 
-  VerifyOtpScreen({required this.phoneNumber});
+  LoginWithOTP({required this.phoneNumber});
 
   @override
-  _VerifyOtpScreenState createState() => _VerifyOtpScreenState();
+  _LoginWithOTPState createState() => _LoginWithOTPState();
 }
 
-class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
+class _LoginWithOTPState extends State<LoginWithOTP> {
   List<TextEditingController> otpControllers =
       List.generate(4, (_) => TextEditingController());
+  final storage = FlutterSecureStorage();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _otpErrorMessage = '';
 
@@ -30,49 +34,56 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<String> verifyOtp(String phoneNumber, int otp) async {
-    final response = await http.get(
-      Uri.parse(
-          "http://192.168.0.243:8090/auth/registerUser/verifyOtp?phoneNumber=$phoneNumber&otp=$otp"),
-    );
+  Future<void> verifyOtpRequest(String phoneNumber, String otp) async {
+    final otp = otpControllers.map((controller) => controller.text).join();
 
-    if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      throw Exception("Failed to verify OTP");
-    }
-  }
+    final requestBody = {
+      'phoneNumber': widget.phoneNumber,
+      'otp': otp,
+    };
 
-  Future<void> verifyOtpRequest() async {
+    final requestBodyJson = json.encode(requestBody);
+
+    final url = Uri.parse('http://192.168.0.243:8090/auth/loginUser/verifyOtp');
+
     try {
-      String phoneNumber = widget.phoneNumber;
-      String enteredOtp =
-          otpControllers.map((controller) => controller.text).join();
-      String response = await verifyOtp(phoneNumber, int.parse(enteredOtp));
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: requestBodyJson,
+      );
 
-      final status = jsonDecode(response)["status"];
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
 
-      if (status == "success") {
-        navigateToLoginScreen();
-      } else if (status == "userExists") {
-      } else if (status == "invalid") {
-        setState(() {
-          _otpErrorMessage = 'Invalid OTP. Please try again.';
-        });
-      } else {}
+        if (data.containsKey('token')) {
+          final String token = data['token'];
+          await storage.write(key: 'authToken', value: token);
+
+          Login contactNumberLogin = Login(phoneNumber, otp);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) {
+              print("Successfully logged in with contact number");
+              return HomeScreen(
+                login: contactNumberLogin,
+              );
+            },
+          ));
+        } else if (data['status'] == 'invalid') {
+          setState(() {
+            _otpErrorMessage = 'Invalid OTP. Please try again.';
+          });
+        } else {
+          showSnackbar('An error occurred. Please try again later.');
+        }
+      } else {
+        showSnackbar('An error occurred. Please try again later.');
+      }
     } catch (e) {
-      print("Error: $e");
+      showSnackbar('An error occurred. Please check your internet connection.');
     }
-  }
-
-  void navigateToLoginScreen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AdditionalDetailsScreen(
-          phoneNumber: widget.phoneNumber,
-        ),
-      ),
-    );
   }
 
   @override
@@ -122,7 +133,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Text(
                               "Enter the Verification code we have send to ",
                               style:
@@ -195,7 +206,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
                             _otpErrorMessage,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.red,
                               fontSize: 16,
                             ),
@@ -212,9 +223,15 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(32.0)),
                           ),
-                          onPressed: verifyOtpRequest,
-                          child: Text(
-                            'Next',
+                          onPressed: () {
+                            verifyOtpRequest(
+                                widget.phoneNumber,
+                                otpControllers
+                                    .map((controller) => controller.text)
+                                    .join());
+                          },
+                          child: const Text(
+                            'Login',
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),

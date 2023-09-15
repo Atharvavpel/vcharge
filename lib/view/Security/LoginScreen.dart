@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:vcharge/view/Security/LoginWithOTP.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
 
 import 'RegistrationScreen.dart';
@@ -153,6 +154,39 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> sendOtpRequest(String phoneNumber) async {
+    final url = Uri.parse(
+        'http://192.168.0.243:8090/auth/loginUser/sentOtp?phoneNumber=$phoneNumber');
+
+    final response = await http.get(url);
+    print(response);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final status = data['status'];
+
+      if (status == 'sent') {
+        print(status);
+        navigateToLoginWithOTP(phoneNumber);
+      } else if (status == 'alreadySent') {
+      } else if (status == 'wait') {
+      } else if (status == 'notExists') {
+        showSnackbar('User does not exist. Please register.');
+      } else {
+        showSnackbar('An error occurred. Please try again later.');
+      }
+    } else {
+      showSnackbar('An error occurred. Please try again later.');
+    }
+  }
+
+  void navigateToLoginWithOTP(String phoneNumber) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => LoginWithOTP(phoneNumber: phoneNumber),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -247,8 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Icon(
                                   Icons.lock,
-                                  size:
-                                      24, // Adjust the size to your preferred value
+                                  size: 24,
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -292,19 +325,42 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   width: 120,
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Request ",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 15),
-                                    ),
-                                    Text(
-                                      "OTP",
-                                      style: TextStyle(
-                                          color: Colors.amber, fontSize: 15),
-                                    )
-                                  ],
+                                GestureDetector(
+                                  onTap: () {
+                                    final input =
+                                        _contactNumberOrEmailController.text;
+                                    if (input.isEmpty) {
+                                      showSnackbar(
+                                          'Please enter a phone number');
+                                    } else if (input.length != 10 ||
+                                        !input
+                                            .trim()
+                                            .replaceAll(RegExp(r'\s+'), '')
+                                            .contains(RegExp(r'^[0-9]*$'))) {
+                                      showSnackbar(
+                                          'Please enter a valid 10-digit phone number');
+                                    } else {
+                                      sendOtpRequest(input);
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Request ",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Text(
+                                        "OTP",
+                                        style: TextStyle(
+                                          color: Colors.amber,
+                                          fontSize: 15,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
