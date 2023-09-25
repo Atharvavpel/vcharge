@@ -111,13 +111,6 @@ this is screen with onclose function
           size: 30, color: selectedIndex == 1 ? Colors.white : Colors.white),
       Icon(Icons.qr_code_scanner,
           size: 30, color: selectedIndex == 2 ? Colors.white : Colors.white),
-      //     IconButton(
-      //       onPressed: () async {
-      //   String barcodeResult = await ScannerQr().scanBarcode();
-      //   print(barcodeResult);
-      //    // Do something with the barcode result, such as navigate to a new screen
-      // },
-      //       icon: const Icon(Icons.qr_code_scanner, size: 30)),
     ];
 
     // return Scaffold(

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:vcharge/view/Security/LoginWithOTP.dart';
 import 'package:vcharge/view/homeScreen/homeScreen.dart';
+import 'package:vcharge/view/Security/forgotPassword.dart';
 
 import 'RegistrationScreen.dart';
 
@@ -166,15 +167,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (status == 'sent') {
         print(status);
+        // Only navigate to LoginWithOTP screen when status is "sent"
         navigateToLoginWithOTP(phoneNumber);
       } else if (status == 'alreadySent') {
+        // OTP already sent
       } else if (status == 'wait') {
+        // Waiting for OTP
       } else if (status == 'notExists') {
+        // User does not exist
         showSnackbar('User does not exist. Please register.');
       } else {
+        // Handle other error cases here
         showSnackbar('An error occurred. Please try again later.');
       }
     } else {
+      // Handle server errors here
       showSnackbar('An error occurred. Please try again later.');
     }
   }
@@ -258,9 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     controller: _contactNumberOrEmailController,
                                     decoration: InputDecoration(
                                       labelText: 'Enter Number or Email',
-                                      prefixText: _isNumericInput
-                                          ? '+91 '
-                                          : '', // Add "+91" prefix
+                                      prefixText: _isNumericInput ? '+91 ' : '',
                                     ),
                                   ),
                                 ),
@@ -281,7 +286,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Icon(
                                   Icons.lock,
-                                  size: 24,
+                                  size:
+                                      24, // Adjust the size to your preferred value
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -315,54 +321,66 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 10,
                           ),
                           Container(
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Forgot Password?",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15),
-                                ),
-                                SizedBox(
-                                  width: 120,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    final input =
-                                        _contactNumberOrEmailController.text;
-                                    if (input.isEmpty) {
-                                      showSnackbar(
-                                          'Please enter a phone number');
-                                    } else if (input.length != 10 ||
-                                        !input
-                                            .trim()
-                                            .replaceAll(RegExp(r'\s+'), '')
-                                            .contains(RegExp(r'^[0-9]*$'))) {
-                                      showSnackbar(
-                                          'Please enter a valid 10-digit phone number');
-                                    } else {
-                                      sendOtpRequest(input);
-                                    }
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return ForgotPasswordScreen(); // Replace with the actual class name
                                   },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Request ",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Text(
-                                        "OTP",
-                                        style: TextStyle(
-                                          color: Colors.amber,
-                                          fontSize: 15,
-                                        ),
-                                      )
-                                    ],
+                                ));
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Forgot Password?",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 15),
                                   ),
-                                )
-                              ],
+                                  SizedBox(
+                                    width: 120,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      final input =
+                                          _contactNumberOrEmailController.text;
+                                      if (input.isEmpty) {
+                                        // Show an error message since the input is empty
+                                        showSnackbar(
+                                            'Please enter a phone number');
+                                      } else if (input.length != 10 ||
+                                          !input
+                                              .trim()
+                                              .replaceAll(RegExp(r'\s+'), '')
+                                              .contains(RegExp(r'^[0-9]*$'))) {
+                                        // Show an error message for an invalid phone number
+                                        showSnackbar(
+                                            'Please enter a valid 10-digit phone number');
+                                      } else {
+                                        // Phone number is valid, proceed with sending OTP request
+                                        sendOtpRequest(input);
+                                      }
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Request ",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        Text(
+                                          "OTP",
+                                          style: TextStyle(
+                                            color: Colors.amber,
+                                            fontSize: 15,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(

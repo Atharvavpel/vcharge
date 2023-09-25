@@ -266,16 +266,6 @@ class ListOfStationsState extends State<ListOfStations> {
                                             ),
                                           ],
                                         ),
-
-                                        //Container for connector type
-                                        // Text(
-                                        //   sortedStationList[index]
-                                        //       .stationPowerStandard!,
-                                        //   style: const TextStyle(
-                                        //     color: Colors.grey,
-                                        //     fontWeight: FontWeight.bold,
-                                        //   ),
-                                        // )
                                       ],
                                     )));
                           }),
