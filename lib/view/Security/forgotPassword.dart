@@ -40,7 +40,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> sendOtpViaPhoneNumber(String phoneNumber) async {
     final url = Uri.parse(
-        'http://192.168.0.243:8090/auth/registerUser/sendOtp?phoneNumber=$phoneNumber');
+        'http://192.168.0.243:8090/auth/loginUser/sentOtp?phoneNumber=$phoneNumber');
 
     final response = await http.get(url);
 

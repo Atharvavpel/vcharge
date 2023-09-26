@@ -12,14 +12,15 @@ class ChargingScreen extends StatefulWidget {
   String stationName;
   String stationLocation;
   String userId;
-  String chargerId;
 
-  ChargingScreen(
-      {required this.userId,
-      required this.stationLocation,
-      required this.stationName,
-      required this.chargerId,
-      super.key});
+  ChargingScreen({
+    required this.userId,
+    required this.stationLocation,
+    required this.stationName,
+    super.key,
+    required String chargerSerialNumber,
+    required String connectorNumber,
+  });
 
   @override
   State<StatefulWidget> createState() => ChargingScreenState();

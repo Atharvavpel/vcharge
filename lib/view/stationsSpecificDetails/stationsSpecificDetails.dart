@@ -987,7 +987,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                                                                       stationLocation: stationDetails!.stationArea!,
                                                                                       stationName: stationDetails!.stationName!,
                                                                                       userId: widget.userId,
-                                                                                      chargerId: chargerList[index].chargerId!,
+                                                                                      chargerSerialNumber: '',
+                                                                                      connectorNumber: '',
                                                                                     )));
                                                                       },
                                                                       child: const Text(
