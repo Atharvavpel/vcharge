@@ -160,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
         'http://192.168.0.243:8090/auth/loginUser/sentOtp?phoneNumber=$phoneNumber');
 
     final response = await http.get(url);
+
     print(response);
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

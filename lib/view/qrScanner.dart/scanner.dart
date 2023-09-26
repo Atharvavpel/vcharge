@@ -1,20 +1,11 @@
-// Decrypt the scanned data
-// final key = encrypt.Key.fromUtf8('my32lengthsupersecretnooneknows1');
-// final iv = IV.fromLength(16);
-// final encrypter = Encrypter(AES(key));
-// final decrypted = encrypter.decrypt64(scanData as String, iv: iv);
-
-// // Navigate to the output page and pass the decrypted data as a parameter
-// Navigator.push(
-//   context,
-//   MaterialPageRoute(builder: (context) => QrScannerOutput(output: decrypted)),
-// );
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:http/http.dart' as http;
 import 'package:vcharge/view/stationsSpecificDetails/stationsSpecificDetails.dart';
 
 import '../chargingScreen/chargingScreen.dart';
@@ -28,19 +19,10 @@ class QRScannerWidget extends StatefulWidget {
 }
 
 class _QRScannerWidgetState extends State<QRScannerWidget> {
-  // controller for taking input the stationCode
   var stationCodeController = TextEditingController();
-
-  // this is the global key variable which is used to access this qrKey from anywher in the entire app
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
-  // this is the controller which is used to handle the scanning events of the qr scanner
   QRViewController? controller;
-
-  // boolean var which is used to keep the track of whether the screen is open or not
   bool scanStarted = false;
-
-  // variable for keeping the track of scan outputs
   String scanResult = " ";
 
   @override
@@ -49,28 +31,24 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     showScanner();
   }
 
-// function for setting the initial value of the scanner as true - so that the scannerwidget will always get displayed
   void showScanner() {
     setState(() {
       showScannerWidget = true;
     });
   }
 
-// dispose method which is used to handle the widgets which are not mounted
   @override
   void dispose() {
     controller?.dispose();
     super.dispose();
   }
 
-// method which handles the events for starting the scanner
   void startScanner() async {
     try {
       if (controller != null) {
         await controller?.resumeCamera();
         setState(() {
           scanStarted = true;
-          // isScanned = false;
         });
       }
     } catch (e) {
@@ -78,7 +56,6 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     }
   }
 
-// method which handles the events for stopping the scanner
   void stopScanner() async {
     try {
       if (controller != null) {
@@ -92,10 +69,8 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
     }
   }
 
-  // for stopping scanner after first successful scanning:
   bool isScanned = false;
 
-  // method for storing bar code result
   void onQRViewCreated(QRViewController controller) async {
     try {
       this.controller = controller;
@@ -108,37 +83,49 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       }
 
       if (status.isGranted) {
-        try {
-          controller.scannedDataStream.listen((scanData) async {
-            // controller.pauseCamera();
-            if (isScanned) return;
+        controller.scannedDataStream.listen((scanData) async {
+          if (isScanned) return;
+
+          try {
             controller.stopCamera();
 
             scanResult = scanData.code!;
+            print("Scanned Result: $scanResult");
 
-            print("the scanned result is: $scanResult");
+            List<String> parts = scanResult.split(';');
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChargingScreen(
-                  stationLocation: 'Kharadi, Pune',
-                  stationName: 'EV Charging station',
-                  userId: widget.userId,
-                  chargerId: scanResult,
+            if (parts.length == 2) {
+              String chargerSerialNumber = parts[0];
+              String connectorNumber = parts[1];
+
+              // Now you can use chargerSerialNumber and connectorNumber as needed
+              print("Charger Serial Number: $chargerSerialNumber");
+              print("Connector Number: $connectorNumber");
+
+              // Navigate to Charging Screen with relevant data
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChargingScreen(
+                    stationLocation: 'Kharadi',
+                    stationName: 'Virtuoso Charging Station',
+                    userId: widget.userId,
+                    chargerSerialNumber: chargerSerialNumber,
+                    connectorNumber: connectorNumber,
+                  ),
                 ),
-              ),
-            );
-            // isScanned = true;
-
-            // this is used to stop the camera after single successful scan
-            controller.stopCamera();
-          });
-        } on PlatformException {
-          setState(() {
-            scanResult = "Failed to scan";
-          });
-        }
+              );
+            } else {
+              // Handle case where the content doesn't match the expected format
+              print("Invalid QR Code Format");
+              // Display an error message or take appropriate action
+            }
+          } catch (e) {
+            print("Error while processing QR code: $e");
+          } finally {
+            isScanned = true;
+          }
+        });
       } else {
         // Handle denied permission
         ScaffoldMessenger.of(context).showSnackBar(
@@ -149,19 +136,16 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
         );
       }
     } catch (e) {
-      print("the error is: $e");
+      print("Error: $e");
     }
   }
 
-  // var for showing scanner widget
   bool showScannerWidget = true;
 
-// build method
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // this is used for doing the unfocus activity, once the user clicks on the field other than the textfield
         FocusScope.of(context).unfocus();
         showScannerWidget = true;
       },
@@ -176,11 +160,8 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           ),
         ),
         extendBodyBehindAppBar: true,
-
-        // container for qr scanner
         body: Stack(
           children: [
-            // background overlay effect
             Visibility(
               visible: showScannerWidget,
               child: Positioned.fill(
@@ -201,12 +182,8 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                 ),
               ),
             ),
-
-            // qr scanner widget
             Visibility(
               visible: showScannerWidget,
-
-              // replacement for textfield
               replacement: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -243,7 +220,6 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                   ],
                 ),
               ),
-
               child: Positioned(
                 top: 100,
                 left: (MediaQuery.of(context).size.width -
@@ -285,8 +261,6 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                 ),
               ),
             ),
-
-            // Text - "OR";
             Visibility(
               visible: showScannerWidget,
               child: Positioned(
@@ -301,8 +275,6 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                 ),
               ),
             ),
-
-            // widget for Station code textfield
             Visibility(
               visible: showScannerWidget,
               child: Positioned(
@@ -343,8 +315,6 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
             ),
           ],
         ),
-
-        // submit button
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Container(
           padding: const EdgeInsets.only(bottom: 80),
@@ -355,7 +325,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                   MaterialPageRoute(
                       builder: (context) => StationsSpecificDetails(
                           userId: widget.userId,
-                          stationId: 'STN20230505105447818')));
+                          stationId: 'STN20230905124347342')));
             },
             label: const Text(
               "Proceed",

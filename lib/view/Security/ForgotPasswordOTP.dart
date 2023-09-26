@@ -1,0 +1,344 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:vcharge/view/Security/ResetPasswordScreen.dart';
+import 'AdditionalDetailsScreen.dart';
+import 'package:vcharge/view/homeScreen/homeScreen.dart';
+
+class ForgotPasswordOTP extends StatefulWidget {
+  final String phoneNumber;
+  final String email;
+  final bool isEmailVerification;
+
+  ForgotPasswordOTP({
+    required this.phoneNumber,
+    required this.email,
+    required this.isEmailVerification,
+  });
+
+  @override
+  _ForgotPasswordOTPState createState() => _ForgotPasswordOTPState();
+}
+
+class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
+  List<TextEditingController> otpControllers =
+      List.generate(4, (_) => TextEditingController());
+  final storage = FlutterSecureStorage();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _otpErrorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void showSnackbar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> verifyPhoneNumberOtp(String phoneNumber, String otp) async {
+    final otpValue = otpControllers.map((controller) => controller.text).join();
+
+    final requestBody = {
+      'phoneNumber': phoneNumber,
+      'otp': otpValue,
+    };
+
+    final requestBodyJson = json.encode(requestBody);
+
+    final url = Uri.parse(
+        'http://192.168.0.243:8090/auth/user/forgetPassword/verifyOtp');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: requestBodyJson,
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data.containsKey('token')) {
+          final String token = data['token'];
+          await storage.write(key: 'authToken', value: token);
+
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) {
+              return ResetPasswordScreen();
+            },
+          ));
+        } else if (data['status'] == 'invalid') {
+          setState(() {
+            _otpErrorMessage = 'Invalid OTP. Please try again.';
+          });
+        } else {
+          showSnackbar('An error occurred. Please try again later.');
+        }
+      } else {
+        showSnackbar('An error occurred. Please try again later.');
+      }
+    } catch (e) {
+      showSnackbar('An error occurred. Please check your internet connection.');
+    }
+  }
+
+  Future<void> verifyEmailOtp(String email, String otp) async {
+    final otpValue = otpControllers.map((controller) => controller.text).join();
+
+    final requestBody = {
+      'email': email,
+      'otp': otpValue,
+    };
+
+    final requestBodyJson = json.encode(requestBody);
+
+    final url = Uri.parse(
+        'http://192.168.0.41:8090/auth/user/forgetPassword/verifyEmailOtp');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: requestBodyJson,
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data.containsKey('token')) {
+          final String token = data['token'];
+          await storage.write(key: 'authToken', value: token);
+
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) {
+              return ResetPasswordScreen();
+            },
+          ));
+        } else if (data['status'] == 'invalid') {
+          setState(() {
+            _otpErrorMessage = 'Invalid OTP. Please try again.';
+          });
+        } else {
+          showSnackbar('An error occurred. Please try again later.');
+        }
+      } else {
+        showSnackbar('An error occurred. Please try again later.');
+      }
+    } catch (e) {
+      showSnackbar('An error occurred. Please check your internet connection.');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/background.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.center,
+            end: Alignment.bottomCenter,
+            colors: [Colors.black12, Colors.transparent],
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          key: _scaffoldKey,
+          body: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.only(top: 300, right: 10, left: 10),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: Colors.black45,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Enter the verification code",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              "Enter the Verification code we have sent to ",
+                              style:
+                                  TextStyle(color: Colors.amber, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.isEmailVerification
+                                ? widget.email
+                                : "(+91) ${widget.phoneNumber}",
+                            style: TextStyle(
+                              color: Colors.amber,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: SingleChildScrollView(
+                          child: Container(
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: List.generate(
+                                    4,
+                                    (index) => SizedBox(
+                                      width: 40,
+                                      child: TextFormField(
+                                        controller: otpControllers[index],
+                                        keyboardType: TextInputType.number,
+                                        textAlign: TextAlign.center,
+                                        maxLength: 1,
+                                        decoration: const InputDecoration(
+                                          counterText: "",
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.amber, width: 2),
+                                          ),
+                                        ),
+                                        onChanged: (value) {
+                                          if (value.isNotEmpty && index < 3) {
+                                            FocusScope.of(context).nextFocus();
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_otpErrorMessage.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            _otpErrorMessage,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: 110,
+                        height: 45,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32.0)),
+                          ),
+                          onPressed: () {
+                            widget.isEmailVerification
+                                ? verifyEmailOtp(
+                                    widget.email,
+                                    otpControllers
+                                        .map((controller) => controller.text)
+                                        .join(),
+                                  )
+                                : verifyPhoneNumberOtp(
+                                    widget.phoneNumber,
+                                    otpControllers
+                                        .map((controller) => controller.text)
+                                        .join(),
+                                  );
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Didn't Receive Anything ? ",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return AdditionalDetailsScreen(
+                                      phoneNumber: widget.phoneNumber,
+                                    );
+                                  },
+                                ));
+                              },
+                              child: Text(
+                                "Resend Code ",
+                                style: TextStyle(
+                                  color: Colors.amber,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
