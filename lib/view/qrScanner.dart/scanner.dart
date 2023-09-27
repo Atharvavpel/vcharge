@@ -98,11 +98,9 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
               String chargerSerialNumber = parts[0];
               String connectorNumber = parts[1];
 
-              // Now you can use chargerSerialNumber and connectorNumber as needed
               print("Charger Serial Number: $chargerSerialNumber");
               print("Connector Number: $connectorNumber");
 
-              // Navigate to Charging Screen with relevant data
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -116,9 +114,7 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                 ),
               );
             } else {
-              // Handle case where the content doesn't match the expected format
               print("Invalid QR Code Format");
-              // Display an error message or take appropriate action
             }
           } catch (e) {
             print("Error while processing QR code: $e");
@@ -152,11 +148,12 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(0, 78, 230, 164),
+          // Set the background color to transparent
+
           centerTitle: true,
           title: const Text(
             "Scan and Charge",
-            style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         extendBodyBehindAppBar: true,
@@ -164,62 +161,6 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
           children: [
             Visibility(
               visible: showScannerWidget,
-              child: Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.9),
-                        Colors.transparent,
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.9),
-                      ],
-                      stops: const [0.0, 0.2, 0.8, 1.0],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: showScannerWidget,
-              replacement: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Please enter the station code as seen on the box",
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        child: TextFormField(
-                          onTap: () {
-                            showScannerWidget = false;
-                          },
-                          decoration: const InputDecoration(
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(9.0),
-                              child: FaIcon(
-                                FontAwesomeIcons.gasPump,
-                                size: 20,
-                                color: Color.fromARGB(255, 51, 50, 50),
-                              ),
-                            ),
-                            border: OutlineInputBorder(),
-                            label: Text("Station Code"),
-                          ),
-                          controller: stationCodeController,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               child: Positioned(
                 top: 100,
                 left: (MediaQuery.of(context).size.width -
@@ -230,8 +171,9 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                   height: MediaQuery.of(context).size.height * 0.5,
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: const Color.fromARGB(255, 195, 227, 196),
-                        width: 3.0),
+                      color: const Color.fromARGB(255, 195, 227, 196),
+                      width: 3.0,
+                    ),
                   ),
                   child: (scanResult == "Failed to scan")
                       ? Column(
@@ -240,9 +182,13 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                             Icon(Icons.qr_code_scanner,
                                 color: Colors.white, size: 60.0),
                             SizedBox(height: 16.0),
-                            Text("Failed to scan, please enter the station Id",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16.0)),
+                            Text(
+                              "Failed to scan, please enter the station Id",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              ),
+                            ),
                           ],
                         )
                       : QRView(

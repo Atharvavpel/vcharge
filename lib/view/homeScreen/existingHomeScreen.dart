@@ -80,18 +80,14 @@ class ExistingHomeScreenState extends State<ExistingHomeScreen> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      boxShadow: const [
-                        BoxShadow(
-                            blurRadius: 5, color: Colors.grey, spreadRadius: 1),
-                      ],
                       borderRadius: BorderRadius.circular(30),
                     ),
                     margin: const EdgeInsets.only(right: 13),
                     child: const CircleAvatar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.green,
                       child: Icon(
                         Icons.favorite,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -117,16 +113,14 @@ class ExistingHomeScreenState extends State<ExistingHomeScreen> {
                       });
                 },
                 child: Container(
-                  decoration: BoxDecoration(boxShadow: const [
-                    BoxShadow(
-                        blurRadius: 5, color: Colors.grey, spreadRadius: 1)
-                  ], borderRadius: BorderRadius.circular(30)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(30)),
                   margin: const EdgeInsets.only(right: 13, bottom: 10),
                   child: const CircleAvatar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.green,
                     child: Icon(
                       Icons.filter_alt_sharp,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                 ),
