@@ -33,90 +33,105 @@ class _MarkerHintsState extends State<MarkerHints> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  content: Wrap(children: [
-                    //Row For Available
-                    Row(
-                      children: const [
-                        Expanded(
-                          flex: 2,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.green,
-                            radius: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Adjust the radius as needed
+                  ),
+                  contentPadding:
+                      EdgeInsets.all(10.0), // Adjust the padding as needed
+                  content: Wrap(
+                    children: [
+                      //Row For Available
+                      Row(
+                        children: const [
+                          Expanded(
+                            flex: 2,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.green,
+                              radius: 8,
+                            ),
                           ),
-                        ),
-                        Expanded(
+                          Expanded(
                             flex: 5,
                             child: Text(
                               'Available',
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )),
-                      ],
-                    ),
-
-                    const SizedBox(
-                      width: 1,
-                      height: 5,
-                    ),
-
-                    //Row For Busy
-                    Row(
-                      children: const [
-                        Expanded(
-                          flex: 2,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.orange,
-                            radius: 8,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
-                        Expanded(
+                        ],
+                      ),
+
+                      const SizedBox(
+                        width: 1,
+                        height: 5,
+                      ),
+
+                      //Row For Busy
+                      Row(
+                        children: const [
+                          Expanded(
+                            flex: 2,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.orange,
+                              radius: 8,
+                            ),
+                          ),
+                          Expanded(
                             flex: 5,
                             child: Text(
                               'Busy',
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )),
-                      ],
-                    ),
-
-                    const SizedBox(
-                      width: 1,
-                      height: 5,
-                    ),
-
-                    //Row For Not Available
-                    Row(
-                      children: const [
-                        Expanded(
-                          flex: 2,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.red,
-                            radius: 8,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
-                        Expanded(
+                        ],
+                      ),
+
+                      const SizedBox(
+                        width: 1,
+                        height: 5,
+                      ),
+
+                      //Row For Not Available
+                      Row(
+                        children: const [
+                          Expanded(
+                            flex: 2,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.red,
+                              radius: 8,
+                            ),
+                          ),
+                          Expanded(
                             flex: 5,
                             child: Text(
                               'Not Available',
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )),
-                      ],
-                    ),
-                  ]),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               });
         },
         child: Container(
-          decoration: BoxDecoration(boxShadow: const [
-            BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
-          ], borderRadius: BorderRadius.circular(30)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
           margin: const EdgeInsets.only(right: 13, bottom: 10),
           child: const CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.green,
             child: FaIcon(
               FontAwesomeIcons.question,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),

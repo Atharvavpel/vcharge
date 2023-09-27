@@ -177,7 +177,7 @@ class ListOfStationsState extends State<ListOfStations> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: const Text('List of Stations'),
+            title: const Text('Stations'),
           ),
           body: SafeArea(
             child: Wrap(

@@ -26,11 +26,14 @@ class LocationFinderState extends State<LocationFinder>
       var userLong = await RedisConnection.get('userLongitude');
       BgMapState.userLocation =
           LatLng(double.parse(userLat), double.parse(userLong));
-        // Call the animatedMapMove method only if the widget is still mounted
-        animatedMapMove(BgMapState.userLocation!, 15.0);
-      
+      // Call the animatedMapMove method only if the widget is still mounted
+      animatedMapMove(BgMapState.userLocation!, 15.0);
+
       LatLng currLocation = await GetLiveLocation.getUserLiveLocation();
-      if(currLocation.latitude.toStringAsFixed(2)!=BgMapState.userLocation!.latitude.toStringAsFixed(2) || currLocation.longitude.toStringAsFixed(2)!=BgMapState.userLocation!.longitude.toStringAsFixed(2)){
+      if (currLocation.latitude.toStringAsFixed(2) !=
+              BgMapState.userLocation!.latitude.toStringAsFixed(2) ||
+          currLocation.longitude.toStringAsFixed(2) !=
+              BgMapState.userLocation!.longitude.toStringAsFixed(2)) {
         BgMapState.userLocation = currLocation;
         animatedMapMove(BgMapState.userLocation!, 15.0);
       }
@@ -93,15 +96,13 @@ class LocationFinderState extends State<LocationFinder>
             getToUserLocation();
           },
           child: Container(
-            decoration: BoxDecoration(boxShadow: const [
-              BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 1)
-            ], borderRadius: BorderRadius.circular(30)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
             margin: const EdgeInsets.only(right: 13, bottom: 10),
             child: CircleAvatar(
-              backgroundColor: locationFinder ? Colors.blue : Colors.white,
+              backgroundColor: locationFinder ? Colors.blue : Colors.green,
               child: const FaIcon(
                 FontAwesomeIcons.locationCrosshairs,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
           )),

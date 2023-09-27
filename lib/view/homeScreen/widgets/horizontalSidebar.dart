@@ -306,7 +306,10 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               Text('Blogs & Videos'),
-              Icon(Icons.video_collection)
+              Icon(
+                Icons.video_collection,
+                color: Colors.green,
+              )
             ],
           ),
         ),
@@ -316,7 +319,7 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               Text('Help & Support'),
-              Icon(Icons.contact_support)
+              Icon(Icons.contact_support, color: Colors.green)
             ],
           ),
         ),
@@ -324,21 +327,33 @@ class HorizontalSideBarState extends State<HorizontalSideBar> {
           value: 3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [Text('User Manual'), Icon(Icons.library_books)],
+            children: const [
+              Text('User Manual'),
+              Icon(Icons.library_books, color: Colors.green)
+            ],
           ),
         ),
         PopupMenuItem(
           value: 4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [Text('Legal Policy'), Icon(Icons.policy_rounded)],
+            children: const [
+              Text('Legal Policy'),
+              Icon(Icons.policy_rounded, color: Colors.green)
+            ],
           ),
         ),
         PopupMenuItem(
           value: 5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [Text('Log Out'), Icon(Icons.logout_rounded)],
+            children: const [
+              Text(
+                'Log Out',
+                style: TextStyle(color: Colors.red),
+              ),
+              Icon(Icons.logout_rounded, color: Colors.red)
+            ],
           ),
         ),
       ],
