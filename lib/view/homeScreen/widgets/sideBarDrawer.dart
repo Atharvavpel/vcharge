@@ -62,294 +62,363 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
               // this is the real widget for displaying the list of items
 
               // container - vehicle addition
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
-                          ),
-                      child: const FaIcon(
-                        FontAwesomeIcons.car,
-                        size: 20,
-                        color: Color.fromARGB(255, 51, 50, 50),
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(),
+                        child: const FaIcon(
+                          FontAwesomeIcons.car,
+                          size: 20,
+                          color: Colors.green,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: const Text('Add Vehicle'),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddVehicleScreen(
-                                      userId: widget.userId,
-                                    ))).then((value) {
-                          Future.delayed(
-                            const Duration(milliseconds: 250),
-                          );
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // container - wallet
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
-                          ),
-                      child: const Icon(Icons.wallet),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: const Text('Wallet'),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WalletScreen(
-                                      userId: widget.userId,
-                                    ))).then((value) {
-                          Future.delayed(
-                            const Duration(milliseconds: 250),
-                          );
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // container - reservation
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
-                          ),
-                      child: const Icon(Icons.book_online),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: const Text('Reservations'),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ReservationScreen(
-                                      userId: widget.userId,
-                                    ))).then((value) {
-                          Future.delayed(
-                            const Duration(milliseconds: 250),
-                          );
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              //Container - favourites
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
-                          ),
-                      child: const Icon(Icons.favorite_outline_outlined),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: const Text('Favourites'),
-                      onTap: () {
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        FavouriteSceen(userId: widget.userId)))
-                            .then((value) {
-                          Future.delayed(
-                            const Duration(milliseconds: 250),
-                          );
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // container for Refer a friend
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
-                          ),
-                      width: 25,
-                      height: 25,
-                      child: Image.asset("assets/images/referral.png"),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: const Text('Refer a friend'),
-                      onTap: () {
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ReferFriend()))
-                            .then((value) {
-                          Future.delayed(
-                            const Duration(milliseconds: 250),
-                          );
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // container - FAQ
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          // border: Border.all(),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
-                          // ],
-                          ),
-                      child: const Icon(Icons.question_answer),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: const Text('FAQ'),
-                      onTap: () {
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const FaqScreen()))
-                            .then((value) {
-                          Future.delayed(
-                            const Duration(milliseconds: 250),
-                          );
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // container - help and support
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(),
-                      child: const Icon(Icons.headphones),
-                    ),
-                  ),
-                  Expanded(
-                    child: Semantics(
-                      label: "drawerHelpAndSupportButton",
+                    Expanded(
                       child: ListTile(
-                        title: const Text('Help & Support'),
+                        title: const Text('Add Vehicle'),
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HelpSupportScreen(
+                                  builder: (context) => AddVehicleScreen(
                                         userId: widget.userId,
-                                      )));
-                          Future.delayed(
-                            const Duration(milliseconds: 250),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              //Container - settings page
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 20.0),
-                    child: Container(
-                      decoration: const BoxDecoration(),
-                      child: const Icon(Icons.settings),
-                    ),
-                  ),
-                  Expanded(
-                    child: Semantics(
-                      label: "drawerSettingsButton",
-                      child: ListTile(
-                        title: const Text('Settings'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SettingPage(
-                                userId: widget.userId.toString(),
-                                firstNameEdited: firstName,
-                                lastNameEdited: lastName,
-                                contactNoEdited: contactNo,
-                                emailIdEdited: emailId,
-                              ),
-                            ),
-                          ).then((value) {
+                                      ))).then((value) {
                             Future.delayed(
                               const Duration(milliseconds: 250),
                             );
                           });
                         },
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: MediaQuery.of(context).size.width * 0.07,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+
+              // container - wallet
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            // border: Border.all(),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                            // ],
+                            ),
+                        child: const Icon(
+                          Icons.wallet,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: const Text('Wallet'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WalletScreen(
+                                        userId: widget.userId,
+                                      ))).then((value) {
+                            Future.delayed(
+                              const Duration(milliseconds: 250),
+                            );
+                          });
+                        },
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // container - reservation
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            // border: Border.all(),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                            // ],
+                            ),
+                        child: const Icon(
+                          Icons.book_online,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: const Text('Reservations'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReservationScreen(
+                                        userId: widget.userId,
+                                      ))).then((value) {
+                            Future.delayed(
+                              const Duration(milliseconds: 250),
+                            );
+                          });
+                        },
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              //Container - favourites
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            // border: Border.all(),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                            // ],
+                            ),
+                        child: const Icon(
+                          Icons.favorite_outline_outlined,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: const Text('Favourites'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FavouriteSceen(
+                                      userId: widget.userId))).then((value) {
+                            Future.delayed(
+                              const Duration(milliseconds: 250),
+                            );
+                          });
+                        },
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // container for Refer a friend
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            // border: Border.all(),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                            // ],
+                            ),
+                        width: 25,
+                        height: 25,
+                        child: Image.asset("assets/images/referral.png",
+                            color: Colors.green),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: const Text('Refer a friend'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ReferFriend())).then((value) {
+                            Future.delayed(
+                              const Duration(milliseconds: 250),
+                            );
+                          });
+                        },
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // container - FAQ
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            // border: Border.all(),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //       blurRadius: 10, color: Colors.grey, spreadRadius: 2)
+                            // ],
+                            ),
+                        child: const Icon(Icons.question_answer,
+                            color: Colors.green),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: const Text('FAQ'),
+                        onTap: () {
+                          Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const FaqScreen()))
+                              .then((value) {
+                            Future.delayed(
+                              const Duration(milliseconds: 250),
+                            );
+                          });
+                        },
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // container - help and support
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(),
+                        child:
+                            const Icon(Icons.headphones, color: Colors.green),
+                      ),
+                    ),
+                    Expanded(
+                      child: Semantics(
+                        label: "drawerHelpAndSupportButton",
+                        child: ListTile(
+                          title: const Text('Help & Support'),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HelpSupportScreen(
+                                          userId: widget.userId,
+                                        )));
+                            Future.delayed(
+                              const Duration(milliseconds: 250),
+                            );
+                          },
+                          trailing: Icon(
+                            Icons.keyboard_arrow_right,
+                            size: MediaQuery.of(context).size.width * 0.07,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              //Container - settings page
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 0.1))),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 20.0),
+                      child: Container(
+                        decoration: const BoxDecoration(),
+                        child: const Icon(Icons.settings, color: Colors.green),
+                      ),
+                    ),
+                    Expanded(
+                      child: Semantics(
+                        label: "drawerSettingsButton",
+                        child: ListTile(
+                          title: const Text('Settings'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SettingPage(
+                                  userId: widget.userId.toString(),
+                                  firstNameEdited: firstName,
+                                  lastNameEdited: lastName,
+                                  contactNoEdited: contactNo,
+                                  emailIdEdited: emailId,
+                                ),
+                              ),
+                            ).then((value) {
+                              Future.delayed(
+                                const Duration(milliseconds: 250),
+                              );
+                            });
+                          },
+                          trailing: Icon(
+                            Icons.keyboard_arrow_right,
+                            size: MediaQuery.of(context).size.width * 0.07,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
               // container - logout
@@ -359,15 +428,22 @@ class _SideBarDrawerState extends State<SideBarDrawer> {
                     padding: const EdgeInsets.only(left: 50.0, right: 20.0),
                     child: Container(
                       decoration: const BoxDecoration(),
-                      child: const Icon(Icons.logout),
+                      child: const Icon(Icons.logout, color: Colors.red),
                     ),
                   ),
                   Expanded(
                     child: Semantics(
                       label: "drawerLogoutButton",
                       child: ListTile(
-                        title: const Text('Logout'),
+                        title: const Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.red),
+                        ),
                         onTap: () {},
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: MediaQuery.of(context).size.width * 0.07,
+                        ),
                       ),
                     ),
                   )

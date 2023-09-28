@@ -115,6 +115,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 leading: const Icon(
                   Icons.edit,
+                  color: Colors.green,
                 ),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
@@ -142,7 +143,10 @@ class _SettingPageState extends State<SettingPage> {
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
-                leading: const Icon(Icons.lock_open),
+                leading: const Icon(
+                  Icons.lock_open,
+                  color: Colors.green,
+                ),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
                   size: MediaQuery.of(context).size.width * 0.07,
@@ -178,7 +182,10 @@ class _SettingPageState extends State<SettingPage> {
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
-                leading: const Icon(Icons.notification_important),
+                leading: const Icon(
+                  Icons.notification_important,
+                  color: Colors.green,
+                ),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
                   size: MediaQuery.of(context).size.width * 0.07,
@@ -215,7 +222,10 @@ class _SettingPageState extends State<SettingPage> {
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
-                leading: const Icon(Icons.language),
+                leading: const Icon(
+                  Icons.language,
+                  color: Colors.green,
+                ),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
                   size: MediaQuery.of(context).size.width * 0.07,
@@ -253,7 +263,10 @@ class _SettingPageState extends State<SettingPage> {
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
-                leading: const Icon(Icons.delete),
+                leading: const Icon(
+                  Icons.delete,
+                  color: Colors.green,
+                ),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
                   size: MediaQuery.of(context).size.width * 0.07,
@@ -273,9 +286,13 @@ class _SettingPageState extends State<SettingPage> {
                 title: const Text(
                   "Logout",
                   textAlign: TextAlign.start,
-                  style: TextStyle(fontWeight: FontWeight.w500),
+                  style:
+                      TextStyle(fontWeight: FontWeight.w500, color: Colors.red),
                 ),
-                leading: const Icon(Icons.logout),
+                leading: const Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                ),
                 trailing: Icon(
                   Icons.keyboard_arrow_right,
                   size: MediaQuery.of(context).size.width * 0.07,
@@ -297,7 +314,10 @@ class _SettingPageState extends State<SettingPage> {
                     textAlign: TextAlign.start,
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  leading: const Icon(Icons.dark_mode),
+                  leading: const Icon(
+                    Icons.dark_mode,
+                    color: Colors.green,
+                  ),
                   trailing: Switch(
                     value: isDarkModeEnabled,
                     onChanged: (value) {

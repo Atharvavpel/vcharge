@@ -314,7 +314,6 @@ class ReservationScreenState extends State<ReservationScreen> {
                                                   ),
                                                 ),
 
-                                                //Column booking status
                                                 Expanded(
                                                   child: SizedBox(
                                                     height: Get.height * 0.07,
