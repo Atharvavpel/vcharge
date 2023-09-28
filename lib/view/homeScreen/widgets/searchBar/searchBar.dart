@@ -94,7 +94,8 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                       // function for calling the searching option - searchDelegate widget
                       onTap: () {
                         showSearch(
-                            context: context, delegate: SearchingWidget(widget.userId));
+                            context: context,
+                            delegate: SearchingWidget(widget.userId));
                       },
 
                       decoration: InputDecoration(
@@ -108,7 +109,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                             key: const Key('drawerButton'),
                             icon: const Icon(
                               Icons.menu,
-                              color: Colors.black,
+                              color: Colors.green,
                             ),
                             onPressed: () => Scaffold.of(context).openDrawer(),
                           ),
@@ -132,7 +133,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                                   onPressed: () {},
                                   icon: const Icon(
                                     Icons.notifications,
-                                    color: Colors.black,
+                                    color: Colors.green,
                                   ),
                                   iconSize: Get.height * 0.036,
                                 ),
@@ -155,7 +156,7 @@ class SearchBarContainerState extends State<SearchBarContainer> {
                                   },
                                   icon: const Icon(
                                     Icons.person,
-                                    color: Colors.black,
+                                    color: Colors.green,
                                   ),
                                   iconSize: Get.height * 0.036,
                                 ),

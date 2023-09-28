@@ -211,9 +211,11 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
               visible: showScannerWidget,
               child: Positioned(
                 top: MediaQuery.of(context).size.height * 0.5 + 120,
-                left: MediaQuery.of(context).size.width * 0.20,
+                left: 0,
+                right: 0,
                 child: const Text(
                   "------------ OR ------------",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -225,12 +227,16 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
               visible: showScannerWidget,
               child: Positioned(
                 top: MediaQuery.of(context).size.height * 0.5 + 160,
-                left: MediaQuery.of(context).size.width * 0.156,
+                left: 0,
+                right: 0,
                 child: Column(
                   children: [
                     const Text(
                       "Please enter the station code as seen on the box",
-                      style: TextStyle(fontSize: 10),
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.06,

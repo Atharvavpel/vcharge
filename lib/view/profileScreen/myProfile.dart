@@ -517,6 +517,8 @@ class MyProfilePageState extends State<MyProfilePage> {
       padding: const EdgeInsets.symmetric(horizontal: 23),
       child: Form(
         child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Center content vertically
           children: [
             // container for name
             textContainer('Name', Icons.person_outlined,
