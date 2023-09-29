@@ -73,8 +73,8 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                       elevation: 5,
                       margin: EdgeInsets.symmetric(
                           vertical: Get.width * 0.02,
-                          horizontal: Get.width * 0.02),
-                      color: const Color.fromARGB(255, 228, 249, 255),
+                          horizontal: Get.width * 0.04),
+                      color: const Color.fromARGB(255, 246, 249, 252),
                       child: Padding(
                           padding: EdgeInsets.all(Get.width * 0.01),
                           child: Padding(
@@ -129,7 +129,7 @@ class FavouriteSceenState extends State<FavouriteSceen> {
                                           padding: EdgeInsets.symmetric(
                                               vertical: Get.height * 0.008),
                                           child: CircleAvatar(
-                                            radius: 10,
+                                            radius: 8,
                                             backgroundColor: AvaliblityColor
                                                 .getAvailablityColor(
                                                     favouriteList[index]

@@ -329,7 +329,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   //container for call Icon
                                   const Expanded(
                                       flex: 2, child: Icon(Icons.call)),
-                                  //conteiner for station contact number text
+                                  //conteiner for station contact number
                                   Expanded(
                                     flex: 14,
                                     child: Text(
@@ -429,7 +429,9 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ReviewForm()),
+                                                    ReviewForm(
+                                                      stationId: stationId,
+                                                    )),
                                           );
                                         },
                                         child: Icon(
@@ -458,6 +460,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         //Row container 2 button for amineties and review
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -517,6 +520,8 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10),
+
                         //This container consist of 2 container for amenities and review
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.08,
@@ -528,7 +533,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                                   ?
                                   //Container for Amenities
                                   Container(
-                                      margin: const EdgeInsets.only(left: 10),
+                                      margin: const EdgeInsets.only(left: 11),
                                       alignment: Alignment.center,
                                       child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
@@ -675,6 +680,7 @@ class StationsSpecificDetailsState extends State<StationsSpecificDetails> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 10),
 
                   //Container for Charger List
                   Expanded(
